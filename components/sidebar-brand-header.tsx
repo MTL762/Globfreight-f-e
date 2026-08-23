@@ -2,7 +2,7 @@
 
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Image from "next/image";
-import { Notifications } from "./layouts/notification/notifiactions";
+// import { Notifications } from "./layouts/notification/notifiactions";
 
 export function SidebarBrandHeader(): JSX.Element {
   return (
@@ -16,7 +16,7 @@ export function SidebarBrandHeader(): JSX.Element {
               </span>
             </div>
             <div className="flex items-center gap-2 text-sidebar-foreground/70">
-              <Notifications />
+              {/* <Notifications /> */}
               {/* <LayoutGrid className="size-4" aria-hidden="true" /> */}
             </div>
           </div>
