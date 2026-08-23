@@ -46,10 +46,10 @@ export async function fetchHelper({
   if (locale === undefined) {
     locale = ((await getLocale()) as locales) ?? "ar";
   }
-  // console.log(url, ";das2", {
-  //   Authorization: `Bearer ${token?.value}`,
-  //   TOKEN
-  // });
+  console.log(url, ";das2", {
+    Authorization: `Bearer ${token?.value}`,
+    TOKEN
+  });
   const headers2 = {
     ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(token?.value ? { Authorization: `Bearer ${token?.value}` } : {}),
@@ -72,7 +72,7 @@ export async function fetchHelper({
     });
     console.log(res, 'dsae2ds')
   } catch (error) {
-    console.warn("Backend offline or connection error:", error);
+    console.log("Backend offline or connection error:", error);
     return {
       success: false,
       data: [],
