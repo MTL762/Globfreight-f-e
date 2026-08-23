@@ -31,23 +31,17 @@ export function useLoginForm() {
 
     const formData = new FormData(form);
     const password = (formData.get("password") as string | null)?.trim();
-    const username = (formData.get("username") as string | null)?.trim();
+    const email = ((formData.get("email") || formData.get("username")) as string | null)?.trim();
 
-    if (!password) {
+    if (!email || !password) {
       setIsLoading(false);
+      toast.error("Please fill in both email and password.");
       return;
     }
 
-    // const fcm = await getLoginFcmToken();
-
-    const requestBody: {
-      password: string;
-      // fcm: string | null;
-      username?: string;
-      // locale: string;
-    } = {
-      password,
-      ...(username ? { username } : {})
+    const requestBody = {
+      email,
+      password
     };
 
     const res: any = await fetchHelper({
@@ -55,11 +49,15 @@ export function useLoginForm() {
       method: "POST",
       body: requestBody
     });
-    console.log(res, 'sdae2ads')
 
     if (!res.success) {
       setIsLoading(false);
-      toast.error(res.message || res.result?.message || "Login failed");
+      const errorMessage =
+        res.result?.message ||
+        res.message ||
+        (res.result?.errors ? Object.values(res.result.errors).flat().join(", ") : null) ||
+        "Login failed";
+      toast.error(errorMessage);
       return;
     }
 
@@ -75,7 +73,7 @@ export function useLoginForm() {
 
     if (token) {
       await setToken(token);
-      toast.success("Login successful");
+      toast.success(res.message || "User logged in successfully");
       router.push("/dashboard");
     } else {
       setIsLoading(false);

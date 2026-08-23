@@ -98,20 +98,15 @@ export default async function proxy(request: NextRequest) {
   const searchParamsString = params.toString();
   const urlWithParams = `${currentPath}${searchParamsString ? `?${searchParamsString}` : ""}`;
 
+  const { shouldRedirect, redirectUrl } = determineAuthRedirect(request);
+  if (shouldRedirect) {
+    return NextResponse.redirect(new URL(redirectUrl, request.url));
+  }
+
   // Get the response from the handler
   const response = handler(request);
 
   response.headers.set("header-URL", urlWithParams);
-  // const { shouldRedirect, redirectUrl } = determineAuthRedirect(request);
-  // if (shouldRedirect) {
-  //   return NextResponse.redirect(new URL(redirectUrl, request.url));
-  // }
-
-  // const permissions = await getCachedPermissions(request);
-  // if (permissions && !isRouteAllowed(request, permissions)) {
-  //   const locale = request.nextUrl.pathname.split("/").filter(Boolean)[0] || "en";
-  //   return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
-  // }
 
   return response;
 }
