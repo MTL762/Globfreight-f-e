@@ -1,18 +1,18 @@
 
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 
-import UsersFormPage from '@/components/pages/_users/usersForm.page';
+import CategoriesFormPage from '@/components/pages/_categories/categoriesForm.page';
  import { fetchHelper } from '@/api/fetch';
 
 const page = async ({ params }: { params: Params }) => {
   const data = await fetchHelper({
-    endPoint: ['users',Number((await params).id)],
+    endPoint: ['adminCategories',Number((await params).id)],
     method: "GET",
   });
 
   return<>
   <CustomHeader />
-   <UsersFormPage data={data?.data} /></>;
+   <CategoriesFormPage data={data?.data} /></>;
 };
 
 export default page;

@@ -1,10 +1,10 @@
 
-import UsersFormPage from '@/components/pages/_users/usersForm.page';
+import CategoriesFormPage from '@/components/pages/_categories/categoriesForm.page';
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 
 
 export default async function Page() : Promise<JSX.Element>  {
   return <>
   <CustomHeader />
-  <UsersFormPage /></>;
+  <CategoriesFormPage /></>;
 }

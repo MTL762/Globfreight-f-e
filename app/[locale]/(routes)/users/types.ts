@@ -1,10 +1,18 @@
-export interface usersEntity {
+// Auto-generated type definitions
+
+export interface usersRole {
+  id: number;
+  name: string;
+}
+
+export interface users {
   id: number;
   name: string;
   email: string;
-  address: string;
-  role: {
-    id: number;
-    name: string;
-  };
-  avatar: string;}
+  phone?: null;
+  type: string;
+  email_verified_at: string;
+  phone_verified_at?: null;
+  role: usersRole;
+  avatar?: null;
+}

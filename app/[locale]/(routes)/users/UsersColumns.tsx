@@ -1,36 +1,69 @@
-"use client";
-import IconHeader from "@/components/common/table/columns/icon-header";
-import { UserCell } from "@/components/common/table/columns/user-cell";
+'use client'
 import { type ColumnDef } from "@tanstack/react-table";
-import { usersEntity } from "./types";
+import PhoneDirectionCol from "@/components/common/table/columns/Phone.direction";
+import DateCol from "@/components/common/table/columns/date.column";
+import { ImageCell } from "@/components/common/table/columns/img-cell";
 
-export default function UsersColumns(): ColumnDef<usersEntity>[] {
+export default function UsersColumns(): ColumnDef<Record<string, unknown>>[] {
   return [
-    {
-      accessorKey: "id",
-      header: () => <IconHeader columnKey="id" />,
-      cell: ({ row }) => (
-        <span className="font-medium text-gray-700 dark:text-gray-300">#{row.original.id}</span>
-      )
-    },
-    {
-      id: "user",
-      header: () => <IconHeader columnKey="user" />,
-      accessorFn: row => `${row.name} ${row.email}`,
-      cell: ({ row }) => {
-        const name = row.original.name as string;
-        const email = row.original.email as string;
-        const image = row.original.avatar as string;
-        return <UserCell name={name} email={email} image={image} />;
-      }
-    },
-
-    {
-      accessorKey: "role",
-      header: () => <IconHeader columnKey="role" />,
-      cell: ({ row }) => (
-        <span className="text-sm text-gray-600 dark:text-gray-400">{(row.original.role?.name as string) || "-"}</span>
-      )
+  {
+    accessorKey: "id",
+    header: "Id"
+  },
+  {
+    accessorKey: "name",
+    header: "Name"
+  },
+  {
+    accessorKey: "email",
+    header: "Email"
+  },
+  {
+    accessorKey: "phone",
+    header: "Phone",
+    cell: ({ getValue }) => <PhoneDirectionCol value={getValue() as string} />
+  },
+  {
+    accessorKey: "type",
+    header: "Type"
+  },
+  {
+    accessorKey: "email_verified_at",
+    header: "Email_verified_at",
+   cell: ({ getValue }) => {
+		  return (
+			<DateCol date={getValue() as string} />
+		  );
+		}
+  },
+  {
+    accessorKey: "phone_verified_at",
+    header: "Phone_verified_at",
+   cell: ({ getValue }) => {
+		  return (
+			<DateCol date={getValue() as string} />
+		  );
+		}
+  },
+  {
+    accessorKey: "role",
+    header: "Role"
+  },
+  {
+    accessorKey: "avatar",
+    header: "Avatar",
+    cell: ({ getValue }) => {
+      const image = getValue() as string;
+      return (
+        <div className="flex items-center justify-center w-full h-12 overflow-hidden">
+          <ImageCell cell={image} />
+        </div>
+      );
     }
+  },
+  {
+    accessorKey: "id",
+    header: "Id"
+  }
   ];
 }

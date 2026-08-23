@@ -1,6 +1,12 @@
+// Auto-generated type definitions
 
-export interface rolesEntity {
+export interface rolesPermissionsItem {
   id: number;
   name: string;
-  permissions: unknown[];
+}
+
+export interface roles {
+  id: number;
+  name: string;
+  permissions: rolesPermissionsItem[];
 }
