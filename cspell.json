@@ -1,0 +1,26 @@
+// filepath: /cspell.json
+{
+  "version": "0.2",
+  "language": "en",
+  "ignoreRandomStrings": true,
+  "words": [
+    "alsdnaljsdnjsbfkbskhfb",
+    "cmdk",
+    "commitlint",
+    "cspell",
+    "graphik",
+    "husky",
+    "toploader",
+    "uihelpers",
+    "العربية"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "public/**",
+    "dist/**",
+    ".git/**",
+    "package-lock.json",
+    "yarn.lock"
+  ],
+  "suggestionsTimeout": 500
+}

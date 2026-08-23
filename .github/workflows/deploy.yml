@@ -1,0 +1,36 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set server host based on branch
+        id: set-host
+        run: |
+          if [ "${GITHUB_REF##*/}" = "main" ]; then
+            echo "SERVER_HOST=${{ secrets.SERVER_HOST_MAIN }}" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ env.SERVER_HOST }}
+          username: root
+          password: ${{ secrets.SERVER_PASSWORD }}
+          port: 22
+          script: |
+            cd /var/www/apps/quran-dashboard-neovida
+            git clean -fd
+            git pull 
+            npm i --force
+            npm run build
+            pm2 restart all

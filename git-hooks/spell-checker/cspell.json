@@ -1,0 +1,22 @@
+// filepath: /cspell.json
+{
+	"version": "0.2",
+	"language": "en",
+	"ignoreRandomStrings": true,
+
+	"words": [
+		"alsdnaljsdnjsbfkbskhfb",
+		"cmdk",
+		"commitlint",
+		"cspell",
+		"husky",
+		"العربية"
+	],
+	"ignorePaths": [
+		"node_modules/**",
+		"dist/**",
+		"public/**",
+		"**/package.json"
+	],
+	"suggestionsTimeout": 500
+}

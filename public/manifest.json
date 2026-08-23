@@ -1,0 +1,22 @@
+{
+  "name": "Harmony",
+  "short_name": "Harmony",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "background_color": "#ffffff",
+  "theme_color": "#0F8B8D",
+  "description": "منصة تعليمية شاملة",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["productivity", "education"],
+  "prefer_related_applications": false
+}
