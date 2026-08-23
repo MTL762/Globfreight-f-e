@@ -12,8 +12,6 @@ export function useLoginForm() {
   const locale = useLocale();
   const router = useRouter();
   const { notificationPermission, requestPermission } = useFcmToken();
-  const [loginType, setLoginType] = useState<"username" | "phone">("username");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,6 +31,7 @@ export function useLoginForm() {
 
     const formData = new FormData(form);
     const password = (formData.get("password") as string | null)?.trim();
+    const username = (formData.get("username") as string | null)?.trim();
 
     if (!password) {
       setIsLoading(false);
@@ -45,20 +44,11 @@ export function useLoginForm() {
       password: string;
       // fcm: string | null;
       username?: string;
-      phone?: string;
       // locale: string;
     } = {
       password,
-      // fcm,
-      // locale
+      ...(username ? { username } : {})
     };
-
-    if (loginType === "username") {
-      const username = (formData.get("username") as string | null)?.trim();
-      if (username) requestBody.username = username;
-    } else {
-      requestBody.phone = phoneNumber;
-    }
 
     const res: any = await fetchHelper({
       endPoint: ["authLogin"],
@@ -95,10 +85,6 @@ export function useLoginForm() {
 
   return {
     locale,
-    loginType,
-    setLoginType,
-    phoneNumber,
-    setPhoneNumber,
     isLoading,
     showPassword,
     togglePasswordVisibility,

@@ -1,11 +1,9 @@
 "use client";
 
-import CustomPhoneInput from "@/components/common/Inputs/phone/PhoneInput";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useLoginForm } from "@/features/auth/login/hooks/use-login-form";
 import { Bell, Eye, EyeOff, Lock, User } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -16,10 +14,6 @@ export function LoginForm() {
   const t = useTranslations();
   const {
     locale,
-    loginType,
-    setLoginType,
-    phoneNumber,
-    setPhoneNumber,
     isLoading,
     showPassword,
     togglePasswordVisibility,
@@ -48,51 +42,30 @@ export function LoginForm() {
             </CardHeader>
 
             <CardContent className="mt-8 p-0">
-              <Tabs
-                defaultValue="username"
-                className="w-full"
-                onValueChange={value => setLoginType(value as "username" | "phone")}
+              <form
+                onSubmit={onSubmit}
+                className="space-y-5 mt-6"
+                dir={locale === "ar" ? "rtl" : "ltr"}
               >
-                <form
-                  onSubmit={onSubmit}
-                  className="space-y-5 mt-6"
-                  dir={locale === "ar" ? "rtl" : "ltr"}
-                >
-                  <TabsContent value="username" className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="username" className="text-sm font-medium">
-                        {t("Username")}
-                      </Label>
-                      <div className="relative group">
-                        <Input
-                          id="username"
-                          name="username"
-                          placeholder={t("Enter your username")}
-                          required={loginType === "username"}
-                          className="h-11 rounded-full border border-border/70 dark:border-gray-600 bg-white dark:bg-gray-800 pl-10 pr-4 shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
-                        />
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                      </div>
-                    </div>
-                  </TabsContent>
+                <div className="space-y-2">
+                  <Label htmlFor="username" className="text-sm font-medium">
+                    {t("Username")}
+                  </Label>
+                  <div className="relative group">
+                    <Input
+                      id="username"
+                      name="username"
+                      placeholder={t("Enter your username")}
+                      required
+                      className="h-11 rounded-full border border-border/70 dark:border-gray-600 bg-white dark:bg-gray-800 pl-10 pr-4 shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
+                    />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  </div>
+                </div>
 
-                  <TabsContent value="phone" className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-sm font-medium">
-                        {t("Phone")}
-                      </Label>
-                      <CustomPhoneInput
-                        name="phone"
-                        placeholder={t("Enter your phone number")}
-                        value={phoneNumber}
-                        onChange={setPhoneNumber}
-                      />
-                    </div>
-                  </TabsContent>
-
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <Label htmlFor="password" className="text-sm font-medium">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="password" className="text-sm font-medium">
                         {t("Password")}
                       </Label>
                     </div>
@@ -153,7 +126,6 @@ export function LoginForm() {
                     )}
                   </Button>
                 </form>
-              </Tabs>
 
               <footer className="mt-8 text-center text-xs text-muted-foreground">
                 © {new Date().getFullYear()}{" "}
