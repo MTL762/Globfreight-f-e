@@ -1,52 +1,55 @@
-
-import { fetchHelper } from '@/api/fetch';
-import TableBasic from '@/components/common/table/TableBasic';
-import { getTranslations } from 'next-intl/server';
+import { fetchHelper } from "@/api/fetch";
+import TableBasic from "@/components/common/table/TableBasic";
+import { getTranslations } from "next-intl/server";
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 import type { Metadata } from "next";
-import UsersColumns from './UsersColumns';
-// import GenerateStaticParams from '@/api/metadata';
+import UsersColumns from "./UsersColumns";
 import { PROJECT_NAME } from "@/utils/config";
-// export const generateStaticParams = GenerateStaticParams;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const headerName= t("Users");
+  const headerName = t("Users");
   return {
-     title:  headerName +PROJECT_NAME,
-  description: "Manage " + headerName + " items in the HR dashboard"
+    title: `${headerName} | ${PROJECT_NAME}`,
+    description: `Manage ${headerName} and system accounts.`
   };
 }
-async function page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
+
+export default async function Page({
+  searchParams
+}: {
+  searchParams: SearchParams;
+}): Promise<JSX.Element> {
   const t = await getTranslations();
   const data = await fetchHelper({
-    endPoint: ["users"],
+    endPoint: ["adminUsers"],
     method: "GET",
-    params: await searchParams,
+    params: await searchParams
   });
 
-  if (!data) return <div>Error...</div>;
+  if (!data) return <div>Error loading users...</div>;
 
-  const filteredData = data?.data
+  const filteredData = data?.data || [];
 
   return (
-    <>
-    <CustomHeader />
+    <div className="space-y-6">
+      <CustomHeader />
       <TableBasic
         data={filteredData}
         columns={UsersColumns}
         pagination={{
-          total: data?.total,
+          total: data?.total
         }}
         tableActions={{
           onEdit: true,
-          onDelete: ["users"],
-          //onInfo: true,
+          onDelete: ["adminUsers"]
         }}
         cardHeader={t("Users")}
-        filters={[]}
+        filters={[
+          { name: "name", type: "text", width: 4 },
+          { name: "email", type: "text", width: 4 }
+        ]}
       />
-    </>
+    </div>
   );
 }
-
-export default page;
