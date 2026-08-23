@@ -53,7 +53,7 @@ export default function InputLangSwitcher({
     }
   }, [changeLang]);
   return (
-    <div className="col-span-6 mt-2">
+    <div className="col-span-12 mt-2">
       {langOptions.map(lang => (
         <button
           type="button"
