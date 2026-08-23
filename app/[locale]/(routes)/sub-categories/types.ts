@@ -1,46 +1,44 @@
-// Auto-generated type definitions
-
-export interface sub-categoriesCategory {
+export interface SubCategoryCategory {
   id: number;
-  name: string;
+  name: string | { ar?: string; en?: string };
   slug: string;
-  description: string;
+  description?: string | { ar?: string; en?: string };
   is_active: boolean;
   order: number;
-  parent_id?: null;
-  image?: null;
+  parent_id?: number | null;
+  image?: string | null;
   created_at: string;
   updated_at: string;
 }
 
-export interface sub-categoriesSeo {
+export interface SubCategorySeo {
   id: number;
-  meta_title: string;
-  meta_description?: null;
-  focus_keyphrase?: null;
-  canonical_url?: null;
-  schema_markup_type?: null;
-  schema_markup?: null;
-  og_title?: null;
-  og_description?: null;
-  og_image?: null;
-  meta_robots: string;
-  keywords?: null;
+  meta_title?: string | { ar?: string; en?: string } | null;
+  meta_description?: string | { ar?: string; en?: string } | null;
+  focus_keyphrase?: string | null;
+  canonical_url?: string | null;
+  schema_markup_type?: string | null;
+  schema_markup?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image?: string | null;
+  meta_robots?: string;
+  keywords?: string | null;
   created_at: string;
   updated_at: string;
 }
 
-export interface sub-categories {
+export interface SubCategoryItem {
   id: number;
   category_id: number;
-  name: string;
+  name: string | { ar?: string; en?: string };
   slug: string;
-  description: string;
+  description?: string | { ar?: string; en?: string };
   is_active: boolean;
   order: number;
-  image: string;
-  category: sub-categoriesCategory;
-  seo: sub-categoriesSeo;
+  image?: string | null;
+  category?: SubCategoryCategory;
+  seo?: SubCategorySeo;
   created_at: string;
   updated_at: string;
 }

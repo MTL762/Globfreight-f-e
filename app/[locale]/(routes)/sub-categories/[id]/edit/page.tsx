@@ -1,18 +1,20 @@
-
 import CustomHeader from "@/components/layouts/header/CustomHeader";
+import SubCategoriesFormPage from "@/components/pages/_sub-categories/subCategoriesForm.page";
+import { fetchHelper } from "@/api/fetch";
 
-import Sub-categoriesFormPage from '@/components/pages/_sub-categories/sub-categoriesForm.page';
- import { fetchHelper } from '@/api/fetch';
-
-const page = async ({ params }: { params: Params }) => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id } = await params;
   const data = await fetchHelper({
-    endPoint: ['adminSubCategories',Number((await params).id)],
-    method: "GET",
+    endPoint: ["adminSubCategories", Number(id)],
+    method: "GET"
   });
 
-  return<>
-  <CustomHeader />
-   <Sub-categoriesFormPage data={data?.data} /></>;
+  return (
+    <>
+      <CustomHeader />
+      <SubCategoriesFormPage data={data?.data} />
+    </>
+  );
 };
 
 export default page;
