@@ -11,8 +11,8 @@ import { useFcmToken } from "./use-fcm-token";
 export function useLoginForm() {
   const locale = useLocale();
   const router = useRouter();
-  const {  notificationPermission, requestPermission } = useFcmToken();
-  const [loginType, setLoginType] = useState<"email" | "phone">("email");
+  const { notificationPermission, requestPermission } = useFcmToken();
+  const [loginType, setLoginType] = useState<"username" | "phone">("username");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -43,8 +43,8 @@ export function useLoginForm() {
 
     const requestBody: {
       password: string;
-        // fcm: string | null;
-      email?: string;
+      // fcm: string | null;
+      username?: string;
       phone?: string;
       // locale: string;
     } = {
@@ -53,20 +53,20 @@ export function useLoginForm() {
       // locale
     };
 
-    if (loginType === "email") {
-      const email = (formData.get("email") as string | null)?.trim();
-      if (email) requestBody.email = email;
+    if (loginType === "username") {
+      const username = (formData.get("username") as string | null)?.trim();
+      if (username) requestBody.username = username;
     } else {
       requestBody.phone = phoneNumber;
     }
 
-    const res :any= await fetchHelper({
-      endPoint: ["adminLogin"],
+    const res: any = await fetchHelper({
+      endPoint: ["authLogin"],
       method: "POST",
       body: requestBody
     });
     console.log(res, 'sdae2ads')
-    
+
     if (!res.success) {
       setIsLoading(false);
       toast.error(res.message || res.result?.message || "Login failed");

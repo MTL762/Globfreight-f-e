@@ -11,11 +11,11 @@ import "../globals.css";
 
 export const metadata: Metadata = {
   title: PROJECT_NAME,
-  description: "منصة تعليمية شاملة",
+  description: "Enow HR System",
   applicationName: PROJECT_NAME,
   icons: [
-    { rel: "icon", url: "/logo.png" },
-    { rel: "apple-touch-icon", url: "/logo.png" }
+    { rel: "icon", url: "/logo.svg" },
+    { rel: "apple-touch-icon", url: "/logo.svg" }
   ],
   appleWebApp: {
     capable: true,

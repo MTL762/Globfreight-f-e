@@ -38,7 +38,7 @@ export async function fetchHelper({
 }): Promise<any> {
   "use server";
 
-	const url = handleUrl(endPoint, params);
+  const url = handleUrl(endPoint, params);
 
 
   const token = (await cookies()).get(TOKEN);
@@ -52,7 +52,7 @@ export async function fetchHelper({
   // });
   const headers2 = {
     ...(isFormData ? {} : { "Content-Type": "application/json" }),
-    ...(token?.value ? { Authorization: `Bearer ${token?.value}` }: {}),
+    ...(token?.value ? { Authorization: `Bearer ${token?.value}` } : {}),
     Accept: "application/json",
     // Locale: locale ?? "ar",
     // isLocalized: isLocalized ? isLocalized.toString() : "false",
@@ -70,6 +70,7 @@ export async function fetchHelper({
       cache: cache ?? "no-cache",
       ...(method !== "GET" ? { body: isFormData ? (body as any) : JSON.stringify(body) } : {})
     });
+    console.log(res, 'dsae2ds')
   } catch (error) {
     console.warn("Backend offline or connection error:", error);
     return {
@@ -79,7 +80,7 @@ export async function fetchHelper({
       message: "Backend server is offline or unreachable."
     };
   }
-  console.log(res,'das2edsa');
+  console.log(res, 'das2edsa');
   // if (res.status === 503 || res.status === 502) {
   //   const header = nextHeader();
   //   if (header.get("header-URL") !== `/${locale}/updating-system`) {
@@ -136,24 +137,23 @@ export async function fetchHelper({
   };
 }
 function handleUrl(endPoint: endpointType, params: UrlSearchParamsInterface | any) {
-	let queryString = "";
-	if (params !== undefined) {
-		queryString = extractSearchParams(params);
-	}
-	const url = `${baseUrl}${endPoint
-		?.map((item: endpointName | number | string) => {
-			if (typeof item === "number" || Boolean(Number(item))) {
-				return `/${item}`;
-			} else {
-				return endpoints[item as endpointName];
-			}
-		})
-		?.join("")}${
-		queryString.length > 1
-			? queryString.startsWith("?")
-				? queryString
-				: `?${queryString.toString()}`
-			: ""
-	}`;
-	return url;
+  let queryString = "";
+  if (params !== undefined) {
+    queryString = extractSearchParams(params);
+  }
+  const url = `${baseUrl}${endPoint
+    ?.map((item: endpointName | number | string) => {
+      if (typeof item === "number" || Boolean(Number(item))) {
+        return `/${item}`;
+      } else {
+        return endpoints[item as endpointName];
+      }
+    })
+    ?.join("")}${queryString.length > 1
+      ? queryString.startsWith("?")
+        ? queryString
+        : `?${queryString.toString()}`
+      : ""
+    }`;
+  return url;
 }

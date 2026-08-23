@@ -26,7 +26,7 @@ export default function Loading() {
             <div className="absolute inset-0 animate-spin rounded-full border-2 border-blue-400/20 border-t-blue-300" />
             <div className="relative m-2 rounded-full bg-slate-800 p-3">
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt={t("logoAlt")}
                 width={50}
                 height={50}

@@ -1,15 +1,15 @@
 {
-  "name": "Harmony",
-  "short_name": "Harmony",
+  "name": "Enow",
+  "short_name": "Enow",
   "start_url": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
   "background_color": "#ffffff",
   "theme_color": "#0F8B8D",
-  "description": "منصة تعليمية شاملة",
+  "description": "منصة شاملة لإدارة الموارد البشرية",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/logo.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
@@ -17,6 +17,6 @@
   ],
   "orientation": "portrait-primary",
   "scope": "/",
-  "categories": ["productivity", "education"],
+  "categories": ["productivity", "business"],
   "prefer_related_applications": false
 }

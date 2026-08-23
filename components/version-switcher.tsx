@@ -16,7 +16,7 @@ export function VersionSwitcher(): JSX.Element {
               <div className="flex justify-center items-center w-full rounded-lg text-foreground">
                 <Link href="/">
                   <Image
-                    src="/logo.png"
+                    src="/logo.svg"
                     width={90}
                     height={100}
                     alt="Logo"

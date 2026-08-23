@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useLoginForm } from "@/features/auth/login/hooks/use-login-form";
-import { Bell, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Bell, Eye, EyeOff, Lock, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,7 +35,7 @@ export function LoginForm() {
           <div className="px-6 py-10 sm:px-10 sm:py-12 lg:px-12">
             <CardHeader className="space-y-4 p-0">
               <div className="flex items-center justify-center gap-3">
-                <Image src="/logo.png" alt="Logo" width={120} height={42} />
+                <Image src="/logo.svg" alt="Logo" width={120} height={42} />
               </div>
               <div className="space-y-2">
                 <CardTitle className="text-2xl sm:text-3xl font-semibold text-foreground">
@@ -49,30 +49,29 @@ export function LoginForm() {
 
             <CardContent className="mt-8 p-0">
               <Tabs
-                defaultValue="email"
+                defaultValue="username"
                 className="w-full"
-                onValueChange={value => setLoginType(value as "email" | "phone")}
+                onValueChange={value => setLoginType(value as "username" | "phone")}
               >
                 <form
                   onSubmit={onSubmit}
                   className="space-y-5 mt-6"
                   dir={locale === "ar" ? "rtl" : "ltr"}
                 >
-                  <TabsContent value="email" className="space-y-4">
+                  <TabsContent value="username" className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-medium">
-                        {t("Email")}
+                      <Label htmlFor="username" className="text-sm font-medium">
+                        {t("Username")}
                       </Label>
                       <div className="relative group">
                         <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="name@company.com"
-                          required={loginType === "email"}
+                          id="username"
+                          name="username"
+                          placeholder={t("Enter your username")}
+                          required={loginType === "username"}
                           className="h-11 rounded-full border border-border/70 dark:border-gray-600 bg-white dark:bg-gray-800 pl-10 pr-4 shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
                         />
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       </div>
                     </div>
                   </TabsContent>

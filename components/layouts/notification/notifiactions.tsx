@@ -178,7 +178,7 @@ export function Notifications() {
                 <Image
                   width={32}
                   height={32}
-                  src="/logo.png"
+                  src="/logo.svg"
                   alt="No notifications"
                   className="text-muted-foreground mb-2 h-8 w-8"
                 />
