@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   FileText,
@@ -10,8 +9,6 @@ import {
   Sparkles,
   ArrowRight,
   ArrowLeft,
-  User,
-  ExternalLink,
   Layers
 } from "lucide-react";
 import { RecentBlogPost, getLocalizedText } from "../types";

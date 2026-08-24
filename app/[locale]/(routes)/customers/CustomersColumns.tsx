@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import PhoneDirectionCol from "@/components/common/table/columns/Phone.direction";
 import TableStatusBadge from "@/components/common/table/tableHelperComponents/TableStatusBadge";
 import DateCol from "@/components/common/table/columns/date.column";
 import LocationCol from "@/components/common/table/columns/Location.column";
-import { Building2, Sparkles, User } from "lucide-react";
+import { Building2, Sparkles } from "lucide-react";
 
 export default function CustomersColumns(): ColumnDef<Record<string, unknown>>[] {
   return [

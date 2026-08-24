@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import ActiveCol from "@/components/common/table/columns/Ative.column";
 import DateCol from "@/components/common/table/columns/date.column";

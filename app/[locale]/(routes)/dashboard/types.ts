@@ -182,6 +182,22 @@ export interface DashboardApiResponse {
   success?: boolean;
 }
 
+export interface CountryStat {
+  country: string;
+  country_code?: string;
+  visits: number;
+  percentage?: number;
+}
+
+export interface ActivityItem {
+  id: string | number;
+  type: "message" | "customer" | "user" | "post" | "other" | string;
+  title: string;
+  description: string;
+  time: string;
+  badge?: string;
+}
+
 export interface UserProfileData {
   id?: number | string;
   name?: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -15,9 +15,7 @@ import {
   BarChart3,
   Globe2,
   Mail,
-  Calendar,
-  Sparkles,
-  ArrowUpRight
+  Sparkles
 } from "lucide-react";
 import { ChartTrendPoint, DashboardCharts } from "../types";
 

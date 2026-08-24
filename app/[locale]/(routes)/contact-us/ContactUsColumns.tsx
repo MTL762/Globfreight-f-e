@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { TableStatusBadge } from "@/components/common/table/tableHelperComponents/TableStatusBadge";
 import DateCol from "@/components/common/table/columns/date.column";
 import PhoneDirectionCol from "@/components/common/table/columns/Phone.direction";
 import { Button } from "@/components/ui/button";
-import { Mail, MessageSquare, Reply, User } from "lucide-react";
+import { Reply } from "lucide-react";
 import { ContactMessage } from "./types";
 
 export function ContactUsColumns({

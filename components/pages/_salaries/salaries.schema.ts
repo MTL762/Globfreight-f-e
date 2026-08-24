@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { StringReq, StringNotReq, EmailReq, noSchema } from "@/validations/String.schema";
+import { StringNotReq } from "@/validations/String.schema";
 
-export const SalariesSchema = (t: TFunction) => {
+export const SalariesSchema = (_t: TFunction) => {
   return z.object({
     user_id: z.coerce.number(),
     basic_salary: z.coerce.number(),

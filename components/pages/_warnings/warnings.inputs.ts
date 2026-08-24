@@ -8,7 +8,7 @@ export const WarningsInputs = (): FormInput[] => {
         "label": "Employee",
         "required": true,
         "cardId": "general",
-        "apiUrl": "adminUsers",
+        "apiUrl": ["adminUsers"],
         "labelKey": "name"
     },
     {

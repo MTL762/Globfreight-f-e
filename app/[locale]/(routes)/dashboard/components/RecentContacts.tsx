@@ -1,16 +1,12 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   Mail,
   MessageSquare,
-  Clock,
   ArrowRight,
   ArrowLeft,
-  CheckCircle2,
-  Inbox,
-  User
+  Inbox
 } from "lucide-react";
 import { RecentContact } from "../types";
 

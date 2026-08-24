@@ -1,13 +1,11 @@
 "use client";
 
-import React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import TableStatusBadge from "@/components/common/table/tableHelperComponents/TableStatusBadge";
-import ActiveCol from "@/components/common/table/columns/Ative.column";
 import DateCol from "@/components/common/table/columns/date.column";
 import LocaleViewColumn from "@/components/common/table/columns/locale-view.column";
 import TagsCol from "@/components/common/table/columns/Tags.column";
-import { Eye, Folder, Sparkles, User } from "lucide-react";
+import { Eye, Folder, Sparkles } from "lucide-react";
 
 export default function BlogColumns(): ColumnDef<Record<string, unknown>>[] {
   return [

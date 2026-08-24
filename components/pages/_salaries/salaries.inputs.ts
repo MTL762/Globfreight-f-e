@@ -8,7 +8,7 @@ export const SalariesInputs = (): FormInput[] => {
         "label": "Employee",
         "required": true,
         "cardId": "general",
-        "apiUrl": "adminUsers",
+        "apiUrl": ["adminUsers"],
         "labelKey": "name"
     },
     {

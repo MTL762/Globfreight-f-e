@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import TableBasic from "@/components/common/table/TableBasic";
 import { ContactUsColumns } from "../ContactUsColumns";
 import { ContactReplyModal } from "./ContactReplyModal";

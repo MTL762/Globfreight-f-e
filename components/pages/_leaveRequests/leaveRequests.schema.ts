@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { StringReq, StringNotReq, EmailReq, noSchema } from "@/validations/String.schema";
+import { StringReq, noSchema } from "@/validations/String.schema";
 
 export const LeaveRequestsSchema = (t: TFunction) => {
   return z.object({

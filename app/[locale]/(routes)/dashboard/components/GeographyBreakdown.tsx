@@ -1,5 +1,4 @@
-import React from "react";
-import { Globe, MapPin } from "lucide-react";
+import { Globe } from "lucide-react";
 import { CountryStat } from "../types";
 
 interface GeographyBreakdownProps {

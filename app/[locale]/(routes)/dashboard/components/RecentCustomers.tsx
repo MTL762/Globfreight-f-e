@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -12,13 +11,9 @@ import {
   CheckCircle2,
   Sparkles,
   ArrowRight,
-  ArrowLeft,
-  User,
-  ShieldCheck,
-  FileText
+  ArrowLeft
 } from "lucide-react";
 import { RecentCustomer } from "../types";
-import { Badge } from "@/components/ui/badge";
 
 interface RecentCustomersProps {
   customers?: RecentCustomer[];

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function DashboardLoading() {
   return (
     <div className="min-h-screen space-y-8 pb-12 animate-pulse">

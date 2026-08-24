@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   Users,
@@ -14,8 +13,6 @@ import {
   Server,
   Zap,
   CheckCircle2,
-  ShieldCheck,
-  Globe2,
   Database,
   Lock
 } from "lucide-react";

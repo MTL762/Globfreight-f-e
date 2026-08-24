@@ -1,9 +1,7 @@
-import React from "react";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import { fetchHelper } from "@/api/fetch";
 import { PROJECT_NAME } from "@/utils/config";
-import { DashboardApiResponse, DashboardData } from "./types";
+import { DashboardData } from "./types";
 import { DashboardHeader } from "./components/DashboardHeader";
 import { MetricCards } from "./components/MetricCards";
 import { VisitorChart } from "./components/VisitorChart";

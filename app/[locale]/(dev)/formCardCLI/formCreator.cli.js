@@ -9,7 +9,7 @@ const { createFormDevTest } = require("./formTestWarn");
 const { createFormLogicFile } = require("./formLogic.cli");
 const { createTestFile } = require("./test.cli");
 // Get the project root directory
-const projectRoot = path.resolve(process.cwd());
+const projectRoot = path.resolve(/*turbopackIgnore: true*/ process.cwd());
 
 // Template for inputs file
 
@@ -34,7 +34,7 @@ export function createFolderStructure(rootFolderName, apiEndpoint, inputs) {
 
 	// Create directories
 	[componentsPath, testPath].forEach((dir) => {
-		if (!fs.existsSync(dir)) {
+		if (!fs.existsSync(/*turbopackIgnore: true*/ dir)) {
 			fs.mkdirSync(dir, { recursive: true });
 		}
 	});

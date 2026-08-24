@@ -8,7 +8,7 @@ export const PerformanceReviewsInputs = (): FormInput[] => {
         "label": "Employee",
         "required": true,
         "cardId": "general",
-        "apiUrl": "adminUsers",
+        "apiUrl": ["adminUsers"],
         "labelKey": "name"
     },
     {
@@ -17,7 +17,7 @@ export const PerformanceReviewsInputs = (): FormInput[] => {
         "label": "Reviewer / Manager",
         "required": true,
         "cardId": "general",
-        "apiUrl": "adminUsers",
+        "apiUrl": ["adminUsers"],
         "labelKey": "name"
     },
     {

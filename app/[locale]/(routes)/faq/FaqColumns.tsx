@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import ActiveCol from "@/components/common/table/columns/Ative.column";
 import DateCol from "@/components/common/table/columns/date.column";
 import LocaleViewColumn from "@/components/common/table/columns/locale-view.column";
-import { Folder, HelpCircle } from "lucide-react";
+import { Folder } from "lucide-react";
 
 export default function FaqColumns(): ColumnDef<Record<string, unknown>>[] {
   return [

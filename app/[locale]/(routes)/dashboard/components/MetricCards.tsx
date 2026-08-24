@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   Users,
@@ -11,10 +10,7 @@ import {
   Mail,
   Send,
   Globe2,
-  ArrowUpRight,
-  Sparkles,
-  TrendingUp,
-  CheckCircle2
+  ArrowUpRight
 } from "lucide-react";
 import { DashboardMetrics } from "../types";
 

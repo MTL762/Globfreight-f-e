@@ -8,7 +8,7 @@ export const LeaveRequestsInputs = (): FormInput[] => {
         "label": "Leave Type",
         "required": true,
         "cardId": "general",
-        "apiUrl": "hrLeaveTypes",
+        "apiUrl": ["hrLeaveTypes"],
         "labelKey": "name"
     },
     {

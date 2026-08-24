@@ -80,7 +80,6 @@ export function QuickRouteCalculator({
             value={selectedOrigin}
             onChange={(e) => {
               setSelectedOrigin(e.target.value);
-              setHasCalculated(true);
             }}
             className="route-calculator__select"
           >
@@ -102,7 +101,6 @@ export function QuickRouteCalculator({
             value={selectedDest}
             onChange={(e) => {
               setSelectedDest(e.target.value);
-              setHasCalculated(true);
             }}
             className="route-calculator__select"
           >
@@ -124,7 +122,6 @@ export function QuickRouteCalculator({
             value={selectedService}
             onChange={(e) => {
               setSelectedService(e.target.value);
-              setHasCalculated(true);
             }}
             className="route-calculator__select"
           >

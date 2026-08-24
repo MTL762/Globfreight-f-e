@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Building2, Globe, Bell, Shield, Sliders } from "lucide-react";
 import { useTranslations } from "next-intl";

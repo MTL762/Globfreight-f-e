@@ -14,7 +14,7 @@ export const OnboardingTemplatesInputs = (): FormInput[] => {
         "type": "select",
         "label": "Section / Department",
         "cardId": "general",
-        "apiUrl": "hrSections",
+        "apiUrl": ["hrSections"],
         "labelKey": "name"
     },
     {

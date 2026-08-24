@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,11 +11,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TableStatusBadge } from "@/components/common/table/tableHelperComponents/TableStatusBadge";
-import { Mail, Phone, Calendar, User, Send, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, Send, CheckCircle2 } from "lucide-react";
 import { ContactMessage } from "../types";
 import { fetchHelper } from "@/api/fetch";
 import { toast } from "sonner";
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 
 interface ContactReplyModalProps {
@@ -25,7 +25,6 @@ interface ContactReplyModalProps {
 }
 
 export function ContactReplyModal({ message, isOpen, onClose }: ContactReplyModalProps) {
-  const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
   const isRtl = locale === "ar";

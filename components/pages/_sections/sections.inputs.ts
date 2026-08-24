@@ -14,7 +14,7 @@ export const SectionsInputs = (): FormInput[] => {
         "type": "select",
         "label": "Department Manager",
         "cardId": "general",
-        "apiUrl": "adminUsers",
+        "apiUrl": ["adminUsers"],
         "labelKey": "name"
     },
     {
@@ -22,7 +22,7 @@ export const SectionsInputs = (): FormInput[] => {
         "type": "select",
         "label": "Parent Department (Optional)",
         "cardId": "general",
-        "apiUrl": "hrSections",
+        "apiUrl": ["hrSections"],
         "labelKey": "name"
     }
 ];

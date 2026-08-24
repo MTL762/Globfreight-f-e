@@ -1,4 +1,3 @@
-import React from "react";
 import { fetchHelper } from "@/api/fetch";
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 import { ContactUsTableWrapper } from "./components/ContactUsTableWrapper";

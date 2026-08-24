@@ -8,7 +8,7 @@ export const ContractInputs = (): FormInput[] => {
         "label": "Employee",
         "required": true,
         "cardId": "general",
-        "apiUrl": "adminUsers",
+        "apiUrl": ["adminUsers"],
         "labelKey": "name"
     },
     {
@@ -17,7 +17,7 @@ export const ContractInputs = (): FormInput[] => {
         "label": "Contract Type",
         "required": true,
         "cardId": "general",
-        "apiUrl": "hrContractTypes",
+        "apiUrl": ["hrContractTypes"],
         "labelKey": "name"
     },
     {
@@ -26,7 +26,7 @@ export const ContractInputs = (): FormInput[] => {
         "label": "Section / Department",
         "required": true,
         "cardId": "general",
-        "apiUrl": "hrSections",
+        "apiUrl": ["hrSections"],
         "labelKey": "name"
     },
     {
