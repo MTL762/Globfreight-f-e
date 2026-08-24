@@ -56,11 +56,8 @@ export function QuickRouteCalculator({
   const [selectedOrigin, setSelectedOrigin] = useState(origins[0].id);
   const [selectedDest, setSelectedDest] = useState(destinations[0].id);
   const [selectedService, setSelectedService] = useState(services[0].id);
-  const [hasCalculated, setHasCalculated] = useState(false);
-
   const currentDest = destinations.find((d) => d.id === selectedDest) || destinations[0];
   const currentService = services.find((s) => s.id === selectedService) || services[0];
-  const currentOrigin = origins.find((o) => o.id === selectedOrigin) || origins[0];
 
   return (
     <div className="route-calculator">

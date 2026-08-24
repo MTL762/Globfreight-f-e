@@ -4,6 +4,10 @@ export const endpoints = {
   authProfile: "/auth/profile",
   authChangePassword: "/auth/change_password",
   authLogout: "/auth/logout",
+  authRegister: "/auth/register",
+  authSendCode: "/auth/send_code",
+  authVerifyEmail: "/auth/verify_email",
+  authResetPassword: "/auth/reset_password",
 
   // Admin
   adminDashboard: "/admin/dashboard",

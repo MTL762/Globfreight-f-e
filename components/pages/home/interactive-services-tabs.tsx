@@ -9,8 +9,6 @@ import {
   Coins,
   CheckCircle2,
   ArrowRight,
-  ShieldAlert,
-  Clock,
   ExternalLink
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";

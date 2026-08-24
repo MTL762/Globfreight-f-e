@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Anchor, Building2, ChevronRight, Compass, MapPin, Navigation, ShieldCheck, Zap } from "lucide-react";
+import { Anchor, Building2, ChevronRight, Navigation, ShieldCheck, Zap } from "lucide-react";
 
 interface Hub {
   id: string;
