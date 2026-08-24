@@ -10,13 +10,14 @@ import { PROJECT_NAME } from "@/utils/config";
 // export const generateStaticParams = GenerateStaticParams;
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const headerName= t("Roles");
+  const headerName = t("Roles");
   return {
-     title:  headerName +PROJECT_NAME,
-  description: "Manage " + headerName + " items in the HR dashboard"
+    title: `${headerName} | ${PROJECT_NAME}`,
+    description: `Manage ${headerName} items in the HR dashboard`
   };
 }
-async function page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
+
+export default async function Page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
   const t = await getTranslations();
   const data = await fetchHelper({
     endPoint: ["roles"],
@@ -24,29 +25,24 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
     params: await searchParams,
   });
 
-  if (!data) return <div>Error...</div>;
-
-  const filteredData = data?.data
+  const filteredData = Array.isArray(data?.data) ? data.data : [];
 
   return (
-    <>
-    <CustomHeader />
+    <div className="space-y-6">
+      <CustomHeader />
       <TableBasic
         data={filteredData}
         columns={RolesColumns}
         pagination={{
-          total: data?.total,
+          total: data?.total || (Array.isArray(filteredData) ? filteredData.length : 0),
         }}
         tableActions={{
           onEdit: true,
           onDelete: ["roles"],
-          //onInfo: true,
         }}
         cardHeader={t("Roles")}
-        filters={[]}
+        filters={[{ name: "name", type: "text", width: 4 }]}
       />
-    </>
+    </div>
   );
 }
-
-export default page;

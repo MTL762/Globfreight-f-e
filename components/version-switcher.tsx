@@ -16,12 +16,12 @@ export function VersionSwitcher(): JSX.Element {
               <div className="flex justify-center items-center w-full rounded-lg text-foreground">
                 <Link href="/">
                   <Image
-                    src="/logo.svg"
+                    src="/logo.png"
                     width={90}
                     height={100}
                     alt="Logo"
                     priority
-                    className="transition-transform hover:scale-105"
+                    className="transition-transform hover:scale-105 object-contain"
                   />
                 </Link>
               </div>

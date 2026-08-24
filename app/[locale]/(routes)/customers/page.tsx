@@ -10,13 +10,14 @@ import { PROJECT_NAME } from "@/utils/config";
 // export const generateStaticParams = GenerateStaticParams;
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const headerName= t("Customers");
+  const headerName = t("Customers");
   return {
-     title:  headerName +PROJECT_NAME,
-  description: "Manage " + headerName + " items in the HR dashboard"
+    title: `${headerName} | ${PROJECT_NAME}`,
+    description: `Manage ${headerName} items in the HR dashboard`
   };
 }
-async function page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
+
+export default async function Page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
   const t = await getTranslations();
   const data = await fetchHelper({
     endPoint: ["adminCustomers"],
@@ -24,29 +25,24 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
     params: await searchParams,
   });
 
-  if (!data) return <div>Error...</div>;
-
-  const filteredData = data?.data
+  const filteredData = Array.isArray(data?.data) ? data.data : [];
 
   return (
-    <>
-    <CustomHeader />
+    <div className="space-y-6">
+      <CustomHeader />
       <TableBasic
         data={filteredData}
         columns={CustomersColumns}
         pagination={{
-          total: data?.total,
+          total: data?.total || 0,
         }}
         tableActions={{
           onEdit: true,
           onDelete: ["adminCustomers"],
-          //onInfo: true,
         }}
         cardHeader={t("Customers")}
-        filters={[{"name":"name","type":"text","width":3}]}
+        filters={[{ name: "name", type: "text", width: 3 }]}
       />
-    </>
+    </div>
   );
 }
-
-export default page;

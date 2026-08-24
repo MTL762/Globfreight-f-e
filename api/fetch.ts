@@ -5,10 +5,8 @@ import { endpointName, endpoints, endpointType } from '@/utils/endpoints';
 import { extractSearchParams } from "@/utils/extractSearchParams";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { newRefreshToken } from "./refresh-token";
 
-const baseUrl = process.env.API_BASE_URL;
+const baseUrl = process.env.API_BASE_URL || process.env.baseUrl || "https://api.globfreight.com";
 
 export async function fetchHelper({
   endPoint,
@@ -18,11 +16,8 @@ export async function fetchHelper({
   params,
   cache,
   locale,
-  isLocalized,
-  refreshToken = true,
   tags,
   revalidate
-
 }: {
   isLocalized?: boolean;
   headers?: HeadersInit;
@@ -34,45 +29,39 @@ export async function fetchHelper({
   body?: unknown;
   cache?: "no-cache" | "default" | "reload" | "force-cache" | "only-if-cached";
   params?: any;
-  refreshToken?: boolean;
 }): Promise<any> {
   "use server";
 
   const url = handleUrl(endPoint, params);
-
-
-  const token = (await cookies()).get(TOKEN);
+  const cookieStore = await cookies();
+  const token = cookieStore.get(TOKEN);
   const isFormData = body instanceof FormData;
+
   if (locale === undefined) {
     locale = ((await getLocale()) as locales) ?? "ar";
   }
-  console.log(url, ";das2", {
-    Authorization: `Bearer ${token?.value}`,
-    TOKEN
-  });
-  const headers2 = {
+
+  const requestHeaders = {
     ...(isFormData ? {} : { "Content-Type": "application/json" }),
-    ...(token?.value ? { Authorization: `Bearer ${token?.value}` } : {}),
+    ...(token?.value ? { Authorization: `Bearer ${token.value}` } : {}),
     Accept: "application/json",
-    // Locale: locale ?? "ar",
-    // isLocalized: isLocalized ? isLocalized.toString() : "false",
     ...(headers ?? {})
   };
+
   let res: Response;
   try {
     res = await fetch(url, {
       method,
-      headers: headers2,
+      headers: requestHeaders,
       next: {
-        revalidate: revalidate,
+        revalidate,
         tags: tags ? [tags.join("")] : []
       },
       cache: cache ?? "no-cache",
       ...(method !== "GET" ? { body: isFormData ? (body as any) : JSON.stringify(body) } : {})
     });
-    console.log(res, 'dsae2ds')
   } catch (error) {
-    console.log("Backend offline or connection error:", error);
+    console.error("Backend offline or connection error:", error);
     return {
       success: false,
       data: [],
@@ -80,34 +69,18 @@ export async function fetchHelper({
       message: "Backend server is offline or unreachable."
     };
   }
-  console.log(res, 'das2edsa');
-  // if (res.status === 503 || res.status === 502) {
-  //   const header = nextHeader();
-  //   if (header.get("header-URL") !== `/${locale}/updating-system`) {
-  //     redirect(`/ar/updating-system`);
-  //   } else {
-  //     return { success: false, message: "System is updating" };
-  //   }
-  // }
-  // console.log(headers2);
-  // console.log("->2", url, res.status);
-  if (res.status === 401 && refreshToken == true) {
-    await newRefreshToken();
-    return await fetchHelper({
-      endPoint,
-      method,
-      body,
-      headers,
-      params,
-      cache,
-      locale,
-      isLocalized,
-      refreshToken: false
-    });
-  } else if (res.status === 401 && refreshToken == false) {
-    // await removeToken();
-    redirect("/ar/removeToken");
+
+  // Handle 401 Unauthorized
+  if (res.status === 401) {
+    return {
+      success: false,
+      data: [],
+      total: 0,
+      status: 401,
+      message: "Unauthenticated"
+    };
   }
+
   let result: any = null;
   const contentType = res.headers.get("content-type");
 
@@ -119,15 +92,17 @@ export async function fetchHelper({
       result = { message: "Error parsing JSON response" };
     }
   } else {
-    // Handle non-JSON response (could be HTML error page)
     result = { message: res.statusText || "Something went wrong" };
   }
 
   if (!res.ok) {
     return {
       success: false,
-      result
-    } as any;
+      data: [],
+      total: 0,
+      result,
+      status: res.status
+    };
   }
 
   return {
@@ -136,24 +111,29 @@ export async function fetchHelper({
     status: res.status
   };
 }
+
 function handleUrl(endPoint: endpointType, params: UrlSearchParamsInterface | any) {
   let queryString = "";
   if (params !== undefined) {
     queryString = extractSearchParams(params);
   }
-  const url = `${baseUrl}${endPoint
-    ?.map((item: endpointName | number | string) => {
+
+  const cleanBaseUrl = (baseUrl || "https://api.globfreight.com").replace(/\/+$/, "");
+
+  const path = (endPoint || [])
+    .map((item: endpointName | number | string) => {
       if (typeof item === "number" || Boolean(Number(item))) {
         return `/${item}`;
       } else {
-        return endpoints[item as endpointName];
+        const ep = (endpoints as Record<string, string>)[item as string] || item;
+        return typeof ep === "string" ? (ep.startsWith("/") ? ep : `/${ep}`) : "";
       }
     })
-    ?.join("")}${queryString.length > 1
-      ? queryString.startsWith("?")
-        ? queryString
-        : `?${queryString.toString()}`
-      : ""
-    }`;
-  return url;
+    .join("");
+
+  const query = queryString.length > 0
+    ? (queryString.startsWith("?") ? queryString : `?${queryString}`)
+    : "";
+
+  return `${cleanBaseUrl}${path.startsWith("/") ? path : `/${path}`}${query}`;
 }

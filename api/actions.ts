@@ -1,5 +1,6 @@
 "use server";
-import { REFRESH_TOKEN, TOKEN } from "@/utils/config";
+
+import { TOKEN } from "@/utils/config";
 import { cookies } from "next/headers";
 
 const cookieOptions = {
@@ -9,20 +10,9 @@ const cookieOptions = {
   path: "/",
 } as const;
 
-export async function setRefreshToken(refreshToken: string) {
-  const c = await cookies();
-  c.set(REFRESH_TOKEN, refreshToken, {
-    ...cookieOptions,
-    maxAge: 60 * 60 * 24 * 30 // 30 days
-  });
-  console.log(c.getAll(), "das2das2das2d",refreshToken);
-
-}
-
 export async function removeToken() {
   const c = await cookies();
   c.delete(TOKEN);
-  c.delete(REFRESH_TOKEN);
 }
 
 export async function setToken(token: string) {

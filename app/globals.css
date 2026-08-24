@@ -7,28 +7,33 @@ body {
 }
 
 :root {
-  /* HR-inspired color palette - Teal and Navy */
-  --logo-teal: 182 80% 31%; /* Primary Teal for trust and clarity */
-  --logo-teal-dark: 182 80% 24%; /* Darker teal for depth */
-  --logo-navy: 215 50% 26%; /* Primary Navy for professionalism */
-  --logo-navy-dark: 216 58% 18%; /* Darker navy for dark mode accents */
-  --logo-mint-light: 186 44% 92%; /* Light mint for subtle accents */
+  /* HR-inspired color palette based on Logo - Vibrant Orange & Deep Navy */
+  --logo-orange: 26 100% 50%; /* Primary Orange from Logo (#FE6F00) */
+  --logo-orange-dark: 24 100% 44%; /* Darker orange for depth/hover (#E15A00) */
+  --logo-navy: 212 100% 19%; /* Deep Navy from Logo (#002E62) */
+  --logo-navy-dark: 213 100% 13%; /* Darker navy (#001E42) */
+  --logo-peach-light: 27 100% 96%; /* Subtle warm peach accent */
 
-  --brand-1: var(--logo-teal);
+  --brand-1: var(--logo-orange);
   --brand-2: var(--logo-navy);
+
+  /* Backward-compatibility aliases */
+  --logo-teal: var(--logo-orange);
+  --logo-teal-dark: var(--logo-orange-dark);
+  --logo-mint-light: var(--logo-peach-light);
 
   /* Light mode colors */
   --background: 0 0% 100%;
-  --foreground: 0 0% 15%;
+  --foreground: 222 47% 11%;
 
-  --primary: var(--logo-teal);
+  --primary: var(--logo-orange);
   --primary-foreground: 0 0% 100%;
 
   --secondary: var(--logo-navy);
   --secondary-foreground: 0 0% 100%;
 
-  --accent: var(--logo-mint-light);
-  --accent-foreground: 216 38% 20%;
+  --accent: var(--logo-peach-light);
+  --accent-foreground: 24 100% 30%;
 
   --info: var(--logo-navy);
   --info-foreground: 0 0% 100%;
@@ -36,113 +41,113 @@ body {
   --success: 142 76% 36%;
   --success-foreground: 0 0% 100%;
 
-  --warning: 45 93% 47%;
+  --warning: 38 92% 50%;
   --warning-foreground: 26 83% 14%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --card: 0 0% 98%;
-  --card-foreground: 0 0% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
 
-  --popover: 0 0% 99%;
-  --popover-foreground: 0 0% 15%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
 
-  --muted: 210 40% 96%;
+  --muted: 214 32% 96%;
   --muted-foreground: 215 16% 47%;
 
   --border: 214 32% 91%;
   --input: 214 32% 91%;
-  --ring: var(--logo-teal);
+  --ring: var(--logo-orange);
 
-  --chart-1: var(--logo-teal);
+  --chart-1: var(--logo-orange);
   --chart-2: var(--logo-navy);
   --chart-3: var(--logo-navy-dark);
-  --chart-4: var(--logo-teal-dark);
-  --chart-5: 45 93% 47%;
+  --chart-4: var(--logo-orange-dark);
+  --chart-5: 38 92% 50%;
 
   --sidebar-background: 0 0% 99%;
-  --sidebar-foreground: 0 0% 15%;
-  --sidebar-primary: var(--logo-teal);
+  --sidebar-foreground: 222 47% 11%;
+  --sidebar-primary: var(--logo-orange);
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: var(--logo-mint-light);
-  --sidebar-accent-foreground: 216 38% 20%;
+  --sidebar-accent: var(--logo-peach-light);
+  --sidebar-accent-foreground: 24 100% 30%;
   --sidebar-border: 214 32% 91%;
-  --sidebar-ring: var(--logo-teal);
+  --sidebar-ring: var(--logo-orange);
 
   --shadow: 220 14% 0%;
   --radius: 0.5rem;
 
   /* Base utility colors */
   --base: #ffffff;
-  --Secondary: #eef7f7;
-  --secondary-accent: #d9efef;
-  --text-color: #2d2d2d;
+  --Secondary: #fff7ed;
+  --secondary-accent: #ffedd5;
+  --text-color: #1e293b;
 }
 
 .dark {
   /* Dark mode colors */
-  --background: 224 71% 4%;
-  --foreground: 213 31% 91%;
-  --brand-1: var(--logo-teal);
+  --background: 222 47% 7%;
+  --foreground: 210 40% 98%;
+  --brand-1: var(--logo-orange);
   --brand-2: var(--logo-navy);
 
-  --primary: var(--logo-teal);
+  --primary: var(--logo-orange);
   --primary-foreground: 0 0% 100%;
 
   --secondary: var(--logo-navy);
   --secondary-foreground: 0 0% 100%;
 
-  --accent: var(--logo-navy-dark);
+  --accent: 215 28% 17%;
   --accent-foreground: 210 40% 98%;
 
-  --info: var(--logo-navy);
+  --info: 212 100% 35%;
   --info-foreground: 210 40% 98%;
 
   --success: 142 70% 50%;
   --success-foreground: 144 17% 95%;
 
-  --warning: 48 96% 53%;
+  --warning: 38 92% 50%;
   --warning-foreground: 30 100% 10%;
 
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --card: 224 71% 4%;
-  --card-foreground: 213 31% 91%;
+  --card: 222 47% 10%;
+  --card-foreground: 210 40% 98%;
 
-  --popover: 224 71% 4%;
-  --popover-foreground: 215 20.2% 65.1%;
+  --popover: 222 47% 10%;
+  --popover-foreground: 210 40% 98%;
 
-  --muted: 215 25% 27%;
+  --muted: 217 33% 17%;
   --muted-foreground: 215 20% 65%;
 
-  --border: 215 25% 27%;
-  --input: 215 25% 27%;
-  --ring: var(--logo-teal);
+  --border: 217 33% 18%;
+  --input: 217 33% 18%;
+  --ring: var(--logo-orange);
 
-  --chart-1: var(--logo-teal);
+  --chart-1: var(--logo-orange);
   --chart-2: var(--logo-navy);
   --chart-3: var(--logo-navy-dark);
-  --chart-4: var(--logo-teal-dark);
-  --chart-5: 48 96% 53%;
+  --chart-4: var(--logo-orange-dark);
+  --chart-5: 38 92% 50%;
 
-  --sidebar-background: 224 71% 4%;
-  --sidebar-foreground: 240 5% 96%;
-  --sidebar-primary: var(--logo-teal);
+  --sidebar-background: 222 47% 9%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: var(--logo-orange);
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: var(--logo-navy-dark);
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-border: 215 25% 27%;
-  --sidebar-ring: var(--logo-teal);
+  --sidebar-accent: 217 33% 17%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: 217 33% 18%;
+  --sidebar-ring: var(--logo-orange);
 
   --shadow: 220 14% 100%;
 
   /* Base utility colors for dark mode */
-  --base: #0a0a0a;
-  --Secondary: #152127;
-  --secondary-accent: #20323c;
-  --text-color: #f0f0f0;
+  --base: #0f172a;
+  --Secondary: #1e293b;
+  --secondary-accent: #334155;
+  --text-color: #f8fafc;
 }
 
 @layer utilities {

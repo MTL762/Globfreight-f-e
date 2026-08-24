@@ -12,7 +12,7 @@ export function SidebarBrandHeader(): JSX.Element {
           <div className="flex w-full items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="flex size-10 items-center justify-center rounded-md ">
-                <Image src={"/logo.svg"} width={40} height={40} alt="Logo" />
+                <Image src={"/logo.png"} width={40} height={40} alt="Logo" className="object-contain" />
               </span>
             </div>
             <div className="flex items-center gap-2 text-sidebar-foreground/70">

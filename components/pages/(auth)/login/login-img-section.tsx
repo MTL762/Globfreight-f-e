@@ -12,7 +12,7 @@ export default async function LoginImgSection(): Promise<JSX.Element> {
 
       <div className="relative z-10 text-center max-w-2xl">
         <div className="mb-8 flex items-center justify-center gap-4">
-          <Image src="/logo.svg" alt="Logo" width={160} height={100} className="mx-auto" />
+          <Image src="/logo.png" alt="Logo" width={160} height={100} className="mx-auto object-contain" />
           <div className="hidden md:flex flex-col text-left">
             <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
               {t("People Operations")}

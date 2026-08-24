@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description: "Enow HR System",
   applicationName: PROJECT_NAME,
   icons: [
-    { rel: "icon", url: "/logo.svg" },
-    { rel: "apple-touch-icon", url: "/logo.svg" }
+    { rel: "icon", url: "/logo.png" },
+    { rel: "apple-touch-icon", url: "/logo.png" }
   ],
   appleWebApp: {
     capable: true,
@@ -59,9 +59,9 @@ export default async function AppLayout(props: {
 
             <NextTopLoader
               crawl
-              shadow={`#16a34a`}
+              shadow={`#FE6F00`}
               easing="easing"
-              color="#16a34a"
+              color="#FE6F00"
               showSpinner={false}
             />
             {/* Add a modal root div for portal-based components */}

@@ -63,7 +63,7 @@ export const onMessageListener = ({
 };
 
 // Display a notification
-export const displayNotification = (title: string, body: string, icon: string = "/logo.svg") => {
+export const displayNotification = (title: string, body: string, icon: string = "/logo.png") => {
   if (Notification.permission === "granted") {
     new Notification(title, {
       body,

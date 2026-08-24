@@ -29,7 +29,7 @@ export function LoginForm() {
           <div className="px-6 py-10 sm:px-10 sm:py-12 lg:px-12">
             <CardHeader className="space-y-4 p-0">
               <div className="flex items-center justify-center gap-3">
-                 <Image src="/logo.svg" alt="Logo" width={120} height={42} />
+                 <Image src="/logo.png" alt="Logo" width={120} height={42} className="object-contain" />
               </div>
               <div className="space-y-2">
                 <CardTitle className="text-2xl sm:text-3xl font-semibold text-foreground">
