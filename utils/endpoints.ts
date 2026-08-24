@@ -39,6 +39,8 @@ export const endpoints = {
   customers: "/admin/customers",
   sentEmails: "/admin/sent-emails",
   visitors: "/admin/visitors",
+  profile: "/auth/profile",
+  changePassword: "/auth/change_password"
 };
 
 export type endpointName = keyof typeof endpoints;
