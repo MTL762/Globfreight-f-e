@@ -13,10 +13,10 @@ import { ChevronUp, LogOut } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaUserFriends } from "react-icons/fa";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 const API_IMG_URL = process.env.NEXT_PUBLIC_API_IMG_URL as string;
-// ...existing code...
 
 export const SideBarFooter = ({
   user
@@ -30,6 +30,8 @@ export const SideBarFooter = ({
 }): JSX.Element => {
   const t = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
+
   return (
     <>
       <SidebarMenu>
@@ -47,8 +49,6 @@ export const SideBarFooter = ({
                 />
                 <div className="flex flex-col">
                   <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                  {/* Uncomment below if you wish to show user email */}
-                  {/* <p className="text-xs text-gray-500">{user.email}</p> */}
                 </div>
                 <ChevronUp className="ml-auto text-gray-600" />
               </SidebarMenuButton>
@@ -71,6 +71,7 @@ export const SideBarFooter = ({
                 <button
                   onClick={async () => {
                     await removeToken();
+                    router.push(`/${locale}`);
                   }}
                   className="flex w-full items-center px-3 py-2 text-sm font-semibold text-gray-700"
                 >

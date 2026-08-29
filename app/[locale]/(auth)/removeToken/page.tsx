@@ -10,8 +10,8 @@ export default function Page() {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-    // Redirect after cookie deletion
-    router.push("/signin");
+    // Redirect to default /[locale] home after cookie deletion
+    router.push("/");
   }, [router]);
 
   return <></>;

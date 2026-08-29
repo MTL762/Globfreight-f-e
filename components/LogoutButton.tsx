@@ -15,14 +15,14 @@ const LogoutButton: React.FC = () => {
   const handleLogout = async () => {
     try {
       await removeToken();
-      router.push(`/${locale}/signin`);
+      router.push(`/${locale}`);
       fetchHelper({
         endPoint: ['logout'],
         method: "POST"
       });
     } catch (error) {
       toast.error(t(`${error}`));
-      router.push(`/${locale}/signin`);
+      router.push(`/${locale}`);
       await removeToken();
     }
   };

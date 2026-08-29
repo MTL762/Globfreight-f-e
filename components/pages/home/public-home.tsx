@@ -1,5 +1,5 @@
 import { PublicShell } from "./public-shell";
-import { PortSpotlightSection } from "./port-spotlight-section";
+import { HeroSection } from "./hero-section";
 import { PipelineSection } from "./pipeline-section";
 import { ServicesSection } from "./services-section";
 import { GatewaysSection } from "./gateways-section";
@@ -11,31 +11,25 @@ export async function PublicHome() {
   return (
     <PublicShell>
       <div className="flex w-full flex-col">
-        {/* Live Port Status Ribbon */}
+        {/* Clean, High-Impact Hero Command Center */}
+        <HeroSection />
 
-
-        {/* Redesigned Hero Command Center */}
-        {/* <HeroSection /> */}
-
-        {/* Visual Port Imagery & Value Banner */}
-        <PortSpotlightSection />
-
-        {/* 4-Stage Logistics Pipeline Flow */}
+        {/* 4-Stage European Logistics Pipeline */}
         <PipelineSection />
 
-        {/* Interactive Capabilities Matrix */}
+        {/* Core Capabilities Interactive Matrix */}
         <ServicesSection />
 
-        {/* European Gateway Corridors Showcase */}
+        {/* Strategic Gateway Corridors & Port Hubs */}
         <GatewaysSection />
 
-        {/* Compliance & Trust Grid */}
+        {/* Operational Trust & Compliance */}
         <TrustSection />
 
-        {/* Dynamic Latest Insights Section */}
+        {/* Latest Logistics Intelligence */}
         <LatestInsightsSection />
 
-        {/* High-Conversion CTA Band */}
+        {/* High-Conversion Direct Action Band */}
         <CtaBandSection />
       </div>
     </PublicShell>

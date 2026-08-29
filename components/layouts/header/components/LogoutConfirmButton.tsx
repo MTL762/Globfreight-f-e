@@ -28,7 +28,7 @@ export default function LogoutConfirmButton() {
   const handleLogout = async () => {
     try {
       await removeToken();
-      router.push(`/${locale}/signin`);
+      router.push(`/${locale}`);
       fetchHelper({
         endPoint: ["logout"],
         method: "POST"
@@ -36,7 +36,7 @@ export default function LogoutConfirmButton() {
       setOpen(false);
     } catch (error) {
       toast.error(t(`${error}`));
-      router.push(`/${locale}/signin`);
+      router.push(`/${locale}`);
       await removeToken();
       setOpen(false);
     }

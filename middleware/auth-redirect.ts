@@ -50,10 +50,10 @@ export function determineAuthRedirect(request: NextRequest): {
   let shouldRedirect = false;
   let redirectUrl = "";
 
-  // 1. Unauthenticated user trying to access protected admin dashboard routes
+  // 1. Unauthenticated user trying to access protected routes -> default route is /[locale]
   if (!token) {
     if (isProtectedRoute) {
-      redirectUrl = `/${locale}/signin`;
+      redirectUrl = `/${locale}`;
       shouldRedirect = true;
     }
   } else {
