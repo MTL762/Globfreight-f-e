@@ -49,3 +49,4 @@ tests/task.config.ts
 firebase.txt
 check-missing-keys.js
 .env.production
+.agents/
