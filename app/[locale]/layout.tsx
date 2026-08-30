@@ -11,7 +11,7 @@ import "../globals.css";
 
 export const metadata: Metadata = {
   title: PROJECT_NAME,
-  description: "Enow HR System",
+  description: `${PROJECT_NAME} `,
   applicationName: PROJECT_NAME,
   icons: [
     { rel: "icon", url: "/logo.png" },
