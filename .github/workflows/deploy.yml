@@ -1,36 +1,68 @@
-name: Deploy to Server
+name: CI / Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  # A second push while a deploy runs would race on the release symlink.
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  ci:
+    name: Lint & build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Set server host based on branch
-        id: set-host
-        run: |
-          if [ "${GITHUB_REF##*/}" = "main" ]; then
-            echo "SERVER_HOST=${{ secrets.SERVER_HOST_MAIN }}" >> $GITHUB_ENV
-          fi
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.0
+      - uses: pnpm/action-setup@v4
         with:
-          host: ${{ env.SERVER_HOST }}
-          username: root
-          password: ${{ secrets.SERVER_PASSWORD }}
-          port: 22
-          script: |
-            cd /var/www/apps/quran-dashboard-neovida
-            git clean -fd
-            git pull 
-            npm i --force
-            npm run build
-            pm2 restart all
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+        env:
+          HUSKY: 0
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Build
+        run: pnpm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          API_BASE_URL: https://api.globfreight.com
+          NEXT_PUBLIC_API_BASE_URL: https://api.globfreight.com
+          API_IMG_URL: https://api.globfreight.com
+          NEXT_PUBLIC_API_IMG_URL: https://api.globfreight.com
+
+  deploy:
+    name: Deploy to production
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://globfreight.com
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          command_timeout: 30m
+          # The server-side script clones and builds a fresh release, then flips
+          # the `current` symlink only on success — so a bad build cannot take
+          # the live site down.
+          script: /var/www/globfreight-fe/deploy.sh
