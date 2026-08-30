@@ -9,7 +9,6 @@ import Select, { type MultiValue, type SingleValue } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import { toast } from "sonner";
 import {
-  type ApiResponseItem,
   type Option,
   type SelectPaginatedProps,
   customStyles
@@ -96,15 +95,19 @@ Readonly<SelectPaginatedProps>) {
         console.log(data, "datasad2", name);
         const formattedData = Array.isArray(data?.data)
           ? data.data
-          : data.roles
-            ? data.roles
-            : data;
+          : Array.isArray(data?.permissions)
+            ? data.permissions
+            : data.roles
+              ? data.roles
+              : Array.isArray(data)
+                ? data
+                : [];
         const newOptions = Array.isArray(formattedData)
-          ? formattedData?.map((item: ApiResponseItem) => ({
-              label: item[labelKey] || "Unknown",
-              value: item[idKey] || "",
-              icon: item.icon ?? "",
-              group: groupBy ? item[groupBy] : undefined
+          ? formattedData?.map((item: any) => ({
+              label: (typeof item === "string" ? item : item[labelKey] || item.name) || "Unknown",
+              value: (typeof item === "string" ? item : item[idKey] || item.name || item.id) || "",
+              icon: typeof item === "object" && item !== null ? item.icon ?? "" : "",
+              group: groupBy && typeof item === "object" && item !== null ? item[groupBy] : undefined
             }))
           : [];
 
@@ -245,7 +248,10 @@ Readonly<SelectPaginatedProps>) {
 
     // For multi select
     if (Array.isArray(value)) {
-      return value.map(v => allOptions.find(opt => opt.value === v)).filter(Boolean);
+      return value.map(v => {
+        const found = allOptions.find((opt: Option) => opt.value === v);
+        return found || { label: String(v), value: v };
+      });
     }
 
     return undefined;

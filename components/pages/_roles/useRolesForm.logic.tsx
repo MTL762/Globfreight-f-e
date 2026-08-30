@@ -12,17 +12,31 @@ import { RolesSchema, type RolesType } from "./roles.schema";
 export default function useRolesLogic({ data }: { data?: any }) {
   const t = useTranslations();
   const inputs = RolesInputs();
+
+  const normalizedData = data
+    ? {
+        ...data,
+        permission_ids: Array.isArray(data.permissions)
+          ? data.permissions.map((p: any) =>
+              typeof p === "object" && p !== null ? Number(p.id) : Number(p)
+            )
+          : Array.isArray(data.permission_ids)
+            ? data.permission_ids.map((p: any) => Number(p))
+            : []
+      }
+    : undefined;
+
   const { control, handleSubmit, reset } = useForm<RolesType>({
     mode: "onSubmit",
     resolver: zodResolver(RolesSchema(t)),
-    defaultValues: extractFormDefaultInputs(inputs, data) as RolesType,
+    defaultValues: extractFormDefaultInputs(inputs, normalizedData) as RolesType,
   });
 
   const onSubmit = async (formData: RolesType) => {
     await FormAction({
       data,
       formData: extractFormNameInputs({ inputs, data: formData }),
-      endpoint: ['roles'],
+      endpoint: ["roles"],
       reset: reset,
       redirectLink: "roles",
       t,
