@@ -29,7 +29,7 @@ export function LoginForm() {
           <div className="px-6 py-10 sm:px-10 sm:py-12 lg:px-12">
             <CardHeader className="space-y-4 p-0">
               <div className="flex items-center justify-center gap-3">
-                 <Image src="/logo.png" alt="Logo" width={120} height={42} className="object-contain" />
+                <Image src="/logo.png" alt="Logo" width={120} height={42} className="object-contain" />
               </div>
               <div className="space-y-2">
                 <CardTitle className="text-2xl sm:text-3xl font-semibold text-foreground">
@@ -67,34 +67,34 @@ export function LoginForm() {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <Label htmlFor="password" className="text-sm font-medium">
-                        {t("Password")}
-                      </Label>
-                    </div>
-                    <div className="relative group">
-                      <Input
-                        id="password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        required
-                        className="h-11 rounded-full border border-border/70 dark:border-gray-600 bg-white dark:bg-gray-800 pl-10 pr-12 shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
-                      />
-                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                      <button
-                        type="button"
-                        onClick={togglePasswordVisibility}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
-                        aria-label={showPassword ? "Hide password" : "Show password"}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
-                    </div>
+                      {t("Password")}
+                    </Label>
                   </div>
+                  <div className="relative group">
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      className="h-11 rounded-full border border-border/70 dark:border-gray-600 bg-white dark:bg-gray-800 pl-10 pr-12 shadow-sm focus-visible:ring-1 focus-visible:ring-black/20 dark:focus-visible:ring-white/20"
+                    />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                  {notificationPermission !== "granted" && (
+                {/* {notificationPermission !== "granted" && (
                     <div className="space-y-2">
                       <Button
                         type="button"
@@ -109,24 +109,24 @@ export function LoginForm() {
                         {t("Allow notifications to receive updates")}
                       </p>
                     </div>
-                  )}
+                  )} */}
 
-                  <Button
-                    disabled={isLoading}
-                    type="submit"
-                    className="w-full h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-sm tracking-wide shadow-md"
-                    variant="default"
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center gap-2">
-                        <span className="h-4 w-4 rounded-full border-2 border-white border-r-transparent animate-spin"></span>
-                        <span>{t("Processing")}</span>
-                      </div>
-                    ) : (
-                      t("Sign In")
-                    )}
-                  </Button>
-                </form>
+                <Button
+                  disabled={isLoading}
+                  type="submit"
+                  className="w-full h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-sm tracking-wide shadow-md"
+                  variant="default"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <span className="h-4 w-4 rounded-full border-2 border-white border-r-transparent animate-spin"></span>
+                      <span>{t("Processing")}</span>
+                    </div>
+                  ) : (
+                    t("Sign In")
+                  )}
+                </Button>
+              </form>
 
               <footer className="mt-8 text-center text-xs text-muted-foreground">
                 © {new Date().getFullYear()}{" "}
