@@ -11,10 +11,11 @@ export async function SiteHeader() {
 
   const nav = [
     ["home", "/"],
-    ["about", "/about"],
-    ["services", "/services"],
-    ["blog", "/blog"],
-    ["faq", "/faq"]
+    ["services", "/#services"],
+    ["about", "/#about"],
+    ["blog", "/#blog"],
+    ["faq", "/#faq"],
+    ["ship", "/ship-with-us"]
   ] as const;
 
   return (
@@ -58,7 +59,7 @@ export async function SiteHeader() {
 
           <Link
             className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs sm:text-sm font-bold shadow-xs hover:opacity-90 active:scale-[0.98] transition-all"
-            href="/contact"
+            href="/#contact"
           >
             <span>{t("contact")}</span>
             <ArrowUpRight size={14} />

@@ -5,7 +5,7 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginForm } from "@/features/auth/login/hooks/use-login-form";
-import { Bell, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,9 +17,7 @@ export function LoginForm() {
     isLoading,
     showPassword,
     togglePasswordVisibility,
-    onSubmit,
-    notificationPermission,
-    requestPermission
+    onSubmit
   } = useLoginForm();
 
   return (

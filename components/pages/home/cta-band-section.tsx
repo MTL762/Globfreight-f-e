@@ -6,7 +6,7 @@ export async function CtaBandSection() {
   const t = await getTranslations("Home");
 
   return (
-    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-24 bg-slate-950 text-white">
+    <section id="contact" className="relative overflow-hidden py-16 sm:py-20 lg:py-24 bg-slate-950 text-white scroll-mt-20">
       {/* Ambient background glow */}
       <div
         className="pointer-events-none absolute -top-32 right-0 h-96 w-96 rounded-full bg-primary/15 blur-[120px]"

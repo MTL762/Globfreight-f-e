@@ -13,11 +13,24 @@ const AUTH_ROUTES = [
 
 const PROTECTED_ROUTES = [
   "dashboard",
-  "hr",
+  "faq",
+  "blog",
+  "categories",
+  "sub-categories",
+  "contact-us",
+  "customers",
+  "sent-emails",
+  "visitors",
   "users",
   "roles",
   "settings",
-  "profile"
+  "profile",
+  "hr",
+  "CRUD-generator",
+  "form-crud-generator",
+  "formCardCLI",
+  "formPage",
+  "postman-form-generator"
 ];
 
 export function determineAuthRedirect(request: NextRequest): {
@@ -43,22 +56,18 @@ export function determineAuthRedirect(request: NextRequest): {
   const isProtectedRoute =
     PROTECTED_ROUTES.includes(routeSegment) ||
     PROTECTED_ROUTES.some((route) => routeSegment.startsWith(route));
-  const isRootLocale =
-    pathSegments.length === 0 ||
-    (pathSegments.length === 1 && supportedLocales.includes(pathSegments[0]));
-
   let shouldRedirect = false;
   let redirectUrl = "";
 
-  // 1. Unauthenticated user trying to access protected routes -> default route is /[locale]
+  // 1. Unauthenticated user trying to access protected routes -> redirect to /[locale]/signin
   if (!token) {
     if (isProtectedRoute) {
-      redirectUrl = `/${locale}`;
+      redirectUrl = `/${locale}/signin`;
       shouldRedirect = true;
     }
   } else {
-    // 2. Authenticated user trying to access auth pages (except removeToken) or root
-    if ((isAuthRoute && routeSegment !== "removeToken") || isRootLocale) {
+    // 2. Authenticated user trying to access auth pages (except removeToken) -> redirect to /[locale]/dashboard
+    if (isAuthRoute && routeSegment !== "removeToken") {
       redirectUrl = `/${locale}/dashboard`;
       shouldRedirect = true;
     }

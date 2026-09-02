@@ -30,27 +30,27 @@ export async function SiteFooter() {
             {t("links")}
           </p>
           <div className="flex flex-col space-y-2.5 text-xs text-slate-400">
-            <Link href="/about" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#about" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>About Globfreight</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>All Services</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/blog" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#blog" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>Blog & Insights</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/faq" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#faq" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>FAQ Guidance</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/contact" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#contact" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>Request Quote</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/admin" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/signin" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>Staff Portal</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>

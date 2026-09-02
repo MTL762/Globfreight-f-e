@@ -5,6 +5,9 @@ import CheckAttendanceButton from "@/components/layouts/header/components/CheckA
 import LogoutConfirmButton from "@/components/layouts/header/components/LogoutConfirmButton";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { TOKEN } from "@/utils/config";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function RoutesLayout({
   children,
@@ -13,10 +16,13 @@ export default async function RoutesLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }): Promise<JSX.Element> {
-  // const data = await fetchHelper({
-  //   endPoint: ["profile"]
-  // });
   const { locale } = await params;
+  const cookieStore = await cookies();
+  const token = cookieStore.get(TOKEN)?.value;
+
+  if (!token) {
+    redirect(`/${locale}/signin`);
+  }
   return (
     <SidebarProvider>
       <AppSidebar side={locale == "ar" ? "right" : "left"} />

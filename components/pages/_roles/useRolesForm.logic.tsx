@@ -24,12 +24,23 @@ export default function useRolesLogic({ data }: { data?: any }) {
             ? data.permission_ids.map((p: any) => Number(p))
             : []
       }
-    : undefined;
+    : {
+        name: "",
+        permission_ids: []
+      };
 
-  const { control, handleSubmit, reset } = useForm<RolesType>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<RolesType>({
     mode: "onSubmit",
     resolver: zodResolver(RolesSchema(t)),
-    defaultValues: extractFormDefaultInputs(inputs, normalizedData) as RolesType,
+    defaultValues: {
+      ...(extractFormDefaultInputs(inputs, normalizedData) as RolesType),
+      permission_ids: normalizedData?.permission_ids || []
+    }
   });
 
   const onSubmit = async (formData: RolesType) => {
@@ -39,7 +50,7 @@ export default function useRolesLogic({ data }: { data?: any }) {
       endpoint: ["roles"],
       reset: reset,
       redirectLink: "roles",
-      t,
+      t
     });
   };
 
@@ -50,5 +61,6 @@ export default function useRolesLogic({ data }: { data?: any }) {
     inputs,
     formSubmit,
     t,
+    errors
   };
 }
