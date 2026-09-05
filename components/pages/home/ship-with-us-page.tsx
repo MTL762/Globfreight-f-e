@@ -140,7 +140,7 @@ export function ShipWithUsPage() {
                     Tell us about your cargo
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    Complete the 3-step form below. All fields marked with context hints are optional.
+                    Complete the 3-step form below to receive a personalized freight rate and transit schedule.
                   </p>
                 </div>
                 <ShipWithUsForm />

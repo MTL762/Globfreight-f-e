@@ -28,6 +28,7 @@ export const endpoints = {
 
   // Public
   contactUs: "/contact-us",
+  priceRequests: "/price-requests",
   visitorsTrack: "/visitors/track",
   categories: "/categories",
   categoriesSlug: "/categories/slug",
@@ -61,6 +62,7 @@ export const tags = {
   blogPosts: "blogPosts",
   faqItems: "faqItems",
   contactUs: "contactUs",
+  priceRequests: "priceRequests",
   customers: "customers",
   sentEmails: "sentEmails",
   visitors: "visitors",

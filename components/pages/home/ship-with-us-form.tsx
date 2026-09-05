@@ -10,87 +10,125 @@ import {
   User,
   Ship,
   Anchor,
-  Clock,
   Weight,
-  Box,
-  Thermometer,
-  FileText,
-  Loader2
+  Loader2,
+  Building2,
+  Phone,
+  Mail,
+  Ruler,
+  AlertCircle,
+  Sparkles
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { submitPriceRequest, PriceRequestPayload } from "@/api/price-requests";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Data Types & Defaults ───────────────────────────────────────────────────
 
-type CargoType = "fcl" | "lcl" | "bulk" | "roro" | "hazmat" | "reefer" | "";
-type ContainerSize = "20ft" | "40ft" | "40hc" | "45ft" | "";
-type IncoTerms =
-  | "EXW"
-  | "FOB"
-  | "CIF"
-  | "DAP"
-  | "DDP"
-  | "CFR"
-  | "FCA"
-  | "CPT"
-  | "CIP"
-  | "DAT"
-  | "";
+export type PriceRequestFormData = PriceRequestPayload;
 
-interface FormData {
-  // Step 1 – Cargo Details
-  cargoType: CargoType;
-  containerSize: ContainerSize;
-  quantity: string;
-  weight: string;
-  commodity: string;
-  dangerous: boolean;
-  temperature: string;
-  specialRequirements: string;
-  // Step 2 – Route & Schedule
-  originPort: string;
-  destinationPort: string;
-  readyDate: string;
-  incoterms: IncoTerms;
-  customsClearance: boolean;
-  insurance: boolean;
-  warehousing: boolean;
-  // Step 3 – Contact Info
-  companyName: string;
-  contactName: string;
-  email: string;
-  phone: string;
-  vatNumber: string;
-  notes: string;
-}
-
-const INITIAL: FormData = {
-  cargoType: "",
-  containerSize: "",
-  quantity: "",
+const INITIAL_DATA: PriceRequestFormData = {
+  from: "",
+  to: "",
+  container_type: "40ft High Cube",
+  cargo_type: "",
   weight: "",
-  commodity: "",
-  dangerous: false,
-  temperature: "",
-  specialRequirements: "",
-  originPort: "",
-  destinationPort: "",
-  readyDate: "",
-  incoterms: "",
-  customsClearance: false,
-  insurance: false,
-  warehousing: false,
-  companyName: "",
-  contactName: "",
+  dimensions: "12.03m x 2.35m x 2.69m",
+  name: "",
   email: "",
   phone: "",
-  vatNumber: "",
+  company_name: "",
   notes: ""
 };
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// ─── Options & Presets ───────────────────────────────────────────────────────
+
+interface ContainerOption {
+  value: string;
+  label: string;
+  desc: string;
+  defaultDim: string;
+}
+
+const CONTAINER_TYPES: ContainerOption[] = [
+  {
+    value: "40ft High Cube",
+    label: "40ft High Cube",
+    desc: "Max volume (76.4 m³)",
+    defaultDim: "12.03m x 2.35m x 2.69m"
+  },
+  {
+    value: "20ft Standard",
+    label: "20ft Standard",
+    desc: "Standard cargo (33.2 m³)",
+    defaultDim: "5.90m x 2.35m x 2.39m"
+  },
+  {
+    value: "40ft Standard",
+    label: "40ft Standard",
+    desc: "General volume (67.7 m³)",
+    defaultDim: "12.03m x 2.35m x 2.39m"
+  },
+  {
+    value: "45ft High Cube",
+    label: "45ft High Cube",
+    desc: "Extra capacity (86 m³)",
+    defaultDim: "13.55m x 2.35m x 2.69m"
+  },
+  {
+    value: "Reefer (40ft)",
+    label: "40ft Reefer",
+    desc: "Temperature controlled",
+    defaultDim: "11.58m x 2.29m x 2.50m"
+  },
+  {
+    value: "LCL / Shared Container",
+    label: "LCL / Partial",
+    desc: "Consolidated freight",
+    defaultDim: "Custom dimensions"
+  }
+];
+
+const POPULAR_ORIGINS = [
+  "Shanghai Port, China",
+  "Ningbo-Zhoushan, China",
+  "Shenzhen Port, China",
+  "Antwerp Port, Belgium",
+  "Hamburg Port, Germany",
+  "Rotterdam Port, Netherlands"
+];
+
+const POPULAR_DESTINATIONS = [
+  "Alexandria Port, Egypt",
+  "Port Said Port, Egypt",
+  "Damietta Port, Egypt",
+  "Antwerp Port, Belgium",
+  "Rotterdam Port, Netherlands",
+  "Hamburg Port, Germany"
+];
+
+const CARGO_PRESETS = [
+  "Electronics & Appliances",
+  "Industrial Machinery",
+  "Automotive & Spare Parts",
+  "Textiles & Garments",
+  "Chemicals & Hazmat",
+  "Foodstuffs & Perishables",
+  "General Cargo"
+];
+
+const NOTE_ASSISTANTS = [
+  "Need customs clearance assistance",
+  "Best freight rate requested",
+  "Requires door-to-door delivery",
+  "Marine cargo insurance needed",
+  "Bonded warehousing required"
+];
+
+// ─── Step Indicator Component ────────────────────────────────────────────────
 
 function StepIndicator({ step, current }: { step: number; current: number }) {
   const done = current > step;
@@ -101,7 +139,7 @@ function StepIndicator({ step, current }: { step: number; current: number }) {
         "w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-300",
         done ? "bg-primary text-primary-foreground shadow-sm" : "",
         active ? "bg-primary text-primary-foreground ring-4 ring-primary/20 shadow-md scale-110" : "",
-        !done && !active ? "bg-muted text-muted-foreground" : ""
+        !done && !active ? "bg-muted text-muted-foreground border border-border" : ""
       ].join(" ")}
     >
       {done ? <CheckCircle2 size={16} /> : step}
@@ -109,337 +147,446 @@ function StepIndicator({ step, current }: { step: number; current: number }) {
   );
 }
 
-function ToggleChip({
-  active,
-  onClick,
-  children
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={[
-        "inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold border transition-all duration-200 cursor-pointer",
-        active
-          ? "bg-primary text-primary-foreground border-primary shadow-sm"
-          : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground hover:bg-muted/40"
-      ].join(" ")}
-    >
-      {children}
-    </button>
-  );
-}
-
 function FieldGroup({
   label,
   htmlFor,
   hint,
+  required,
   children
 }: {
   label: string;
   htmlFor: string;
   hint?: string;
+  required?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-1.5">
-      <Label htmlFor={htmlFor} className="text-xs font-semibold text-foreground">
-        {label}
-      </Label>
+      <div className="flex items-center justify-between">
+        <Label htmlFor={htmlFor} className="text-xs font-semibold text-foreground flex items-center gap-1">
+          {label}
+          {required && <span className="text-destructive font-bold">*</span>}
+        </Label>
+        {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
+      </div>
       {children}
-      {hint && <p className="text-[10px] text-muted-foreground leading-snug">{hint}</p>}
     </div>
   );
 }
 
-// ─── Step 1: Cargo Details ────────────────────────────────────────────────────
+// ─── Step 1: Route & Container ───────────────────────────────────────────────
 
-const CARGO_TYPES: { value: CargoType; label: string; icon: React.ReactNode }[] = [
-  { value: "fcl", label: "FCL", icon: <Box size={14} /> },
-  { value: "lcl", label: "LCL", icon: <Package size={14} /> },
-  { value: "bulk", label: "Bulk", icon: <Weight size={14} /> },
-  { value: "roro", label: "RoRo", icon: <Ship size={14} /> },
-  { value: "hazmat", label: "Hazmat", icon: <FileText size={14} /> },
-  { value: "reefer", label: "Reefer", icon: <Thermometer size={14} /> }
-];
+function Step1({
+  data,
+  set
+}: {
+  data: PriceRequestFormData;
+  set: (patch: Partial<PriceRequestFormData>) => void;
+}) {
+  const handleSelectContainer = (option: ContainerOption) => {
+    set({
+      container_type: option.value,
+      dimensions: option.defaultDim || data.dimensions
+    });
+  };
 
-const CONTAINER_SIZES: ContainerSize[] = ["20ft", "40ft", "40hc", "45ft"];
-
-function Step1({ data, set }: { data: FormData; set: (patch: Partial<FormData>) => void }) {
   return (
     <div className="space-y-6">
-      <FieldGroup label="Cargo Type" htmlFor="cargo-type" hint="Select the primary shipment mode for your cargo.">
-        <div id="cargo-type" className="flex flex-wrap gap-2 pt-0.5">
-          {CARGO_TYPES.map(({ value, label, icon }) => (
-            <ToggleChip key={value} active={data.cargoType === value} onClick={() => set({ cargoType: value })}>
-              {icon} {label}
-            </ToggleChip>
-          ))}
-        </div>
-      </FieldGroup>
-
-      {data.cargoType === "fcl" && (
-        <FieldGroup label="Container Size" htmlFor="container-size">
-          <div id="container-size" className="flex flex-wrap gap-2 pt-0.5">
-            {CONTAINER_SIZES.map((s) => (
-              <ToggleChip key={s} active={data.containerSize === s} onClick={() => set({ containerSize: s })}>
-                {s}
-              </ToggleChip>
+      {/* Route: From & To */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <FieldGroup label="Port / City of Origin (From)" htmlFor="from" required hint="Pickup or loading port">
+          <div className="relative">
+            <Anchor size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="from"
+              required
+              className="pl-9"
+              value={data.from}
+              onChange={(e) => set({ from: e.target.value })}
+              placeholder="e.g. Shanghai Port, China"
+            />
+          </div>
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            <span className="text-[10px] text-muted-foreground self-center mr-1">Suggestions:</span>
+            {POPULAR_ORIGINS.slice(0, 3).map((port) => (
+              <button
+                key={port}
+                type="button"
+                onClick={() => set({ from: port })}
+                className="text-[10px] px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border border-border/50 text-muted-foreground cursor-pointer"
+              >
+                {port.split(",")[0]}
+              </button>
             ))}
           </div>
         </FieldGroup>
-      )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Quantity (Units / Containers)" htmlFor="qty">
-          <Input
-            id="qty"
-            type="number"
-            min={1}
-            value={data.quantity}
-            onChange={(e) => set({ quantity: e.target.value })}
-            placeholder="e.g. 2"
-          />
-        </FieldGroup>
-        <FieldGroup label="Gross Weight (kg)" htmlFor="weight">
-          <Input
-            id="weight"
-            type="number"
-            min={0}
-            value={data.weight}
-            onChange={(e) => set({ weight: e.target.value })}
-            placeholder="e.g. 18 500"
-          />
+        <FieldGroup label="Port / City of Destination (To)" htmlFor="to" required hint="Discharge or arrival port">
+          <div className="relative">
+            <MapPin size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="to"
+              required
+              className="pl-9"
+              value={data.to}
+              onChange={(e) => set({ to: e.target.value })}
+              placeholder="e.g. Alexandria Port, Egypt"
+            />
+          </div>
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            <span className="text-[10px] text-muted-foreground self-center mr-1">Suggestions:</span>
+            {POPULAR_DESTINATIONS.slice(0, 3).map((port) => (
+              <button
+                key={port}
+                type="button"
+                onClick={() => set({ to: port })}
+                className="text-[10px] px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border border-border/50 text-muted-foreground cursor-pointer"
+              >
+                {port.split(",")[0]}
+              </button>
+            ))}
+          </div>
         </FieldGroup>
       </div>
 
-      <FieldGroup label="Commodity / Cargo Description" htmlFor="commodity">
-        <Input
-          id="commodity"
-          value={data.commodity}
-          onChange={(e) => set({ commodity: e.target.value })}
-          placeholder="e.g. Automotive spare parts, steel coils, electronics…"
-        />
-      </FieldGroup>
-
-      {data.cargoType === "reefer" && (
-        <FieldGroup label="Required Temperature (°C)" htmlFor="temp">
-          <Input
-            id="temp"
-            value={data.temperature}
-            onChange={(e) => set({ temperature: e.target.value })}
-            placeholder="e.g. -18 or +4"
-          />
-        </FieldGroup>
-      )}
-
-      <div className="space-y-2">
-        <p className="text-xs font-semibold text-foreground">Special Handling</p>
-        <div className="flex flex-wrap gap-2">
-          <ToggleChip active={data.dangerous} onClick={() => set({ dangerous: !data.dangerous })}>
-            <FileText size={14} /> DGR / Dangerous Goods
-          </ToggleChip>
+      {/* Container Type */}
+      <FieldGroup
+        label="Container Type"
+        htmlFor="container-type"
+        required
+        hint="Select equipment type or customize below"
+      >
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+          {CONTAINER_TYPES.map((c) => {
+            const isSelected = data.container_type === c.value;
+            return (
+              <button
+                key={c.value}
+                type="button"
+                onClick={() => handleSelectContainer(c)}
+                className={[
+                  "flex flex-col text-left p-3 rounded-xl border transition-all cursor-pointer",
+                  isSelected
+                    ? "border-primary bg-primary/10 text-foreground ring-2 ring-primary/20 shadow-xs"
+                    : "border-border bg-card hover:border-primary/40 hover:bg-muted/30 text-muted-foreground"
+                ].join(" ")}
+              >
+                <div className="flex items-center justify-between w-full mb-1">
+                  <span className={`text-xs font-bold ${isSelected ? "text-primary" : "text-foreground"}`}>
+                    {c.label}
+                  </span>
+                  {isSelected && <CheckCircle2 size={13} className="text-primary shrink-0" />}
+                </div>
+                <span className="text-[10px] text-muted-foreground">{c.desc}</span>
+              </button>
+            );
+          })}
         </div>
-      </div>
 
-      <FieldGroup label="Additional Cargo Notes" htmlFor="special-req">
-        <Textarea
-          id="special-req"
-          rows={3}
-          value={data.specialRequirements}
-          onChange={(e) => set({ specialRequirements: e.target.value })}
-          placeholder="Stackability restrictions, packaging type, hazmat UN codes, documentation requirements…"
-        />
+        {/* Custom container type input */}
+        <div className="pt-2">
+          <Input
+            id="container-type"
+            value={data.container_type}
+            onChange={(e) => set({ container_type: e.target.value })}
+            placeholder="Custom container type (e.g. 40ft High Cube)"
+            className="text-xs"
+          />
+        </div>
       </FieldGroup>
     </div>
   );
 }
 
-// ─── Step 2: Route & Schedule ─────────────────────────────────────────────────
+// ─── Step 2: Cargo Specifications ────────────────────────────────────────────
 
-const INCOTERMS: IncoTerms[] = ["EXW", "FOB", "CIF", "DAP", "DDP", "CFR", "FCA", "CPT", "CIP", "DAT"];
+function Step2({
+  data,
+  set
+}: {
+  data: PriceRequestFormData;
+  set: (patch: Partial<PriceRequestFormData>) => void;
+}) {
+  const currentContainerOption = CONTAINER_TYPES.find((c) => c.value === data.container_type);
 
-function Step2({ data, set }: { data: FormData; set: (patch: Partial<FormData>) => void }) {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Port / City of Origin" htmlFor="origin" hint="Loading port or pickup location">
-          <div className="relative">
-            <Anchor size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <Input
-              id="origin"
-              className="pl-8"
-              value={data.originPort}
-              onChange={(e) => set({ originPort: e.target.value })}
-              placeholder="e.g. Shanghai, Shenzhen, Hamburg"
-            />
-          </div>
-        </FieldGroup>
-
-        <FieldGroup label="Port / City of Destination" htmlFor="destination" hint="Discharge port or delivery address">
-          <div className="relative">
-            <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <Input
-              id="destination"
-              className="pl-8"
-              value={data.destinationPort}
-              onChange={(e) => set({ destinationPort: e.target.value })}
-              placeholder="e.g. Antwerp, Rotterdam, Zeebrugge"
-            />
-          </div>
-        </FieldGroup>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Cargo Ready Date" htmlFor="ready-date" hint="Approximate date cargo is available for pickup">
-          <div className="relative">
-            <Clock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-            <Input
-              id="ready-date"
-              type="date"
-              className="pl-8"
-              value={data.readyDate}
-              onChange={(e) => set({ readyDate: e.target.value })}
-            />
-          </div>
-        </FieldGroup>
-
-        <FieldGroup label="Incoterms" htmlFor="incoterms">
-          <select
-            id="incoterms"
-            value={data.incoterms}
-            onChange={(e) => set({ incoterms: e.target.value as IncoTerms })}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-foreground"
-          >
-            <option value="">Select Incoterms…</option>
-            {INCOTERMS.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-        </FieldGroup>
-      </div>
-
-      <div className="space-y-3">
-        <p className="text-xs font-semibold text-foreground">Additional Services Required</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {([
-            { key: "customsClearance" as const, label: "Customs Clearance", desc: "AEO-F certified declarations", icon: <FileText size={15} className="text-primary" /> },
-            { key: "insurance" as const, label: "Cargo Insurance", desc: "All-risk marine coverage", icon: <CheckCircle2 size={15} className="text-primary" /> },
-            { key: "warehousing" as const, label: "Bonded Warehousing", desc: "Temperature & security options", icon: <Box size={15} className="text-primary" /> }
-          ]).map(({ key, label, desc, icon }) => (
+      {/* Cargo Type */}
+      <FieldGroup
+        label="Cargo / Commodity Type"
+        htmlFor="cargo_type"
+        required
+        hint="Type of goods to be shipped"
+      >
+        <div className="relative">
+          <Package size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <Input
+            id="cargo_type"
+            required
+            className="pl-9"
+            value={data.cargo_type}
+            onChange={(e) => set({ cargo_type: e.target.value })}
+            placeholder="e.g. Electronics & Appliances"
+          />
+        </div>
+        <div className="flex flex-wrap gap-1.5 pt-1.5">
+          {CARGO_PRESETS.map((preset) => (
             <button
-              key={key}
+              key={preset}
               type="button"
-              onClick={() => set({ [key]: !data[key] })}
+              onClick={() => set({ cargo_type: preset })}
               className={[
-                "flex items-start gap-3 p-3.5 rounded-xl border text-left transition-all duration-200 cursor-pointer",
-                data[key]
-                  ? "border-primary bg-primary/5"
-                  : "border-border bg-card hover:border-primary/40 hover:bg-muted/30"
+                "text-[10px] px-2.5 py-1 rounded-lg border transition-colors cursor-pointer",
+                data.cargo_type === preset
+                  ? "bg-primary text-primary-foreground border-primary font-medium"
+                  : "bg-muted/50 border-border/60 hover:bg-muted text-muted-foreground hover:text-foreground"
               ].join(" ")}
             >
-              <div className={`mt-0.5 shrink-0 ${data[key] ? "opacity-100" : "opacity-40"}`}>{icon}</div>
-              <div>
-                <p className="text-xs font-semibold text-foreground leading-tight">{label}</p>
-                <p className="text-[10px] text-muted-foreground leading-snug mt-0.5">{desc}</p>
-              </div>
-              {data[key] && <CheckCircle2 size={14} className="text-primary ml-auto mt-0.5 shrink-0" />}
+              {preset}
             </button>
           ))}
         </div>
+      </FieldGroup>
+
+      {/* Weight & Dimensions */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <FieldGroup label="Gross Weight" htmlFor="weight" required hint="Total cargo weight (including unit)">
+          <div className="relative">
+            <Weight size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="weight"
+              required
+              className="pl-9"
+              value={data.weight}
+              onChange={(e) => set({ weight: e.target.value })}
+              placeholder="e.g. 18,500 KG"
+            />
+          </div>
+          <div className="flex gap-1.5 pt-1">
+            {["18,500 KG", "22,000 KG", "12,000 KG", "5,000 KG"].map((w) => (
+              <button
+                key={w}
+                type="button"
+                onClick={() => set({ weight: w })}
+                className="text-[10px] px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border border-border/50 text-muted-foreground cursor-pointer"
+              >
+                {w}
+              </button>
+            ))}
+          </div>
+        </FieldGroup>
+
+        <FieldGroup
+          label="Dimensions (L × W × H)"
+          htmlFor="dimensions"
+          hint="Length × Width × Height"
+        >
+          <div className="relative">
+            <Ruler size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="dimensions"
+              className="pl-9"
+              value={data.dimensions}
+              onChange={(e) => set({ dimensions: e.target.value })}
+              placeholder="e.g. 12.03m x 2.35m x 2.69m"
+            />
+          </div>
+          {currentContainerOption?.defaultDim && (
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => set({ dimensions: currentContainerOption.defaultDim })}
+                className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline cursor-pointer"
+              >
+                <Sparkles size={11} /> Use standard {currentContainerOption.label} size ({currentContainerOption.defaultDim})
+              </button>
+            </div>
+          )}
+        </FieldGroup>
+      </div>
+
+      {/* Helpful quote specifications helper */}
+      <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
+        <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+          <Sparkles size={13} className="text-primary" /> Special requirements?
+        </p>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          Click any requirement below to add it directly to your quotation instructions:
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {NOTE_ASSISTANTS.map((req) => {
+            const hasIt = data.notes.includes(req);
+            return (
+              <button
+                key={req}
+                type="button"
+                onClick={() => {
+                  if (hasIt) {
+                    const cleaned = data.notes
+                      .replace(req, "")
+                      .replace(/,\s*,/g, ",")
+                      .replace(/^\s*,\s*|\s*,\s*$/g, "")
+                      .trim();
+                    set({ notes: cleaned });
+                  } else {
+                    const sep = data.notes.trim() ? (data.notes.trim().endsWith(".") ? " " : ". ") : "";
+                    set({ notes: `${data.notes.trim()}${sep}${req}.` });
+                  }
+                }}
+                className={[
+                  "text-[10px] px-2.5 py-1 rounded-lg border transition-colors cursor-pointer",
+                  hasIt
+                    ? "bg-primary text-primary-foreground border-primary font-medium"
+                    : "bg-background border-border/80 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                ].join(" ")}
+              >
+                {hasIt ? `✓ ${req}` : `+ ${req}`}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 }
 
-// ─── Step 3: Contact Info ─────────────────────────────────────────────────────
+// ─── Step 3: Contact Details & Review ────────────────────────────────────────
 
-function Step3({ data, set }: { data: FormData; set: (patch: Partial<FormData>) => void }) {
+function Step3({
+  data,
+  set
+}: {
+  data: PriceRequestFormData;
+  set: (patch: Partial<PriceRequestFormData>) => void;
+}) {
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Company Name" htmlFor="company">
-          <Input
-            id="company"
-            required
-            value={data.companyName}
-            onChange={(e) => set({ companyName: e.target.value })}
-            placeholder="e.g. Acme Trading BV"
-          />
-        </FieldGroup>
-        <FieldGroup label="VAT / EORI Number" htmlFor="vat" hint="Optional – speeds up customs processing">
-          <Input
-            id="vat"
-            value={data.vatNumber}
-            onChange={(e) => set({ vatNumber: e.target.value })}
-            placeholder="e.g. BE 0123.456.789"
-          />
-        </FieldGroup>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Contact Name" htmlFor="contact-name">
+      {/* Contact person & Company */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <FieldGroup label="Contact Name" htmlFor="name" required hint="Full name of representative">
           <div className="relative">
-            <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
-              id="contact-name"
-              className="pl-8"
+              id="name"
               required
-              value={data.contactName}
-              onChange={(e) => set({ contactName: e.target.value })}
-              placeholder="e.g. Sarah Johnson"
+              className="pl-9"
+              value={data.name}
+              onChange={(e) => set({ name: e.target.value })}
+              placeholder="e.g. Tarek Mansour"
             />
           </div>
         </FieldGroup>
-        <FieldGroup label="Work Email" htmlFor="email">
-          <Input
-            id="email"
-            type="email"
-            required
-            value={data.email}
-            onChange={(e) => set({ email: e.target.value })}
-            placeholder="sarah@acme.com"
-          />
+
+        <FieldGroup label="Company Name" htmlFor="company_name" required hint="Registered business entity">
+          <div className="relative">
+            <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="company_name"
+              required
+              className="pl-9"
+              value={data.company_name}
+              onChange={(e) => set({ company_name: e.target.value })}
+              placeholder="e.g. Mansour Trading LLC"
+            />
+          </div>
         </FieldGroup>
       </div>
 
-      <FieldGroup label="Phone / WhatsApp" htmlFor="phone">
-        <Input
-          id="phone"
-          value={data.phone}
-          onChange={(e) => set({ phone: e.target.value })}
-          placeholder="+32 496 00 00 00"
-        />
-      </FieldGroup>
+      {/* Email & Phone */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <FieldGroup label="Work Email" htmlFor="email" required hint="Quote will be delivered here">
+          <div className="relative">
+            <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="email"
+              type="email"
+              required
+              className="pl-9"
+              value={data.email}
+              onChange={(e) => set({ email: e.target.value })}
+              placeholder="e.g. tarek.mansour@importers.com"
+            />
+          </div>
+        </FieldGroup>
 
+        <FieldGroup label="Phone / WhatsApp" htmlFor="phone" required hint="For urgent quotation updates">
+          <div className="relative">
+            <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Input
+              id="phone"
+              type="tel"
+              required
+              className="pl-9"
+              value={data.phone}
+              onChange={(e) => set({ phone: e.target.value })}
+              placeholder="e.g. +201012345678"
+            />
+          </div>
+        </FieldGroup>
+      </div>
+
+      {/* Notes */}
       <FieldGroup
-        label="Additional Notes & Instructions"
+        label="Quotation Notes & Instructions"
         htmlFor="notes"
-        hint="Mention any special requirements, preferred shipping lines, or deadlines."
+        hint="Specific deadlines, clearance requests, or shipping lines"
       >
         <Textarea
           id="notes"
-          rows={4}
+          rows={3}
           value={data.notes}
           onChange={(e) => set({ notes: e.target.value })}
-          placeholder="e.g. Prefer Maersk or MSC services, cargo must arrive before 15 October…"
+          placeholder="e.g. Need customs clearance assistance and best freight rate."
         />
       </FieldGroup>
+
+      {/* Live Quote Summary Card */}
+      <div className="rounded-xl border border-border/80 bg-muted/30 p-4 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-bold text-foreground uppercase tracking-wide">Request Overview</p>
+          <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
+            {data.container_type || "Custom Equipment"}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
+          <div className="flex justify-between border-b border-border/40 py-1">
+            <span className="text-muted-foreground">Route:</span>
+            <span className="font-semibold text-foreground truncate max-w-[200px]">
+              {data.from || "—"} → {data.to || "—"}
+            </span>
+          </div>
+          <div className="flex justify-between border-b border-border/40 py-1">
+            <span className="text-muted-foreground">Cargo:</span>
+            <span className="font-semibold text-foreground truncate max-w-[200px]">
+              {data.cargo_type || "—"}
+            </span>
+          </div>
+          <div className="flex justify-between border-b border-border/40 py-1">
+            <span className="text-muted-foreground">Weight:</span>
+            <span className="font-semibold text-foreground">
+              {data.weight || "—"}
+            </span>
+          </div>
+          <div className="flex justify-between border-b border-border/40 py-1">
+            <span className="text-muted-foreground">Dimensions:</span>
+            <span className="font-semibold text-foreground truncate max-w-[200px]">
+              {data.dimensions || "—"}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 // ─── Summary Row ──────────────────────────────────────────────────────────────
 
-function SummaryRow({ label, value }: { label: string; value: string }) {
+function SummaryRow({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
   return (
     <div className="flex items-start justify-between gap-4 py-2 border-b border-border/40 last:border-0">
-      <span className="text-xs text-muted-foreground shrink-0 w-36">{label}</span>
+      <span className="text-xs text-muted-foreground shrink-0 w-32">{label}</span>
       <span className="text-xs font-semibold text-foreground text-right">{value}</span>
     </div>
   );
@@ -448,32 +595,108 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 const STEPS = [
+  { label: "Route & Container", icon: <Ship size={15} /> },
   { label: "Cargo Details", icon: <Package size={15} /> },
-  { label: "Route & Schedule", icon: <Ship size={15} /> },
-  { label: "Contact Info", icon: <User size={15} /> }
+  { label: "Contact & Submit", icon: <User size={15} /> }
 ];
 
 export function ShipWithUsForm() {
   const [step, setStep] = useState(1);
-  const [data, setData] = useState<FormData>(INITIAL);
+  const [data, setData] = useState<PriceRequestFormData>(INITIAL_DATA);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const set = (patch: Partial<FormData>) => setData((prev) => ({ ...prev, ...patch }));
+  const set = (patch: Partial<PriceRequestFormData>) => {
+    setData((prev) => ({ ...prev, ...patch }));
+    if (errorMessage) setErrorMessage(null);
+  };
+
+  // Step validation
+  const validateStep = (currentStep: number): boolean => {
+    if (currentStep === 1) {
+      if (!data.from.trim()) {
+        toast.error("Please enter the port or city of origin (From).");
+        return false;
+      }
+      if (!data.to.trim()) {
+        toast.error("Please enter the port or city of destination (To).");
+        return false;
+      }
+      if (!data.container_type.trim()) {
+        toast.error("Please specify the container equipment type.");
+        return false;
+      }
+    } else if (currentStep === 2) {
+      if (!data.cargo_type.trim()) {
+        toast.error("Please enter the cargo or commodity type.");
+        return false;
+      }
+      if (!data.weight.trim()) {
+        toast.error("Please enter the gross weight of your cargo.");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (validateStep(step)) {
+      setStep((s) => s + 1);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateStep(1) || !validateStep(2)) return;
+
+    if (!data.name.trim() || !data.email.trim() || !data.phone.trim() || !data.company_name.trim()) {
+      toast.error("Please fill in all contact details (Name, Company, Email, and Phone).");
+      return;
+    }
+
     setLoading(true);
-    // Static simulation — no real API call
-    await new Promise((r) => setTimeout(r, 1400));
-    setLoading(false);
-    setSubmitted(true);
+    setErrorMessage(null);
+
+    try {
+      const payload: PriceRequestPayload = {
+        from: data.from.trim(),
+        to: data.to.trim(),
+        container_type: data.container_type.trim(),
+        cargo_type: data.cargo_type.trim(),
+        weight: data.weight.trim(),
+        dimensions: data.dimensions.trim(),
+        name: data.name.trim(),
+        email: data.email.trim(),
+        phone: data.phone.trim(),
+        company_name: data.company_name.trim(),
+        notes: data.notes.trim()
+      };
+
+      const res = await submitPriceRequest(payload);
+
+      if (res && res.success) {
+        toast.success("Price request submitted successfully! Our dispatch team will follow up within 4 hours.");
+        setSubmitted(true);
+      } else {
+        const msg = res?.result?.message || res?.message || "Failed to submit price request. Please try again.";
+        setErrorMessage(msg);
+        toast.error(msg);
+      }
+    } catch (err) {
+      console.error("Price request submission error:", err);
+      const msg = err instanceof Error ? err.message : "An unexpected error occurred while transmitting your request.";
+      setErrorMessage(msg);
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // ── Success state ─────────────────────────────────────────────────────────
+  // ── Success State ─────────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div className="rounded-2xl border bg-card shadow-sm overflow-hidden">
+      <div className="rounded-2xl border bg-card shadow-sm overflow-hidden animate-in fade-in-50 duration-300">
         <div className="h-1.5 w-full bg-gradient-to-r from-primary via-primary/70 to-primary/30" />
         <div className="p-8 sm:p-12 flex flex-col items-center text-center gap-5">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center ring-8 ring-primary/5">
@@ -481,25 +704,28 @@ export function ShipWithUsForm() {
           </div>
           <div className="space-y-2">
             <h3 className="text-2xl font-extrabold tracking-tight text-foreground">
-              Shipment Request Received
+              Shipment Price Request Received
             </h3>
             <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Thank you,{" "}
-              <strong className="text-foreground">{data.contactName || data.companyName}</strong>.
-              Our operations desk in Antwerp will review your{" "}
-              <strong className="text-foreground">{data.cargoType.toUpperCase() || "cargo"}</strong>{" "}
-              request and respond within{" "}
-              <strong className="text-foreground">4 business hours</strong>.
+              Thank you, <strong className="text-foreground">{data.name}</strong> from{" "}
+              <strong className="text-foreground">{data.company_name}</strong>. Your rate inquiry for{" "}
+              <strong className="text-foreground">{data.container_type}</strong> from{" "}
+              <strong className="text-foreground">{data.from}</strong> to{" "}
+              <strong className="text-foreground">{data.to}</strong> has been logged. Our European operations
+              desk will prepare your quotation within <strong className="text-foreground">4 business hours</strong>.
             </p>
           </div>
 
-          <div className="w-full max-w-sm rounded-xl bg-muted/40 border border-border/60 p-4 text-left">
-            <SummaryRow label="Route" value={`${data.originPort} → ${data.destinationPort}`} />
-            <SummaryRow label="Cargo Type" value={data.cargoType.toUpperCase()} />
-            <SummaryRow label="Container" value={data.containerSize} />
-            <SummaryRow label="Weight" value={data.weight ? `${data.weight} kg` : ""} />
-            <SummaryRow label="Ready Date" value={data.readyDate} />
+          <div className="w-full max-w-md rounded-xl bg-muted/40 border border-border/60 p-4 text-left">
+            <SummaryRow label="Route" value={`${data.from} → ${data.to}`} />
+            <SummaryRow label="Container" value={data.container_type} />
+            <SummaryRow label="Cargo Type" value={data.cargo_type} />
+            <SummaryRow label="Gross Weight" value={data.weight} />
+            <SummaryRow label="Dimensions" value={data.dimensions} />
+            <SummaryRow label="Contact" value={`${data.name} (${data.company_name})`} />
             <SummaryRow label="Email" value={data.email} />
+            <SummaryRow label="Phone" value={data.phone} />
+            {data.notes && <SummaryRow label="Notes" value={data.notes} />}
           </div>
 
           <Button
@@ -507,7 +733,7 @@ export function ShipWithUsForm() {
             className="mt-2"
             onClick={() => {
               setSubmitted(false);
-              setData(INITIAL);
+              setData(INITIAL_DATA);
               setStep(1);
             }}
           >
@@ -518,12 +744,12 @@ export function ShipWithUsForm() {
     );
   }
 
-  // ── Form ──────────────────────────────────────────────────────────────────
+  // ── Form State ────────────────────────────────────────────────────────────
   return (
     <form onSubmit={handleSubmit} className="rounded-2xl border bg-card shadow-sm overflow-hidden">
       <div className="h-1.5 w-full bg-gradient-to-r from-primary via-primary/70 to-primary/30" />
 
-      {/* Step header */}
+      {/* Step Header */}
       <div className="px-6 sm:px-8 pt-6 pb-5 border-b border-border/60">
         <div className="flex items-center gap-3 sm:gap-5 overflow-x-auto no-scrollbar">
           {STEPS.map(({ label, icon }, i) => {
@@ -567,34 +793,56 @@ export function ShipWithUsForm() {
         </div>
       </div>
 
-      {/* Step body */}
-      <div className="px-6 sm:px-8 py-7 min-h-[320px]">
+      {/* Error Message Banner */}
+      {errorMessage && (
+        <div className="mx-6 sm:mx-8 mt-5 p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive flex items-start gap-2.5 text-xs">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <p className="font-semibold">Submission failed</p>
+            <p className="text-destructive/90">{errorMessage}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Step Body */}
+      <div className="px-6 sm:px-8 py-7 min-h-[340px]">
         {step === 1 && <Step1 data={data} set={set} />}
         {step === 2 && <Step2 data={data} set={set} />}
         {step === 3 && <Step3 data={data} set={set} />}
       </div>
 
-      {/* Footer navigation */}
+      {/* Footer Navigation */}
       <div className="px-6 sm:px-8 py-5 border-t border-border/60 flex items-center justify-between gap-3 bg-muted/20">
         <div className="text-xs text-muted-foreground">
           Step <strong className="text-foreground">{step}</strong> of {STEPS.length}
         </div>
         <div className="flex items-center gap-2.5">
           {step > 1 && (
-            <Button type="button" variant="outline" className="gap-1.5 text-sm" onClick={() => setStep((s) => s - 1)}>
+            <Button
+              type="button"
+              variant="outline"
+              className="gap-1.5 text-sm"
+              disabled={loading}
+              onClick={() => setStep((s) => s - 1)}
+            >
               <ArrowLeft size={15} /> Back
             </Button>
           )}
+
           {step < STEPS.length ? (
-            <Button type="button" className="gap-1.5 text-sm" onClick={() => setStep((s) => s + 1)}>
+            <Button type="button" className="gap-1.5 text-sm" onClick={handleNext}>
               Next <ArrowRight size={15} />
             </Button>
           ) : (
             <Button type="submit" disabled={loading} className="gap-2 text-sm px-6">
               {loading ? (
-                <><Loader2 size={15} className="animate-spin" /> Sending Request…</>
+                <>
+                  <Loader2 size={15} className="animate-spin" /> Submitting Request…
+                </>
               ) : (
-                <>Submit Shipment Request <ArrowRight size={15} /></>
+                <>
+                  Submit Quotation Request <ArrowRight size={15} />
+                </>
               )}
             </Button>
           )}
