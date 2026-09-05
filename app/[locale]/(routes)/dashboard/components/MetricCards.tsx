@@ -10,6 +10,7 @@ import {
   Mail,
   Send,
   Globe2,
+  Ship,
   ArrowUpRight
 } from "lucide-react";
 import { DashboardMetrics } from "../types";
@@ -151,6 +152,33 @@ export function MetricCards({ metrics, locale }: MetricCardsProps) {
       accentColor: "text-amber-600 dark:text-amber-400",
       badgeBg: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
       hoverBorder: "hover:border-amber-500/30"
+    },
+    {
+      id: "price_requests",
+      title: isRtl ? "طلبات عروض الأسعار" : "Freight Price Requests",
+      value: (
+        metrics?.price_requests?.total ??
+        metrics?.stats?.total_price_requests ??
+        0
+      ).toLocaleString(locale),
+      subValue: isRtl
+        ? `قيد الانتظار: ${(metrics?.price_requests?.pending ?? metrics?.stats?.pending_price_requests ?? 0).toLocaleString(locale)} • تم التسعير: ${(metrics?.price_requests?.quoted ?? metrics?.stats?.quoted_price_requests ?? 0).toLocaleString(locale)}`
+        : `Pending: ${(metrics?.price_requests?.pending ?? metrics?.stats?.pending_price_requests ?? 0).toLocaleString(locale)} • Quoted: ${(metrics?.price_requests?.quoted ?? metrics?.stats?.quoted_price_requests ?? 0).toLocaleString(locale)}`,
+      secondaryPill: (metrics?.price_requests?.pending ?? metrics?.stats?.pending_price_requests ?? 0) > 0
+        ? {
+            text: isRtl ? "طلبات جديدة" : "Action required",
+            variant: "warning"
+          }
+        : {
+            text: isRtl ? "مُحدث" : "Clear",
+            variant: "success"
+          },
+      icon: Ship,
+      href: `/${locale}/price-requests`,
+      gradient: "from-blue-500/10 via-indigo-500/5 to-transparent",
+      accentColor: "text-blue-600 dark:text-blue-400",
+      badgeBg: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+      hoverBorder: "hover:border-blue-500/30"
     },
     {
       id: "faq_items",

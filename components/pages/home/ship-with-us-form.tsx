@@ -55,38 +55,50 @@ interface ContainerOption {
 
 const CONTAINER_TYPES: ContainerOption[] = [
   {
-    value: "40ft High Cube",
-    label: "40ft High Cube",
-    desc: "Max volume (76.4 m³)",
-    defaultDim: "12.03m x 2.35m x 2.69m"
-  },
-  {
     value: "20ft Standard",
-    label: "20ft Standard",
+    label: "20ft Standard (20' GP)",
     desc: "Standard cargo (33.2 m³)",
     defaultDim: "5.90m x 2.35m x 2.39m"
   },
   {
     value: "40ft Standard",
-    label: "40ft Standard",
+    label: "40ft Standard (40' GP)",
     desc: "General volume (67.7 m³)",
     defaultDim: "12.03m x 2.35m x 2.39m"
   },
   {
-    value: "45ft High Cube",
-    label: "45ft High Cube",
-    desc: "Extra capacity (86 m³)",
-    defaultDim: "13.55m x 2.35m x 2.69m"
+    value: "40ft High Cube",
+    label: "40ft High Cube (40' HC)",
+    desc: "Max volume (76.4 m³)",
+    defaultDim: "12.03m x 2.35m x 2.69m"
   },
   {
-    value: "Reefer (40ft)",
-    label: "40ft Reefer",
-    desc: "Temperature controlled",
+    value: "20ft Reefer",
+    label: "20ft Reefer (Refrigerated)",
+    desc: "Cold cargo (28.3 m³)",
+    defaultDim: "5.45m x 2.29m x 2.26m"
+  },
+  {
+    value: "40ft Reefer",
+    label: "40ft Reefer (Refrigerated)",
+    desc: "Cold cargo (67.3 m³)",
     defaultDim: "11.58m x 2.29m x 2.50m"
   },
   {
-    value: "LCL / Shared Container",
-    label: "LCL / Partial",
+    value: "Open Top Container",
+    label: "Open Top Container",
+    desc: "Top loading / bulky",
+    defaultDim: "12.03m x 2.35m x 2.35m"
+  },
+  {
+    value: "Flat Rack Container",
+    label: "Flat Rack Container",
+    desc: "Over-dimensional cargo",
+    defaultDim: "12.03m x 2.44m x 2.59m"
+  },
+  {
+    value: "Less than Container Load (LCL)",
+    label: "LCL / Shared Container",
     desc: "Consolidated freight",
     defaultDim: "Custom dimensions"
   }
@@ -111,13 +123,14 @@ const POPULAR_DESTINATIONS = [
 ];
 
 const CARGO_PRESETS = [
+  "General Cargo",
   "Electronics & Appliances",
-  "Industrial Machinery",
-  "Automotive & Spare Parts",
-  "Textiles & Garments",
-  "Chemicals & Hazmat",
   "Foodstuffs & Perishables",
-  "General Cargo"
+  "Textiles & Garments",
+  "Chemicals / Hazardous (DG)",
+  "Automotive & Spare Parts",
+  "Heavy Machinery",
+  "Other"
 ];
 
 const NOTE_ASSISTANTS = [
@@ -152,12 +165,14 @@ function FieldGroup({
   htmlFor,
   hint,
   required,
+  error,
   children
 }: {
   label: string;
   htmlFor: string;
   hint?: string;
   required?: boolean;
+  error?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -170,6 +185,12 @@ function FieldGroup({
         {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
       </div>
       {children}
+      {error && (
+        <p className="text-[11px] text-destructive font-medium flex items-center gap-1 mt-1 animate-in fade-in">
+          <AlertCircle size={12} className="shrink-0" />
+          <span>{error}</span>
+        </p>
+      )}
     </div>
   );
 }
@@ -178,10 +199,12 @@ function FieldGroup({
 
 function Step1({
   data,
-  set
+  set,
+  errors
 }: {
   data: PriceRequestFormData;
   set: (patch: Partial<PriceRequestFormData>) => void;
+  errors?: Record<string, string[]>;
 }) {
   const handleSelectContainer = (option: ContainerOption) => {
     set({
@@ -194,13 +217,19 @@ function Step1({
     <div className="space-y-6">
       {/* Route: From & To */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <FieldGroup label="Port / City of Origin (From)" htmlFor="from" required hint="Pickup or loading port">
+        <FieldGroup
+          label="Port / City of Origin (From)"
+          htmlFor="from"
+          required
+          hint="Pickup or loading port"
+          error={errors?.from?.[0]}
+        >
           <div className="relative">
             <Anchor size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="from"
               required
-              className="pl-9"
+              className={`pl-9 ${errors?.from ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.from}
               onChange={(e) => set({ from: e.target.value })}
               placeholder="e.g. Shanghai Port, China"
@@ -221,13 +250,19 @@ function Step1({
           </div>
         </FieldGroup>
 
-        <FieldGroup label="Port / City of Destination (To)" htmlFor="to" required hint="Discharge or arrival port">
+        <FieldGroup
+          label="Port / City of Destination (To)"
+          htmlFor="to"
+          required
+          hint="Discharge or arrival port"
+          error={errors?.to?.[0]}
+        >
           <div className="relative">
             <MapPin size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="to"
               required
-              className="pl-9"
+              className={`pl-9 ${errors?.to ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.to}
               onChange={(e) => set({ to: e.target.value })}
               placeholder="e.g. Alexandria Port, Egypt"
@@ -255,6 +290,7 @@ function Step1({
         htmlFor="container-type"
         required
         hint="Select equipment type or customize below"
+        error={errors?.container_type?.[0]}
       >
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
           {CONTAINER_TYPES.map((c) => {
@@ -302,10 +338,12 @@ function Step1({
 
 function Step2({
   data,
-  set
+  set,
+  errors
 }: {
   data: PriceRequestFormData;
   set: (patch: Partial<PriceRequestFormData>) => void;
+  errors?: Record<string, string[]>;
 }) {
   const currentContainerOption = CONTAINER_TYPES.find((c) => c.value === data.container_type);
 
@@ -317,13 +355,14 @@ function Step2({
         htmlFor="cargo_type"
         required
         hint="Type of goods to be shipped"
+        error={errors?.cargo_type?.[0]}
       >
         <div className="relative">
           <Package size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
             id="cargo_type"
             required
-            className="pl-9"
+            className={`pl-9 ${errors?.cargo_type ? "border-destructive focus-visible:ring-destructive" : ""}`}
             value={data.cargo_type}
             onChange={(e) => set({ cargo_type: e.target.value })}
             placeholder="e.g. Electronics & Appliances"
@@ -350,13 +389,19 @@ function Step2({
 
       {/* Weight & Dimensions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <FieldGroup label="Gross Weight" htmlFor="weight" required hint="Total cargo weight (including unit)">
+        <FieldGroup
+          label="Gross Weight"
+          htmlFor="weight"
+          required
+          hint="Total cargo weight (including unit)"
+          error={errors?.weight?.[0]}
+        >
           <div className="relative">
             <Weight size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="weight"
               required
-              className="pl-9"
+              className={`pl-9 ${errors?.weight ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.weight}
               onChange={(e) => set({ weight: e.target.value })}
               placeholder="e.g. 18,500 KG"
@@ -380,6 +425,7 @@ function Step2({
           label="Dimensions (L × W × H)"
           htmlFor="dimensions"
           hint="Length × Width × Height"
+          error={errors?.dimensions?.[0]}
         >
           <div className="relative">
             <Ruler size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
@@ -415,22 +461,23 @@ function Step2({
         </p>
         <div className="flex flex-wrap gap-1.5">
           {NOTE_ASSISTANTS.map((req) => {
-            const hasIt = data.notes.includes(req);
+            const currentNotes = data.notes || "";
+            const hasIt = currentNotes.includes(req);
             return (
               <button
                 key={req}
                 type="button"
                 onClick={() => {
                   if (hasIt) {
-                    const cleaned = data.notes
+                    const cleaned = currentNotes
                       .replace(req, "")
                       .replace(/,\s*,/g, ",")
                       .replace(/^\s*,\s*|\s*,\s*$/g, "")
                       .trim();
                     set({ notes: cleaned });
                   } else {
-                    const sep = data.notes.trim() ? (data.notes.trim().endsWith(".") ? " " : ". ") : "";
-                    set({ notes: `${data.notes.trim()}${sep}${req}.` });
+                    const sep = currentNotes.trim() ? (currentNotes.trim().endsWith(".") ? " " : ". ") : "";
+                    set({ notes: `${currentNotes.trim()}${sep}${req}.` });
                   }
                 }}
                 className={[
@@ -454,22 +501,30 @@ function Step2({
 
 function Step3({
   data,
-  set
+  set,
+  errors
 }: {
   data: PriceRequestFormData;
   set: (patch: Partial<PriceRequestFormData>) => void;
+  errors?: Record<string, string[]>;
 }) {
   return (
     <div className="space-y-6">
       {/* Contact person & Company */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <FieldGroup label="Contact Name" htmlFor="name" required hint="Full name of representative">
+        <FieldGroup
+          label="Contact Name"
+          htmlFor="name"
+          required
+          hint="Full name of representative"
+          error={errors?.name?.[0]}
+        >
           <div className="relative">
             <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="name"
               required
-              className="pl-9"
+              className={`pl-9 ${errors?.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.name}
               onChange={(e) => set({ name: e.target.value })}
               placeholder="e.g. Tarek Mansour"
@@ -477,13 +532,17 @@ function Step3({
           </div>
         </FieldGroup>
 
-        <FieldGroup label="Company Name" htmlFor="company_name" required hint="Registered business entity">
+        <FieldGroup
+          label="Company Name"
+          htmlFor="company_name"
+          hint="Registered business entity (optional)"
+          error={errors?.company_name?.[0]}
+        >
           <div className="relative">
             <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="company_name"
-              required
-              className="pl-9"
+              className={`pl-9 ${errors?.company_name ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.company_name}
               onChange={(e) => set({ company_name: e.target.value })}
               placeholder="e.g. Mansour Trading LLC"
@@ -494,14 +553,20 @@ function Step3({
 
       {/* Email & Phone */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <FieldGroup label="Work Email" htmlFor="email" required hint="Quote will be delivered here">
+        <FieldGroup
+          label="Work Email"
+          htmlFor="email"
+          required
+          hint="Quote will be delivered here"
+          error={errors?.email?.[0]}
+        >
           <div className="relative">
             <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="email"
               type="email"
               required
-              className="pl-9"
+              className={`pl-9 ${errors?.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.email}
               onChange={(e) => set({ email: e.target.value })}
               placeholder="e.g. tarek.mansour@importers.com"
@@ -509,14 +574,20 @@ function Step3({
           </div>
         </FieldGroup>
 
-        <FieldGroup label="Phone / WhatsApp" htmlFor="phone" required hint="For urgent quotation updates">
+        <FieldGroup
+          label="Phone / WhatsApp"
+          htmlFor="phone"
+          required
+          hint="For urgent quotation updates"
+          error={errors?.phone?.[0]}
+        >
           <div className="relative">
             <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="phone"
               type="tel"
               required
-              className="pl-9"
+              className={`pl-9 ${errors?.phone ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.phone}
               onChange={(e) => set({ phone: e.target.value })}
               placeholder="e.g. +201012345678"
@@ -530,6 +601,7 @@ function Step3({
         label="Quotation Notes & Instructions"
         htmlFor="notes"
         hint="Specific deadlines, clearance requests, or shipping lines"
+        error={errors?.notes?.[0]}
       >
         <Textarea
           id="notes"
@@ -606,10 +678,18 @@ export function ShipWithUsForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
 
   const set = (patch: Partial<PriceRequestFormData>) => {
     setData((prev) => ({ ...prev, ...patch }));
     if (errorMessage) setErrorMessage(null);
+    if (Object.keys(fieldErrors).length > 0) {
+      const updated = { ...fieldErrors };
+      Object.keys(patch).forEach((key) => {
+        delete updated[key];
+      });
+      setFieldErrors(updated);
+    }
   };
 
   // Step validation
@@ -650,13 +730,14 @@ export function ShipWithUsForm() {
     e.preventDefault();
     if (!validateStep(1) || !validateStep(2)) return;
 
-    if (!data.name.trim() || !data.email.trim() || !data.phone.trim() || !data.company_name.trim()) {
-      toast.error("Please fill in all contact details (Name, Company, Email, and Phone).");
+    if (!data.name.trim() || !data.email.trim() || !data.phone.trim()) {
+      toast.error("Please fill in all contact details (Name, Email, and Phone).");
       return;
     }
 
     setLoading(true);
     setErrorMessage(null);
+    setFieldErrors({});
 
     try {
       const payload: PriceRequestPayload = {
@@ -665,27 +746,41 @@ export function ShipWithUsForm() {
         container_type: data.container_type.trim(),
         cargo_type: data.cargo_type.trim(),
         weight: data.weight.trim(),
-        dimensions: data.dimensions.trim(),
+        dimensions: data.dimensions?.trim() || undefined,
         name: data.name.trim(),
         email: data.email.trim(),
         phone: data.phone.trim(),
-        company_name: data.company_name.trim(),
-        notes: data.notes.trim()
+        company_name: data.company_name?.trim() || undefined,
+        notes: data.notes?.trim() || undefined
       };
 
       const res = await submitPriceRequest(payload);
 
       if (res && res.success) {
-        toast.success("Price request submitted successfully! Our dispatch team will follow up within 4 hours.");
+        toast.success("Thank you! Your quote request has been received. Our team will review and reply within 24 hours.");
         setSubmitted(true);
       } else {
-        const msg = res?.result?.message || res?.message || "Failed to submit price request. Please try again.";
+        const backendErrors = res?.errors || res?.result?.errors;
+        if (backendErrors && typeof backendErrors === "object") {
+          setFieldErrors(backendErrors);
+          if (backendErrors.from || backendErrors.to || backendErrors.container_type) setStep(1);
+          else if (backendErrors.cargo_type || backendErrors.weight || backendErrors.dimensions) setStep(2);
+          else if (backendErrors.name || backendErrors.email || backendErrors.phone || backendErrors.company_name) setStep(3);
+        }
+        const msg = res?.result?.message || res?.message || "Failed to submit price request. Please verify the information entered.";
         setErrorMessage(msg);
         toast.error(msg);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Price request submission error:", err);
-      const msg = err instanceof Error ? err.message : "An unexpected error occurred while transmitting your request.";
+      const backendErrors = err?.response?.data?.errors;
+      if (backendErrors && typeof backendErrors === "object") {
+        setFieldErrors(backendErrors);
+        if (backendErrors.from || backendErrors.to || backendErrors.container_type) setStep(1);
+        else if (backendErrors.cargo_type || backendErrors.weight || backendErrors.dimensions) setStep(2);
+        else if (backendErrors.name || backendErrors.email || backendErrors.phone || backendErrors.company_name) setStep(3);
+      }
+      const msg = err?.response?.data?.message || (err instanceof Error ? err.message : "An unexpected error occurred while transmitting your request.");
       setErrorMessage(msg);
       toast.error(msg);
     } finally {
@@ -704,15 +799,15 @@ export function ShipWithUsForm() {
           </div>
           <div className="space-y-2">
             <h3 className="text-2xl font-extrabold tracking-tight text-foreground">
-              Shipment Price Request Received
+              Thank You! Your Quote Request Has Been Received
             </h3>
             <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Thank you, <strong className="text-foreground">{data.name}</strong> from{" "}
-              <strong className="text-foreground">{data.company_name}</strong>. Your rate inquiry for{" "}
-              <strong className="text-foreground">{data.container_type}</strong> from{" "}
+              Thank you, <strong className="text-foreground">{data.name}</strong>
+              {data.company_name ? <> from <strong className="text-foreground">{data.company_name}</strong></> : ""}.
+              Your quote request for <strong className="text-foreground">{data.container_type}</strong> from{" "}
               <strong className="text-foreground">{data.from}</strong> to{" "}
-              <strong className="text-foreground">{data.to}</strong> has been logged. Our European operations
-              desk will prepare your quotation within <strong className="text-foreground">4 business hours</strong>.
+              <strong className="text-foreground">{data.to}</strong> has been logged. Our logistics team
+              will review and reply to your email (<strong className="text-foreground">{data.email}</strong>) within 24 hours.
             </p>
           </div>
 
@@ -721,8 +816,8 @@ export function ShipWithUsForm() {
             <SummaryRow label="Container" value={data.container_type} />
             <SummaryRow label="Cargo Type" value={data.cargo_type} />
             <SummaryRow label="Gross Weight" value={data.weight} />
-            <SummaryRow label="Dimensions" value={data.dimensions} />
-            <SummaryRow label="Contact" value={`${data.name} (${data.company_name})`} />
+            {data.dimensions && <SummaryRow label="Dimensions" value={data.dimensions} />}
+            <SummaryRow label="Contact" value={data.company_name ? `${data.name} (${data.company_name})` : data.name} />
             <SummaryRow label="Email" value={data.email} />
             <SummaryRow label="Phone" value={data.phone} />
             {data.notes && <SummaryRow label="Notes" value={data.notes} />}
@@ -806,9 +901,9 @@ export function ShipWithUsForm() {
 
       {/* Step Body */}
       <div className="px-6 sm:px-8 py-7 min-h-[340px]">
-        {step === 1 && <Step1 data={data} set={set} />}
-        {step === 2 && <Step2 data={data} set={set} />}
-        {step === 3 && <Step3 data={data} set={set} />}
+        {step === 1 && <Step1 data={data} set={set} errors={fieldErrors} />}
+        {step === 2 && <Step2 data={data} set={set} errors={fieldErrors} />}
+        {step === 3 && <Step3 data={data} set={set} errors={fieldErrors} />}
       </div>
 
       {/* Footer Navigation */}

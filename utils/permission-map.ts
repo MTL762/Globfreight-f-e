@@ -12,6 +12,8 @@ export const routePermissionMap: Record<string, string> = {
   delivery: "deliveryAll",
   modules: "Modules",
   permissions: "Permissions",
+  priceRequests: "Price Requests",
+  "price-requests": "Price Requests",
   roles: "Roles",
   schedule: "Schedule",
   services: "Service",

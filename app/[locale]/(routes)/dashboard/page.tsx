@@ -8,6 +8,7 @@ import { VisitorChart } from "./components/VisitorChart";
 import { RecentCustomers } from "./components/RecentCustomers";
 import { RecentBlogPosts } from "./components/RecentBlogPosts";
 import { RecentContacts } from "./components/RecentContacts";
+import { RecentPriceRequests } from "./components/RecentPriceRequests";
 import { OperationalHub } from "./components/OperationalHub";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -159,8 +160,9 @@ export default async function DashboardPage({
           <RecentCustomers customers={dashboardData.recent?.customers} locale={locale} />
         </div>
 
-        {/* Right Column (5 cols): Blog Posts & Contact Inquiries */}
+        {/* Right Column (5 cols): Blog Posts, Contact Inquiries & Price Requests */}
         <div className="lg:col-span-5 space-y-8">
+          <RecentPriceRequests priceRequests={dashboardData.recent?.price_requests} locale={locale} />
           <RecentBlogPosts posts={dashboardData.recent?.blog_posts} locale={locale} />
           <RecentContacts contacts={dashboardData.recent?.contacts} locale={locale} />
         </div>

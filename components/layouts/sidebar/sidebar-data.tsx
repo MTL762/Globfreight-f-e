@@ -36,6 +36,11 @@ export const links = ({ permissions }: { permissions?: Set<Permission> }): NavIt
       icon: "contactUs"
     },
     {
+      title: "PriceRequests",
+      url: "/price-requests",
+      icon: "priceRequests"
+    },
+    {
       title: "SentEmails",
       url: "/sent-emails",
       icon: "sentEmails"

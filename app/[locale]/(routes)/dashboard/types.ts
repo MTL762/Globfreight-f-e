@@ -54,6 +54,17 @@ export interface DashboardMetrics {
     total: number;
   };
   visitors?: VisitorMetrics;
+  price_requests?: {
+    total?: number;
+    pending?: number;
+    quoted?: number;
+  };
+  stats?: {
+    total_price_requests?: number;
+    pending_price_requests?: number;
+    quoted_price_requests?: number;
+    [key: string]: number | undefined;
+  };
   // Fallbacks for optional custom metrics
   bounce_rate?: {
     rate?: number;
@@ -160,12 +171,21 @@ export interface ChartTrendPoint {
 export interface DashboardCharts {
   visitor_trend?: ChartTrendPoint[];
   contact_trend?: ChartTrendPoint[];
+  price_requests_chart?: { date: string; count: number }[];
 }
 
 export interface DashboardRecent {
   contacts?: RecentContact[];
   customers?: RecentCustomer[];
   blog_posts?: RecentBlogPost[];
+  price_requests?: {
+    id: number | string;
+    from: string;
+    to: string;
+    name: string;
+    status: string;
+    created_at: string;
+  }[];
 }
 
 export interface DashboardData {
