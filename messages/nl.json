@@ -2437,6 +2437,172 @@
       "body": "Vraag een logistieke offerte op maat aan of raadpleeg een gecertificeerde douanespecialist over uw Europese zendingen."
     }
   },
+  "ShipWithUs": {
+    "meta": {
+      "title": "Verzend met ons | Globfreight",
+      "description": "Dien uw vrachtgegevens in en ontvang een op maat gemaakte vrachtofferte van Globfreight. Zeevracht, douaneafhandeling, entrepotopslag en levering van deur tot deur in heel Europa."
+    },
+    "hero": {
+      "eyebrow": "START UW ZENDING",
+      "title": "Verzend met ons — <highlight>Naadloze vracht</highlight> van elke haven naar Europa",
+      "description": "Dien uw vrachtgegevens in binnen 3 minuten. Ons Europese operationele team stelt een offerte op maat op voor zeevracht, douaneafhandeling en levering van deur tot deur.",
+      "cta": "Spreek met een specialist"
+    },
+    "stats": {
+      "countries": "Landen bediend",
+      "coverage": "Operationele dekking",
+      "shipments": "Zendingen afgehandeld",
+      "certification": "EU-certificering"
+    },
+    "usp": {
+      "aeo": {
+        "title": "AEO-F gecertificeerd",
+        "body": "Volledige Authorised Economic Operator-status voor prioritaire douanebehandeling in alle EU-havens."
+      },
+      "response": {
+        "title": "Reactie binnen 4 uur",
+        "body": "Ons dispatchteam bevestigt elk verzendverzoek binnen 4 kantooruren, gegarandeerd."
+      },
+      "network": {
+        "title": "Wereldwijd netwerk",
+        "body": "Directe EDI-verbindingen met Antwerpen, Rotterdam & Zeebrugge met partneragenten in 90+ landen."
+      },
+      "agent": {
+        "title": "Toegewijde agent",
+        "body": "Een vaste douanespecialist wordt toegewezen aan elk account — altijd één vast aanspreekpunt."
+      }
+    },
+    "section": {
+      "eyebrow": "VERZENDVERZOEK",
+      "title": "Vertel ons over uw lading",
+      "subtitle": "Vul het onderstaande 3-stappenformulier in om een gepersonaliseerd vrachttarief en transitschema te ontvangen."
+    },
+    "sidebar": {
+      "nextTitle": "Wat gebeurt er daarna?",
+      "step1": "Wij ontvangen uw verzoek en wijzen een toegewijde vrachtspecialist toe.",
+      "step2": "Een offerte op maat wordt binnen 4 kantooruren opgesteld.",
+      "step3": "U controleert, keurt goed, en wij regelen de rest — van haven tot deur.",
+      "coveredTitle": "Inbegrepen in uw offerte",
+      "items": {
+        "item1": "Zeevracht (FCL / LCL / RoRo)",
+        "item2": "Douaneafhandeling & aangiften",
+        "item3": "Douane-entrepotopslag in Antwerpen",
+        "item4": "Fiscale vertegenwoordiging (Niet-EU)",
+        "item5": "Binnenlands transport & last-mile",
+        "item6": "Goederenverzekering (op aanvraag)"
+      },
+      "callTitle": "Liever telefonisch?",
+      "callNote": "Ma – Vr · 08:00 – 18:00 CET · Directe dispatchlijn"
+    },
+    "form": {
+      "steps": {
+        "step": "Stap",
+        "of": "van",
+        "route": "Route & Container",
+        "cargo": "Ladinggegevens",
+        "contact": "Contact & Verzenden"
+      },
+      "from": {
+        "label": "Haven / Stad van herkomst (Van)",
+        "hint": "Ophaal- of laadhaven",
+        "placeholder": "bijv. Shanghai Port, China"
+      },
+      "to": {
+        "label": "Haven / Stad van bestemming (Naar)",
+        "hint": "Los- of aankomsthaven",
+        "placeholder": "bijv. Alexandria Port, Egypte"
+      },
+      "container": {
+        "label": "Containertype",
+        "hint": "Selecteer type uitrusting of pas hieronder aan",
+        "customPlaceholder": "Aangepast containertype (bijv. 40ft High Cube)"
+      },
+      "cargo": {
+        "label": "Type lading / goederen",
+        "hint": "Type goederen dat wordt verzonden",
+        "placeholder": "bijv. Elektronica & Huishoudapparaten"
+      },
+      "weight": {
+        "label": "Brutogewicht",
+        "hint": "Totaal gewicht van de lading (inclusief eenheid)",
+        "placeholder": "bijv. 18.500 KG"
+      },
+      "dimensions": {
+        "label": "Afmetingen (L × B × H)",
+        "hint": "Lengte × Breedte × Hoogte",
+        "placeholder": "bijv. 12.03m x 2.35m x 2.69m",
+        "useStandard": "Gebruik standaardformaat voor {label} ({dim})"
+      },
+      "specialRequirements": {
+        "title": "Speciale vereisten?",
+        "hint": "Klik op een vereiste hieronder om deze direct toe te voegen aan uw offerte-instructies:"
+      },
+      "contact": {
+        "name": {
+          "label": "Contactnaam",
+          "hint": "Volledige naam van vertegenwoordiger",
+          "placeholder": "bijv. Tarek Mansour"
+        },
+        "company": {
+          "label": "Bedrijfsnaam",
+          "hint": "Geregistreerde bedrijfsentiteit (optioneel)",
+          "placeholder": "bijv. Mansour Trading LLC"
+        },
+        "email": {
+          "label": "Zakelijk e-mailadres",
+          "hint": "Offerte wordt hierheen gestuurd",
+          "placeholder": "bijv. tarek.mansour@importers.com"
+        },
+        "phone": {
+          "label": "Telefoon / WhatsApp",
+          "hint": "Voor dringende offerte-updates",
+          "placeholder": "bijv. +201012345678"
+        },
+        "notes": {
+          "label": "Opmerkingen & instructies",
+          "hint": "Specifieke deadlines, douaneverzoeken of rederijen",
+          "placeholder": "bijv. Douaneafhandeling vereist en beste vrachttarief."
+        }
+      },
+      "overview": {
+        "title": "Aanvraagoverzicht",
+        "customEquipment": "Aangepaste uitrusting",
+        "route": "Route",
+        "cargo": "Lading",
+        "weight": "Gewicht",
+        "dimensions": "Afmetingen",
+        "contact": "Contact",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "notes": "Opmerkingen"
+      },
+      "buttons": {
+        "back": "Terug",
+        "next": "Volgende",
+        "submit": "Offerteaanvraag versturen",
+        "submitting": "Gegevens versturen…"
+      },
+      "submissionFailed": "Verzending mislukt",
+      "validation": {
+        "fromRequired": "Vul de haven of stad van herkomst in (Van).",
+        "toRequired": "Vul de haven of stad van bestemming in (Naar).",
+        "containerRequired": "Geef het gewenste containertype op.",
+        "cargoRequired": "Voer het type lading of goederen in.",
+        "weightRequired": "Voer het brutogewicht van uw lading in.",
+        "contactRequired": "Vul alle contactgegevens in (naam, e-mail en telefoon).",
+        "successToast": "Bedankt! Uw offerteaanvraag is ontvangen. Ons team zal deze beoordelen en binnen 24 uur reageren.",
+        "genericError": "Versturen van prijsaanvraag mislukt. Controleer de ingevoerde gegevens.",
+        "unexpectedError": "Er is een onverwachte fout opgetreden bij het verzenden van uw verzoek."
+      },
+      "success": {
+        "title": "Bedankt! Uw offerteaanvraag is ontvangen",
+        "thankYou": "Bedankt",
+        "fromCompany": "van",
+        "loggedNotice": "Uw offerteaanvraag voor {container} van {from} naar {to} is geregistreerd. Ons logistieke team zal deze beoordelen en binnen 24 uur reageren op uw e-mailadres ({email}).",
+        "submitAnother": "Nog een aanvraag indienen"
+      }
+    }
+  },
   "proficiency": "Proficiency",
   "is_paid": "Is Paid",
   "from_date": "From Date",

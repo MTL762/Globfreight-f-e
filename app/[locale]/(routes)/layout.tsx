@@ -32,7 +32,7 @@ export default async function RoutesLayout({
           <div className="flex items-center gap-2 w-full flex-row-reverse me-3">
             <LogoutConfirmButton />
             <LanguageSwitcher />
-            <CheckAttendanceButton />
+            {/* <CheckAttendanceButton /> */}
             <ThemeSwitcher />
           </div>
         </header>

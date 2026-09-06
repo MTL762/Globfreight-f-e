@@ -66,12 +66,108 @@ const FAQ_DATA = {
         answer: "تشمل المستندات الأساسية: بوليصة الشحن البحري (B/L)، الفاتورة التجارية، بيان العبوة، شهادة المنشأ (EUR.1 أو COO)، وأي تراخيص استيراد مطلوبة وفقاً للرمز الجمركي للسلعة."
       }
     ]
+  },
+  nl: {
+    badge: "KENNISBANK & RICHTLIJNEN",
+    title: "Veelgestelde Vragen",
+    subtitle: "Belangrijke antwoorden over Europese douaneafhandeling, containerlogistiek en havenprocedures.",
+    items: [
+      {
+        id: "item-1",
+        question: "Wat is de AEO-F-certificering en wat zijn de voordelen voor mijn zendingen?",
+        answer: "Geautoriseerde Marktdeelnemer - Volledig (AEO-F) is de hoogste douaneconformiteitsnorm erkend door de Europese Unie. Het biedt onze klanten versnelde douaneafhandeling, minder fysieke controles, voorrang bij risicobeoordelingen en vereenvoudigde documentinzending in Europese zeehavens."
+      },
+      {
+        id: "item-2",
+        question: "Welke Europese zeehavens en containerterminals bedient Globfreight?",
+        answer: "Wij opereren met directe elektronische gegevensuitwisseling (EDI) en wegvervoer over de haven van Antwerpen-Brugge, de haven van Rotterdam, Zeebrugge en Hamburg, met naadloos vervoer naar de Benelux, Duitsland, Frankrijk en de bredere Europese handelscorridors."
+      },
+      {
+        id: "item-3",
+        question: "Wat is een NCTS T1-transitdocument en wanneer is dit nodig?",
+        answer: "Het T1-transitdocument maakt het mogelijk om niet-Uniegoederen onder douanetoezicht te vervoeren van de ene Europese haven naar een andere bestemming in de EU of een douane-entrepot, zonder onmiddellijke betaling van invoerrechten of btw tot de definitieve inklaring."
+      },
+      {
+        id: "item-4",
+        question: "Hoe vraag ik een vrachttarief of containertransport aan?",
+        answer: "U kunt gebruikmaken van onze online logistieke rekentools op deze pagina of uw containerspecificaties doorgeven via het contactformulier. Onze operationele afdeling bezorgt u binnen enkele uren een transparant en concurrerend tarief."
+      },
+      {
+        id: "item-5",
+        question: "Welke documenten zijn vereist voor de douaneafhandeling van zeevracht?",
+        answer: "Standaarddocumenten omvatten de Ocean Bill of Lading (B/L), handelsfactuur, paklijst, certificaat van oorsprong (EUR.1 of COO) en eventuele specifieke in- of uitvoervergunningen afhankelijk van de goederencode."
+      }
+    ]
+  },
+  fr: {
+    badge: "BASE DE CONNAISSANCES & CONSEILS",
+    title: "Foire Aux Questions",
+    subtitle: "Réponses essentielles concernant le dédouanement européen, la logistique des conteneurs et les procédures portuaires.",
+    items: [
+      {
+        id: "item-1",
+        question: "Qu'est-ce que la certification OEA-F et quels sont ses avantages ?",
+        answer: "L'Opérateur Économique Agréé - Simplifications douanières et Sécurité (OEA-F) est le standard d'excellence douanière de l'UE. Il garantit un dédouanement accéléré, un nombre réduit de contrôles physiques et un traitement prioritaire de vos marchandises."
+      },
+      {
+        id: "item-2",
+        question: "Quels ports européens et terminaux à conteneurs Globfreight dessert-il ?",
+        answer: "Nous opérons avec des échanges de données informatisés (EDI) directs et une logistique terrestre sur le port d'Anvers-Bruges, Rotterdam, Zeebruges et Hambourg, reliant efficacement le Benelux, la France, l'Allemagne et l'Europe."
+      },
+      {
+        id: "item-3",
+        question: "Qu'est-ce qu'un document de transit NCTS T1 et quand est-il requis ?",
+        answer: "Le document de transit T1 permet de transporter des marchandises tierces sous contrôle douanier d'un port européen à une autre destination ou entrepôt sous douane de l'UE, en suspension de droits de douane et de TVA jusqu'au dédouanement final."
+      },
+      {
+        id: "item-4",
+        question: "Comment puis-je demander un devis de fret ou de transport de conteneurs ?",
+        answer: "Vous pouvez utiliser nos outils logistiques sur cette page ou envoyer vos critères d'expédition via le formulaire de contact. Notre service d'exploitation vous répondra dans les plus brefs délais avec une offre transparente et compétitive."
+      },
+      {
+        id: "item-5",
+        question: "Quels documents sont nécessaires pour dédouaner du fret maritime ?",
+        answer: "Les documents standards incluent le connaissement maritime (B/L), la facture commerciale, la liste de colisage détaillée, le certificat d'origine (EUR.1 ou COO) et les éventuelles licences d'importation selon la nomenclature douanière."
+      }
+    ]
+  },
+  de: {
+    badge: "WISSEN & LEITFADEN",
+    title: "Häufig Gestellte Fragen",
+    subtitle: "Wichtige Antworten zu europäischer Zollabfertigung, Containerlogistik und Hafenprozessen.",
+    items: [
+      {
+        id: "item-1",
+        question: "Was bedeutet die AEO-F-Zertifizierung und welche Vorteile bietet sie?",
+        answer: "Der Zugelassene Wirtschaftsbeteiligte (AEO-F) ist der höchste zollrechtliche Standard der EU. Er gewährt unseren Kunden schnellere Zollabfertigungen, weniger physische Kontrollen und eine vorrangige Bearbeitung in den europäischen Seehäfen."
+      },
+      {
+        id: "item-2",
+        question: "Welche Seehäfen und Terminals deckt Globfreight ab?",
+        answer: "Wir betreiben direkte elektronische Schnittstellen (EDI) und Bodentransporte in den Häfen Antwerpen-Brügge, Rotterdam, Zeebrugge und Hamburg für nahtlose Transporte in die Benelux-Länder, nach Deutschland, Frankreich und ganz Europa."
+      },
+      {
+        id: "item-3",
+        question: "Was ist ein NCTS T1-Versandschein und wann wird er benötigt?",
+        answer: "Das T1-Versanddokument ermöglicht den Transport von Nicht-Unionswaren unter zollamtlicher Überwachung von einem EU-Eingangshafen zu einem anderen Bestimmungsort oder Zolllager ohne sofortige Zahlung von Zöllen oder Einfuhrumsatzsteuer."
+      },
+      {
+        id: "item-4",
+        question: "Wie fordere ich ein Frachtangebot oder Containertransport-Preise an?",
+        answer: "Nutzen Sie unsere Online-Tools auf dieser Startseite oder senden Sie Ihre Sendungsdaten über den Kontaktbereich. Unsere Disponenten erstellen Ihnen innerhalb kürzester Zeit ein transparentes Angebot."
+      },
+      {
+        id: "item-5",
+        question: "Welche Unterlagen sind für die Seefracht-Zollabfertigung erforderlich?",
+        answer: "Zu den Standarddokumenten gehören das Seefrachtkonnossement (B/L), die Handelsrechnung, die Packliste, das Ursprungszeugnis (EUR.1 oder COO) sowie spezifische Genehmigungen je nach Zolltarifnummer."
+      }
+    ]
   }
 };
 
 export async function FaqSection() {
-  const locale = (await getLocale()) === "ar" ? "ar" : "en";
-  const data = FAQ_DATA[locale] || FAQ_DATA.en;
+  const currentLocale = (await getLocale()) as "en" | "ar" | "nl" | "fr" | "de";
+  const data = FAQ_DATA[currentLocale] || FAQ_DATA.en;
 
   return (
     <section id="faq" className="py-16 sm:py-20 lg:py-24 bg-muted/20 border-b border-border/70 scroll-mt-20">

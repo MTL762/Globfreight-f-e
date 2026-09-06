@@ -1,9 +1,13 @@
 {
-  "name": "Enow",
-  "short_name": "Enow",
+  "name": "GlobFreight",
+  "short_name": "GlobFreight",
   "start_url": "/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui", "browser"],
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
   "background_color": "#ffffff",
   "theme_color": "#FE6F00",
   "description": "منصة شاملة لإدارة الموارد البشرية",
@@ -17,6 +21,9 @@
   ],
   "orientation": "portrait-primary",
   "scope": "/",
-  "categories": ["productivity", "business"],
+  "categories": [
+    "productivity",
+    "business"
+  ],
   "prefer_related_applications": false
 }

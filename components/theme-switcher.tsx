@@ -1,41 +1,63 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Monitor, Moon, Sun } from "lucide-react";
+
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { Monitor, Moon, Sun, Check } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const themes = [
-  { value: "dark", label: "Dark", icon: Moon },
   { value: "light", label: "Light", icon: Sun },
+  { value: "dark", label: "Dark", icon: Moon },
   { value: "system", label: "System", icon: Monitor }
 ];
 
 export default function ThemeSwitcher() {
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <Popover>
-      <PopoverTrigger asChild className="  text-primary">
-        <Button variant="ghost" size="icon" className="relative group">
-          {/* Sun Icon visible in light mode */}
-          <Sun className="h-5 w-5 rotate-0 transition-transform dark:-rotate-90 dark:scale-0" />
-          {/* Moon Icon visible in dark mode */}
-          <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
+      <PopoverTrigger asChild>
+        <button
+          className="relative inline-flex items-center justify-center h-8 w-8 rounded-lg border border-border/70 text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors cursor-pointer outline-none"
+          title="Toggle theme"
+          aria-label="Toggle theme"
+        >
+          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
-        </Button>
+        </button>
       </PopoverTrigger>
-      <PopoverContent className="w-48 rounded-md bg-white dark:bg-zinc-900 p-2 shadow-md border border-gray-200 dark:border-zinc-700">
-        <div className="flex flex-col space-y-1">
-          {themes.map(t => (
-            <Button
-              key={t.value}
-              variant="ghost"
-              className="w-full justify-start gap-2 rounded-sm hover:bg-orange-50 dark:hover:bg-zinc-800 hover:text-orange-700 dark:hover:text-teal-200"
-              onClick={() => setTheme(t.value)}
-            >
-              <t.icon className="h-4 w-4" />
-              <span className="text-sm">{t.label}</span>
-            </Button>
-          ))}
+      <PopoverContent
+        align="end"
+        className="w-36 rounded-xl bg-popover p-1.5 shadow-lg border border-border z-50"
+      >
+        <div className="flex flex-col space-y-0.5">
+          {themes.map((t) => {
+            const isActive = mounted && theme === t.value;
+            const Icon = t.icon;
+            return (
+              <button
+                key={t.value}
+                onClick={() => setTheme(t.value)}
+                className={`flex items-center justify-between w-full px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                  isActive
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-foreground hover:bg-muted/80"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Icon className="h-3.5 w-3.5" />
+                  <span>{t.label}</span>
+                </div>
+                {isActive && <Check className="h-3.5 w-3.5 text-primary" />}
+              </button>
+            );
+          })}
         </div>
       </PopoverContent>
     </Popover>

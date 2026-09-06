@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   ArrowLeft,
@@ -104,24 +105,6 @@ const CONTAINER_TYPES: ContainerOption[] = [
   }
 ];
 
-const POPULAR_ORIGINS = [
-  "Shanghai Port, China",
-  "Ningbo-Zhoushan, China",
-  "Shenzhen Port, China",
-  "Antwerp Port, Belgium",
-  "Hamburg Port, Germany",
-  "Rotterdam Port, Netherlands"
-];
-
-const POPULAR_DESTINATIONS = [
-  "Alexandria Port, Egypt",
-  "Port Said Port, Egypt",
-  "Damietta Port, Egypt",
-  "Antwerp Port, Belgium",
-  "Rotterdam Port, Netherlands",
-  "Hamburg Port, Germany"
-];
-
 const CARGO_PRESETS = [
   "General Cargo",
   "Electronics & Appliances",
@@ -206,6 +189,8 @@ function Step1({
   set: (patch: Partial<PriceRequestFormData>) => void;
   errors?: Record<string, string[]>;
 }) {
+  const t = useTranslations("ShipWithUs.form");
+
   const handleSelectContainer = (option: ContainerOption) => {
     set({
       container_type: option.value,
@@ -218,78 +203,54 @@ function Step1({
       {/* Route: From & To */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <FieldGroup
-          label="Port / City of Origin (From)"
+          label={t("from.label")}
           htmlFor="from"
           required
-          hint="Pickup or loading port"
+          hint={t("from.hint")}
           error={errors?.from?.[0]}
         >
           <div className="relative">
-            <Anchor size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Anchor size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="from"
               required
-              className={`pl-9 ${errors?.from ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.from ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.from}
               onChange={(e) => set({ from: e.target.value })}
-              placeholder="e.g. Shanghai Port, China"
+              placeholder={t("from.placeholder")}
             />
-          </div>
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            <span className="text-[10px] text-muted-foreground self-center mr-1">Suggestions:</span>
-            {POPULAR_ORIGINS.slice(0, 3).map((port) => (
-              <button
-                key={port}
-                type="button"
-                onClick={() => set({ from: port })}
-                className="text-[10px] px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border border-border/50 text-muted-foreground cursor-pointer"
-              >
-                {port.split(",")[0]}
-              </button>
-            ))}
           </div>
         </FieldGroup>
 
         <FieldGroup
-          label="Port / City of Destination (To)"
+          label={t("to.label")}
           htmlFor="to"
           required
-          hint="Discharge or arrival port"
+          hint={t("to.hint")}
           error={errors?.to?.[0]}
         >
           <div className="relative">
-            <MapPin size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <MapPin size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="to"
               required
-              className={`pl-9 ${errors?.to ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.to ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.to}
               onChange={(e) => set({ to: e.target.value })}
-              placeholder="e.g. Alexandria Port, Egypt"
+              placeholder={t("to.placeholder")}
             />
-          </div>
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            <span className="text-[10px] text-muted-foreground self-center mr-1">Suggestions:</span>
-            {POPULAR_DESTINATIONS.slice(0, 3).map((port) => (
-              <button
-                key={port}
-                type="button"
-                onClick={() => set({ to: port })}
-                className="text-[10px] px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border border-border/50 text-muted-foreground cursor-pointer"
-              >
-                {port.split(",")[0]}
-              </button>
-            ))}
           </div>
         </FieldGroup>
       </div>
 
       {/* Container Type */}
       <FieldGroup
-        label="Container Type"
+        label={t("container.label")}
         htmlFor="container-type"
         required
-        hint="Select equipment type or customize below"
+        hint={t("container.hint")}
         error={errors?.container_type?.[0]}
       >
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
@@ -301,7 +262,7 @@ function Step1({
                 type="button"
                 onClick={() => handleSelectContainer(c)}
                 className={[
-                  "flex flex-col text-left p-3 rounded-xl border transition-all cursor-pointer",
+                  "flex flex-col text-left rtl:text-right p-3 rounded-xl border transition-all cursor-pointer",
                   isSelected
                     ? "border-primary bg-primary/10 text-foreground ring-2 ring-primary/20 shadow-xs"
                     : "border-border bg-card hover:border-primary/40 hover:bg-muted/30 text-muted-foreground"
@@ -323,9 +284,10 @@ function Step1({
         <div className="pt-2">
           <Input
             id="container-type"
+            autoComplete="off"
             value={data.container_type}
             onChange={(e) => set({ container_type: e.target.value })}
-            placeholder="Custom container type (e.g. 40ft High Cube)"
+            placeholder={t("container.customPlaceholder")}
             className="text-xs"
           />
         </div>
@@ -345,27 +307,29 @@ function Step2({
   set: (patch: Partial<PriceRequestFormData>) => void;
   errors?: Record<string, string[]>;
 }) {
+  const t = useTranslations("ShipWithUs.form");
   const currentContainerOption = CONTAINER_TYPES.find((c) => c.value === data.container_type);
 
   return (
     <div className="space-y-6">
       {/* Cargo Type */}
       <FieldGroup
-        label="Cargo / Commodity Type"
+        label={t("cargo.label")}
         htmlFor="cargo_type"
         required
-        hint="Type of goods to be shipped"
+        hint={t("cargo.hint")}
         error={errors?.cargo_type?.[0]}
       >
         <div className="relative">
-          <Package size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <Package size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
           <Input
             id="cargo_type"
             required
-            className={`pl-9 ${errors?.cargo_type ? "border-destructive focus-visible:ring-destructive" : ""}`}
+            autoComplete="off"
+            className={`ps-9 ${errors?.cargo_type ? "border-destructive focus-visible:ring-destructive" : ""}`}
             value={data.cargo_type}
             onChange={(e) => set({ cargo_type: e.target.value })}
-            placeholder="e.g. Electronics & Appliances"
+            placeholder={t("cargo.placeholder")}
           />
         </div>
         <div className="flex flex-wrap gap-1.5 pt-1.5">
@@ -390,51 +354,41 @@ function Step2({
       {/* Weight & Dimensions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <FieldGroup
-          label="Gross Weight"
+          label={t("weight.label")}
           htmlFor="weight"
           required
-          hint="Total cargo weight (including unit)"
+          hint={t("weight.hint")}
           error={errors?.weight?.[0]}
         >
           <div className="relative">
-            <Weight size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Weight size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="weight"
               required
-              className={`pl-9 ${errors?.weight ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.weight ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.weight}
               onChange={(e) => set({ weight: e.target.value })}
-              placeholder="e.g. 18,500 KG"
+              placeholder={t("weight.placeholder")}
             />
-          </div>
-          <div className="flex gap-1.5 pt-1">
-            {["18,500 KG", "22,000 KG", "12,000 KG", "5,000 KG"].map((w) => (
-              <button
-                key={w}
-                type="button"
-                onClick={() => set({ weight: w })}
-                className="text-[10px] px-2 py-0.5 rounded-md bg-muted/60 hover:bg-primary/10 hover:text-primary transition-colors border border-border/50 text-muted-foreground cursor-pointer"
-              >
-                {w}
-              </button>
-            ))}
           </div>
         </FieldGroup>
 
         <FieldGroup
-          label="Dimensions (L × W × H)"
+          label={t("dimensions.label")}
           htmlFor="dimensions"
-          hint="Length × Width × Height"
+          hint={t("dimensions.hint")}
           error={errors?.dimensions?.[0]}
         >
           <div className="relative">
-            <Ruler size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Ruler size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="dimensions"
-              className="pl-9"
+              autoComplete="off"
+              className="ps-9"
               value={data.dimensions}
               onChange={(e) => set({ dimensions: e.target.value })}
-              placeholder="e.g. 12.03m x 2.35m x 2.69m"
+              placeholder={t("dimensions.placeholder")}
             />
           </div>
           {currentContainerOption?.defaultDim && (
@@ -444,7 +398,7 @@ function Step2({
                 onClick={() => set({ dimensions: currentContainerOption.defaultDim })}
                 className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline cursor-pointer"
               >
-                <Sparkles size={11} /> Use standard {currentContainerOption.label} size ({currentContainerOption.defaultDim})
+                <Sparkles size={11} /> {t("dimensions.useStandard", { label: currentContainerOption.label, dim: currentContainerOption.defaultDim })}
               </button>
             </div>
           )}
@@ -454,10 +408,10 @@ function Step2({
       {/* Helpful quote specifications helper */}
       <div className="p-3.5 rounded-xl border border-primary/20 bg-primary/5 space-y-2">
         <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-          <Sparkles size={13} className="text-primary" /> Special requirements?
+          <Sparkles size={13} className="text-primary" /> {t("specialRequirements.title")}
         </p>
         <p className="text-[11px] text-muted-foreground leading-relaxed">
-          Click any requirement below to add it directly to your quotation instructions:
+          {t("specialRequirements.hint")}
         </p>
         <div className="flex flex-wrap gap-1.5">
           {NOTE_ASSISTANTS.map((req) => {
@@ -508,44 +462,48 @@ function Step3({
   set: (patch: Partial<PriceRequestFormData>) => void;
   errors?: Record<string, string[]>;
 }) {
+  const t = useTranslations("ShipWithUs.form");
+
   return (
     <div className="space-y-6">
       {/* Contact person & Company */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <FieldGroup
-          label="Contact Name"
+          label={t("contact.name.label")}
           htmlFor="name"
           required
-          hint="Full name of representative"
+          hint={t("contact.name.hint")}
           error={errors?.name?.[0]}
         >
           <div className="relative">
-            <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <User size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="name"
               required
-              className={`pl-9 ${errors?.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.name}
               onChange={(e) => set({ name: e.target.value })}
-              placeholder="e.g. Tarek Mansour"
+              placeholder={t("contact.name.placeholder")}
             />
           </div>
         </FieldGroup>
 
         <FieldGroup
-          label="Company Name"
+          label={t("contact.company.label")}
           htmlFor="company_name"
-          hint="Registered business entity (optional)"
+          hint={t("contact.company.hint")}
           error={errors?.company_name?.[0]}
         >
           <div className="relative">
-            <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Building2 size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="company_name"
-              className={`pl-9 ${errors?.company_name ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.company_name ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.company_name}
               onChange={(e) => set({ company_name: e.target.value })}
-              placeholder="e.g. Mansour Trading LLC"
+              placeholder={t("contact.company.placeholder")}
             />
           </div>
         </FieldGroup>
@@ -554,43 +512,45 @@ function Step3({
       {/* Email & Phone */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <FieldGroup
-          label="Work Email"
+          label={t("contact.email.label")}
           htmlFor="email"
           required
-          hint="Quote will be delivered here"
+          hint={t("contact.email.hint")}
           error={errors?.email?.[0]}
         >
           <div className="relative">
-            <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Mail size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="email"
               type="email"
               required
-              className={`pl-9 ${errors?.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.email}
               onChange={(e) => set({ email: e.target.value })}
-              placeholder="e.g. tarek.mansour@importers.com"
+              placeholder={t("contact.email.placeholder")}
             />
           </div>
         </FieldGroup>
 
         <FieldGroup
-          label="Phone / WhatsApp"
+          label={t("contact.phone.label")}
           htmlFor="phone"
           required
-          hint="For urgent quotation updates"
+          hint={t("contact.phone.hint")}
           error={errors?.phone?.[0]}
         >
           <div className="relative">
-            <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <Phone size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <Input
               id="phone"
               type="tel"
               required
-              className={`pl-9 ${errors?.phone ? "border-destructive focus-visible:ring-destructive" : ""}`}
+              autoComplete="off"
+              className={`ps-9 ${errors?.phone ? "border-destructive focus-visible:ring-destructive" : ""}`}
               value={data.phone}
               onChange={(e) => set({ phone: e.target.value })}
-              placeholder="e.g. +201012345678"
+              placeholder={t("contact.phone.placeholder")}
             />
           </div>
         </FieldGroup>
@@ -598,50 +558,51 @@ function Step3({
 
       {/* Notes */}
       <FieldGroup
-        label="Quotation Notes & Instructions"
+        label={t("contact.notes.label")}
         htmlFor="notes"
-        hint="Specific deadlines, clearance requests, or shipping lines"
+        hint={t("contact.notes.hint")}
         error={errors?.notes?.[0]}
       >
         <Textarea
           id="notes"
           rows={3}
+          autoComplete="off"
           value={data.notes}
           onChange={(e) => set({ notes: e.target.value })}
-          placeholder="e.g. Need customs clearance assistance and best freight rate."
+          placeholder={t("contact.notes.placeholder")}
         />
       </FieldGroup>
 
       {/* Live Quote Summary Card */}
       <div className="rounded-xl border border-border/80 bg-muted/30 p-4 space-y-2.5">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-foreground uppercase tracking-wide">Request Overview</p>
+          <p className="text-xs font-bold text-foreground uppercase tracking-wide">{t("overview.title")}</p>
           <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-            {data.container_type || "Custom Equipment"}
+            {data.container_type || t("overview.customEquipment")}
           </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
           <div className="flex justify-between border-b border-border/40 py-1">
-            <span className="text-muted-foreground">Route:</span>
+            <span className="text-muted-foreground">{t("overview.route")}:</span>
             <span className="font-semibold text-foreground truncate max-w-[200px]">
               {data.from || "—"} → {data.to || "—"}
             </span>
           </div>
           <div className="flex justify-between border-b border-border/40 py-1">
-            <span className="text-muted-foreground">Cargo:</span>
+            <span className="text-muted-foreground">{t("overview.cargo")}:</span>
             <span className="font-semibold text-foreground truncate max-w-[200px]">
               {data.cargo_type || "—"}
             </span>
           </div>
           <div className="flex justify-between border-b border-border/40 py-1">
-            <span className="text-muted-foreground">Weight:</span>
+            <span className="text-muted-foreground">{t("overview.weight")}:</span>
             <span className="font-semibold text-foreground">
               {data.weight || "—"}
             </span>
           </div>
           <div className="flex justify-between border-b border-border/40 py-1">
-            <span className="text-muted-foreground">Dimensions:</span>
+            <span className="text-muted-foreground">{t("overview.dimensions")}:</span>
             <span className="font-semibold text-foreground truncate max-w-[200px]">
               {data.dimensions || "—"}
             </span>
@@ -659,26 +620,27 @@ function SummaryRow({ label, value }: { label: string; value?: string }) {
   return (
     <div className="flex items-start justify-between gap-4 py-2 border-b border-border/40 last:border-0">
       <span className="text-xs text-muted-foreground shrink-0 w-32">{label}</span>
-      <span className="text-xs font-semibold text-foreground text-right">{value}</span>
+      <span className="text-xs font-semibold text-foreground text-right rtl:text-left">{value}</span>
     </div>
   );
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-const STEPS = [
-  { label: "Route & Container", icon: <Ship size={15} /> },
-  { label: "Cargo Details", icon: <Package size={15} /> },
-  { label: "Contact & Submit", icon: <User size={15} /> }
-];
-
 export function ShipWithUsForm() {
+  const t = useTranslations("ShipWithUs.form");
   const [step, setStep] = useState(1);
   const [data, setData] = useState<PriceRequestFormData>(INITIAL_DATA);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
+
+  const steps = [
+    { label: t("steps.route"), icon: <Ship size={15} /> },
+    { label: t("steps.cargo"), icon: <Package size={15} /> },
+    { label: t("steps.contact"), icon: <User size={15} /> }
+  ];
 
   const set = (patch: Partial<PriceRequestFormData>) => {
     setData((prev) => ({ ...prev, ...patch }));
@@ -696,24 +658,24 @@ export function ShipWithUsForm() {
   const validateStep = (currentStep: number): boolean => {
     if (currentStep === 1) {
       if (!data.from.trim()) {
-        toast.error("Please enter the port or city of origin (From).");
+        toast.error(t("validation.fromRequired"));
         return false;
       }
       if (!data.to.trim()) {
-        toast.error("Please enter the port or city of destination (To).");
+        toast.error(t("validation.toRequired"));
         return false;
       }
       if (!data.container_type.trim()) {
-        toast.error("Please specify the container equipment type.");
+        toast.error(t("validation.containerRequired"));
         return false;
       }
     } else if (currentStep === 2) {
       if (!data.cargo_type.trim()) {
-        toast.error("Please enter the cargo or commodity type.");
+        toast.error(t("validation.cargoRequired"));
         return false;
       }
       if (!data.weight.trim()) {
-        toast.error("Please enter the gross weight of your cargo.");
+        toast.error(t("validation.weightRequired"));
         return false;
       }
     }
@@ -731,7 +693,7 @@ export function ShipWithUsForm() {
     if (!validateStep(1) || !validateStep(2)) return;
 
     if (!data.name.trim() || !data.email.trim() || !data.phone.trim()) {
-      toast.error("Please fill in all contact details (Name, Email, and Phone).");
+      toast.error(t("validation.contactRequired"));
       return;
     }
 
@@ -757,7 +719,7 @@ export function ShipWithUsForm() {
       const res = await submitPriceRequest(payload);
 
       if (res && res.success) {
-        toast.success("Thank you! Your quote request has been received. Our team will review and reply within 24 hours.");
+        toast.success(t("validation.successToast"));
         setSubmitted(true);
       } else {
         const backendErrors = res?.errors || res?.result?.errors;
@@ -767,7 +729,7 @@ export function ShipWithUsForm() {
           else if (backendErrors.cargo_type || backendErrors.weight || backendErrors.dimensions) setStep(2);
           else if (backendErrors.name || backendErrors.email || backendErrors.phone || backendErrors.company_name) setStep(3);
         }
-        const msg = res?.result?.message || res?.message || "Failed to submit price request. Please verify the information entered.";
+        const msg = res?.result?.message || res?.message || t("validation.genericError");
         setErrorMessage(msg);
         toast.error(msg);
       }
@@ -780,7 +742,7 @@ export function ShipWithUsForm() {
         else if (backendErrors.cargo_type || backendErrors.weight || backendErrors.dimensions) setStep(2);
         else if (backendErrors.name || backendErrors.email || backendErrors.phone || backendErrors.company_name) setStep(3);
       }
-      const msg = err?.response?.data?.message || (err instanceof Error ? err.message : "An unexpected error occurred while transmitting your request.");
+      const msg = err?.response?.data?.message || (err instanceof Error ? err.message : t("validation.unexpectedError"));
       setErrorMessage(msg);
       toast.error(msg);
     } finally {
@@ -799,28 +761,25 @@ export function ShipWithUsForm() {
           </div>
           <div className="space-y-2">
             <h3 className="text-2xl font-extrabold tracking-tight text-foreground">
-              Thank You! Your Quote Request Has Been Received
+              {t("success.title")}
             </h3>
             <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-              Thank you, <strong className="text-foreground">{data.name}</strong>
-              {data.company_name ? <> from <strong className="text-foreground">{data.company_name}</strong></> : ""}.
-              Your quote request for <strong className="text-foreground">{data.container_type}</strong> from{" "}
-              <strong className="text-foreground">{data.from}</strong> to{" "}
-              <strong className="text-foreground">{data.to}</strong> has been logged. Our logistics team
-              will review and reply to your email (<strong className="text-foreground">{data.email}</strong>) within 24 hours.
+              {t("success.thankYou")}, <strong className="text-foreground">{data.name}</strong>
+              {data.company_name ? <> {t("success.fromCompany")} <strong className="text-foreground">{data.company_name}</strong></> : ""}.{" "}
+              {t("success.loggedNotice", { container: data.container_type, from: data.from, to: data.to, email: data.email })}
             </p>
           </div>
 
-          <div className="w-full max-w-md rounded-xl bg-muted/40 border border-border/60 p-4 text-left">
-            <SummaryRow label="Route" value={`${data.from} → ${data.to}`} />
-            <SummaryRow label="Container" value={data.container_type} />
-            <SummaryRow label="Cargo Type" value={data.cargo_type} />
-            <SummaryRow label="Gross Weight" value={data.weight} />
-            {data.dimensions && <SummaryRow label="Dimensions" value={data.dimensions} />}
-            <SummaryRow label="Contact" value={data.company_name ? `${data.name} (${data.company_name})` : data.name} />
-            <SummaryRow label="Email" value={data.email} />
-            <SummaryRow label="Phone" value={data.phone} />
-            {data.notes && <SummaryRow label="Notes" value={data.notes} />}
+          <div className="w-full max-w-md rounded-xl bg-muted/40 border border-border/60 p-4 text-left rtl:text-right">
+            <SummaryRow label={t("overview.route")} value={`${data.from} → ${data.to}`} />
+            <SummaryRow label={t("container.label")} value={data.container_type} />
+            <SummaryRow label={t("overview.cargo")} value={data.cargo_type} />
+            <SummaryRow label={t("overview.weight")} value={data.weight} />
+            {data.dimensions && <SummaryRow label={t("overview.dimensions")} value={data.dimensions} />}
+            <SummaryRow label={t("overview.contact")} value={data.company_name ? `${data.name} (${data.company_name})` : data.name} />
+            <SummaryRow label={t("overview.email")} value={data.email} />
+            <SummaryRow label={t("overview.phone")} value={data.phone} />
+            {data.notes && <SummaryRow label={t("overview.notes")} value={data.notes} />}
           </div>
 
           <Button
@@ -832,7 +791,7 @@ export function ShipWithUsForm() {
               setStep(1);
             }}
           >
-            Submit Another Request
+            {t("success.submitAnother")}
           </Button>
         </div>
       </div>
@@ -841,13 +800,13 @@ export function ShipWithUsForm() {
 
   // ── Form State ────────────────────────────────────────────────────────────
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl border bg-card shadow-sm overflow-hidden">
+    <form onSubmit={handleSubmit} autoComplete="off" className="rounded-2xl border bg-card shadow-sm overflow-hidden">
       <div className="h-1.5 w-full bg-gradient-to-r from-primary via-primary/70 to-primary/30" />
 
       {/* Step Header */}
       <div className="px-6 sm:px-8 pt-6 pb-5 border-b border-border/60">
         <div className="flex items-center gap-3 sm:gap-5 overflow-x-auto no-scrollbar">
-          {STEPS.map(({ label, icon }, i) => {
+          {steps.map(({ label, icon }, i) => {
             const n = i + 1;
             const done = step > n;
             const active = step === n;
@@ -862,7 +821,7 @@ export function ShipWithUsForm() {
                         active ? "text-primary" : done ? "text-primary/60" : "text-muted-foreground"
                       ].join(" ")}
                     >
-                      Step {n}
+                      {t("steps.step")} {n}
                     </p>
                     <p
                       className={[
@@ -874,7 +833,7 @@ export function ShipWithUsForm() {
                     </p>
                   </div>
                 </div>
-                {i < STEPS.length - 1 && (
+                {i < steps.length - 1 && (
                   <div
                     className={[
                       "flex-1 h-px min-w-[24px] transition-colors duration-300",
@@ -893,7 +852,7 @@ export function ShipWithUsForm() {
         <div className="mx-6 sm:mx-8 mt-5 p-3.5 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive flex items-start gap-2.5 text-xs">
           <AlertCircle size={16} className="shrink-0 mt-0.5" />
           <div className="space-y-0.5">
-            <p className="font-semibold">Submission failed</p>
+            <p className="font-semibold">{t("submissionFailed")}</p>
             <p className="text-destructive/90">{errorMessage}</p>
           </div>
         </div>
@@ -909,7 +868,7 @@ export function ShipWithUsForm() {
       {/* Footer Navigation */}
       <div className="px-6 sm:px-8 py-5 border-t border-border/60 flex items-center justify-between gap-3 bg-muted/20">
         <div className="text-xs text-muted-foreground">
-          Step <strong className="text-foreground">{step}</strong> of {STEPS.length}
+          {t("steps.step")} <strong className="text-foreground">{step}</strong> {t("steps.of")} {steps.length}
         </div>
         <div className="flex items-center gap-2.5">
           {step > 1 && (
@@ -920,23 +879,23 @@ export function ShipWithUsForm() {
               disabled={loading}
               onClick={() => setStep((s) => s - 1)}
             >
-              <ArrowLeft size={15} /> Back
+              <ArrowLeft size={15} className="rtl:rotate-180" /> {t("buttons.back")}
             </Button>
           )}
 
-          {step < STEPS.length ? (
+          {step < steps.length ? (
             <Button type="button" className="gap-1.5 text-sm" onClick={handleNext}>
-              Next <ArrowRight size={15} />
+              {t("buttons.next")} <ArrowRight size={15} className="rtl:rotate-180" />
             </Button>
           ) : (
             <Button type="submit" disabled={loading} className="gap-2 text-sm px-6">
               {loading ? (
                 <>
-                  <Loader2 size={15} className="animate-spin" /> Submitting Request…
+                  <Loader2 size={15} className="animate-spin" /> {t("buttons.submitting")}
                 </>
               ) : (
                 <>
-                  Submit Quotation Request <ArrowRight size={15} />
+                  {t("buttons.submit")} <ArrowRight size={15} className="rtl:rotate-180" />
                 </>
               )}
             </Button>

@@ -2437,6 +2437,172 @@
       "body": "Fordern Sie ein maßgeschneidertes Logistikangebot an oder konsultieren Sie einen zertifizierten Zollspezialisten für Ihre europäischen Sendungen."
     }
   },
+  "ShipWithUs": {
+    "meta": {
+      "title": "Versenden Sie mit uns | Globfreight",
+      "description": "Übermitteln Sie Ihre Frachtdaten und erhalten Sie ein maßgeschneidertes Frachtangebot von Globfreight. Seefracht, Zollabfertigung, Zolllagerung und Haus-zu-Haus-Lieferung in ganz Europa."
+    },
+    "hero": {
+      "eyebrow": "STARTEN SIE IHRE SENDUNG",
+      "title": "Versenden Sie mit uns — <highlight>Reibungslose Fracht</highlight> von jedem Hafen nach Europa",
+      "description": "Übermitteln Sie Ihre Frachtdaten in unter 3 Minuten. Unser europäisches Betriebsteam erstellt ein maßgeschneidertes Angebot für Seefracht, Zollabfertigung und Haus-zu-Haus-Lieferung.",
+      "cta": "Mit einem Spezialisten sprechen"
+    },
+    "stats": {
+      "countries": "Bediente Länder",
+      "coverage": "Betriebliche Abdeckung",
+      "shipments": "Abgefertigte Sendungen",
+      "certification": "EU-Zertifizierung"
+    },
+    "usp": {
+      "aeo": {
+        "title": "AEO-F zertifiziert",
+        "body": "Vollständiger Status als Zugelassener Wirtschaftsbeteiligter für vorrangige Zollbehandlung in allen EU-Häfen."
+      },
+      "response": {
+        "title": "Antwort innerhalb von 4 Stunden",
+        "body": "Unser Dispositionsteam bestätigt jede Frachtanfrage innerhalb von 4 Geschäftsstunden, garantiert."
+      },
+      "network": {
+        "title": "Weltweites Netzwerk",
+        "body": "Direkte EDI-Verbindungen nach Antwerpen, Rotterdam und Zeebrugge mit Partneragenten in 90+ Ländern."
+      },
+      "agent": {
+        "title": "Fester Ansprechpartner",
+        "body": "Jedem Kunden wird ein fester Zollspezialist zugewiesen — immer ein direkter Ansprechpartner."
+      }
+    },
+    "section": {
+      "eyebrow": "FRACHTANFRAGE",
+      "title": "Erzählen Sie uns von Ihrer Fracht",
+      "subtitle": "Füllen Sie das 3-Schritte-Formular unten aus, um einen individuellen Frachttarif und Transitzeitplan zu erhalten."
+    },
+    "sidebar": {
+      "nextTitle": "Was passiert als Nächstes?",
+      "step1": "Wir erhalten Ihre Anfrage und weisen einen Frachtspezialisten zu.",
+      "step2": "Ein maßgeschneidertes Angebot wird innerhalb von 4 Geschäftsstunden erstellt.",
+      "step3": "Sie prüfen, erteilen die Freigabe und wir kümmern uns um den Rest — vom Hafen bis zur Haustür.",
+      "coveredTitle": "In Ihrem Angebot enthalten",
+      "items": {
+        "item1": "Seefracht (FCL / LCL / RoRo)",
+        "item2": "Zollabfertigung & Zollerklärungen",
+        "item3": "Zolllagerung in Antwerpen",
+        "item4": "Fiskalvertretung (Nicht-EU)",
+        "item5": "Inlandstransport & Letzte Meile",
+        "item6": "Warenversicherung (auf Anfrage)"
+      },
+      "callTitle": "Lieber anrufen?",
+      "callNote": "Mo – Fr · 08:00 – 18:00 MEZ · Direkte Dispositionsleitung"
+    },
+    "form": {
+      "steps": {
+        "step": "Schritt",
+        "of": "von",
+        "route": "Route & Container",
+        "cargo": "Frachtdetails",
+        "contact": "Kontakt & Absenden"
+      },
+      "from": {
+        "label": "Abgangshafen / Stadt (Von)",
+        "hint": "Abhol- oder Ladehafen",
+        "placeholder": "z.B. Hafen Shanghai, China"
+      },
+      "to": {
+        "label": "Bestimmungshafen / Stadt (Nach)",
+        "hint": "Lösch- oder Ankunftshafen",
+        "placeholder": "z.B. Hafen Alexandria, Ägypten"
+      },
+      "container": {
+        "label": "Containertyp",
+        "hint": "Ausrüstungstyp auswählen oder unten anpassen",
+        "customPlaceholder": "Benutzerdefinierter Containertyp (z.B. 40ft High Cube)"
+      },
+      "cargo": {
+        "label": "Fracht- / Warentyp",
+        "hint": "Art der zu versendenden Waren",
+        "placeholder": "z.B. Elektronik & Haushaltsgeräte"
+      },
+      "weight": {
+        "label": "Bruttogewicht",
+        "hint": "Gesamtgewicht der Ladung (inkl. Einheit)",
+        "placeholder": "z.B. 18.500 KG"
+      },
+      "dimensions": {
+        "label": "Abmessungen (L × B × H)",
+        "hint": "Länge × Breite × Höhe",
+        "placeholder": "z.B. 12.03m x 2.35m x 2.69m",
+        "useStandard": "Standardgröße für {label} verwenden ({dim})"
+      },
+      "specialRequirements": {
+        "title": "Besondere Anforderungen?",
+        "hint": "Klicken Sie auf eine Anforderung, um sie direkt zu Ihren Angebotsanweisungen hinzuzufügen:"
+      },
+      "contact": {
+        "name": {
+          "label": "Kontaktperson",
+          "hint": "Vollständiger Name des Vertreters",
+          "placeholder": "z.B. Tarek Mansour"
+        },
+        "company": {
+          "label": "Firmenname",
+          "hint": "Eingetragenes Unternehmen (optional)",
+          "placeholder": "z.B. Mansour Trading LLC"
+        },
+        "email": {
+          "label": "Geschäftliche E-Mail",
+          "hint": "Das Angebot wird hierhin gesendet",
+          "placeholder": "z.B. tarek.mansour@importers.com"
+        },
+        "phone": {
+          "label": "Telefon / WhatsApp",
+          "hint": "Für dringende Angebotsaktualisierungen",
+          "placeholder": "z.B. +201012345678"
+        },
+        "notes": {
+          "label": "Hinweise & Anweisungen",
+          "hint": "Spezifische Fristen, Zollanfragen oder Reedereien",
+          "placeholder": "z.B. Zollabfertigung erforderlich und bester Frachttarif erbeten."
+        }
+      },
+      "overview": {
+        "title": "Anfrageübersicht",
+        "customEquipment": "Individuelle Ausrüstung",
+        "route": "Route",
+        "cargo": "Fracht",
+        "weight": "Gewicht",
+        "dimensions": "Abmessungen",
+        "contact": "Kontakt",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "notes": "Hinweise"
+      },
+      "buttons": {
+        "back": "Zurück",
+        "next": "Weiter",
+        "submit": "Frachtangebot anfordern",
+        "submitting": "Wird übermittelt…"
+      },
+      "submissionFailed": "Übermittlung fehlgeschlagen",
+      "validation": {
+        "fromRequired": "Bitte geben Sie den Abgangshafen oder die Stadt ein (Von).",
+        "toRequired": "Bitte geben Sie den Bestimmungshafen oder die Stadt ein (Nach).",
+        "containerRequired": "Bitte geben Sie den Containertyp an.",
+        "cargoRequired": "Bitte geben Sie den Fracht- oder Warentyp ein.",
+        "weightRequired": "Bitte geben Sie das Bruttogewicht Ihrer Ladung ein.",
+        "contactRequired": "Bitte füllen Sie alle Kontaktdaten aus (Name, E-Mail und Telefon).",
+        "successToast": "Vielen Dank! Ihre Frachtanfrage ist eingegangen. Unser Team wird sie prüfen und innerhalb von 24 Stunden antworten.",
+        "genericError": "Übermittlung der Preisanfrage fehlgeschlagen. Bitte überprüfen Sie die eingegebenen Daten.",
+        "unexpectedError": "Bei der Übermittlung Ihrer Anfrage ist ein unerwarteter Fehler aufgetreten."
+      },
+      "success": {
+        "title": "Vielen Dank! Ihre Frachtanfrage ist eingegangen",
+        "thankYou": "Vielen Dank",
+        "fromCompany": "von",
+        "loggedNotice": "Ihre Angebotsanfrage für {container} von {from} nach {to} wurde erfasst. Unser Logistikteam wird sie prüfen und innerhalb von 24 Stunden an Ihre E-Mail-Adresse ({email}) antworten.",
+        "submitAnother": "Weitere Anfrage senden"
+      }
+    }
+  },
   "proficiency": "Proficiency",
   "is_paid": "Is Paid",
   "from_date": "From Date",

@@ -3,7 +3,7 @@ import { routing } from "@/i18n/routing";
 import { PROJECT_NAME } from "@/utils/config";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
 import NextTopLoader from "nextjs-toploader";
@@ -36,6 +36,7 @@ export default async function AppLayout(props: {
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+  setRequestLocale(locale);
   const { children } = props;
 
   // Providing all messages to the client

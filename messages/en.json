@@ -2439,6 +2439,172 @@
       "body": "Request a tailored logistics quotation or consult with a certified customs specialist about your European shipments."
     }
   },
+  "ShipWithUs": {
+    "meta": {
+      "title": "Ship With Us | Globfreight",
+      "description": "Submit your cargo details and receive a tailored freight quotation from Globfreight. Sea freight, customs clearance, bonded warehousing, and door-to-door delivery across Europe."
+    },
+    "hero": {
+      "eyebrow": "START YOUR SHIPMENT",
+      "title": "Ship With Us — <highlight>Seamless Freight</highlight> from Any Port to Europe",
+      "description": "Submit your cargo details in under 3 minutes. Our European operations team will prepare a tailored quotation covering sea freight, customs clearance, and door-to-door delivery.",
+      "cta": "Speak to a Specialist"
+    },
+    "stats": {
+      "countries": "Countries Served",
+      "coverage": "Operational Coverage",
+      "shipments": "Shipments Cleared",
+      "certification": "EU Certification"
+    },
+    "usp": {
+      "aeo": {
+        "title": "AEO-F Certified",
+        "body": "Full Authorised Economic Operator status for priority customs treatment across all EU ports."
+      },
+      "response": {
+        "title": "4-Hour Response",
+        "body": "Our dispatch team acknowledges every shipment request within 4 business hours, guaranteed."
+      },
+      "network": {
+        "title": "Global Network",
+        "body": "Direct EDI connections to Antwerp, Rotterdam & Zeebrugge with partner agents in 90+ countries."
+      },
+      "agent": {
+        "title": "Dedicated Agent",
+        "body": "A named customs specialist is assigned to every account — single point of contact, always."
+      }
+    },
+    "section": {
+      "eyebrow": "SHIPMENT REQUEST",
+      "title": "Tell us about your cargo",
+      "subtitle": "Complete the 3-step form below to receive a personalized freight rate and transit schedule."
+    },
+    "sidebar": {
+      "nextTitle": "What happens next?",
+      "step1": "We receive your request and assign a dedicated freight specialist.",
+      "step2": "A tailored quotation is prepared within 4 business hours.",
+      "step3": "You review, approve, and we handle the rest — port to door.",
+      "coveredTitle": "Covered in your quote",
+      "items": {
+        "item1": "Sea freight (FCL / LCL / RoRo)",
+        "item2": "Customs clearance & declarations",
+        "item3": "Bonded warehousing in Antwerp",
+        "item4": "Fiscal representation (Non-EU)",
+        "item5": "Inland transport & last-mile",
+        "item6": "Cargo insurance (on request)"
+      },
+      "callTitle": "Prefer to call?",
+      "callNote": "Mon – Fri · 08:00 – 18:00 CET · Direct dispatch line"
+    },
+    "form": {
+      "steps": {
+        "step": "Step",
+        "of": "of",
+        "route": "Route & Container",
+        "cargo": "Cargo Details",
+        "contact": "Contact & Submit"
+      },
+      "from": {
+        "label": "Port / City of Origin (From)",
+        "hint": "Pickup or loading port",
+        "placeholder": "e.g. Shanghai Port, China"
+      },
+      "to": {
+        "label": "Port / City of Destination (To)",
+        "hint": "Discharge or arrival port",
+        "placeholder": "e.g. Alexandria Port, Egypt"
+      },
+      "container": {
+        "label": "Container Type",
+        "hint": "Select equipment type or customize below",
+        "customPlaceholder": "Custom container type (e.g. 40ft High Cube)"
+      },
+      "cargo": {
+        "label": "Cargo / Commodity Type",
+        "hint": "Type of goods to be shipped",
+        "placeholder": "e.g. Electronics & Appliances"
+      },
+      "weight": {
+        "label": "Gross Weight",
+        "hint": "Total cargo weight (including unit)",
+        "placeholder": "e.g. 18,500 KG"
+      },
+      "dimensions": {
+        "label": "Dimensions (L × W × H)",
+        "hint": "Length × Width × Height",
+        "placeholder": "e.g. 12.03m x 2.35m x 2.69m",
+        "useStandard": "Use standard {label} size ({dim})"
+      },
+      "specialRequirements": {
+        "title": "Special requirements?",
+        "hint": "Click any requirement below to add it directly to your quotation instructions:"
+      },
+      "contact": {
+        "name": {
+          "label": "Contact Name",
+          "hint": "Full name of representative",
+          "placeholder": "e.g. Tarek Mansour"
+        },
+        "company": {
+          "label": "Company Name",
+          "hint": "Registered business entity (optional)",
+          "placeholder": "e.g. Mansour Trading LLC"
+        },
+        "email": {
+          "label": "Work Email",
+          "hint": "Quote will be delivered here",
+          "placeholder": "e.g. tarek.mansour@importers.com"
+        },
+        "phone": {
+          "label": "Phone / WhatsApp",
+          "hint": "For urgent quotation updates",
+          "placeholder": "e.g. +201012345678"
+        },
+        "notes": {
+          "label": "Quotation Notes & Instructions",
+          "hint": "Specific deadlines, clearance requests, or shipping lines",
+          "placeholder": "e.g. Need customs clearance assistance and best freight rate."
+        }
+      },
+      "overview": {
+        "title": "Request Overview",
+        "customEquipment": "Custom Equipment",
+        "route": "Route",
+        "cargo": "Cargo",
+        "weight": "Weight",
+        "dimensions": "Dimensions",
+        "contact": "Contact",
+        "email": "Email",
+        "phone": "Phone",
+        "notes": "Notes"
+      },
+      "buttons": {
+        "back": "Back",
+        "next": "Next",
+        "submit": "Submit Quotation Request",
+        "submitting": "Submitting Request…"
+      },
+      "submissionFailed": "Submission failed",
+      "validation": {
+        "fromRequired": "Please enter the port or city of origin (From).",
+        "toRequired": "Please enter the port or city of destination (To).",
+        "containerRequired": "Please specify the container equipment type.",
+        "cargoRequired": "Please enter the cargo or commodity type.",
+        "weightRequired": "Please enter the gross weight of your cargo.",
+        "contactRequired": "Please fill in all contact details (Name, Email, and Phone).",
+        "successToast": "Thank you! Your quote request has been received. Our team will review and reply within 24 hours.",
+        "genericError": "Failed to submit price request. Please verify the information entered.",
+        "unexpectedError": "An unexpected error occurred while transmitting your request."
+      },
+      "success": {
+        "title": "Thank You! Your Quote Request Has Been Received",
+        "thankYou": "Thank you",
+        "fromCompany": "from",
+        "loggedNotice": "Your quote request for {container} from {from} to {to} has been logged. Our logistics team will review and reply to your email ({email}) within 24 hours.",
+        "submitAnother": "Submit Another Request"
+      }
+    }
+  },
   "proficiency": "Proficiency",
   "is_paid": "Is Paid",
   "from_date": "From Date",

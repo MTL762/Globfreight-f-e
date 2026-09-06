@@ -2437,6 +2437,172 @@
       "body": "Demandez un devis logistique sur mesure ou consultez un spécialiste en douane certifié pour vos expéditions européennes."
     }
   },
+  "ShipWithUs": {
+    "meta": {
+      "title": "Expédiez avec nous | Globfreight",
+      "description": "Soumettez les détails de votre cargaison et recevez un devis de fret sur mesure de Globfreight. Fret maritime, dédouanement, entreposage sous douane et livraison porte-à-porte dans toute l'Europe."
+    },
+    "hero": {
+      "eyebrow": "COMMENCEZ VOTRE EXPÉDITION",
+      "title": "Expédiez avec nous — <highlight>Fret sans interruption</highlight> depuis n'importe quel port vers l'Europe",
+      "description": "Soumettez les détails de votre cargaison en moins de 3 minutes. Notre équipe d'opérations européennes préparera un devis sur mesure couvrant le fret maritime, le dédouanement et la livraison porte-à-porte.",
+      "cta": "Parler à un spécialiste"
+    },
+    "stats": {
+      "countries": "Pays desservis",
+      "coverage": "Couverture opérationnelle",
+      "shipments": "Expéditions dédouanées",
+      "certification": "Certification UE"
+    },
+    "usp": {
+      "aeo": {
+        "title": "Certifié OEA-F (AEO-F)",
+        "body": "Statut complet d'Opérateur Économique Agréé pour un traitement douanier prioritaire dans tous les ports de l'UE."
+      },
+      "response": {
+        "title": "Réponse sous 4 heures",
+        "body": "Notre équipe de dispatching confirme chaque demande d'expédition en moins de 4 heures ouvrables, garanti."
+      },
+      "network": {
+        "title": "Réseau mondial",
+        "body": "Connexions EDI directes avec Anvers, Rotterdam et Zeebruges avec des agents partenaires dans plus de 90 pays."
+      },
+      "agent": {
+        "title": "Agent dédié",
+        "body": "Un spécialiste en douane désigné est assigné à chaque compte — un interlocuteur unique, en tout temps."
+      }
+    },
+    "section": {
+      "eyebrow": "DEMANDE D'EXPÉDITION",
+      "title": "Parlez-nous de votre cargaison",
+      "subtitle": "Remplissez le formulaire en 3 étapes ci-dessous pour recevoir un tarif de fret personnalisé et un calendrier de transit."
+    },
+    "sidebar": {
+      "nextTitle": "Que se passe-t-il ensuite ?",
+      "step1": "Nous recevons votre demande et assignons un spécialiste en fret dédié.",
+      "step2": "Un devis sur mesure est préparé sous 4 heures ouvrables.",
+      "step3": "Vous examinez, approuvez, et nous nous occupons du reste — du port à votre porte.",
+      "coveredTitle": "Inclus dans votre devis",
+      "items": {
+        "item1": "Fret maritime (FCL / LCL / RoRo)",
+        "item2": "Dédouanement & déclarations",
+        "item3": "Entreposage sous douane à Anvers",
+        "item4": "Représentation fiscale (hors UE)",
+        "item5": "Transport terrestre & dernier kilomètre",
+        "item6": "Assurance fret (sur demande)"
+      },
+      "callTitle": "Vous préférez appeler ?",
+      "callNote": "Lun – Ven · 08:00 – 18:00 CET · Ligne de dispatch direct"
+    },
+    "form": {
+      "steps": {
+        "step": "Étape",
+        "of": "sur",
+        "route": "Itinéraire & Conteneur",
+        "cargo": "Détails de la marchandise",
+        "contact": "Contact & Envoi"
+      },
+      "from": {
+        "label": "Port / Ville d'origine (De)",
+        "hint": "Port de chargement ou enlèvement",
+        "placeholder": "ex. Port de Shanghai, Chine"
+      },
+      "to": {
+        "label": "Port / Ville de destination (À)",
+        "hint": "Port de déchargement ou arrivée",
+        "placeholder": "ex. Port d'Alexandrie, Égypte"
+      },
+      "container": {
+        "label": "Type de conteneur",
+        "hint": "Sélectionnez le type d'équipement ou personnalisez ci-dessous",
+        "customPlaceholder": "Type de conteneur personnalisé (ex. 40ft High Cube)"
+      },
+      "cargo": {
+        "label": "Type de marchandise / cargaison",
+        "hint": "Type de biens à expédier",
+        "placeholder": "ex. Électronique & Électroménager"
+      },
+      "weight": {
+        "label": "Poids brut",
+        "hint": "Poids total de la cargaison (unité comprise)",
+        "placeholder": "ex. 18 500 KG"
+      },
+      "dimensions": {
+        "label": "Dimensions (L × l × H)",
+        "hint": "Longueur × Largeur × Hauteur",
+        "placeholder": "ex. 12.03m x 2.35m x 2.69m",
+        "useStandard": "Utiliser la taille standard de {label} ({dim})"
+      },
+      "specialRequirements": {
+        "title": "Exigences particulières ?",
+        "hint": "Cliquez sur une exigence ci-dessous pour l'ajouter directement à vos instructions de devis :"
+      },
+      "contact": {
+        "name": {
+          "label": "Nom du contact",
+          "hint": "Nom complet du représentant",
+          "placeholder": "ex. Tarek Mansour"
+        },
+        "company": {
+          "label": "Nom de l'entreprise",
+          "hint": "Entité commerciale enregistrée (facultatif)",
+          "placeholder": "ex. Mansour Trading LLC"
+        },
+        "email": {
+          "label": "E-mail professionnel",
+          "hint": "Le devis vous sera envoyé ici",
+          "placeholder": "ex. tarek.mansour@importers.com"
+        },
+        "phone": {
+          "label": "Téléphone / WhatsApp",
+          "hint": "Pour les mises à jour urgentes du devis",
+          "placeholder": "ex. +201012345678"
+        },
+        "notes": {
+          "label": "Remarques & instructions",
+          "hint": "Délais précis, demandes douanières ou compagnies maritimes",
+          "placeholder": "ex. Assistance au dédouanement et meilleur tarif de fret requis."
+        }
+      },
+      "overview": {
+        "title": "Aperçu de la demande",
+        "customEquipment": "Équipement personnalisé",
+        "route": "Itinéraire",
+        "cargo": "Cargaison",
+        "weight": "Poids",
+        "dimensions": "Dimensions",
+        "contact": "Contact",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "notes": "Remarques"
+      },
+      "buttons": {
+        "back": "Retour",
+        "next": "Suivant",
+        "submit": "Soumettre la demande de devis",
+        "submitting": "Transmission en cours…"
+      },
+      "submissionFailed": "Échec de l'envoi",
+      "validation": {
+        "fromRequired": "Veuillez entrer le port ou la ville d'origine (De).",
+        "toRequired": "Veuillez entrer le port ou la ville de destination (À).",
+        "containerRequired": "Veuillez spécifier le type de conteneur.",
+        "cargoRequired": "Veuillez entrer le type de marchandise.",
+        "weightRequired": "Veuillez entrer le poids brut de votre cargaison.",
+        "contactRequired": "Veuillez remplir toutes vos coordonnées (nom, e-mail et téléphone).",
+        "successToast": "Merci ! Votre demande de devis a bien été reçue. Notre équipe l'examinera et répondra sous 24 heures.",
+        "genericError": "Échec de l'envoi de la demande de prix. Veuillez vérifier les informations saisies.",
+        "unexpectedError": "Une erreur inattendue est survenue lors de la transmission de votre demande."
+      },
+      "success": {
+        "title": "Merci ! Votre demande de devis a bien été reçue",
+        "thankYou": "Merci",
+        "fromCompany": "de",
+        "loggedNotice": "Votre demande de devis pour {container} de {from} à {to} a été enregistrée. Notre équipe logistique l'examinera et répondra à votre e-mail ({email}) sous 24 heures.",
+        "submitAnother": "Soumettre une autre demande"
+      }
+    }
+  },
   "proficiency": "Proficiency",
   "is_paid": "Is Paid",
   "from_date": "From Date",
