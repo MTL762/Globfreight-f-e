@@ -7,7 +7,9 @@ import { ShipWithUsForm } from "@/components/pages/home/ship-with-us-form";
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export async function ShipWithUsPage({ locale }: { locale?: string } = {}) {
-  const t = await getTranslations(locale ? { locale, namespace: "ShipWithUs" } : "ShipWithUs");
+  const t = locale
+    ? await getTranslations({ locale, namespace: "ShipWithUs" })
+    : await getTranslations("ShipWithUs");
 
   const uspCards = [
     {
