@@ -22,7 +22,14 @@ export default function ChangeTimeFormat({
   const lang = useLocale();
   if (!time) return "";
   const date = new Date(time);
-  localeStringType = lang === "ar" ? "ar-EG" : "en-US";
+  const localeMap: Record<string, string> = {
+    ar: "ar-EG",
+    nl: "nl-BE",
+    fr: "fr-BE",
+    de: "de-DE",
+    en: "en-US"
+  };
+  localeStringType = localeMap[lang] || "en-US";
   return isNaN(date.getTime())
     ? " "
     : date.toLocaleString(localeStringType, {

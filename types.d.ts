@@ -149,7 +149,7 @@ declare namespace Auth {
 }
 
 declare namespace AppConfig {
-  type Locale = "ar" | "en" | "admin";
+  type Locale = "en" | "nl" | "fr" | "de" | "ar" | "admin";
   interface MiniNavItem {
     label: string;
     href: string;
