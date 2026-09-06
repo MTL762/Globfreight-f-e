@@ -1,19 +1,17 @@
 
 import { fetchHelper } from '@/api/fetch';
-import TableBasic from '@/components/common/table/TableBasic';
 import { getTranslations } from 'next-intl/server';
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 import type { Metadata } from "next";
-import CustomersColumns from './CustomersColumns';
-// import GenerateStaticParams from '@/api/metadata';
+import { CustomersTableWrapper } from "./components/CustomersTableWrapper";
 import { PROJECT_NAME } from "@/utils/config";
-// export const generateStaticParams = GenerateStaticParams;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
   const headerName = t("Customers");
   return {
     title: `${headerName} | ${PROJECT_NAME}`,
-    description: `Manage ${headerName} items in the HR dashboard`
+    description: `Manage ${headerName} and client communications.`
   };
 }
 
@@ -30,18 +28,10 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
   return (
     <div className="space-y-6">
       <CustomHeader />
-      <TableBasic
+      <CustomersTableWrapper
         data={filteredData}
-        columns={CustomersColumns}
-        pagination={{
-          total: data?.total || 0,
-        }}
-        tableActions={{
-          onEdit: true,
-          onDelete: ["adminCustomers"],
-        }}
+        total={data?.total || 0}
         cardHeader={t("Customers")}
-        filters={[{ name: "name", type: "text", width: 3 }]}
       />
     </div>
   );

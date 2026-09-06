@@ -21,3 +21,17 @@ export interface customers {
   created_at: string;
   updated_at: string;
 }
+
+export interface SendCustomerWhatsappMailPayload {
+  send_to_all: boolean;
+  client_ids?: number[];
+  subject: string;
+  message: string;
+}
+
+export interface SendCustomerWhatsappMailResponse {
+  success?: boolean;
+  status?: boolean;
+  message?: string;
+  data?: any;
+}

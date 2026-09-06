@@ -5,9 +5,17 @@ import PhoneDirectionCol from "@/components/common/table/columns/Phone.direction
 import TableStatusBadge from "@/components/common/table/tableHelperComponents/TableStatusBadge";
 import DateCol from "@/components/common/table/columns/date.column";
 import LocationCol from "@/components/common/table/columns/Location.column";
-import { Building2, Sparkles } from "lucide-react";
+import { Building2, Sparkles, Mail } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import type { TargetCustomerInfo } from "./components/SendWhatsappMailForm";
 
-export default function CustomersColumns(): ColumnDef<Record<string, unknown>>[] {
+export interface CustomersColumnsOptions {
+  onSendMessage?: (customer: TargetCustomerInfo) => void;
+}
+
+export default function CustomersColumns(
+  options?: CustomersColumnsOptions
+): ColumnDef<Record<string, unknown>>[] {
   return [
     {
       accessorKey: "id",
@@ -124,6 +132,42 @@ export default function CustomersColumns(): ColumnDef<Record<string, unknown>>[]
       accessorKey: "created_at",
       header: "Registered",
       cell: ({ getValue }) => <DateCol date={getValue() as string} />
-    }
+    },
+    ...(options?.onSendMessage
+      ? [
+          {
+            id: "dispatch_action",
+            header: "Message",
+            cell: ({ row }: any) => {
+              const item = row.original as any;
+              const fullName =
+                `${item.first_name || ""} ${item.last_name || ""}`.trim() ||
+                item.company_name ||
+                "Customer";
+
+              return (
+                <button
+                  type="button"
+                  onClick={() =>
+                    options.onSendMessage!({
+                      id: item.id,
+                      name: fullName,
+                      email: item.email,
+                      phone: item.phone || item.alt_phone,
+                      company_name: item.company_name
+                    })
+                  }
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-all hover:scale-105 active:scale-95 whitespace-nowrap shadow-xs cursor-pointer"
+                  title="Send WhatsApp & Email"
+                >
+                  <FaWhatsapp className="h-3.5 w-3.5" />
+                  <Mail className="h-3 w-3" />
+                  <span>Send</span>
+                </button>
+              );
+            }
+          } as ColumnDef<Record<string, unknown>>
+        ]
+      : [])
   ];
 }

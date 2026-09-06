@@ -19,6 +19,7 @@ export const endpoints = {
   adminContactUs: "/admin/contact-us",
   adminPriceRequests: "/admin/price-requests",
   adminCustomers: "/admin/customers",
+  adminCustomersSendWhatsappMail: "/admin/customers/send-whatsapp-mail",
   adminSentEmails: "/admin/sent-emails",
   adminVisitors: "/admin/visitors",
   adminVisitorsStats: "/admin/visitors/stats",
