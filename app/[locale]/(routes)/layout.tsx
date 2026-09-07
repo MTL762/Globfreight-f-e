@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import PageTransitionWrapper from "@/components/layouts/PageTransitionWrapper";
-import CheckAttendanceButton from "@/components/layouts/header/components/CheckAttendanceButton";
+// import CheckAttendanceButton from "@/components/layouts/header/components/CheckAttendanceButton";
 import LogoutConfirmButton from "@/components/layouts/header/components/LogoutConfirmButton";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";

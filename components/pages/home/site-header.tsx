@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { ArrowUpRight, PhoneCall } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { Link } from "@/i18n/navigation";
 import { HeaderLanguageMenu } from "./header-language-menu";
