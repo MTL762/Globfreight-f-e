@@ -15,13 +15,19 @@ export default function SubCategoriesFormPage({ data }: { data?: SubCategoriesTy
         {
           id: "general",
           title: t("General Information"),
-          width: 6
+          width: 5
         },
         {
           id: "lang",
           title: t("SubCategories Information"),
           multiLang: true,
-          width: 6
+          width: 7
+        },
+        {
+          id: "seo",
+          title: t("SEO Settings"),
+          multiLang: true,
+          width: 12
         }
       ]}
       inputs={inputs}

@@ -15,7 +15,22 @@ export default function CustomersFormPage({ data }: { data?: any }) {
           {
             id: "general",
             title: t("Customer Information"),
-            width: 12
+            width: 6
+          },
+          {
+            id: "business",
+            title: t("Business Details"),
+            width: 6
+          },
+          {
+            id: "location",
+            title: t("Location"),
+            width: 6
+          },
+          {
+            id: "notes",
+            title: t("Notes"),
+            width: 6
           }
         ]}
         inputs={inputs}

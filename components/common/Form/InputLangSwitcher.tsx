@@ -1,14 +1,5 @@
 import { useEffect } from "react";
-import type { FormLangs } from "./CustomFormTypes.types";
-
-const langOptions: {
-  value: "En" | "Ar" | "default";
-  label: string;
-}[] = [
-    { value: "Ar", label: "العربية" },
-    { value: "En", label: "English" }
-    // { value: "default", label: "default" }
-  ];
+import { FORM_LANGUAGES, type FormLangs } from "./CustomFormTypes.types";
 
 const styles = {
   languageButton: {
@@ -27,42 +18,42 @@ const styles = {
 export default function InputLangSwitcher({
   selectedLang,
   setSelectedLang,
-  changeLang,
-  hideDefault = false
+  changeLang
 }: {
   selectedLang: FormLangs;
   changeLang?: FormLangs;
   hideDefault?: boolean;
   setSelectedLang: (lang: FormLangs) => void;
 }) {
-  if (hideDefault && langOptions.length === 3) {
-    langOptions.pop();
-  }
   const handleLangChange = (lang: FormLangs) => {
     setSelectedLang(lang);
   };
   useEffect(() => {
     if (changeLang === "changeToAr") {
       handleLangChange("Ar");
-    }
-    if (changeLang === "changeToEn") {
+    } else if (changeLang === "changeToEn") {
       handleLangChange("En");
-    }
-    if (changeLang === "changeToDefault") {
+    } else if (changeLang === "changeToNl") {
+      handleLangChange("Nl");
+    } else if (changeLang === "changeToFr") {
+      handleLangChange("Fr");
+    } else if (changeLang === "changeToDe") {
+      handleLangChange("De");
+    } else if (changeLang === "changeToDefault") {
       handleLangChange("default");
     }
   }, [changeLang]);
   return (
     <div className="col-span-12 mt-2">
-      {langOptions.map(lang => (
+      {FORM_LANGUAGES.map(lang => (
         <button
           type="button"
-          key={lang.value}
-          data-testid={`lang-${lang.value}`}
-          onClick={() => handleLangChange(lang.value as FormLangs)}
+          key={lang.key}
+          data-testid={`lang-${lang.key}`}
+          onClick={() => handleLangChange(lang.key as FormLangs)}
           style={{
             ...styles.languageButton,
-            ...(selectedLang === lang.value ? styles.activeButton : {})
+            ...(selectedLang === lang.key ? styles.activeButton : {})
           }}
         >
           {lang.label}
@@ -72,3 +63,4 @@ export default function InputLangSwitcher({
     </div>
   );
 }
+

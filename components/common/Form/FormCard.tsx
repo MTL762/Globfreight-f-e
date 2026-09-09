@@ -37,7 +37,17 @@ export default function FormCard<T extends FieldValues>({
   }
 
   const locale = useLocale();
-  const [selectedLang, setSelectedLang] = useState<FormLangs>(locale === "ar" ? "Ar" : "En");
+  const getInitialLang = (loc: string): FormLangs => {
+    const map: Record<string, FormLangs> = {
+      ar: "Ar",
+      en: "En",
+      nl: "Nl",
+      fr: "Fr",
+      de: "De"
+    };
+    return map[loc] || "En";
+  };
+  const [selectedLang, setSelectedLang] = useState<FormLangs>(getInitialLang(locale));
 
 
 
@@ -66,7 +76,7 @@ export default function FormCard<T extends FieldValues>({
               <FormInputContainer width={inputWidth} className={item.inputClassName} index={index}>
                 {isMultiLang ? (
                   <>
-                    {["Ar", "En"].map(lang => (
+                    {(["Ar", "En", "Nl", "Fr", "De"] as const).map(lang => (
                       <div key={`${item.name}${lang}`}>
                         <div
                           style={{
@@ -74,14 +84,14 @@ export default function FormCard<T extends FieldValues>({
                           }}
                         >
                           <Controller
-                            name={`${item.name}${lang === "En" ? "En" : "Ar"}` as Path<T>}
+                            name={`${item.name}${lang}` as Path<T>}
                             control={control}
                             render={({ field, fieldState: { error } }) => {
                               return renderInputComponent({
                                 errors: { [field.name]: error },
                                 item: {
                                   ...item,
-                                  name: `${item.name}${lang === "En" ? "En" : "Ar"}`
+                                  name: `${item.name}${lang}`
                                 },
                                 field
                               });

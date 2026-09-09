@@ -1,4 +1,4 @@
-import type { FormInput } from "@/components/common/Form/CustomFormTypes.types";
+import { FORM_LANGUAGES, type FormInput } from "@/components/common/Form/CustomFormTypes.types";
 export function extractFormNameInputs({
   inputs,
   data,
@@ -25,14 +25,13 @@ export function extractFormNameInputs({
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         data[item] && formdata.append(item, `${data[item]}`);
       } else if (inputs.find(input => input.name === item.slice(0, -2))?.multiLang) {
-        if (formdata.has(`${item.slice(0, -2)}`)) return;
-        formdata.append(
-          `${item.slice(0, -2)}`,
-          JSON.stringify({
-            ar: data[`${item.slice(0, -2)}Ar`],
-            en: data[`${item.slice(0, -2)}En`]
-          })
-        );
+        const baseName = item.slice(0, -2);
+        if (formdata.has(baseName)) return;
+        const langObj: Record<string, string> = {};
+        FORM_LANGUAGES.forEach(({ code, key }) => {
+          langObj[code] = data[`${baseName}${key}`] ?? "";
+        });
+        formdata.append(baseName, JSON.stringify(langObj));
       } else if (
         data[item] &&
         (data[item][0] instanceof File ||
@@ -52,10 +51,7 @@ export function extractFormNameInputs({
   } else {
     const formdata: Record<
       string,
-      | {
-          ar: string;
-          en: string;
-        }
+      | Record<string, string>
       | string
       | boolean
     > = {};
@@ -67,10 +63,14 @@ export function extractFormNameInputs({
         inputs.find(input => input.name === item.slice(0, -2))?.multiLang &&
         data[item] != undefined
       ) {
-        formdata[`${item.slice(0, -2)}`] = {
-          ar: data[`${item.slice(0, -2)}Ar`],
-          en: data[`${item.slice(0, -2)}En`]
-        };
+        const baseName = item.slice(0, -2);
+        if (!formdata[baseName]) {
+          const langObj: Record<string, string> = {};
+          FORM_LANGUAGES.forEach(({ code, key }) => {
+            langObj[code] = data[`${baseName}${key}`] ?? "";
+          });
+          formdata[baseName] = langObj;
+        }
       } else if (typeof data[item] === "boolean") {
         formdata[item] = Boolean(data[item]);
       } else {

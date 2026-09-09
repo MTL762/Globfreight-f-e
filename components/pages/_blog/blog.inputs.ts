@@ -42,13 +42,6 @@ export const BlogInputs = (): FormInput[] => {
       cardId: "general"
     },
     {
-      name: "tags",
-      type: "text",
-      label: "Tags (comma separated)",
-      placeholder: "AI, Logistics, Shipping",
-      cardId: "general"
-    },
-    {
       name: "title",
       type: "text",
       multiLang: true,
@@ -70,8 +63,35 @@ export const BlogInputs = (): FormInput[] => {
       label: "Full Article Content",
       cardId: "lang",
       required: true
-    }
+    },
+    // SEO Fields
+    { name: "seo_meta_title", type: "text", multiLang: true, label: "Meta Title", cardId: "seo" },
+    { name: "seo_meta_description", type: "textarea", multiLang: true, label: "Meta Description", cardId: "seo" },
+    { name: "seo_focus_keyphrase", type: "text", label: "Focus Keyphrase", placeholder: "e.g. AI logistics agents", cardId: "seo" },
+    { name: "seo_canonical_url", type: "text", label: "Canonical URL", placeholder: "https://globfreight.com/blog/...", cardId: "seo" },
+    {
+      name: "seo_schema_markup_type",
+      type: "select",
+      label: "Schema Markup Type",
+      options: [
+        { label: "Article", value: "Article" },
+        { label: "BlogPosting", value: "BlogPosting" },
+        { label: "WebPage", value: "WebPage" },
+      ],
+      cardId: "seo"
+    },
   ];
 
   return inputs;
 };
+
+// Tag input definition for CustomGeneratedInputs
+export const BlogTagInputs = (): FormInput[] => [
+  {
+    name: "value",
+    type: "text",
+    label: "Tag",
+    placeholder: "e.g. AI, Logistics, Shipping",
+    required: true
+  }
+];

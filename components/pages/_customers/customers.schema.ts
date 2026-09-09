@@ -13,6 +13,8 @@ export const CustomersSchema = (t: TFunction) => {
     country: StringNotReq(),
     city: StringNotReq(),
     address: StringNotReq(),
+    postal_code: StringNotReq(),
+    status: StringNotReq(),
     notes: StringNotReq(),
     
   });

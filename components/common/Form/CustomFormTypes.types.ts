@@ -75,9 +75,24 @@ export type FormInput = {
   searchFilters?: { key: string; value: string | number }[];
 };
 
-export type FormLangs = "Ar" | "En" | "default" | "changeToAr" | "changeToEn" | "changeToDefault";
+export const FORM_LANGUAGES = [
+  { code: "ar", key: "Ar", label: "العربية" },
+  { code: "en", key: "En", label: "English" },
+  { code: "nl", key: "Nl", label: "Nederlands" },
+  { code: "fr", key: "Fr", label: "Français" },
+  { code: "de", key: "De", label: "Deutsch" }
+] as const;
+
+export type FormLangKey = (typeof FORM_LANGUAGES)[number]["key"];
+
+export type FormLangs =
+  | FormLangKey
+  | "default"
+  | `changeTo${FormLangKey}`
+  | "changeToDefault";
 
 export interface Option {
   label: string;
   value: boolean | string | number;
 }
+

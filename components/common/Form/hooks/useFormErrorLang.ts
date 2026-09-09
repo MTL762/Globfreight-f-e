@@ -13,24 +13,29 @@ export default function useFormErrorLang<T extends FieldValues>({
 }): { lang: FormLangs } {
   const locale = useLocale();
   const t = useTranslations();
-  const [lang, setLang] = useState<FormLangs>(locale === "ar" ? "Ar" : "En");
+  const getInitialLang = (loc: string): FormLangs => {
+    const map: Record<string, FormLangs> = {
+      ar: "Ar",
+      en: "En",
+      nl: "Nl",
+      fr: "Fr",
+      de: "De"
+    };
+    return map[loc] || "En";
+  };
+  const [lang, setLang] = useState<FormLangs>(getInitialLang(locale));
   useEffect(() => {
     name.forEach(element => {
-      if (Object.keys(errors).includes(`${element}En`)) {
-        setLang("changeToEn");
-        window.scrollTo(0, 0);
-
-        toast.error(`${t(element)} (${t("En")})`, {
-          description: errors[`${element}En`]?.message as string
-        });
-      }
-      if (Object.keys(errors).includes(`${element}Ar`)) {
-        setLang("changeToAr");
-        window.scrollTo(0, 0);
-        toast.error(`${t(element)} (${t("Ar")})`, {
-          description: errors[`${element}Ar`]?.message as string
-        });
-      }
+      (["Ar", "En", "Nl", "Fr", "De"] as const).forEach(langKey => {
+        const fieldKey = `${element}${langKey}`;
+        if (Object.keys(errors).includes(fieldKey)) {
+          setLang(`changeTo${langKey}` as FormLangs);
+          window.scrollTo(0, 0);
+          toast.error(`${t(element)} (${t(langKey)})`, {
+            description: errors[fieldKey]?.message as string
+          });
+        }
+      });
     });
   }, [errors]);
   return {

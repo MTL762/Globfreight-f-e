@@ -36,6 +36,17 @@ export const CustomersInputs = (): FormInput[] => {
         "cardId": "general"
     },
     {
+        "name": "status",
+        "type": "select",
+        "label": "Status",
+        "options": [
+            { "label": "Active", "value": "active" },
+            { "label": "Inactive", "value": "inactive" },
+            { "label": "Suspended", "value": "suspended" }
+        ],
+        "cardId": "general"
+    },
+    {
         "name": "company_name",
         "type": "text",
         "label": "Company Name",
@@ -63,6 +74,13 @@ export const CustomersInputs = (): FormInput[] => {
         "name": "address",
         "type": "text",
         "label": "Address",
+        "cardId": "location"
+    },
+    {
+        "name": "postal_code",
+        "type": "text",
+        "label": "Postal Code",
+        "placeholder": "e.g. 12345",
         "cardId": "location"
     },
     {
