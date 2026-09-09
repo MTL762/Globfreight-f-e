@@ -244,7 +244,7 @@
                                     }
                                 ],
                                 "url": {
-                                    "raw": "{{base_url}}/admin/users?per_page=10",
+                                    "raw": "{{base_url}}/admin/users",
                                     "host": [
                                         "{{base_url}}"
                                     ],
@@ -255,7 +255,8 @@
                                     "query": [
                                         {
                                             "key": "per_page",
-                                            "value": "10"
+                                            "value": "10",
+                                            "disabled": true
                                         }
                                     ]
                                 }
@@ -1694,7 +1695,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"first_name\": \"Ahmed\",\n  \"last_name\": \"Hassan\",\n  \"company_name\": \"Hassan Global Logistics\",\n  \"email\": \"ahmed@hassanglobal.com\",\n  \"phone\": \"+971501234567\",\n  \"alt_phone\": \"+971509876543\",\n  \"country\": \"United Arab Emirates\",\n  \"city\": \"Dubai\",\n  \"address\": \"Business Bay, Tower 4, Suite 1205\",\n  \"postal_code\": \"12345\",\n  \"tax_number\": \"TRN-987654321\",\n  \"status\": \"active\",\n  \"notes\": \"VIP Corporate client.\"\n}"
+                                    "raw": "{\n  \"first_name\": \"Ahmed\",\n  \"last_name\": \"Hassan\",\n  \"company_name\": \"Hassan Global Logistics\",\n  \"email\": \"bolaphilip3@gmail.com\",\n  \"phone\": \"+201273082739\",\n  \"alt_phone\": \"+201273082739\",\n  \"country\": \"United Arab Emirates\",\n  \"city\": \"Dubai\",\n  \"address\": \"Business Bay, Tower 4, Suite 1205\",\n  \"postal_code\": \"12345\",\n  \"tax_number\": \"TRN-987654321\",\n  \"status\": \"active\",\n  \"notes\": \"VIP Corporate client.\"\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/admin/customers",
@@ -1875,7 +1876,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"recipient_email\": \"customer@example.com\",\n  \"recipient_name\": \"Customer Name\",\n  \"subject\": \"Shipment Update - Bill of Lading Available\",\n  \"body\": \"<p>Dear Customer, your shipping documents are now ready for download.</p>\"\n}"
+                                    "raw": "{\n  \"recipient_email\": \"bolaphilip3@gmail.com\",\n  \"recipient_name\": \"Customer Name\",\n  \"subject\": \"Shipment Update - Bill of Lading Available\",\n  \"body\": \"<p>Dear Customer, your shipping documents are now ready for download.</p>\"\n}"
                                 },
                                 "url": {
                                     "raw": "{{base_url}}/admin/sent-emails",
@@ -2020,6 +2021,201 @@
                             "response": []
                         }
                     ]
+                },
+                {
+                    "name": "Price Requests",
+                    "item": [
+                        {
+                            "name": "List Price Requests",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/price-requests",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "price-requests"
+                                    ],
+                                    "query": [
+                                        {
+                                            "key": "status",
+                                            "value": "pending",
+                                            "disabled": true
+                                        }
+                                    ]
+                                },
+                                "description": "Get paginated list of price requests with filters by status, container type and search."
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Show Price Request",
+                            "request": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/price-requests/1",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "price-requests",
+                                        "1"
+                                    ]
+                                },
+                                "description": "Get details of a single price request by ID."
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Reply with Quote",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"quoted_price\": 3250.00,\n  \"currency\": \"USD\",\n  \"reply_message\": \"Thank you for contacting GlobFreight. Our rate for 40ft HC from Shanghai to Alexandria is $3,250 USD valid for 14 days.\",\n  \"admin_notes\": \"VIP client quotation approved.\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/price-requests/1/reply",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "price-requests",
+                                        "1",
+                                        "reply"
+                                    ]
+                                },
+                                "description": "Submit quote pricing and formal reply message to customer."
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Change Status",
+                            "request": {
+                                "method": "PATCH",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"status\": \"reviewing\",\n  \"admin_notes\": \"Followed up via phone.\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/admin/price-requests/1/status",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "price-requests",
+                                        "1",
+                                        "status"
+                                    ]
+                                },
+                                "description": "Change status (pending, reviewing, quoted, rejected, archived) and update admin notes."
+                            },
+                            "response": []
+                        },
+                        {
+                            "name": "Delete Price Request",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/admin/price-requests/1",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "price-requests",
+                                        "1"
+                                    ]
+                                },
+                                "description": "Soft delete a price request."
+                            },
+                            "response": []
+                        }
+                    ]
+                },
+                {
+                    "name": "Send WhatsApp & Mail",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"send_to_all\": false,\n    \"client_ids\": [1],\n    \"subject\": \"تحديث أسعار الشحن البحري\",\n    \"message\": \"عزيزنا العميل، نود إحاطتكم علماً بتحديث جداول الإبحار وأسعار الشحن البحري للأسبوع القادم.\"\n\n    //send to all\n    //\"send_to_all\": true,\n    //\"subject\": \"تهنئة بمناسبة العام الجديد وعروض خاصة\",\n    //\"message\": \"تهنئكم شركة GlobFreight وتتمنى لكم عاماً سعيداً مليئاً بالنجاح والتوسع التجاري.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/admin/customers/send-whatsapp-mail",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "customers",
+                                "send-whatsapp-mail"
+                            ]
+                        }
+                    },
+                    "response": []
                 }
             ]
         },
@@ -2324,6 +2520,39 @@
                             "response": []
                         }
                     ]
+                },
+                {
+                    "name": "Submit Price Request",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"from\": \"Shanghai Port, China\",\n  \"to\": \"Alexandria Port, Egypt\",\n  \"container_type\": \"40ft High Cube\",\n  \"cargo_type\": \"Electronics & Appliances\",\n  \"weight\": \"18,500 KG\",\n  \"dimensions\": \"12.03m x 2.35m x 2.69m\",\n  \"name\": \"Tarek Mansour\",\n  \"email\": \"tarek.mansour@importers.com\",\n  \"phone\": \"+201012345678\",\n  \"company_name\": \"Mansour Trading LLC\",\n  \"notes\": \"Need customs clearance assistance and best freight rate.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/price-requests",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "price-requests"
+                            ]
+                        },
+                        "description": "Public website form allowing visitors to submit a freight quote / price inquiry."
+                    },
+                    "response": []
                 }
             ],
             "auth": {
