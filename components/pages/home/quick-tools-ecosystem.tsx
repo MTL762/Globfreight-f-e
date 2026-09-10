@@ -10,63 +10,66 @@ import {
   ArrowUpRight
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 
-export function QuickToolsEcosystem() {
+export async function QuickToolsEcosystem() {
+  const t = await getTranslations("LandingPage.tools");
+
   const tools = [
     {
       icon: Ship,
-      title: "Logistics Explorer",
-      subtitle: "Instant freight quotes for FCL, LCL & Air across 150+ ocean & air carriers.",
-      tag: "Freight Calculator",
+      title: t("explorerTitle"),
+      subtitle: t("explorerDesc"),
+      tag: t("explorerTag"),
       href: "/contact?tool=logistics-explorer"
     },
     {
       icon: Compass,
-      title: "Tracking System",
-      subtitle: "Unified multimodal container & vessel tracking with real-time AIS radar.",
-      tag: "Live AIS Radar",
+      title: t("trackingTitle"),
+      subtitle: t("trackingDesc"),
+      tag: t("trackingTag"),
       href: "/contact?tool=tracking-system"
     },
     {
       icon: Plane,
-      title: "Air Cargo Tracking",
-      subtitle: "Real-time airway bill (AWB) status and airline flight itineraries worldwide.",
-      tag: "Global AWB",
+      title: t("airTitle"),
+      subtitle: t("airDesc"),
+      tag: t("airTag"),
       href: "/contact?tool=air-cargo"
     },
     {
       icon: Calendar,
-      title: "Ship Schedules",
-      subtitle: "Vessel sailing timetables, port terminal cutoffs, and transit matrices.",
-      tag: "Sailing Timetable",
+      title: t("schedulesTitle"),
+      subtitle: t("schedulesDesc"),
+      tag: t("schedulesTag"),
       href: "/contact?tool=ship-schedules"
     },
     {
       icon: Box,
-      title: "Load Calculator",
-      subtitle: "3D container stuffing, carton packing simulation, and weight distribution.",
-      tag: "3D Stuffing",
+      title: t("loadTitle"),
+      subtitle: t("loadDesc"),
+      tag: t("loadTag"),
       href: "/contact?tool=load-calculator"
     },
     {
       icon: Route,
-      title: "Distances & Time",
-      subtitle: "Nautical miles, overland highway kilometers, and predictive transit time.",
-      tag: "Route Engine",
+      title: t("distancesTitle"),
+      subtitle: t("distancesDesc"),
+      tag: t("distancesTag"),
       href: "/contact?tool=distances-time"
     },
     {
       icon: TrendingUp,
-      title: "Freight Rate Index",
-      subtitle: "Global container market rate benchmarks, historical analytics & trends.",
-      tag: "Market Index",
+      title: t("indexTitle"),
+      subtitle: t("indexDesc"),
+      tag: t("indexTag"),
       href: "/blog"
     },
     {
       icon: Leaf,
-      title: "Carbon / CO₂ Calculator",
-      subtitle: "Assess supply chain carbon footprint and meet European ESG compliance.",
-      tag: "Green Logistics",
+      title: t("co2Title"),
+      subtitle: t("co2Desc"),
+      tag: t("co2Tag"),
       href: "/contact?tool=co2-calculator"
     }
   ];
@@ -77,13 +80,13 @@ export function QuickToolsEcosystem() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-              <span>SeaRates Digital Ecosystem</span>
+              <span>{t("badge")}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
-              Smart Logistics Tools & Freight Applications
+              {t("title")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-2xl">
-              Access the complete digital suite designed for shippers, freight forwarders, and supply chain managers worldwide.
+              {t("subtitle")}
             </p>
           </div>
 
@@ -91,7 +94,7 @@ export function QuickToolsEcosystem() {
             href="/services"
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-primary hover:gap-2.5 transition-all shrink-0"
           >
-            <span>Explore All Digital Services</span>
+            <span>{t("exploreAll")}</span>
             <ArrowUpRight size={15} />
           </Link>
         </div>
@@ -127,7 +130,7 @@ export function QuickToolsEcosystem() {
                 </div>
 
                 <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px] font-semibold text-primary">
-                  <span>Launch Tool</span>
+                  <span>{t("launch")}</span>
                   <span className="text-muted-foreground group-hover:translate-x-0.5 transition-transform">➔</span>
                 </div>
               </Link>

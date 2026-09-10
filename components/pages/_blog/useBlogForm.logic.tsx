@@ -29,7 +29,7 @@ export default function useBlogLogic({ data }: { data?: BlogType }) {
       formData: extractFormNameInputs({ inputs, data: formData }),
       endpoint: ["adminBlogPosts"],
       reset: reset,
-      redirectLink: "blog",
+      redirectLink: "admin/blog",
       t
     });
   };

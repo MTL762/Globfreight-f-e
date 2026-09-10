@@ -20,8 +20,10 @@ import {
   RefreshCw
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export function LogisticsSearchWidget() {
+  const t = useTranslations("LandingPage.searchWidget");
   const [activeTab, setActiveTab] = useState<
     "rates" | "tracking" | "air" | "schedules" | "load" | "quote"
   >("rates");
@@ -158,10 +160,7 @@ export function LogisticsSearchWidget() {
           }`}
         >
           <Ship size={16} className={activeTab === "rates" ? "text-primary" : ""} />
-          <span>Logistics Explorer</span>
-          <span className="hidden md:inline-block text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold">
-            Rates
-          </span>
+          <span>{t("tabs.rates")}</span>
         </button>
 
         <button
@@ -174,10 +173,7 @@ export function LogisticsSearchWidget() {
           }`}
         >
           <Compass size={16} className={activeTab === "tracking" ? "text-primary" : ""} />
-          <span>Tracking System</span>
-          <span className="hidden md:inline-block text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold">
-            Live AIS
-          </span>
+          <span>{t("tabs.tracking")}</span>
         </button>
 
         <button
@@ -190,7 +186,7 @@ export function LogisticsSearchWidget() {
           }`}
         >
           <Plane size={16} className={activeTab === "air" ? "text-primary" : ""} />
-          <span>Air Cargo</span>
+          <span>{t("tabs.air")}</span>
         </button>
 
         <button
@@ -203,7 +199,7 @@ export function LogisticsSearchWidget() {
           }`}
         >
           <Calendar size={16} className={activeTab === "schedules" ? "text-primary" : ""} />
-          <span>Ship Schedules</span>
+          <span>{t("tabs.schedules")}</span>
         </button>
 
         <button
@@ -216,7 +212,7 @@ export function LogisticsSearchWidget() {
           }`}
         >
           <Box size={16} className={activeTab === "load" ? "text-primary" : ""} />
-          <span>Load Calculator</span>
+          <span>{t("tabs.load")}</span>
         </button>
 
         <button
@@ -229,7 +225,7 @@ export function LogisticsSearchWidget() {
           }`}
         >
           <FileText size={16} className={activeTab === "quote" ? "text-primary" : ""} />
-          <span>Request a Quote</span>
+          <span>{t("tabs.quote")}</span>
         </button>
       </div>
 
@@ -240,7 +236,7 @@ export function LogisticsSearchWidget() {
           <form onSubmit={handleSearchRates} className="space-y-5">
             {/* Mode selection pills */}
             <div className="flex flex-wrap items-center gap-2 pb-2">
-              <span className="text-xs font-semibold text-muted-foreground mr-1">Transport Mode:</span>
+              <span className="text-xs font-semibold text-muted-foreground mr-1">{t("modeLabel")}</span>
               <button
                 type="button"
                 onClick={() => setShippingMode("fcl")}
@@ -251,7 +247,7 @@ export function LogisticsSearchWidget() {
                 }`}
               >
                 <Ship size={13} />
-                <span>Full Container (FCL)</span>
+                <span>{t("modes.fcl")}</span>
               </button>
               <button
                 type="button"
@@ -263,7 +259,7 @@ export function LogisticsSearchWidget() {
                 }`}
               >
                 <Box size={13} />
-                <span>Less than Container (LCL)</span>
+                <span>{t("modes.lcl")}</span>
               </button>
               <button
                 type="button"
@@ -275,7 +271,7 @@ export function LogisticsSearchWidget() {
                 }`}
               >
                 <Plane size={13} />
-                <span>Air Cargo</span>
+                <span>{t("modes.air")}</span>
               </button>
               <button
                 type="button"
@@ -287,7 +283,7 @@ export function LogisticsSearchWidget() {
                 }`}
               >
                 <Truck size={13} />
-                <span>Inland Drayage</span>
+                <span>{t("modes.land")}</span>
               </button>
             </div>
 
@@ -297,7 +293,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <MapPin size={13} className="text-primary" />
-                  <span>Origin Port / City</span>
+                  <span>{t("rates.originLabel")}</span>
                 </label>
                 <div className="relative">
                   <input
@@ -314,7 +310,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <MapPin size={13} className="text-emerald-500" />
-                  <span>Destination Port / City</span>
+                  <span>{t("rates.destLabel")}</span>
                 </label>
                 <div className="relative">
                   <input
@@ -331,7 +327,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-2 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <SlidersHorizontal size={13} className="text-muted-foreground" />
-                  <span>Equipment / Size</span>
+                  <span>{t("rates.containerLabel")}</span>
                 </label>
                 <select
                   value={containerType}
@@ -351,7 +347,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-2 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Calendar size={13} className="text-muted-foreground" />
-                  <span>Ready to Load</span>
+                  <span>{t("rates.dateLabel")}</span>
                 </label>
                 <input
                   type="date"
@@ -364,7 +360,7 @@ export function LogisticsSearchWidget() {
 
             {/* Quick Popular Corridors */}
             <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground pt-1">
-              <span className="font-semibold text-foreground">Popular Trade Corridors:</span>
+              <span className="font-semibold text-foreground">{t("rates.popular")}</span>
               {[
                 ["Antwerp", "Jebel Ali"],
                 ["Rotterdam", "Shanghai"],
@@ -390,12 +386,12 @@ export function LogisticsSearchWidget() {
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <ShieldCheck size={14} className="text-emerald-500" />
-                  <span>AEO-F Customs Guaranteed</span>
+                  <span>{t("rates.aeo")}</span>
                 </span>
                 <span className="hidden sm:inline">•</span>
                 <span className="inline-flex items-center gap-1">
                   <Clock size={14} className="text-primary" />
-                  <span>Real-Time Spot & Contract Rates</span>
+                  <span>{t("rates.realtime")}</span>
                 </span>
               </div>
 
@@ -407,12 +403,12 @@ export function LogisticsSearchWidget() {
                 {isSearchingRates ? (
                   <>
                     <RefreshCw size={16} className="animate-spin" />
-                    <span>Searching Rates...</span>
+                    <span>{t("rates.searching")}</span>
                   </>
                 ) : (
                   <>
                     <Search size={16} />
-                    <span>Search Freight Rates</span>
+                    <span>{t("rates.searchButton")}</span>
                     <ArrowRight size={15} />
                   </>
                 )}
@@ -425,7 +421,7 @@ export function LogisticsSearchWidget() {
                 <div className="flex items-center justify-between border-b border-border/80 pb-3">
                   <div>
                     <div className="text-xs font-bold text-primary uppercase tracking-wider">
-                      Live Freight Quotations • {ratesResult.mode}
+                      {t("rates.resultsTitle")} • {ratesResult.mode}
                     </div>
                     <div className="text-sm font-extrabold text-foreground mt-0.5">
                       {ratesResult.origin} ➔ {ratesResult.destination}
@@ -449,11 +445,11 @@ export function LogisticsSearchWidget() {
                           </strong>
                           {route.direct && (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600">
-                              Direct Sailing
+                              {t("rates.direct")}
                             </span>
                           )}
                           <span className="text-[11px] text-muted-foreground">
-                            Vessel: {route.vessel}
+                            {t("rates.vessel")}: {route.vessel}
                           </span>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
@@ -467,7 +463,7 @@ export function LogisticsSearchWidget() {
 
                       <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
                         <div className="text-right">
-                          <div className="text-xs text-muted-foreground">Est. Freight Rate</div>
+                          <div className="text-xs text-muted-foreground">{t("rates.rateLabel")}</div>
                           <div className="text-base sm:text-lg font-extrabold text-primary font-mono">
                             {route.rateRange}
                           </div>
@@ -477,7 +473,7 @@ export function LogisticsSearchWidget() {
                           href={`/contact?origin=${encodeURIComponent(ratesResult.origin)}&destination=${encodeURIComponent(ratesResult.destination)}&mode=${ratesResult.mode}&carrier=${encodeURIComponent(route.carrier)}`}
                           className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-xs hover:opacity-90 transition-all shrink-0"
                         >
-                          Book Rate
+                          {t("rates.book")}
                         </Link>
                       </div>
                     </div>
@@ -495,13 +491,13 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-7 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Compass size={13} className="text-primary" />
-                  <span>Container Number / Bill of Lading (B/L) / Booking Reference</span>
+                  <span>{t("tracking.numberLabel")}</span>
                 </label>
                 <input
                   type="text"
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
-                  placeholder="e.g. MSCU9842173, MAEU1029384, MEDU8472910"
+                  placeholder={t("tracking.placeholder")}
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-mono font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
@@ -509,14 +505,14 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-5 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Ship size={13} className="text-muted-foreground" />
-                  <span>Shipping Line / Carrier</span>
+                  <span>{t("tracking.carrierLabel")}</span>
                 </label>
                 <select
                   value={trackingCarrier}
                   onChange={(e) => setTrackingCarrier(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl bg-muted/40 border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 >
-                  <option value="Auto-Detect Carrier">Auto-Detect Carrier (150+ Lines)</option>
+                  <option value="Auto-Detect Carrier">{t("tracking.allCarriers")}</option>
                   <option value="MSC - Mediterranean Shipping Co">MSC - Mediterranean Shipping Co</option>
                   <option value="Maersk Line">Maersk Line</option>
                   <option value="CMA CGM Group">CMA CGM Group</option>
@@ -532,7 +528,7 @@ export function LogisticsSearchWidget() {
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <CheckCircle2 size={14} className="text-emerald-500" />
-                  <span>Direct AIS Vessel Radar & Port API Feeds</span>
+                  <span>{t("tracking.radarFeed")}</span>
                 </span>
               </div>
 
@@ -544,12 +540,12 @@ export function LogisticsSearchWidget() {
                 {isTracking ? (
                   <>
                     <RefreshCw size={16} className="animate-spin" />
-                    <span>Tracking Container...</span>
+                    <span>{t("tracking.tracking")}</span>
                   </>
                 ) : (
                   <>
                     <Search size={16} />
-                    <span>Track Shipment</span>
+                    <span>{t("tracking.trackButton")}</span>
                     <ArrowRight size={15} />
                   </>
                 )}
@@ -570,12 +566,12 @@ export function LogisticsSearchWidget() {
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground mt-0.5">
-                      Carrier: {trackingResult.carrier} • Vessel: {trackingResult.vessel}
+                      {t("tracking.carrierShort")}: {trackingResult.carrier} • {t("tracking.vesselShort")}: {trackingResult.vessel}
                     </div>
                   </div>
 
                   <div className="text-left sm:text-right">
-                    <div className="text-xs text-muted-foreground">Predictive Arrival (ETA)</div>
+                    <div className="text-xs text-muted-foreground">{t("tracking.eta")}</div>
                     <div className="text-sm font-bold text-emerald-600 font-mono">
                       {trackingResult.eta}
                     </div>
@@ -636,7 +632,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Plane size={13} className="text-primary" />
-                  <span>Departure Airport</span>
+                  <span>{t("air.originLabel")}</span>
                 </label>
                 <input
                   type="text"
@@ -650,7 +646,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <MapPin size={13} className="text-emerald-500" />
-                  <span>Destination Airport</span>
+                  <span>{t("air.destLabel")}</span>
                 </label>
                 <input
                   type="text"
@@ -664,7 +660,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-2 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Box size={13} className="text-muted-foreground" />
-                  <span>Gross Weight (kg)</span>
+                  <span>{t("air.weightLabel")}</span>
                 </label>
                 <input
                   type="number"
@@ -677,7 +673,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-2 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <FileText size={13} className="text-muted-foreground" />
-                  <span>Airway Bill (AWB)</span>
+                  <span>{t("air.awbLabel")}</span>
                 </label>
                 <input
                   type="text"
@@ -691,13 +687,13 @@ export function LogisticsSearchWidget() {
 
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-muted-foreground">
-                Express IATA scheduled air freight & chartered cargo
+                {t("air.tagline")}
               </span>
               <Link
                 href={`/contact?mode=AIR&origin=${encodeURIComponent(airOrigin)}&dest=${encodeURIComponent(airDest)}&weight=${airWeight}`}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all"
               >
-                <span>Get Instant Air Quote</span>
+                <span>{t("air.instantQuote")}</span>
                 <ArrowRight size={15} />
               </Link>
             </div>
@@ -711,7 +707,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Anchor size={13} className="text-primary" />
-                  <span>Port of Loading (POL)</span>
+                  <span>{t("schedules.originLabel")}</span>
                 </label>
                 <input
                   type="text"
@@ -724,7 +720,7 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Anchor size={13} className="text-emerald-500" />
-                  <span>Port of Discharge (POD)</span>
+                  <span>{t("schedules.destLabel")}</span>
                 </label>
                 <input
                   type="text"
@@ -737,14 +733,14 @@ export function LogisticsSearchWidget() {
               <div className="md:col-span-4 space-y-1.5">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                   <Ship size={13} className="text-muted-foreground" />
-                  <span>Shipping Line</span>
+                  <span>{t("schedules.carrierLabel")}</span>
                 </label>
                 <select
                   value={schedCarrier}
                   onChange={(e) => setSchedCarrier(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 >
-                  <option value="All Carriers">All Carriers (Aggregated Timetable)</option>
+                  <option value="All Carriers">{t("schedules.allCarriers")}</option>
                   <option value="MSC">MSC Shipping</option>
                   <option value="Maersk">Maersk Line</option>
                   <option value="CMA CGM">CMA CGM</option>
@@ -755,7 +751,7 @@ export function LogisticsSearchWidget() {
 
             <div className="flex items-center justify-between pt-2">
               <span className="text-xs text-muted-foreground">
-                Sailing schedules updated hourly with live terminal cutoffs
+                {t("schedules.hourlyTagline")}
               </span>
               <button
                 type="button"
@@ -768,7 +764,7 @@ export function LogisticsSearchWidget() {
                 }
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all cursor-pointer"
               >
-                <span>Find Sailing Schedules</span>
+                <span>{t("schedules.searchButton")}</span>
                 <ArrowRight size={15} />
               </button>
             </div>
@@ -785,9 +781,9 @@ export function LogisticsSearchWidget() {
                       <span className="text-muted-foreground">{item.vessel}</span>
                     </div>
                     <div className="flex items-center gap-4 font-mono">
-                      <span>Cutoff: <strong className="text-foreground">{item.polCutoff}</strong></span>
-                      <span>ETD: <strong className="text-primary">{item.etd}</strong></span>
-                      <span>ETA: <strong className="text-emerald-600">{item.eta}</strong></span>
+                      <span>{t("schedules.cutoff")}: <strong className="text-foreground">{item.polCutoff}</strong></span>
+                      <span>{t("schedules.etd")}: <strong className="text-primary">{item.etd}</strong></span>
+                      <span>{t("schedules.eta")}: <strong className="text-emerald-600">{item.eta}</strong></span>
                       <span className="font-sans font-semibold px-2 py-0.5 rounded bg-muted">
                         {item.transit}
                       </span>
@@ -804,7 +800,7 @@ export function LogisticsSearchWidget() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">Length (cm)</label>
+                <label className="text-[11px] font-bold text-foreground">{t("load.length")}</label>
                 <input
                   type="number"
                   value={boxLength}
@@ -813,7 +809,7 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">Width (cm)</label>
+                <label className="text-[11px] font-bold text-foreground">{t("load.width")}</label>
                 <input
                   type="number"
                   value={boxWidth}
@@ -822,7 +818,7 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">Height (cm)</label>
+                <label className="text-[11px] font-bold text-foreground">{t("load.height")}</label>
                 <input
                   type="number"
                   value={boxHeight}
@@ -831,7 +827,7 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">Weight/Box (kg)</label>
+                <label className="text-[11px] font-bold text-foreground">{t("load.weight")}</label>
                 <input
                   type="number"
                   value={boxWeight}
@@ -840,7 +836,7 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">Quantity (Pcs)</label>
+                <label className="text-[11px] font-bold text-foreground">{t("load.quantity")}</label>
                 <input
                   type="number"
                   value={boxQuantity}
@@ -849,7 +845,7 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">Container Type</label>
+                <label className="text-[11px] font-bold text-foreground">{t("load.container")}</label>
                 <select
                   value={loadContainer}
                   onChange={(e) => setLoadContainer(e.target.value)}
@@ -867,9 +863,9 @@ export function LogisticsSearchWidget() {
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-foreground flex items-center gap-1.5">
                   <Box size={14} className="text-primary" />
-                  <span>3D Container Volume Utilization</span>
+                  <span>{t("load.utilization")}</span>
                 </span>
-                <span className="text-primary font-mono">{utilPercent}% Full</span>
+                <span className="text-primary font-mono">{utilPercent}% {t("load.full")}</span>
               </div>
 
               <div className="w-full h-3.5 rounded-full bg-muted overflow-hidden">
@@ -881,21 +877,21 @@ export function LogisticsSearchWidget() {
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Total Cargo Volume</span>
+                  <span className="text-muted-foreground block text-[10px]">{t("load.totalVol")}</span>
                   <strong className="text-foreground font-mono">{totalCbm} CBM</strong>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Total Cargo Weight</span>
+                  <span className="text-muted-foreground block text-[10px]">{t("load.totalWt")}</span>
                   <strong className="text-foreground font-mono">{totalKg} kg</strong>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Remaining CBM Space</span>
+                  <span className="text-muted-foreground block text-[10px]">{t("load.remaining")}</span>
                   <strong className="text-emerald-600 font-mono">
                     {Math.max(0, maxCbm - Number(totalCbm)).toFixed(2)} CBM
                   </strong>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Max Payload Limit</span>
+                  <span className="text-muted-foreground block text-[10px]">{t("load.maxPayload")}</span>
                   <strong className="text-foreground font-mono">{maxWeightKg.toLocaleString()} kg</strong>
                 </div>
               </div>
@@ -907,31 +903,31 @@ export function LogisticsSearchWidget() {
         {activeTab === "quote" && (
           <div className="space-y-4">
             <div className="text-xs text-muted-foreground">
-              Submit custom cargo specs for specialized, project, reefer, or hazardous goods. Our certified forwarders provide direct quotes in &lt; 2 hours.
+              {t("quote.description")}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Pickup Location</label>
+                <label className="text-xs font-bold text-foreground">{t("quote.pickup")}</label>
                 <input
                   type="text"
-                  placeholder="City, ZIP, or Seaport"
+                  placeholder={t("quote.pickupPlaceholder")}
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Delivery Destination</label>
+                <label className="text-xs font-bold text-foreground">{t("quote.delivery")}</label>
                 <input
                   type="text"
-                  placeholder="Final City or Facility"
+                  placeholder={t("quote.deliveryPlaceholder")}
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Cargo Description & Special Handling</label>
+                <label className="text-xs font-bold text-foreground">{t("quote.cargo")}</label>
                 <input
                   type="text"
-                  placeholder="e.g. 5 Pallets, Temp-Controlled, ADR"
+                  placeholder={t("quote.cargoPlaceholder")}
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm"
                 />
               </div>
@@ -942,7 +938,7 @@ export function LogisticsSearchWidget() {
                 href="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all"
               >
-                <span>Proceed with Custom Quote</span>
+                <span>{t("quote.button")}</span>
                 <ArrowRight size={15} />
               </Link>
             </div>

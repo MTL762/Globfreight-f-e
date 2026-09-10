@@ -12,6 +12,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 interface ServiceData {
   id: string;
@@ -72,6 +73,7 @@ export function InteractiveServicesTabs({
   warehouseDetail,
   fiscalDetail
 }: ServicesTabsProps) {
+  const t = useTranslations("LandingPage.servicesTabs");
   const [activeTab, setActiveTab] = useState<"customs" | "transport" | "warehouse" | "fiscal">("customs");
 
   const servicesData: Record<"customs" | "transport" | "warehouse" | "fiscal", ServiceData> = {
@@ -85,9 +87,9 @@ export function InteractiveServicesTabs({
       point3: customsDetail.point3,
       image: "/manus-storage/winz-customs-documents_a858a147.jpg",
       imageAlt: "European customs declaration and paperwork handling",
-      badge: "AEO-F ACCREDITED",
+      badge: t("badges.customs"),
       statNumber: "< 4h",
-      statLabel: "Average Seaport Clearance"
+      statLabel: t("stats.customs")
     },
     transport: {
       id: "transport",
@@ -99,9 +101,9 @@ export function InteractiveServicesTabs({
       point3: transportDetail.point3,
       image: "/manus-storage/winz-hero-port_b04a3a45.jpg",
       imageAlt: "Modern container transport and port haulage logistics",
-      badge: "GPS LIVE CORRIDOR",
+      badge: t("badges.transport"),
       statNumber: "24/7",
-      statLabel: "Dispatch Availability"
+      statLabel: t("stats.transport")
     },
     warehouse: {
       id: "warehouse",
@@ -113,9 +115,9 @@ export function InteractiveServicesTabs({
       point3: warehouseDetail.point3,
       image: "/manus-storage/winz-warehouse_bdc42811.jpg",
       imageAlt: "Modern bonded warehouse facility in Zele Belgium",
-      badge: "DUTY SUSPENSION READY",
+      badge: t("badges.warehouse"),
       statNumber: "100%",
-      statLabel: "Customs Supervised"
+      statLabel: t("stats.warehouse")
     },
     fiscal: {
       id: "fiscal",
@@ -127,9 +129,9 @@ export function InteractiveServicesTabs({
       point3: fiscalDetail.point3,
       image: "/manus-storage/winz-customs-documents_a858a147.jpg",
       imageAlt: "Fiscal representation and VAT deferment documents",
-      badge: "ARTICLE 23 VAT DEFERRAL",
+      badge: t("badges.fiscal"),
       statNumber: "0€",
-      statLabel: "Import VAT Upfront Cash Flow"
+      statLabel: t("stats.fiscal")
     }
   };
 
@@ -221,14 +223,14 @@ export function InteractiveServicesTabs({
               href="/services"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-xs sm:text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-xs group"
             >
-              <span>View Service Details</span>
+              <span>{t("viewDetails")}</span>
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-primary transition-colors px-3 py-2"
             >
-              <span>Request Quote</span>
+              <span>{t("requestQuote")}</span>
               <ExternalLink size={15} />
             </Link>
           </div>

@@ -5,6 +5,8 @@ import { Link } from "@/i18n/navigation";
 
 export async function SiteFooter() {
   const t = await getTranslations("Footer");
+  const tLanding = await getTranslations("LandingPage.footer");
+
   return (
     <footer className="w-full bg-slate-950 text-slate-300 border-t border-slate-800/80 pt-16 pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
@@ -16,10 +18,12 @@ export async function SiteFooter() {
           </p>
           <div className="flex flex-wrap gap-2 pt-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300">
-              <ShieldCheck size={13} className="text-primary" /> AEO-F Certified
+              <ShieldCheck size={13} className="text-primary" />
+              <span>{tLanding("aeoCertified")}</span>
             </span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300">
-              <CheckCircle2 size={13} className="text-emerald-400" /> NCTS Direct EDI
+              <CheckCircle2 size={13} className="text-emerald-400" />
+              <span>{tLanding("nctsEdi")}</span>
             </span>
           </div>
         </div>
@@ -31,27 +35,27 @@ export async function SiteFooter() {
           </p>
           <div className="flex flex-col space-y-2.5 text-xs text-slate-400">
             <Link href="/#about" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>About Globfreight</span>
+              <span>{tLanding("about")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/#services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>All Services</span>
+              <span>{tLanding("allServices")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/#blog" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>Blog & Insights</span>
+            <Link href="/blog" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+              <span>{tLanding("blogInsights")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/#faq" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>FAQ Guidance</span>
+              <span>{tLanding("faqGuidance")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/#contact" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>Request Quote</span>
+              <span>{tLanding("requestQuote")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/signin" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>Staff Portal</span>
+              <span>{tLanding("staffPortal")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
           </div>
@@ -64,19 +68,19 @@ export async function SiteFooter() {
           </p>
           <div className="flex flex-col space-y-2.5 text-xs text-slate-400">
             <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>Import & Export Clearance</span>
+              <span>{tLanding("importExport")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>NCTS T1 / T2 Transit</span>
+              <span>{tLanding("nctsTransit")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>Port & Inland Haulage</span>
+              <span>{tLanding("portHaulage")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
             <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
-              <span>Bonded Warehousing</span>
+              <span>{tLanding("bondedWarehousing")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
           </div>
@@ -105,7 +109,7 @@ export async function SiteFooter() {
           </div>
           <div className="flex items-center gap-2.5 text-xs text-slate-500 pt-1">
             <Clock size={15} className="text-slate-500 shrink-0" />
-            <span>Mon - Fri: 07:30 - 18:30 CET</span>
+            <span>{tLanding("workingHours")}</span>
           </div>
         </address>
       </div>
@@ -113,7 +117,7 @@ export async function SiteFooter() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
         <span>{t("copyright")}</span>
         <div>
-          <span>Port of Antwerp • Port of Rotterdam • Zeebrugge • Hamburg</span>
+          <span>{tLanding("portsList")}</span>
         </div>
       </div>
     </footer>

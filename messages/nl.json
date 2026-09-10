@@ -2692,5 +2692,367 @@
   "Recent Activities": "Recente activiteiten",
   "Action": "Actie",
   "Reply": "Beantwoorden",
-  "Approved": "Goedgekeurd"
+  "Approved": "Goedgekeurd",
+  "BlogPage": {
+    "meta": {
+      "title": "Logistieke Inzichten & Nieuws | Globfreight",
+      "description": "Diepgaande Europese douane-inzichten, multimodaal vrachtadvies en supply chain-technologieperspectieven van Globfreight.",
+      "notFoundTitle": "Artikel niet gevonden | Globfreight",
+      "defaultTitle": "Logistieke Inzichten | Globfreight"
+    },
+    "hero": {
+      "eyebrow": "Logistieke Inzichten & Nieuws",
+      "title": "Supply Chain Inzichten, Douane-intelligentie & Wereldhandel",
+      "description": "Technische perspectieven, regelgeving-updates, Europese havenadviezen en vrachttechnologie-inzichten van Globfreight-specialisten.",
+      "searchPlaceholder": "Zoek artikelen, douaneregels, AI-onderwerpen...",
+      "filterLabel": "Filter:",
+      "allArticles": "Alle artikelen"
+    },
+    "featured": {
+      "badge": "Uitgelichte Publicatie",
+      "readAnalysis": "Lees Volledige Analyse",
+      "authorRole": "Logistiek Specialist"
+    },
+    "card": {
+      "readMore": "Lees Meer",
+      "readAnalysis": "Lees Volledige Analyse",
+      "minRead": "min leestijd",
+      "min": "min",
+      "defaultTag": "Wereldwijde Logistiek"
+    },
+    "list": {
+      "allPublications": "Alle Publicaties & Adviezen",
+      "searchResults": "Zoekresultaten",
+      "articlesCount": "artikelen",
+      "emptyTitle": "Geen artikelen gevonden die aan uw criteria voldoen",
+      "emptyDesc": "Probeer uw zoektermen aan te passen of filters te wissen om meer publicaties te zien.",
+      "resetFilters": "Filters Resetten"
+    },
+    "detail": {
+      "home": "Home",
+      "blog": "Blog",
+      "featured": "Uitgelicht",
+      "minRead": "min leestijd",
+      "shareArticle": "Deel Artikel",
+      "copyLink": "Kopieer Link",
+      "copied": "Gekopieerd!",
+      "copySuccess": "Artikellink gekopieerd naar klembord",
+      "copyError": "Kan link niet kopiëren",
+      "sharePrompt": "Vond u deze analyse waardevol? Deel het met uw logistieke team.",
+      "authorTitle": "Globfreight Mondiale Logistiek Analisten",
+      "authorSubtitle": "Douaneonderzoek & Handelsintelligentie",
+      "authorBio": "Operationele specialisten van Globfreight bieden actuele updates over Europese inklaringsprocedures, entrepots en multimodale corridors.",
+      "relatedEyebrow": "Verder Lezen",
+      "relatedTitle": "Gerelateerde Logistieke Informatie",
+      "browseAll": "Bekijk alle artikelen",
+      "read": "Lezen",
+      "backToAll": "Terug naar alle publicaties",
+      "consultationCta": "Vraag Douaneadvies Aan"
+    },
+    "cta": {
+      "eyebrow": "Douane- & Vrachtadviezen",
+      "title": "Blijf op de Hoogte van Europese Haven- en Douanewijzigingen",
+      "description": "Sluit u aan bij verladers in heel Europa en ontvang actuele regelgevingsinformatie en marktinzichten.",
+      "specialistButton": "Spreek met een Specialist",
+      "quoteButton": "Directe Vrachttarief Aanvraag"
+    },
+    "homeSection": {
+      "badge": "Marktinzichten & Adviezen",
+      "title": "Laatste Inzichten & Logistieke Adviezen",
+      "description": "Sectorupdates, douaneregelgeving en Europese supply chain-inzichten van Globfreight-specialisten.",
+      "viewAll": "Bekijk alle publicaties"
+    }
+  },
+  "LandingPage": {
+    "whatsappTooltip": "Chat met ons via WhatsApp",
+    "hero": {
+      "poweredBadge": "Aangedreven door SeaRates",
+      "engineBadge": "Wereldwijde Multimodale Logistieke Engine",
+      "title": "Zoek Vrachttarieven, Volg Lading & Verzend Wereldwijd",
+      "subtitle": "Vergelijk directe zee- en luchtvrachtoffertes van meer dan 150 rederijen, volg live multimodale containers via AIS-radar en beheer AEO-F gecertificeerde douaneaangiften op één platform.",
+      "aeoBadge": "AEO-F Gecertificeerde Ingress",
+      "releaseBadge": "< 3u Douanevrijgave in Zeehavens",
+      "portsBadge": "2.500+ Verbonden Havens",
+      "demurrageBadge": "Zonder Overliggelden SLA"
+    },
+    "searchWidget": {
+      "tabs": {
+        "rates": "Vrachttarieven",
+        "tracking": "Live Tracking",
+        "air": "Luchtvracht",
+        "schedules": "Vaarschema's",
+        "load": "3D Belading",
+        "quote": "Directe Offerte"
+      },
+      "modeLabel": "Transportmodaliteit:",
+      "modes": {
+        "fcl": "Volle Container (FCL)",
+        "lcl": "Deellading (LCL)",
+        "air": "Luchtvracht",
+        "land": "Wegtransport"
+      },
+      "rates": {
+        "originLabel": "Vertrekhaven / Stad",
+        "destLabel": "Bestemmingshaven / Stad",
+        "containerLabel": "Containertype & Grootte",
+        "dateLabel": "Lading Gereed",
+        "popular": "Populaire Handelsroutes:",
+        "aeo": "AEO-F Douane Gegarandeerd",
+        "realtime": "Realtime Spot- & Contracttarieven",
+        "searchButton": "Zoek Vrachttarieven",
+        "searching": "Tarieven ophalen...",
+        "resultsTitle": "Live Vrachttarieven",
+        "direct": "Directe Zeereis",
+        "transshipment": "Oversteek via Hub",
+        "transit": "Transittijd",
+        "vessel": "Schip",
+        "demurrageFree": "Overliggeldvrije Dagen",
+        "carbon": "Geschatte CO₂",
+        "valid": "Geldig Tot",
+        "rateLabel": "Geschat Vrachttarief",
+        "book": "Boek Tarief"
+      },
+      "tracking": {
+        "numberLabel": "Containernummer / Cognossement (B/L) / Boekingsreferentie",
+        "placeholder": "bijv. MSCU9842173, MAEU1029384, MEDU8472910",
+        "carrierLabel": "Rederij / Vervoerder",
+        "allCarriers": "Automatisch Detecteren (150+ Rederijen)",
+        "radarFeed": "Directe AIS-scheepsradar & Haven API-koppelingen",
+        "trackButton": "Volg Zending",
+        "tracking": "Container traceren...",
+        "resultsTitle": "Multimodale Containerroute & Status",
+        "liveAis": "Live AIS-radar Actief",
+        "status": "Huidige Status",
+        "location": "Huidige Coördinaat / Terminal",
+        "destination": "Definitieve Lossingshaven",
+        "carrierShort": "Vervoerder",
+        "vesselShort": "Schip",
+        "vessel": "Scheepsnaam / IMO",
+        "eta": "Verwachte Aankomst (ETA)",
+        "inTransit": "Onderweg - Zeereis",
+        "atPort": "In Haventerminal - Douane-inspectie",
+        "delivered": "Vrijgegeven door Douane & Afgeleverd"
+      },
+      "air": {
+        "originLabel": "Luchthaven van Vertrek",
+        "destLabel": "Luchthaven van Bestemming",
+        "weightLabel": "Brutogewicht (kg)",
+        "awbLabel": "Luchtvrachtbrief (AWB)",
+        "tagline": "Reguliere IATA-lijnvluchten en charter-luchtvracht",
+        "instantQuote": "Directe Luchtvrachtofferte",
+        "searchButton": "Bereken Luchtvrachttarieven"
+      },
+      "schedules": {
+        "originLabel": "Laadhaven (POL)",
+        "destLabel": "Lossingshaven (POD)",
+        "carrierLabel": "Rederij",
+        "allCarriers": "Alle Rederijen (Geaggregeerd)",
+        "hourlyTagline": "Vaarschema's elk uur bijgewerkt met actuele terminal-cutoffs",
+        "cutoff": "Cutoff",
+        "etd": "ETD",
+        "eta": "ETA",
+        "searchButton": "Vind Vaarschema's"
+      },
+      "load": {
+        "length": "Lengte (cm)",
+        "width": "Breedte (cm)",
+        "height": "Hoogte (cm)",
+        "weight": "Gewicht/Doos (kg)",
+        "quantity": "Aantal (Stuks)",
+        "container": "Containertype",
+        "calcButton": "Simuleer 3D Belading",
+        "utilization": "3D Containervolume Benutting",
+        "full": "Vol",
+        "totalVol": "Totaal Ladingvolume",
+        "totalWt": "Totaal Ladinggewicht",
+        "remaining": "Resterende Ruimte",
+        "maxPayload": "Maximale Laadcapaciteit",
+        "fit": "Succesvol Geladen Dozen"
+      },
+      "quote": {
+        "description": "Dien aangepaste vrachtspecificaties in voor bijzondere projectlading, koellading of gevaarlijke stoffen. Onze gecertificeerde expediteurs reageren binnen 2 uur.",
+        "pickup": "Ophaallocatie",
+        "pickupPlaceholder": "Stad, postcode of haven",
+        "delivery": "Bestemming",
+        "deliveryPlaceholder": "Eindbestemming of magazijn",
+        "cargo": "Goederenomschrijving & Speciale Instructies",
+        "cargoPlaceholder": "bijv. 5 pallets, geconditioneerd transport, ADR",
+        "button": "Offerte Aanvragen"
+      }
+    },
+    "carriers": {
+      "integrated": "Geïntegreerd met 150+ Wereldwijde Rederijen, Terminals & Luchtvrachtlijnen",
+      "edi": "Directe Live EDI",
+      "ports": "2.500+ Verbonden Zeehavens"
+    },
+    "tools": {
+      "badge": "SeaRates Digitaal Ecosysteem",
+      "title": "Slimme Logistieke Tools & Vrachtapplicaties",
+      "subtitle": "Krijg toegang tot het complete digitale platform voor verladers, expediteurs en supply chain managers wereldwijd.",
+      "exploreAll": "Bekijk Alle Digitale Diensten",
+      "launch": "Start Tool",
+      "explorerTitle": "Logistiek Verkenner",
+      "explorerDesc": "Directe vrachttarieven voor FCL, LCL & Luchtvracht van meer dan 150 vervoerders.",
+      "explorerTag": "Vrachtcalculator",
+      "trackingTitle": "Trackingsysteem",
+      "trackingDesc": "Geïntegreerde container- en scheepstracking met realtime AIS-satellietradar.",
+      "trackingTag": "Live AIS Radar",
+      "airTitle": "Luchtvracht Tracking",
+      "airDesc": "Realtime status van luchtvrachtbrieven (AWB) en vluchtschema's wereldwijd.",
+      "airTag": "Wereldwijde AWB",
+      "schedulesTitle": "Vaarschema's",
+      "schedulesDesc": "Afvaarten, sluittijden van haventerminals en transittabellen.",
+      "schedulesTag": "Vaarschema",
+      "loadTitle": "Laadcalculator",
+      "loadDesc": "3D-containerbelading, palletberekening en gewichtsverdeling.",
+      "loadTag": "3D Belading",
+      "distancesTitle": "Afstanden & Tijden",
+      "distancesDesc": "Zeemijlen, snelwegkilometers en voorspellende transittijden.",
+      "distancesTag": "Route Engine",
+      "indexTitle": "Vrachttariefindex",
+      "indexDesc": "Wereldwijde markttarieven, historische analyses en trends.",
+      "indexTag": "Marktindex",
+      "co2Title": "CO₂-Calculator",
+      "co2Desc": "Bereken de CO₂-uitstoot van uw supply chain conform Europese ESG-eisen.",
+      "co2Tag": "Groene Logistiek"
+    },
+    "rates": {
+      "badge": "Realtime Marktinformatie",
+      "title": "Actuele Wereldwijde Vrachttarieven & Corridors",
+      "subtitle": "Realtime spottariefbenchmarks over de belangrijkste zeeroutes, dagelijks bijgewerkt via EDI-verbindingen.",
+      "tabs": {
+        "all": "Alle Handelsroutes",
+        "asia_eu": "Azië – Europa",
+        "gulf_eu": "Midden-Oosten – Europa",
+        "med_eu": "Middellandse Zee",
+        "transatlantic": "Trans-Atlantisch"
+      },
+      "spotRate": "Actueel Spottarief",
+      "book": "Boek Tarief",
+      "guarantee": "Alle tarieven zijn inclusief standaard brandstoftoeslagen (BAF) en directe douanemanifestkoppeling.",
+      "customTariffs": "Vraag contracttarieven aan voor grote volumes",
+      "carrier": "Vervoerder",
+      "valid": "Geldig tot",
+      "stable": "Stabiel"
+    },
+    "solutions": {
+      "badge": "Digitale Vrachttechnologie",
+      "title": "Volgende Generatie Tools voor Moderne Toeleveringsketens",
+      "subtitle": "Ontwikkeld om verladers en logistieke teams volledige zichtbaarheid, optimalisatie en compliance te bieden.",
+      "tabs": {
+        "tracking": "Container AIS Tracking",
+        "rates": "Tariefbeheer (RMS)",
+        "load": "3D Laadoptimalisatie",
+        "customs": "AEO-F Douaneafhandeling"
+      },
+      "trackingTitle": "Realtime AIS-radar & Containermijlpalen",
+      "trackingDesc": "Volg scheepscoördinaten, verblijftijden in de haven en intermodale overdrachten op één interactief dashboard.",
+      "trackingPoint1": "Live satelliet-AIS-coördinaten elke 15 minuten bijgewerkt",
+      "trackingPoint2": "Voorspelde aankomsttijd (ETA) op basis van havencongestie",
+      "trackingPoint3": "Automatische meldingen bij havenvertragingen en douane-inspecties",
+      "ratesTitle": "Algoritmische Spot- & Contracttarieven",
+      "ratesDesc": "Direct inzicht in contracttarieven, zeesurcharges en all-in kosten per post.",
+      "ratesPoint1": "Multi-carrier API-koppelingen (MSC, Maersk, CMA CGM, Hapag)",
+      "ratesPoint2": "Realtime brandstof- en valutacorrecties",
+      "ratesPoint3": "Directe boekingsinzending en EDI-bevestiging",
+      "loadTitle": "Interactieve 3D Container- & Palletbelading",
+      "loadDesc": "Maximaliseer het volume, verlaag vrachtkosten en voldoe aan aslastvereisten.",
+      "loadPoint1": "Volledige 3D-weergave van 20ft, 40ft en 40ft High Cube containers",
+      "loadPoint2": "Palletiseeralgoritmen voor gemengde afmetingen",
+      "loadPoint3": "Printbare laadplannen voor magazijnmedewerkers",
+      "customsTitle": "Directe Elektronische Douaneaangifte & AEO-F Vrijgave",
+      "customsDesc": "Versnel vrijgaves in Europese havens dankzij vooraangiftes en fiscale vertegenwoordiging in Antwerpen en Rotterdam.",
+      "customsPoint1": "Directe EDI-koppeling met Belgische (PLDA) en Nederlandse douane",
+      "customsPoint2": "NCTS T1/T2 transitdocumenten onder officiële borgtocht",
+      "customsPoint3": "Uitstel van invoer-btw (Artikel 23) voor EU-importeurs",
+      "viewDetails": "Ontdek Digitale Oplossingen",
+      "requestDemo": "Vraag Enterprise Demo Aan"
+    },
+    "gateways": {
+      "clearanceSpeed": "Inklaringssnelheid",
+      "antwerp": {
+        "name": "Haven van Antwerpen-Brugge",
+        "country": "België",
+        "role": "Primaire Europese Toegangspoort",
+        "clearanceSpeed": "< 3 Uur",
+        "connections": "Directe toegang tot snelwegen E17 / E19 / E313 en Europees spoornetwerk",
+        "description": "Belangrijkste logistieke hub met eigen declaranten ter plaatse voor directe elektronische inklaring en containerophaling.",
+        "feat1": "Directe EDI-vrijgave",
+        "feat2": "ADR & chemie-gecertificeerd",
+        "feat3": "Reefer-aansluitingen"
+      },
+      "rotterdam": {
+        "name": "Haven van Rotterdam",
+        "country": "Nederland",
+        "role": "Maasvlakte Diepzeecorridor",
+        "clearanceSpeed": "< 4 Uur",
+        "connections": "Binnenvaart Rijn-Ruhr, spoor en directe snelwegverbindingen naar Duitsland",
+        "description": "Naadloze inklaring en direct wegtransport vanaf Maasvlakte I & II naar Duitsland, de Benelux en Midden-Europa.",
+        "feat1": "Digitale vooraangifte",
+        "feat2": "Rijncorridor transit",
+        "feat3": "Zwaar containervervoer"
+      },
+      "zele": {
+        "name": "Zele Douane Logistiek Centrum",
+        "country": "België (Hoofdkantoor)",
+        "role": "Douaneopslag & Cross-Dock Hub",
+        "clearanceSpeed": "Directe Inklaring",
+        "connections": "Strategisch gelegen op de driehoek Antwerpen-Gent-Brussel",
+        "description": "Douane-entrepot onder toezicht voor opschorting van rechten, herverpakking, snelle overslag en distributie.",
+        "feat1": "Opschorting van rechten & btw",
+        "feat2": "Cross-dock overslag",
+        "feat3": "Waarde toevoegende verpakking"
+      },
+      "hamburg": {
+        "name": "Haven van Hamburg & Noordelijke Hubs",
+        "country": "Duitsland / Noordzee",
+        "role": "Centrale & Noordse Distributie",
+        "clearanceSpeed": "< 4 Uur",
+        "connections": "Hogesnelheidsspoor en wegverbindingen naar Scandinavië, Polen en Tsjechië",
+        "description": "Deskundige afhandeling van NCTS T1-aangiften en grensoverschrijdend vervoer naar belangrijke industriële centra.",
+        "feat1": "NCTS T1 borgdekking",
+        "feat2": "Noordse grenscompliance",
+        "feat3": "Multimodale dispatch"
+      }
+    },
+    "servicesTabs": {
+      "badges": {
+        "customs": "AEO-F GECERTIFICEERD",
+        "transport": "GPS LIVE CORRIDOR",
+        "warehouse": "RECHTEN OPSCHORTING",
+        "fiscal": "ARTIKEL 23 BTW-VERLEGGING"
+      },
+      "stats": {
+        "customs": "Gemiddelde Havenvrijgave",
+        "transport": "Beschikbaarheid van Vervoer",
+        "warehouse": "Onder Douanetoezicht",
+        "fiscal": "Directe Invoer-btw Voordeel"
+      },
+      "viewDetails": "Bekijk Dienstdetails",
+      "requestQuote": "Offerte Aanvragen"
+    },
+    "trust": {
+      "badges": {
+        "pillar1": "AEO-F Prioritaire Vrijgave",
+        "pillar2": "Elektronische Vooraangifte",
+        "pillar3": "Rechtstreekse Specialistendesk"
+      }
+    },
+    "footer": {
+      "aeoCertified": "AEO-F Gecertificeerd",
+      "nctsEdi": "NCTS Directe EDI",
+      "about": "Over Globfreight",
+      "allServices": "Alle Diensten",
+      "blogInsights": "Blog & Inzichten",
+      "faqGuidance": "Veelgestelde Vragen",
+      "requestQuote": "Offerte Aanvragen",
+      "staffPortal": "Medewerkersportaal",
+      "importExport": "In- & Uitvoerinklaring",
+      "nctsTransit": "NCTS T1 / T2 Transit",
+      "portHaulage": "Haven- & Binnenlands Vervoer",
+      "bondedWarehousing": "Douane-entrepots",
+      "workingHours": "Ma - Vr: 07:30 - 18:30 CET",
+      "portsList": "Haven van Antwerpen • Haven van Rotterdam • Zeebrugge • Hamburg"
+    }
+  }
 }

@@ -56,7 +56,7 @@ export function RecentBlogPosts({ posts = [], locale }: RecentBlogPostsProps) {
         </div>
 
         <Link
-          href={`/${locale}/blog`}
+          href={`/${locale}/admin/blog`}
           className="group inline-flex items-center gap-1.5 rounded-xl border border-border/50 bg-muted/30 px-3 py-1.5 text-xs font-semibold text-foreground transition-all hover:bg-muted/70 hover:border-border"
         >
           <span>{isRtl ? "عرض الكل" : "View All"}</span>

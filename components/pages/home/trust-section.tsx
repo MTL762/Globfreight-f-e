@@ -3,25 +3,26 @@ import { getTranslations } from "next-intl/server";
 
 export async function TrustSection() {
   const t = await getTranslations("Home");
+  const tTrust = await getTranslations("LandingPage.trust");
 
   const pillars = [
     {
       icon: ShieldCheck,
       title: t("proof1Title"),
       desc: t("proof1Body"),
-      badge: "AEO-F Priority Clearance"
+      badge: tTrust("badges.pillar1")
     },
     {
       icon: Clock,
       title: t("proof2Title"),
       desc: t("proof2Body"),
-      badge: "Pre-Arrival EDI Filing"
+      badge: tTrust("badges.pillar2")
     },
     {
       icon: Globe2,
       title: t("proof3Title"),
       desc: t("proof3Body"),
-      badge: "Direct Specialist Desk"
+      badge: tTrust("badges.pillar3")
     }
   ];
 

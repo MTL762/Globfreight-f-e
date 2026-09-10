@@ -1,6 +1,9 @@
 import { Globe2 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
-export function CarrierNetworkBand() {
+export async function CarrierNetworkBand() {
+  const t = await getTranslations("LandingPage.carriers");
+
   const carriers = [
     "MSC Mediterranean Shipping",
     "Maersk Line",
@@ -22,14 +25,14 @@ export function CarrierNetworkBand() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
             <Globe2 size={15} className="text-primary" />
-            <span>Integrated with 150+ Global Ocean Carriers, Terminals & Air Cargo Lines</span>
+            <span>{t("integrated")}</span>
           </div>
           <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-              Direct EDI Live
+              {t("edi")}
             </span>
-            <span>2,500+ Connected Seaports</span>
+            <span>{t("ports")}</span>
           </div>
         </div>
 

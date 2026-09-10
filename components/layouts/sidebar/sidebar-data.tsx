@@ -12,7 +12,7 @@ export const links = ({ permissions }: { permissions?: Set<Permission> }): NavIt
     },
     {
       title: "Blog",
-      url: "/blog",
+      url: "/admin/blog",
       icon: "blog"
     },
     {

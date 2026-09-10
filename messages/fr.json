@@ -2692,5 +2692,367 @@
   "Recent Activities": "Activités récentes",
   "Action": "Action",
   "Reply": "Répondre",
-  "Approved": "Approuvé"
+  "Approved": "Approuvé",
+  "BlogPage": {
+    "meta": {
+      "title": "Renseignements Logistiques & Actualités | Globfreight",
+      "description": "Veille douanière européenne approfondie, avis de fret multimodal et perspectives technologiques par Globfreight.",
+      "notFoundTitle": "Article non trouvé | Globfreight",
+      "defaultTitle": "Perspectives Logistiques | Globfreight"
+    },
+    "hero": {
+      "eyebrow": "Renseignements Logistiques & Actualités",
+      "title": "Perspectives Supply Chain, Veille Douanière & Commerce Mondial",
+      "description": "Analyses techniques, mises à jour réglementaires, avis sur les passerelles européennes par les spécialistes Globfreight.",
+      "searchPlaceholder": "Rechercher des articles, règles douanières, IA...",
+      "filterLabel": "Filtrer:",
+      "allArticles": "Tous les articles"
+    },
+    "featured": {
+      "badge": "Publication en Vedette",
+      "readAnalysis": "Lire l'Analyse Complète",
+      "authorRole": "Spécialiste Logistique"
+    },
+    "card": {
+      "readMore": "En savoir plus",
+      "readAnalysis": "Lire l'Analyse Complète",
+      "minRead": "min de lecture",
+      "min": "min",
+      "defaultTag": "Logistique Globale"
+    },
+    "list": {
+      "allPublications": "Toutes les Publications & Conseils",
+      "searchResults": "Résultats de recherche",
+      "articlesCount": "articles",
+      "emptyTitle": "Aucun article trouvé selon vos critères",
+      "emptyDesc": "Modifiez vos termes de recherche ou réinitialisez les filtres pour voir plus de publications.",
+      "resetFilters": "Réinitialiser les filtres"
+    },
+    "detail": {
+      "home": "Accueil",
+      "blog": "Blog",
+      "featured": "En vedette",
+      "minRead": "min de lecture",
+      "shareArticle": "Partager l'article",
+      "copyLink": "Copier le lien",
+      "copied": "Copié !",
+      "copySuccess": "Lien de l'article copié dans le presse-papiers",
+      "copyError": "Échec de la copie du lien",
+      "sharePrompt": "Cette analyse vous a été utile ? Partagez-la avec votre équipe logistique.",
+      "authorTitle": "Analystes Logistiques Internationaux Globfreight",
+      "authorSubtitle": "Unité de Recherche Douanière & Veille Commerciale",
+      "authorBio": "Les spécialistes opérationnels de Globfreight fournissent des mises à jour en direct sur les procédures douanières européennes et le fret multimodal.",
+      "relatedEyebrow": "Lectures Complémentaires",
+      "relatedTitle": "Intelligence Logistique Connexe",
+      "browseAll": "Voir tous les articles",
+      "read": "Lire",
+      "backToAll": "Retour à toutes les publications",
+      "consultationCta": "Demander une Consultation Douanière"
+    },
+    "cta": {
+      "eyebrow": "Conseils Douane & Fret",
+      "title": "Anticipez les Évolutions Douanières et Portuaires Européennes",
+      "description": "Rejoignez les expéditeurs à travers l'Europe recevant des informations réglementaires précises et les tendances de marché.",
+      "specialistButton": "Parler à un Spécialiste",
+      "quoteButton": "Devis de Fret Immédiat"
+    },
+    "homeSection": {
+      "badge": "Veille de Marché & Conseils",
+      "title": "Dernières Perspectives & Conseils Logistiques",
+      "description": "Actualités du secteur, réglementations douanières et veille européenne de la chaîne logistique par Globfreight.",
+      "viewAll": "Voir toutes les publications"
+    }
+  },
+  "LandingPage": {
+    "whatsappTooltip": "Discutez avec nous sur WhatsApp",
+    "hero": {
+      "poweredBadge": "Propulsé par SeaRates",
+      "engineBadge": "Moteur Logistique Multimodal Mondial",
+      "title": "Recherchez les Tarifs de Fret, Suivez Vos Cargaisons & Expédiez Mondialement",
+      "subtitle": "Comparez instantanément les cotations de fret maritime et aérien auprès de plus de 150 compagnies maritimes, suivez vos conteneurs par radar AIS et gérez vos déclarations en douane OEA-F sur une plateforme unique.",
+      "aeoBadge": "Accès Portuaire Agréé OEA-F",
+      "releaseBadge": "< 3h Dédouanement Portuaire Garanti",
+      "portsBadge": "2 500+ Ports Connectés",
+      "demurrageBadge": "Zéro Surestarie SLA"
+    },
+    "searchWidget": {
+      "tabs": {
+        "rates": "Tarifs de Fret",
+        "tracking": "Suivi en Direct",
+        "air": "Fret Aérien",
+        "schedules": "Horaires Maritimes",
+        "load": "Chargement 3D",
+        "quote": "Devis Immédiat"
+      },
+      "modeLabel": "Mode de Transport:",
+      "modes": {
+        "fcl": "Conteneur Complet (FCL)",
+        "lcl": "Groupage Maritime (LCL)",
+        "air": "Fret Aérien",
+        "land": "Transport Routier"
+      },
+      "rates": {
+        "originLabel": "Port / Ville de Départ",
+        "destLabel": "Port / Ville d'Arrivée",
+        "containerLabel": "Type & Taille du Conteneur",
+        "dateLabel": "Date de Disponibilité",
+        "popular": "Corridors Commerciaux Fréquents:",
+        "aeo": "Garantie Douanière AEO-F",
+        "realtime": "Tarifs Spot & Contrats en Temps Réel",
+        "searchButton": "Rechercher les Tarifs",
+        "searching": "Recherche des tarifs...",
+        "resultsTitle": "Cotations de Fret en Direct",
+        "direct": "Liaison Directe",
+        "transshipment": "Transbordement via Hub",
+        "transit": "Temps de Transit",
+        "vessel": "Navire",
+        "demurrageFree": "Jours de Franchise Surestaries",
+        "carbon": "CO₂ Estimé",
+        "valid": "Valable Jusqu'au",
+        "rateLabel": "Tarif de Fret Estimé",
+        "book": "Réserver ce Tarif"
+      },
+      "tracking": {
+        "numberLabel": "Numéro de Conteneur / Connaissement (B/L) / Réf. Réservation",
+        "placeholder": "ex: MSCU9842173, MAEU1029384, MEDU8472910",
+        "carrierLabel": "Compagnie Maritime / Transporteur",
+        "allCarriers": "Détection Automatique (150+ Lignes)",
+        "radarFeed": "Flux Radar AIS & API Portuaires Directs",
+        "trackButton": "Suivre l'Expédition",
+        "tracking": "Recherche du conteneur...",
+        "resultsTitle": "Itinéraire & Statut du Conteneur",
+        "liveAis": "Radar AIS Satellite Actif",
+        "status": "Statut Actuel",
+        "location": "Coordonnées / Terminal Actuel",
+        "destination": "Port Final de Déchargement",
+        "carrierShort": "Transporteur",
+        "vesselShort": "Navire",
+        "vessel": "Nom du Navire / IMO",
+        "eta": "Arrivée Estimée (ETA)",
+        "inTransit": "En Transit - Traversée Maritime",
+        "atPort": "Au Terminal Portuaire - Contrôle Douanier",
+        "delivered": "Dédouané & Livré avec Succès"
+      },
+      "air": {
+        "originLabel": "Aéroport de Départ",
+        "destLabel": "Aéroport de Destination",
+        "weightLabel": "Poids Brut (kg)",
+        "awbLabel": "Lettre de Transport Aérien (AWB)",
+        "tagline": "Vols réguliers IATA et affrètement aérien dédié",
+        "instantQuote": "Devis Aérien Immédiat",
+        "searchButton": "Calculer le Tarif Aérien"
+      },
+      "schedules": {
+        "originLabel": "Port de Chargement (POL)",
+        "destLabel": "Port de Déchargement (POD)",
+        "carrierLabel": "Compagnie Maritime",
+        "allCarriers": "Toutes les Compagnies (Calendrier Global)",
+        "hourlyTagline": "Horaires de départ actualisés chaque heure avec les cutoffs des terminaux",
+        "cutoff": "Clôture",
+        "etd": "ETD",
+        "eta": "ETA",
+        "searchButton": "Trouver les Départs"
+      },
+      "load": {
+        "length": "Longueur (cm)",
+        "width": "Largeur (cm)",
+        "height": "Hauteur (cm)",
+        "weight": "Poids/Colis (kg)",
+        "quantity": "Quantité (Pièces)",
+        "container": "Type de Conteneur",
+        "calcButton": "Simuler l'Empotage 3D",
+        "utilization": "Utilisation du Volume du Conteneur",
+        "full": "Rempli",
+        "totalVol": "Volume Total Cargo",
+        "totalWt": "Poids Total Cargo",
+        "remaining": "Espace CBM Restant",
+        "maxPayload": "Charge Utile Maximale",
+        "fit": "Colis Chargés"
+      },
+      "quote": {
+        "description": "Soumettez vos spécifications pour cargaisons spéciales, projets industriels, produits sous température dirigée ou matières dangereuses ADR. Devis en moins de 2h.",
+        "pickup": "Lieu d'Enlèvement",
+        "pickupPlaceholder": "Ville, Code Postal ou Port",
+        "delivery": "Destination Finale",
+        "deliveryPlaceholder": "Ville ou Installation",
+        "cargo": "Description de la Marchandise & Exigences",
+        "cargoPlaceholder": "ex: 5 palettes, température dirigée, ADR",
+        "button": "Demander une Cotation Sur-Mesure"
+      }
+    },
+    "carriers": {
+      "integrated": "Intégré à plus de 150 Compagnies Maritimes, Terminaux et Lignes Aériennes Mondiales",
+      "edi": "EDI Direct en Direct",
+      "ports": "2 500+ Ports Maritimes Connectés"
+    },
+    "tools": {
+      "badge": "Écosystème Numérique SeaRates",
+      "title": "Outils Logistiques Intelligents & Applications de Fret",
+      "subtitle": "Accédez à la suite numérique complète conçue pour les expéditeurs, transitaires et gestionnaires de supply chain du monde entier.",
+      "exploreAll": "Explorer Tous les Services Numériques",
+      "launch": "Lancer l'Outil",
+      "explorerTitle": "Explorateur Logistique",
+      "explorerDesc": "Cotations de fret instantanées pour FCL, LCL et Aérien auprès de 150+ transporteurs.",
+      "explorerTag": "Calculateur de Fret",
+      "trackingTitle": "Système de Suivi",
+      "trackingDesc": "Suivi multimodal unifié des conteneurs et navires avec radar AIS en temps réel.",
+      "trackingTag": "Radar AIS Direct",
+      "airTitle": "Suivi du Fret Aérien",
+      "airDesc": "Statut des lettres de transport aérien (AWB) et itinéraires de vol en direct dans le monde.",
+      "airTag": "LTA Mondiale",
+      "schedulesTitle": "Horaires des Navires",
+      "schedulesDesc": "Horaires de navigation, délais de fermeture des terminaux et matrices de transit.",
+      "schedulesTag": "Horaires Maritimes",
+      "loadTitle": "Calculateur de Chargement",
+      "loadDesc": "Simulation 3D d'empotage de conteneurs, colisage et répartition optimale des charges.",
+      "loadTag": "Empotage 3D",
+      "distancesTitle": "Distances & Délais",
+      "distancesDesc": "Milles nautiques, kilomètres routiers et calcul prédictif des délais d'acheminement.",
+      "distancesTag": "Moteur d'Itinéraire",
+      "indexTitle": "Indice des Taux de Fret",
+      "indexDesc": "Références des taux du marché mondial des conteneurs, analyses historiques et tendances.",
+      "indexTag": "Indice du Marché",
+      "co2Title": "Calculateur de Carbone / CO₂",
+      "co2Desc": "Évaluez l'empreinte carbone de vos expéditions pour répondre aux exigences ESG européennes.",
+      "co2Tag": "Logistique Verte"
+    },
+    "rates": {
+      "badge": "Veille du Marché en Direct",
+      "title": "Tendances des Taux de Fret & Principaux Corridors Mondiaux",
+      "subtitle": "Indicateurs de taux spot en temps réel sur les principales lignes maritimes, mis à jour quotidiennement par flux EDI.",
+      "tabs": {
+        "all": "Toutes les Lignes",
+        "asia_eu": "Asie – Europe",
+        "gulf_eu": "Moyen-Orient – Europe",
+        "med_eu": "Méditerranée",
+        "transatlantic": "Transatlantique"
+      },
+      "spotRate": "Taux Spot du Marché",
+      "book": "Réserver le Tarif",
+      "guarantee": "Tous les tarifs incluent les ajustements carburant (BAF) et le dépôt douanier électronique direct.",
+      "customTariffs": "Demander un tarif contractuel pour gros volumes",
+      "carrier": "Transporteur",
+      "valid": "Valable",
+      "stable": "Stable"
+    },
+    "solutions": {
+      "badge": "Technologie du Fret Numérique",
+      "title": "Outils Nouvelle Génération pour la Supply Chain Moderne",
+      "subtitle": "Conçus pour offrir aux chargeurs et professionnels de la logistique une visibilité intégrale, une optimisation algorithmique et une conformité automatisée.",
+      "tabs": {
+        "tracking": "Suivi des Conteneurs AIS",
+        "rates": "Gestion des Tarifs (RMS)",
+        "load": "Optimisation de Chargement 3D",
+        "customs": "Accès Douanier OEA-F"
+      },
+      "trackingTitle": "Radar AIS en Direct & Jalons des Conteneurs",
+      "trackingDesc": "Suivez les coordonnées en mer, le temps d'attente à quai et les transferts multimodaux sur un tableau de bord unique.",
+      "trackingPoint1": "Coordonnées satellite AIS mises à jour toutes les 15 minutes",
+      "trackingPoint2": "Estimation prédictive d'arrivée (ETA) basée sur la congestion portuaire",
+      "trackingPoint3": "Alertes automatiques en cas de report de conteneur ou de blocage douanier",
+      "ratesTitle": "Comparaison Algorithmique des Taux Spot & Contrat",
+      "ratesDesc": "Consultez en direct les barèmes des compagnies, les surcharges maritimes et le détail clair de chaque poste de coût.",
+      "ratesPoint1": "Connexions directes aux API des transporteurs (MSC, Maersk, CMA CGM, Hapag)",
+      "ratesPoint2": "Calcul en temps réel des surcharges carburant (BAF) et fluctuations de change",
+      "ratesPoint3": "Soumission immédiate des réservations et confirmation par EDI",
+      "loadTitle": "Moteur 3D Interactif d'Empotage de Conteneurs et Palettes",
+      "loadDesc": "Optimisez le volume utile, réduisez les dépenses de fret et assurez le respect des limites de charge à l'essieu.",
+      "loadPoint1": "Visualisation 3D complète pour conteneurs 20ft, 40ft et 40ft High Cube",
+      "loadPoint2": "Algorithmes de palettisation pour colis de dimensions hétérogènes",
+      "loadPoint3": "Plans de chargement pas à pas imprimables pour vos équipes d'entrepôt",
+      "customsTitle": "Dépôt Douanier Électronique Direct & Vraie Franchise OEA-F",
+      "customsDesc": "Accélérez le passage en douane dans les ports européens avec le dépôt anticipé et la représentation fiscale à Anvers et Rotterdam.",
+      "customsPoint1": "Connexion EDI directe aux douanes belges (PLDA) et néerlandaises",
+      "customsPoint2": "Émission des titres de transit NCTS T1/T2 sous caution officielle",
+      "customsPoint3": "Optimisation de l'autoliquidation de la TVA à l'import (Article 23)",
+      "viewDetails": "Explorer les Solutions Numériques",
+      "requestDemo": "Demander une Démo Entreprise"
+    },
+    "gateways": {
+      "clearanceSpeed": "Délai de Dédouanement",
+      "antwerp": {
+        "name": "Port d'Anvers-Bruges",
+        "country": "Belgique",
+        "role": "Porte d'Entrée Européenne Principale",
+        "clearanceSpeed": "< 3 Heures",
+        "connections": "Accès direct aux autoroutes E17 / E19 / E313 et au réseau ferroviaire européen",
+        "description": "Hub logistique central avec déclarants en douane dédiés sur place pour l'apurement électronique et l'enlèvement rapide.",
+        "feat1": "Mainlevée EDI directe",
+        "feat2": "Voies certifiées ADR et chimie",
+        "feat3": "Prises reefers pour conteneurs frigorifiques"
+      },
+      "rotterdam": {
+        "name": "Port de Rotterdam",
+        "country": "Pays-Bas",
+        "role": "Corridor Maritime Maasvlakte",
+        "clearanceSpeed": "< 4 Heures",
+        "connections": "Voies navigables Rhin-Ruhr, rail et autoroutes directes vers l'Allemagne",
+        "description": "Dédouanement fluide et traction routière immédiate depuis les terminaux Maasvlakte I & II vers l'Allemagne et le Benelux.",
+        "feat1": "Dépôt numérique anticipé",
+        "feat2": "Transit par le corridor rhénan",
+        "feat3": "Traction de conteneurs lourds"
+      },
+      "zele": {
+        "name": "Centre Logistique Sous Douane de Zele",
+        "country": "Belgique (Siège)",
+        "role": "Hub d'Entreposage & Cross-Dock",
+        "clearanceSpeed": "Entrée Immédiate",
+        "connections": "Position stratégique sur le triangle de fret Anvers-Gand-Bruxelles",
+        "description": "Entrepôt sous douane agréé pour la suspension des droits et taxes, le reconditionnement de palettes et le transbordement.",
+        "feat1": "Suspension des droits et de la TVA",
+        "feat2": "Transbordement cross-dock",
+        "feat3": "Emballage à valeur ajoutée"
+      },
+      "hamburg": {
+        "name": "Port de Hambourg & Hubs Nordiques",
+        "country": "Allemagne / Mer du Nord",
+        "role": "Distribution Centrale & Nordique",
+        "clearanceSpeed": "< 4 Heures",
+        "connections": "Liaisons ferroviaires et routières à grande vitesse vers la Scandinavie et la Pologne",
+        "description": "Gestion spécialisée des déclarations de transit NCTS T1 et transport transfrontalier vers les pôles industriels européens.",
+        "feat1": "Couverture de garantie NCTS T1",
+        "feat2": "Conformité frontalière nordique",
+        "feat3": "Acheminement multimodal"
+      }
+    },
+    "servicesTabs": {
+      "badges": {
+        "customs": "CERTIFIÉ OEA-F",
+        "transport": "CORRIDOR TRACÉ PAR GPS",
+        "warehouse": "SUSPENSION DE DROITS DISPONIBLE",
+        "fiscal": "AUTOLIQUIDATION TVA ARTICLE 23"
+      },
+      "stats": {
+        "customs": "Délai Moyen de Dédouanement",
+        "transport": "Disponibilité de la Traction",
+        "warehouse": "Sous Contrôle Douanier",
+        "fiscal": "Avantage Trésorerie TVA Import"
+      },
+      "viewDetails": "Voir les Détails du Service",
+      "requestQuote": "Demander un Devis"
+    },
+    "trust": {
+      "badges": {
+        "pillar1": "Dédouanement Prioritaire OEA-F",
+        "pillar2": "Dépôt EDI Anticipé",
+        "pillar3": "Cellule Opérationnelle Dédiée"
+      }
+    },
+    "footer": {
+      "aeoCertified": "Certifié OEA-F",
+      "nctsEdi": "NCTS EDI Direct",
+      "about": "À Propos de Globfreight",
+      "allServices": "Tous les Services",
+      "blogInsights": "Blog & Veille Logistique",
+      "faqGuidance": "Foire Aux Questions",
+      "requestQuote": "Demander un Devis",
+      "staffPortal": "Portail Collaborateurs",
+      "importExport": "Dédouanement Import / Export",
+      "nctsTransit": "Transit NCTS T1 / T2",
+      "portHaulage": "Traction Portuaire & Terrestre",
+      "bondedWarehousing": "Entreposage Sous Douane",
+      "workingHours": "Lun - Ven: 07:30 - 18:30 CET",
+      "portsList": "Port d'Anvers • Port de Rotterdam • Zeebruges • Hambourg"
+    }
+  }
 }

@@ -10,6 +10,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 interface CorridorItem {
   id: string;
@@ -142,6 +143,7 @@ const corridors: CorridorItem[] = [
 ];
 
 export function LiveMarketRatesSection() {
+  const t = useTranslations("LandingPage.rates");
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
   const filteredCorridors =
@@ -152,7 +154,6 @@ export function LiveMarketRatesSection() {
   return (
     <section className="py-16 sm:py-20 bg-background border-b border-border/70">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div className="space-y-2">
@@ -161,24 +162,24 @@ export function LiveMarketRatesSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span>Live Market Intelligence</span>
+              <span>{t("badge")}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
-              Trending Global Freight Rates & Corridors
+              {t("title")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-2xl">
-              Real-time spot rate benchmarks across primary deepsea trade lanes, updated daily from carrier EDI feeds.
+              {t("subtitle")}
             </p>
           </div>
 
           {/* Category Filter Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
             {[
-              { id: "all", label: "All Trade Lanes" },
-              { id: "asia_eu", label: "Asia – Europe" },
-              { id: "gulf_eu", label: "Middle East – Europe" },
-              { id: "med_eu", label: "Mediterranean" },
-              { id: "transatlantic", label: "Transatlantic" }
+              { id: "all", label: t("tabs.all") },
+              { id: "asia_eu", label: t("tabs.asia_eu") },
+              { id: "gulf_eu", label: t("tabs.gulf_eu") },
+              { id: "med_eu", label: t("tabs.med_eu") },
+              { id: "transatlantic", label: t("tabs.transatlantic") }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -224,7 +225,7 @@ export function LiveMarketRatesSection() {
                       </span>
                     ) : (
                       <span className="text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
-                        Stable
+                        {t("stable")}
                       </span>
                     )}
                   </div>
@@ -262,8 +263,8 @@ export function LiveMarketRatesSection() {
                   </div>
 
                   <div className="pt-2 flex items-center justify-between text-[11px] text-muted-foreground">
-                    <span>Carrier: <strong className="text-foreground">{c.carrier}</strong></span>
-                    <span>Valid: {c.validUntil}</span>
+                    <span>{t("carrier")}: <strong className="text-foreground">{c.carrier}</strong></span>
+                    <span>{t("valid")}: {c.validUntil}</span>
                   </div>
                 </div>
               </div>
@@ -271,7 +272,7 @@ export function LiveMarketRatesSection() {
               {/* Pricing & CTA */}
               <div className="pt-3 border-t border-border/70 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] text-muted-foreground block">Spot Market Rate</span>
+                  <span className="text-[10px] text-muted-foreground block">{t("spotRate")}</span>
                   <strong className="text-base sm:text-lg font-extrabold text-primary font-mono">
                     {c.rateRange}
                   </strong>
@@ -281,7 +282,7 @@ export function LiveMarketRatesSection() {
                   href={`/contact?origin=${encodeURIComponent(c.originPort)}&dest=${encodeURIComponent(c.destPort)}&carrier=${encodeURIComponent(c.carrier)}&mode=${encodeURIComponent(c.mode)}`}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-xs hover:opacity-90 active:scale-[0.98] transition-all"
                 >
-                  <span>Book Rate</span>
+                  <span>{t("book")}</span>
                   <ArrowRight size={13} />
                 </Link>
               </div>
@@ -293,19 +294,16 @@ export function LiveMarketRatesSection() {
         <div className="mt-8 p-4 rounded-2xl bg-muted/40 border border-border/80 flex flex-wrap items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-2 text-muted-foreground">
             <ShieldCheck size={16} className="text-emerald-500 shrink-0" />
-            <span>
-              All rates include standard carrier fuel adjustment factors (BAF) and direct electronic customs manifest ingress.
-            </span>
+            <span>{t("guarantee")}</span>
           </div>
           <Link
             href="/contact"
             className="font-bold text-primary hover:underline inline-flex items-center gap-1"
           >
-            <span>Request custom contract tariffs for bulk volume</span>
+            <span>{t("customTariffs")}</span>
             <span>➔</span>
           </Link>
         </div>
-
       </div>
     </section>
   );

@@ -2689,5 +2689,367 @@
   "Training Program Info": "Training Program Info",
   "Security & Avatar": "Security & Avatar",
   "Disciplinary Warning": "Disciplinary Warning",
-  "Request queued offline and will sync when internet is available.": "Request queued offline and will sync when internet is available."
+  "Request queued offline and will sync when internet is available.": "Request queued offline and will sync when internet is available.",
+  "BlogPage": {
+    "meta": {
+      "title": "Logistics Intelligence & Newsroom | Globfreight",
+      "description": "In-depth European customs intelligence, multimodal freight forwarding advisories, and supply chain technology perspectives from Globfreight.",
+      "notFoundTitle": "Article Not Found | Globfreight",
+      "defaultTitle": "Logistics Insights | Globfreight"
+    },
+    "hero": {
+      "eyebrow": "Logistics Intelligence & Newsroom",
+      "title": "Supply Chain Insights, Customs Intelligence & Global Trade",
+      "description": "Technical perspectives, regulatory updates, European gateway advisories, and freight technology insights from Globfreight specialists.",
+      "searchPlaceholder": "Search articles, customs rules, AI topics...",
+      "filterLabel": "Filter:",
+      "allArticles": "All Articles"
+    },
+    "featured": {
+      "badge": "Featured Publication",
+      "readAnalysis": "Read Full Analysis",
+      "authorRole": "Logistics Specialist"
+    },
+    "card": {
+      "readMore": "Read More",
+      "readAnalysis": "Read Full Analysis",
+      "minRead": "min read",
+      "min": "min",
+      "defaultTag": "Global Logistics"
+    },
+    "list": {
+      "allPublications": "All Publications & Advisories",
+      "searchResults": "Search Results",
+      "articlesCount": "articles",
+      "emptyTitle": "No articles found matching your criteria",
+      "emptyDesc": "Try adjusting your search terms or clearing your category filters to see more publications.",
+      "resetFilters": "Reset Filters"
+    },
+    "detail": {
+      "home": "Home",
+      "blog": "Blog",
+      "featured": "Featured",
+      "minRead": "min read",
+      "shareArticle": "Share Article",
+      "copyLink": "Copy Link",
+      "copied": "Copied!",
+      "copySuccess": "Article link copied to clipboard",
+      "copyError": "Failed to copy link",
+      "sharePrompt": "Find this analysis valuable? Share it with your logistics team.",
+      "authorTitle": "Globfreight Global Logistics Analysts",
+      "authorSubtitle": "Customs Research & Trade Intelligence Unit",
+      "authorBio": "Globfreight's operational specialists provide real-time updates on European customs entry procedures, bonded freight warehousing, and multimodal corridor throughput.",
+      "relatedEyebrow": "Further Reading",
+      "relatedTitle": "Related Logistics Intelligence",
+      "browseAll": "Browse all articles",
+      "read": "Read",
+      "backToAll": "Back to all publications",
+      "consultationCta": "Request Customs Consultation"
+    },
+    "cta": {
+      "eyebrow": "Customs & Freight Advisories",
+      "title": "Stay Ahead of European Port & Customs Changes",
+      "description": "Join shippers across Europe receiving concise regulatory intelligence, gateway alerts, and spot market trends.",
+      "specialistButton": "Speak with a Specialist",
+      "quoteButton": "Instant Freight Quote"
+    },
+    "homeSection": {
+      "badge": "Market Intelligence & Advisories",
+      "title": "Latest Insights & Logistics Advisories",
+      "description": "Industry updates, customs regulations, and European supply chain intelligence from Globfreight specialists.",
+      "viewAll": "View all publications"
+    }
+  },
+  "LandingPage": {
+    "whatsappTooltip": "Chat with us on WhatsApp",
+    "hero": {
+      "poweredBadge": "SeaRates Powered",
+      "engineBadge": "Global Multimodal Logistics Engine",
+      "title": "Search Freight Rates, Track Cargo & Ship Worldwide",
+      "subtitle": "Compare instant ocean and air freight quotations across 150+ shipping lines, track live multimodal containers via AIS radar, and manage AEO-F certified customs declarations in one unified platform.",
+      "aeoBadge": "AEO-F Certified Ingress",
+      "releaseBadge": "< 3h Seaport Customs Release",
+      "portsBadge": "2,500+ Connected Ports",
+      "demurrageBadge": "Zero Demurrage SLA"
+    },
+    "searchWidget": {
+      "tabs": {
+        "rates": "Freight Rates",
+        "tracking": "Live Tracking",
+        "air": "Air Cargo",
+        "schedules": "Schedules",
+        "load": "3D Load",
+        "quote": "Instant Quote"
+      },
+      "modeLabel": "Transport Mode:",
+      "modes": {
+        "fcl": "Full Container (FCL)",
+        "lcl": "Less than Container (LCL)",
+        "air": "Air Cargo",
+        "land": "Inland Drayage"
+      },
+      "rates": {
+        "originLabel": "Origin Port / City",
+        "destLabel": "Destination Port / City",
+        "containerLabel": "Equipment / Size",
+        "dateLabel": "Ready to Load",
+        "popular": "Popular Trade Corridors:",
+        "aeo": "AEO-F Customs Guaranteed",
+        "realtime": "Real-Time Spot & Contract Rates",
+        "searchButton": "Search Freight Rates",
+        "searching": "Searching Rates...",
+        "resultsTitle": "Live Freight Quotations",
+        "direct": "Direct Sailing",
+        "transshipment": "Transshipment via Hub",
+        "transit": "Transit Time",
+        "vessel": "Vessel",
+        "demurrageFree": "Demurrage-Free SLA",
+        "carbon": "Estimated CO₂",
+        "valid": "Valid Until",
+        "rateLabel": "Est. Freight Rate",
+        "book": "Book Rate"
+      },
+      "tracking": {
+        "numberLabel": "Container Number / Bill of Lading (B/L) / Booking Reference",
+        "placeholder": "e.g. MSCU9842173, MAEU1029384, MEDU8472910",
+        "carrierLabel": "Shipping Line / Carrier",
+        "allCarriers": "Auto-Detect Carrier (150+ Lines)",
+        "radarFeed": "Direct AIS Vessel Radar & Port API Feeds",
+        "trackButton": "Track Shipment",
+        "tracking": "Tracking Container...",
+        "resultsTitle": "Multimodal Container Journey & Status",
+        "liveAis": "Live AIS Radar Active",
+        "status": "Current Status",
+        "location": "Current Coordinate / Terminal",
+        "destination": "Final Port of Discharge",
+        "carrierShort": "Carrier",
+        "vesselShort": "Vessel",
+        "vessel": "Vessel Name / IMO",
+        "eta": "Predictive Arrival (ETA)",
+        "inTransit": "In Transit - Ocean Voyage",
+        "atPort": "At Port Terminal - Customs Inspection",
+        "delivered": "Customs Released & Delivered"
+      },
+      "air": {
+        "originLabel": "Departure Airport",
+        "destLabel": "Destination Airport",
+        "weightLabel": "Gross Weight (kg)",
+        "awbLabel": "Airway Bill (AWB)",
+        "tagline": "Express IATA scheduled air freight & chartered cargo",
+        "instantQuote": "Get Instant Air Quote",
+        "searchButton": "Calculate Air Rates"
+      },
+      "schedules": {
+        "originLabel": "Port of Loading (POL)",
+        "destLabel": "Port of Discharge (POD)",
+        "carrierLabel": "Shipping Line",
+        "allCarriers": "All Carriers (Aggregated Timetable)",
+        "hourlyTagline": "Sailing schedules updated hourly with live terminal cutoffs",
+        "cutoff": "Cutoff",
+        "etd": "ETD",
+        "eta": "ETA",
+        "searchButton": "Find Sailing Schedules"
+      },
+      "load": {
+        "length": "Length (cm)",
+        "width": "Width (cm)",
+        "height": "Height (cm)",
+        "weight": "Weight/Box (kg)",
+        "quantity": "Quantity (Pcs)",
+        "container": "Container Type",
+        "calcButton": "Simulate 3D Stuffing",
+        "utilization": "3D Container Volume Utilization",
+        "full": "Full",
+        "totalVol": "Total Cargo Volume",
+        "totalWt": "Total Cargo Weight",
+        "remaining": "Remaining CBM Space",
+        "maxPayload": "Max Payload Limit",
+        "fit": "Cartons Fitted"
+      },
+      "quote": {
+        "description": "Submit custom cargo specs for specialized, project, reefer, or hazardous goods. Our certified forwarders provide direct quotes in < 2 hours.",
+        "pickup": "Pickup Location",
+        "pickupPlaceholder": "City, ZIP, or Seaport",
+        "delivery": "Delivery Destination",
+        "deliveryPlaceholder": "Final City or Facility",
+        "cargo": "Cargo Description & Special Handling",
+        "cargoPlaceholder": "e.g. 5 Pallets, Temp-Controlled, ADR",
+        "button": "Proceed with Custom Quote"
+      }
+    },
+    "carriers": {
+      "integrated": "Integrated with 150+ Global Ocean Carriers, Terminals & Air Cargo Lines",
+      "edi": "Direct EDI Live",
+      "ports": "2,500+ Connected Seaports"
+    },
+    "tools": {
+      "badge": "SeaRates Digital Ecosystem",
+      "title": "Smart Logistics Tools & Freight Applications",
+      "subtitle": "Access the complete digital suite designed for shippers, freight forwarders, and supply chain managers worldwide.",
+      "exploreAll": "Explore All Digital Services",
+      "launch": "Launch Tool",
+      "explorerTitle": "Logistics Explorer",
+      "explorerDesc": "Instant freight quotes for FCL, LCL & Air across 150+ ocean & air carriers.",
+      "explorerTag": "Freight Calculator",
+      "trackingTitle": "Tracking System",
+      "trackingDesc": "Unified multimodal container & vessel tracking with real-time AIS radar.",
+      "trackingTag": "Live AIS Radar",
+      "airTitle": "Air Cargo Tracking",
+      "airDesc": "Real-time airway bill (AWB) status and airline flight itineraries worldwide.",
+      "airTag": "Global AWB",
+      "schedulesTitle": "Ship Schedules",
+      "schedulesDesc": "Vessel sailing timetables, port terminal cutoffs, and transit matrices.",
+      "schedulesTag": "Sailing Timetable",
+      "loadTitle": "Load Calculator",
+      "loadDesc": "3D container stuffing, carton packing simulation, and weight distribution.",
+      "loadTag": "3D Stuffing",
+      "distancesTitle": "Distances & Time",
+      "distancesDesc": "Nautical miles, overland highway kilometers, and predictive transit time.",
+      "distancesTag": "Route Engine",
+      "indexTitle": "Freight Rate Index",
+      "indexDesc": "Global container market rate benchmarks, historical analytics & trends.",
+      "indexTag": "Market Index",
+      "co2Title": "Carbon / CO₂ Calculator",
+      "co2Desc": "Assess supply chain carbon footprint and meet European ESG compliance.",
+      "co2Tag": "Green Logistics"
+    },
+    "rates": {
+      "badge": "Live Market Intelligence",
+      "title": "Trending Global Freight Rates & Corridors",
+      "subtitle": "Real-time spot rate benchmarks across primary deepsea trade lanes, updated daily from carrier EDI feeds.",
+      "tabs": {
+        "all": "All Trade Lanes",
+        "asia_eu": "Asia – Europe",
+        "gulf_eu": "Middle East – Europe",
+        "med_eu": "Mediterranean",
+        "transatlantic": "Transatlantic"
+      },
+      "spotRate": "Spot Market Rate",
+      "book": "Book Rate",
+      "guarantee": "All rates include standard carrier fuel adjustment factors (BAF) and direct electronic customs manifest ingress.",
+      "customTariffs": "Request custom contract tariffs for bulk volume",
+      "carrier": "Carrier",
+      "valid": "Valid",
+      "stable": "Stable"
+    },
+    "solutions": {
+      "badge": "Digital Freight Technology",
+      "title": "Next-Generation Tools for Modern Supply Chains",
+      "subtitle": "Engineered to empower shippers, freight forwarders, and logistics teams with total visibility, algorithmic optimization, and automated compliance.",
+      "tabs": {
+        "tracking": "Container AIS Tracking",
+        "rates": "Rate Management (RMS)",
+        "load": "3D Load Optimization",
+        "customs": "AEO-F Customs Ingress"
+      },
+      "trackingTitle": "Real-Time AIS Radar & Container Milestones",
+      "trackingDesc": "Monitor live maritime vessel coordinates, port terminal dwell times, and inland intermodal transfers on a single interactive radar dashboard.",
+      "trackingPoint1": "Live satellite AIS coordinates updated every 15 minutes",
+      "trackingPoint2": "Predictive arrival time (ETA) based on historical port congestion",
+      "trackingPoint3": "Automated exception alerts for port roll-overs and custom holds",
+      "ratesTitle": "Algorithmic Spot & Contract Rate Benchmarking",
+      "ratesDesc": "Instantly query carrier contract tariffs, ocean surcharges, and spot market allocations with transparent line-item fee breakdowns.",
+      "ratesPoint1": "Multi-carrier API rate feeds (MSC, Maersk, CMA CGM, Hapag)",
+      "ratesPoint2": "Real-time bunker (BAF) and currency adjustment factor calculations",
+      "ratesPoint3": "Direct booking submission and EDI booking confirmation",
+      "loadTitle": "Interactive 3D Container & Pallet Packing Engine",
+      "loadDesc": "Maximize container cubic utilization, reduce ocean freight costs, and ensure axle weight balance compliance before stuffing.",
+      "loadPoint1": "Full 3D visualization of 20ft, 40ft, and 40ft High Cube containers",
+      "loadPoint2": "Palletizing algorithms for mixed SKU package dimensions",
+      "loadPoint3": "Printable step-by-step warehouse packing manifest sheets",
+      "customsTitle": "Direct Electronic Customs Ingress & AEO-F Release",
+      "customsDesc": "Accelerate European seaport release with pre-arrival manifest declarations and automated fiscal representation across Antwerp and Rotterdam.",
+      "customsPoint1": "Direct electronic EDI connection to Belgian (PLDA) & Dutch customs",
+      "customsPoint2": "NCTS T1/T2 transit document generation under official guarantee",
+      "customsPoint3": "Import VAT deferment (Article 23) optimization for EU importers",
+      "viewDetails": "Explore Digital Solutions",
+      "requestDemo": "Request Enterprise Demo"
+    },
+    "gateways": {
+      "clearanceSpeed": "Clearance Speed",
+      "antwerp": {
+        "name": "Port of Antwerp-Bruges",
+        "country": "Belgium",
+        "role": "Primary European Gateway",
+        "clearanceSpeed": "< 3 Hours",
+        "connections": "Direct access to E17 / E19 / E313 highways and European rail network",
+        "description": "Main logistics hub with dedicated customs declarants stationed for direct electronic clearance and instant container collection from all main sea terminals.",
+        "feat1": "Direct EDI port release",
+        "feat2": "Chemical & ADR certified lanes",
+        "feat3": "Reefer plug-in staging"
+      },
+      "rotterdam": {
+        "name": "Port of Rotterdam",
+        "country": "Netherlands",
+        "role": "Maasvlakte Deepsea Corridor",
+        "clearanceSpeed": "< 4 Hours",
+        "connections": "Rhine-Ruhr inland barge, rail, and dedicated motorway links into Germany",
+        "description": "Seamless clearance and immediate drayage connection from Maasvlakte I & II terminals directly into Germany, Benelux, and Central Europe.",
+        "feat1": "Pre-arrival digital filing",
+        "feat2": "Rhine corridor transit",
+        "feat3": "Heavy container haulage"
+      },
+      "zele": {
+        "name": "Zele Bonded Logistics Center",
+        "country": "Belgium (HQ)",
+        "role": "Bonded Staging & Cross-Dock Hub",
+        "clearanceSpeed": "Instant Ingress",
+        "connections": "Strategically poised on the Antwerp-Ghent-Brussels freight triangle",
+        "description": "Full customs-supervised bonded warehouse for duty suspension, pallet reworking, rapid transshipment, and flexible last-mile distribution.",
+        "feat1": "Duty & VAT suspension",
+        "feat2": "Cross-dock transshipment",
+        "feat3": "Value-added packing"
+      },
+      "hamburg": {
+        "name": "Port of Hamburg & North Hubs",
+        "country": "Germany / North Sea",
+        "role": "Central & Nordic Distribution",
+        "clearanceSpeed": "< 4 Hours",
+        "connections": "High-speed rail and road links to Scandinavia, Poland, and Czech Republic",
+        "description": "Expert customs handling of NCTS T1 transit declarations and cross-border haulage connecting Northern Europe's major manufacturing hubs.",
+        "feat1": "NCTS T1 guarantee coverage",
+        "feat2": "Nordic border compliance",
+        "feat3": "Multi-modal dispatch"
+      }
+    },
+    "servicesTabs": {
+      "badges": {
+        "customs": "AEO-F ACCREDITED",
+        "transport": "GPS LIVE CORRIDOR",
+        "warehouse": "DUTY SUSPENSION READY",
+        "fiscal": "ARTICLE 23 VAT DEFERRAL"
+      },
+      "stats": {
+        "customs": "Average Seaport Clearance",
+        "transport": "Dispatch Availability",
+        "warehouse": "Customs Supervised",
+        "fiscal": "Import VAT Upfront Cash Flow"
+      },
+      "viewDetails": "View Service Details",
+      "requestQuote": "Request Quote"
+    },
+    "trust": {
+      "badges": {
+        "pillar1": "AEO-F Priority Clearance",
+        "pillar2": "Pre-Arrival EDI Filing",
+        "pillar3": "Direct Specialist Desk"
+      }
+    },
+    "footer": {
+      "aeoCertified": "AEO-F Certified",
+      "nctsEdi": "NCTS Direct EDI",
+      "about": "About Globfreight",
+      "allServices": "All Services",
+      "blogInsights": "Blog & Insights",
+      "faqGuidance": "FAQ Guidance",
+      "requestQuote": "Request Quote",
+      "staffPortal": "Staff Portal",
+      "importExport": "Import & Export Clearance",
+      "nctsTransit": "NCTS T1 / T2 Transit",
+      "portHaulage": "Port & Inland Haulage",
+      "bondedWarehousing": "Bonded Warehousing",
+      "workingHours": "Mon - Fri: 07:30 - 18:30 CET",
+      "portsList": "Port of Antwerp • Port of Rotterdam • Zeebrugge • Hamburg"
+    }
+  }
 }

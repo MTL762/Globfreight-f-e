@@ -14,7 +14,7 @@ const AUTH_ROUTES = [
 const PROTECTED_ROUTES = [
   "dashboard",
   "faq",
-  "blog",
+  "admin",
   "categories",
   "sub-categories",
   "contact-us",

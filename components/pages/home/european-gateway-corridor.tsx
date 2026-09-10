@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Anchor, Building2, ChevronRight, Navigation, ShieldCheck, Zap } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Hub {
   id: string;
@@ -14,51 +15,53 @@ interface Hub {
   features: string[];
 }
 
-const hubs: Hub[] = [
-  {
-    id: "antwerp",
-    name: "Port of Antwerp-Bruges",
-    country: "Belgium",
-    role: "Primary European Gateway",
-    clearanceSpeed: "< 3 Hours",
-    connections: "Direct access to E17 / E19 / E313 highways and European rail network",
-    description: "Main logistics hub with dedicated customs declarants stationed for direct electronic clearance and instant container collection from all main sea terminals.",
-    features: ["Direct EDI port release", "Chemical & ADR certified lanes", "Reefer plug-in staging"]
-  },
-  {
-    id: "rotterdam",
-    name: "Port of Rotterdam",
-    country: "Netherlands",
-    role: "Maasvlakte Deepsea Corridor",
-    clearanceSpeed: "< 4 Hours",
-    connections: "Rhine-Ruhr inland barge, rail, and dedicated motorway links into Germany",
-    description: "Seamless clearance and immediate drayage connection from Maasvlakte I & II terminals directly into Germany, Benelux, and Central Europe.",
-    features: ["Pre-arrival digital filing", "Rhine corridor transit", "Heavy container haulage"]
-  },
-  {
-    id: "zele",
-    name: "Zele Bonded Logistics Center",
-    country: "Belgium (HQ)",
-    role: "Bonded Staging & Cross-Dock Hub",
-    clearanceSpeed: "Instant Ingress",
-    connections: "Strategically poised on the Antwerp-Ghent-Brussels freight triangle",
-    description: "Full customs-supervised bonded warehouse for duty suspension, pallet reworking, rapid transshipment, and flexible last-mile distribution.",
-    features: ["Duty & VAT suspension", "Cross-dock transshipment", "Value-added packing"]
-  },
-  {
-    id: "hamburg",
-    name: "Port of Hamburg & North Hubs",
-    country: "Germany / North Sea",
-    role: "Central & Nordic Distribution",
-    clearanceSpeed: "< 4 Hours",
-    connections: "High-speed rail and road links to Scandinavia, Poland, and Czech Republic",
-    description: "Expert customs handling of NCTS T1 transit declarations and cross-border haulage connecting Northern Europe's major manufacturing hubs.",
-    features: ["NCTS T1 guarantee coverage", "Nordic border compliance", "Multi-modal dispatch"]
-  }
-];
-
 export function EuropeanGatewayCorridor() {
-  const [selectedHub, setSelectedHub] = useState<string>(hubs[0].id);
+  const t = useTranslations("LandingPage.gateways");
+  const [selectedHub, setSelectedHub] = useState<string>("antwerp");
+
+  const hubs: Hub[] = [
+    {
+      id: "antwerp",
+      name: t("antwerp.name"),
+      country: t("antwerp.country"),
+      role: t("antwerp.role"),
+      clearanceSpeed: t("antwerp.clearanceSpeed"),
+      connections: t("antwerp.connections"),
+      description: t("antwerp.description"),
+      features: [t("antwerp.feat1"), t("antwerp.feat2"), t("antwerp.feat3")]
+    },
+    {
+      id: "rotterdam",
+      name: t("rotterdam.name"),
+      country: t("rotterdam.country"),
+      role: t("rotterdam.role"),
+      clearanceSpeed: t("rotterdam.clearanceSpeed"),
+      connections: t("rotterdam.connections"),
+      description: t("rotterdam.description"),
+      features: [t("rotterdam.feat1"), t("rotterdam.feat2"), t("rotterdam.feat3")]
+    },
+    {
+      id: "zele",
+      name: t("zele.name"),
+      country: t("zele.country"),
+      role: t("zele.role"),
+      clearanceSpeed: t("zele.clearanceSpeed"),
+      connections: t("zele.connections"),
+      description: t("zele.description"),
+      features: [t("zele.feat1"), t("zele.feat2"), t("zele.feat3")]
+    },
+    {
+      id: "hamburg",
+      name: t("hamburg.name"),
+      country: t("hamburg.country"),
+      role: t("hamburg.role"),
+      clearanceSpeed: t("hamburg.clearanceSpeed"),
+      connections: t("hamburg.connections"),
+      description: t("hamburg.description"),
+      features: [t("hamburg.feat1"), t("hamburg.feat2"), t("hamburg.feat3")]
+    }
+  ];
+
   const current = hubs.find((h) => h.id === selectedHub) || hubs[0];
 
   return (

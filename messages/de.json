@@ -2692,5 +2692,367 @@
   "Recent Activities": "Letzte Aktivitäten",
   "Action": "Aktion",
   "Reply": "Antworten",
-  "Approved": "Genehmigt"
+  "Approved": "Genehmigt",
+  "BlogPage": {
+    "meta": {
+      "title": "Logistik-Intelligence & Newsroom | Globfreight",
+      "description": "Tiefgehende europäische Zollinformationen, multimodale Frachtberatung und Supply-Chain-Technologieperspektiven von Globfreight.",
+      "notFoundTitle": "Artikel nicht gefunden | Globfreight",
+      "defaultTitle": "Logistik-Einblicke | Globfreight"
+    },
+    "hero": {
+      "eyebrow": "Logistik-Intelligence & Newsroom",
+      "title": "Supply-Chain-Einblicke, Zoll-Intelligence & Welthandel",
+      "description": "Technische Analysen, regulatorische Updates, europäische Gateway-Hinweise und Frachttechnologie von Globfreight-Spezialisten.",
+      "searchPlaceholder": "Artikel, Zollvorschriften, KI-Themen suchen...",
+      "filterLabel": "Filter:",
+      "allArticles": "Alle Artikel"
+    },
+    "featured": {
+      "badge": "Empfohlene Publikation",
+      "readAnalysis": "Vollständige Analyse lesen",
+      "authorRole": "Logistik-Spezialist"
+    },
+    "card": {
+      "readMore": "Mehr lesen",
+      "readAnalysis": "Vollständige Analyse lesen",
+      "minRead": "Min. Lesezeit",
+      "min": "Min.",
+      "defaultTag": "Globale Logistik"
+    },
+    "list": {
+      "allPublications": "Alle Publikationen & Mitteilungen",
+      "searchResults": "Suchergebnisse",
+      "articlesCount": "Artikel",
+      "emptyTitle": "Keine Artikel gefunden, die Ihren Kriterien entsprechen",
+      "emptyDesc": "Passen Sie Ihre Suchbegriffe an oder setzen Sie Filter zurück, um mehr Publikationen zu sehen.",
+      "resetFilters": "Filter zurücksetzen"
+    },
+    "detail": {
+      "home": "Startseite",
+      "blog": "Blog",
+      "featured": "Empfohlen",
+      "minRead": "Min. Lesezeit",
+      "shareArticle": "Artikel teilen",
+      "copyLink": "Link kopieren",
+      "copied": "Kopiert!",
+      "copySuccess": "Artikellink in Zwischenablage kopiert",
+      "copyError": "Kopieren des Links fehlgeschlagen",
+      "sharePrompt": "War diese Analyse hilfreich? Teilen Sie sie mit Ihrem Logistik-Team.",
+      "authorTitle": "Globfreight Global Logistics Analysten",
+      "authorSubtitle": "Zollforschung & Handelsinformationen",
+      "authorBio": "Die Spezialisten von Globfreight bieten Echtzeit-Updates zu europäischen Zollverfahren, Zolllagern und multimodalen Korridoren.",
+      "relatedEyebrow": "Weiterlesen",
+      "relatedTitle": "Verwandte Logistik-Intelligence",
+      "browseAll": "Alle Artikel anzeigen",
+      "read": "Lesen",
+      "backToAll": "Zurück zu allen Publikationen",
+      "consultationCta": "Zollberatung anfragen"
+    },
+    "cta": {
+      "eyebrow": "Zoll- & Frachthinweise",
+      "title": "Bleiben Sie über europäische Hafen- und Zolländerungen informiert",
+      "description": "Schließen Sie sich Verladern in ganz Europa an und erhalten Sie präzise regulatorische Informationen und Markttrends.",
+      "specialistButton": "Mit einem Spezialisten sprechen",
+      "quoteButton": "Sofortiges Frachtangebot"
+    },
+    "homeSection": {
+      "badge": "Markt-Intelligence & Hinweise",
+      "title": "Aktuelle Einblicke & Logistikberatung",
+      "description": "Branchenupdates, Zollvorschriften und europäische Supply-Chain-Intelligence von Globfreight-Spezialisten.",
+      "viewAll": "Alle Publikationen anzeigen"
+    }
+  },
+  "LandingPage": {
+    "whatsappTooltip": "Chatten Sie mit uns auf WhatsApp",
+    "hero": {
+      "poweredBadge": "Unterstützt durch SeaRates",
+      "engineBadge": "Globale multimodale Logistik-Engine",
+      "title": "Frachttarife Vergleichen, Fracht Verfolgen & Weltweit Versenden",
+      "subtitle": "Vergleichen Sie sofortige See- und Luftfrachtangebote von über 150 Reedereien, verfolgen Sie multimodale Container per Live-AIS-Radar und verwalten Sie AEO-F zertifizierte Zollanmeldungen auf einer Plattform.",
+      "aeoBadge": "AEO-F Zertifizierter Zugang",
+      "releaseBadge": "< 3 Std. Zollfreigabe in Seehäfen",
+      "portsBadge": "2.500+ Verbundene Häfen",
+      "demurrageBadge": "Ohne Liegegelder SLA"
+    },
+    "searchWidget": {
+      "tabs": {
+        "rates": "Frachttarife",
+        "tracking": "Live-Tracking",
+        "air": "Luftfracht",
+        "schedules": "Fahrpläne",
+        "load": "3D-Beladung",
+        "quote": "Sofortangebot"
+      },
+      "modeLabel": "Transportmodus:",
+      "modes": {
+        "fcl": "Vollcontainer (FCL)",
+        "lcl": "Stückgut (LCL)",
+        "air": "Luftfracht",
+        "land": "Straßentransport"
+      },
+      "rates": {
+        "originLabel": "Abgangshafen / Stadt",
+        "destLabel": "Bestimmungshafen / Stadt",
+        "containerLabel": "Containertyp & -größe",
+        "dateLabel": "Warenbereitschaft",
+        "popular": "Beliebte Handelskorridore:",
+        "aeo": "AEO-F Zollgarantie",
+        "realtime": "Echtzeit-Spot- & Vertragstarife",
+        "searchButton": "Frachttarife Suchen",
+        "searching": "Tarife werden gesucht...",
+        "resultsTitle": "Live-Frachtangebote",
+        "direct": "Direktverbindung",
+        "transshipment": "Umladung über Hub",
+        "transit": "Laufzeit",
+        "vessel": "Schiff",
+        "demurrageFree": "Freie Tage ohne Liegegeld",
+        "carbon": "Geschätztes CO₂",
+        "valid": "Gültig Bis",
+        "rateLabel": "Geschätzter Frachttarif",
+        "book": "Tarif Buchen"
+      },
+      "tracking": {
+        "numberLabel": "Containernummer / Frachtbrief (B/L) / Buchungsnummer",
+        "placeholder": "z. B. MSCU9842173, MAEU1029384, MEDU8472910",
+        "carrierLabel": "Reederei / Frachtführer",
+        "allCarriers": "Automatische Erkennung (150+ Linien)",
+        "radarFeed": "Direkte AIS-Schiffsradar- & Hafen-API-Daten",
+        "trackButton": "Sendung Verfolgen",
+        "tracking": "Container wird gesucht...",
+        "resultsTitle": "Multimodaler Containerverlauf & Status",
+        "liveAis": "Satelliten-AIS-Radar Aktiv",
+        "status": "Aktueller Status",
+        "location": "Aktuelle Koordinate / Terminal",
+        "destination": "Endgültiger Löschhafen",
+        "carrierShort": "Frachtführer",
+        "vesselShort": "Schiff",
+        "vessel": "Schiffsname / IMO",
+        "eta": "Voraussichtliche Ankunft (ETA)",
+        "inTransit": "Auf See - Seereise",
+        "atPort": "Im Hafenterminal - Zollprüfung",
+        "delivered": "Vom Zoll Freigegeben & Zugestellt"
+      },
+      "air": {
+        "originLabel": "Abflughafen",
+        "destLabel": "Zielflughafen",
+        "weightLabel": "Bruttogewicht (kg)",
+        "awbLabel": "Luftfrachtbrief (AWB)",
+        "tagline": "Reguläre IATA-Linienflüge und dedizierte Frachtcharter",
+        "instantQuote": "Sofortiges Luftfrachtangebot",
+        "searchButton": "Luftfrachttarif Berechnen"
+      },
+      "schedules": {
+        "originLabel": "Ladehafen (POL)",
+        "destLabel": "Löschhafen (POD)",
+        "carrierLabel": "Reederei",
+        "allCarriers": "Alle Reedereien (Konsolidierter Fahrplan)",
+        "hourlyTagline": "Fahrpläne stündlich aktualisiert mit genauen Terminal-Ladeschlüssen",
+        "cutoff": "Ladeschluss",
+        "etd": "ETD",
+        "eta": "ETA",
+        "searchButton": "Fahrpläne Finden"
+      },
+      "load": {
+        "length": "Länge (cm)",
+        "width": "Breite (cm)",
+        "height": "Höhe (cm)",
+        "weight": "Gewicht/Karton (kg)",
+        "quantity": "Menge (Stück)",
+        "container": "Containertyp",
+        "calcButton": "3D-Stauung Simulieren",
+        "utilization": "3D-Containervolumen-Ausnutzung",
+        "full": "Voll",
+        "totalVol": "Gesamtvolumen Fracht",
+        "totalWt": "Gesamtgewicht Fracht",
+        "remaining": "Verbleibendes CBM-Volumen",
+        "maxPayload": "Max. Nutzlastgrenze",
+        "fit": "Erfolgreich Geladene Einheiten"
+      },
+      "quote": {
+        "description": "Geben Sie Ihre Spezifikationen für Projektladung, temperaturgeführte Güter oder ADR-Gefahrgut ein. Unsere zertifizierten Spediteure antworten in unter 2 Stunden.",
+        "pickup": "Abholort",
+        "pickupPlaceholder": "Stadt, PLZ oder Seehafen",
+        "delivery": "Zustellort",
+        "deliveryPlaceholder": "Zielstadt oder Werk",
+        "cargo": "Warenbeschreibung & Besondere Anforderungen",
+        "cargoPlaceholder": "z. B. 5 Paletten, kühlpflichtig, ADR-Gefahrgut",
+        "button": "Individuelles Angebot Anfordern"
+      }
+    },
+    "carriers": {
+      "integrated": "Integriert mit über 150 globalen Seefrachtreedereien, Terminals & Luftfrachtlinien",
+      "edi": "Direkte Live-EDI-Anbindung",
+      "ports": "2.500+ Verbundene Seehäfen"
+    },
+    "tools": {
+      "badge": "SeaRates Digitales Ökosystem",
+      "title": "Intelligente Logistik-Tools & Fracht-Apps",
+      "subtitle": "Nutzen Sie die vollständige digitale Suite für Verlader, Spediteure und Supply-Chain-Manager weltweit.",
+      "exploreAll": "Alle Digitalen Dienste Entdecken",
+      "launch": "Tool Starten",
+      "explorerTitle": "Logistik-Explorer",
+      "explorerDesc": "Sofortige Frachtangebote für FCL, LCL & Luftfracht von über 150 Transportunternehmen.",
+      "explorerTag": "Frachtrechner",
+      "trackingTitle": "Tracking-System",
+      "trackingDesc": "Einheitliches multimodales Container- und Schiffstracking mit Echtzeit-AIS-Satellitenradar.",
+      "trackingTag": "Live-AIS-Radar",
+      "airTitle": "Luftfracht-Tracking",
+      "airDesc": "Echtzeitstatus von Luftfrachtbriefen (AWB) und weltweiten Flugrouten.",
+      "airTag": "Weltweite AWB",
+      "schedulesTitle": "Schiffsfahrpläne",
+      "schedulesDesc": "Abfahrtszeiten, Terminal-Annahmeschlüsse und Transitzeit-Matrizen.",
+      "schedulesTag": "Fahrplan",
+      "loadTitle": "Ladungsrechner",
+      "loadDesc": "3D-Containerbeladung, Packstückoptimierung und Achslastverteilung.",
+      "loadTag": "3D-Stauung",
+      "distancesTitle": "Distanzen & Laufzeiten",
+      "distancesDesc": "Seemeilen, Straßenkilometer und prädiktive Transitzeitberechnung.",
+      "distancesTag": "Routen-Engine",
+      "indexTitle": "Frachtraten-Index",
+      "indexDesc": "Globale Marktpreis-Benchmarks, historische Analysen und Markttrends.",
+      "indexTag": "Marktindex",
+      "co2Title": "CO₂-Rechner",
+      "co2Desc": "Ermitteln Sie den CO₂-Fußabdruck Ihrer Lieferkette gemäß europäischen ESG-Richtlinien.",
+      "co2Tag": "Grüne Logistik"
+    },
+    "rates": {
+      "badge": "Live-Marktinformationen",
+      "title": "Aktuelle Globale Frachtraten & Wichtige Korridore",
+      "subtitle": "Echtzeit-Spottarif-Benchmarks für die wichtigsten Tiefseerouten, täglich aktualisiert über direkte EDI-Feeds.",
+      "tabs": {
+        "all": "Alle Handelsrouten",
+        "asia_eu": "Asien – Europa",
+        "gulf_eu": "Naher Osten – Europa",
+        "med_eu": "Mittelmeer",
+        "transatlantic": "Transatlantisch"
+      },
+      "spotRate": "Aktuelle Spotrate",
+      "book": "Rate Buchen",
+      "guarantee": "Alle Raten verstehen sich inklusive Treibstoffzuschlägen (BAF) und elektronischer Vorabanmeldung.",
+      "customTariffs": "Individuelle Vertragstarife für Großvolumen anfragen",
+      "carrier": "Reedereipartner",
+      "valid": "Gültig bis",
+      "stable": "Stabil"
+    },
+    "solutions": {
+      "badge": "Digitale Frachttechnologie",
+      "title": "Tools der Nächsten Generation für Moderne Lieferketten",
+      "subtitle": "Entwickelt, um Verladern und Speditionsteams lückenlose Transparenz, algorithmische Optimierung und automatisierte Zollkonformität zu bieten.",
+      "tabs": {
+        "tracking": "Container-AIS-Tracking",
+        "rates": "Ratenmanagement (RMS)",
+        "load": "3D-Laderaumoptimierung",
+        "customs": "AEO-F Zollabfertigung"
+      },
+      "trackingTitle": "Echtzeit-AIS-Radar & Container-Meilensteine",
+      "trackingDesc": "Überwachen Sie Schiffskoordinaten, Standzeiten im Hafen und intermodale Umladungen auf einem übersichtlichen Dashboard.",
+      "trackingPoint1": "Live-AIS-Satellitenkoordinaten alle 15 Minuten aktualisiert",
+      "trackingPoint2": "Prädiktive Ankunftszeiten (ETA) basierend auf Hafenauslastung",
+      "trackingPoint3": "Automatische Benachrichtigungen bei Hafenverzögerungen und Zollstopps",
+      "ratesTitle": "Algorithmischer Spot- & Kontraktpreisvergleich",
+      "ratesDesc": "Einsicht in Reedereitarife, Seezuschläge und detaillierte Kostenaufschlüsselungen in Echtzeit.",
+      "ratesPoint1": "Direkte Reederei-APIs (MSC, Maersk, CMA CGM, Hapag)",
+      "ratesPoint2": "Automatische Berechnung von Bunker- (BAF) und Währungszuschlägen",
+      "ratesPoint3": "Direkte Buchungsübermittlung und Bestätigung per EDI",
+      "loadTitle": "Interaktive 3D-Container- und Palettenstaungs-Engine",
+      "loadDesc": "Maximieren Sie das Ladevolumen, senken Sie Frachtkosten und halten Sie Achslastvorschriften sicher ein.",
+      "loadPoint1": "Vollständige 3D-Visualisierung für 20ft, 40ft und 40ft High Cube Container",
+      "loadPoint2": "Palettierungsalgorithmen für gemischte Packstückdimensionen",
+      "loadPoint3": "Druckbare Schritt-für-Schritt-Packanweisungen für Lagermitarbeiter",
+      "customsTitle": "Direkte Elektronische Zollanmeldung & AEO-F Freigabe",
+      "customsDesc": "Beschleunigen Sie die Zollabfertigung in europäischen Häfen durch Vorabanmeldung und Fiskalvertretung in Antwerpen und Rotterdam.",
+      "customsPoint1": "Direkte EDI-Schnittstelle zum belgischen (PLDA) und niederländischen Zoll",
+      "customsPoint2": "Erstellung von NCTS T1/T2 Versandscheinen unter offizieller Bürgschaft",
+      "customsPoint3": "Einfuhrumsatzsteuer-Verlagerung (Artikel 23) für EU-Importeure",
+      "viewDetails": "Digitale Lösungen Entdecken",
+      "requestDemo": "Enterprise-Demo Anfordern"
+    },
+    "gateways": {
+      "clearanceSpeed": "Abfertigungsdauer",
+      "antwerp": {
+        "name": "Hafen Antwerpen-Brügge",
+        "country": "Belgien",
+        "role": "Wichtigstes Europäisches Einfallstor",
+        "clearanceSpeed": "< 3 Stunden",
+        "connections": "Direkte Anbindung an die Autobahnen E17 / E19 / E313 und das europäische Schienennetz",
+        "description": "Zentraler Logistik-Hub mit eigenen Zolldeklaranten vor Ort für direkte elektronische Freigaben und schnelle Containerübernahme.",
+        "feat1": "Direkte elektronische EDI-Freigabe",
+        "feat2": "Zertifizierte Gefahrgut- & Chemiekorridore",
+        "feat3": "Reefer-Kühlcontaineranschlüsse"
+      },
+      "rotterdam": {
+        "name": "Hafen Rotterdam",
+        "country": "Niederlande",
+        "role": "Maasvlakte Tiefseekorridor",
+        "clearanceSpeed": "< 4 Stunden",
+        "connections": "Rhein-Ruhr-Binnenschifffahrt, Güterbahn und Autobahnen nach Deutschland",
+        "description": "Reibungslose Abfertigung und sofortiger Straßentransport von den Terminals Maasvlakte I & II direkt nach Deutschland und Mitteleuropa.",
+        "feat1": "Digitale Vorabverzollung",
+        "feat2": "Rheinkorridor-Transit",
+        "feat3": "Schwerlast-Containertransporte"
+      },
+      "zele": {
+        "name": "Zele Zolllogistikzentrum",
+        "country": "Belgien (Hauptsitz)",
+        "role": "Zolllager & Cross-Dock-Hub",
+        "clearanceSpeed": "Sofortige Einlagerung",
+        "connections": "Strategisch im Frachtdreieck Antwerpen-Gent-Brüssel gelegen",
+        "description": "Zollamtlich überwachtes Zolllager für Abgabenaussetzung, Palettenumrüstung, rasche Umladung und Feinverteilung.",
+        "feat1": "Aussetzung von Zöllen & Einfuhr-MwSt.",
+        "feat2": "Cross-Dock-Umschlag",
+        "feat3": "Mehrwertdienstleistungen & Verpackung"
+      },
+      "hamburg": {
+        "name": "Hafen Hamburg & Nord-Hubs",
+        "country": "Deutschland / Nordsee",
+        "role": "Zentral- & Nordeuropadistribution",
+        "clearanceSpeed": "< 4 Stunden",
+        "connections": "Hochgeschwindigkeitsbahn- und Straßenverbindungen nach Skandinavien, Polen und Tschechien",
+        "description": "Zollrechtliche Abwicklung von NCTS T1-Versandverfahren und grenzüberschreitende Transporte zu den großen Industriezentren.",
+        "feat1": "NCTS T1 Bürgschaftsdeckung",
+        "feat2": "Skandinavien-Grenzzollabwicklung",
+        "feat3": "Multimodale Disposition"
+      }
+    },
+    "servicesTabs": {
+      "badges": {
+        "customs": "AEO-F ZERTIFIZIERT",
+        "transport": "GPS-VERFOLGTER KORRIDOR",
+        "warehouse": "ZOLLAUSSETZUNG VERFÜGBAR",
+        "fiscal": "ARTIKEL 23 MWST-VERLAGERUNG"
+      },
+      "stats": {
+        "customs": "Durchschnittliche Hafenfreigabe",
+        "transport": "Verfügbarkeit Fuhrpark",
+        "warehouse": "Zollamtlich Überwacht",
+        "fiscal": "Sofortiger Liquiditätsvorteil"
+      },
+      "viewDetails": "Dienstleistungsdetails Anzeigen",
+      "requestQuote": "Angebot Anfordern"
+    },
+    "trust": {
+      "badges": {
+        "pillar1": "AEO-F Prioritätsabfertigung",
+        "pillar2": "Elektronische Vorabanmeldung",
+        "pillar3": "Fester Ansprechpartner"
+      }
+    },
+    "footer": {
+      "aeoCertified": "AEO-F Zertifiziert",
+      "nctsEdi": "NCTS Direkte EDI",
+      "about": "Über Globfreight",
+      "allServices": "Alle Dienstleistungen",
+      "blogInsights": "Blog & Marktberichte",
+      "faqGuidance": "Häufig Gestellte Fragen",
+      "requestQuote": "Angebot Anfordern",
+      "staffPortal": "Mitarbeiterportal",
+      "importExport": "Import- & Exportverzollung",
+      "nctsTransit": "NCTS T1 / T2 Transit",
+      "portHaulage": "Hafentransport & Nahverkehr",
+      "bondedWarehousing": "Zolllagerung",
+      "workingHours": "Mo - Fr: 07:30 - 18:30 Uhr MEZ",
+      "portsList": "Hafen Antwerpen • Hafen Rotterdam • Zeebrugge • Hamburg"
+    }
+  }
 }
