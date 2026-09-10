@@ -2,6 +2,7 @@ import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogList } from "@/components/pages/blog/public-blog-list";
 import { BlogPost } from "@/types/blog";
+import { getPageAlternates } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
@@ -25,9 +26,7 @@ export async function generateMetadata({
       type: "website",
       siteName: "Globfreight"
     },
-    alternates: {
-      canonical: "https://globfreight.com/blog"
-    }
+    alternates: getPageAlternates("/blog", locale)
   };
 }
 

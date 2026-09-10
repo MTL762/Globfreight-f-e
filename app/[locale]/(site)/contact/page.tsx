@@ -1,4 +1,5 @@
 import { StandardPage } from "@/components/pages/home/standard-page";
+import { getPageAlternates } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
@@ -10,7 +11,8 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "Pages.contact" });
   return {
     title: t("title"),
-    description: t("body")
+    description: t("body"),
+    alternates: getPageAlternates("/contact", locale)
   };
 }
 

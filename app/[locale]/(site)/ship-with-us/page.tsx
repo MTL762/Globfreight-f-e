@@ -1,4 +1,5 @@
 import { ShipWithUsPage } from "@/components/pages/home/ship-with-us-page";
+import { getPageAlternates } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
@@ -10,7 +11,8 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "ShipWithUs.meta" });
   return {
     title: t("title"),
-    description: t("description")
+    description: t("description"),
+    alternates: getPageAlternates("/ship-with-us", locale)
   };
 }
 

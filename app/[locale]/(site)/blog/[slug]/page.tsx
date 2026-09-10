@@ -2,6 +2,7 @@ import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogDetail } from "@/components/pages/blog/public-blog-detail";
 import { BlogPost, getBlogText } from "@/types/blog";
+import { getPageAlternates } from "@/utils/seo";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -38,20 +39,17 @@ export async function generateMetadata({
       getBlogText(post.seo?.meta_description, locale) ||
       getBlogText(post.excerpt, locale) ||
       "Globfreight supply chain and logistics intelligence article.";
-    const canonical =
-      post.seo?.canonical_url || `https://globfreight.com/blog/${post.slug || slug}`;
+    const alternates = getPageAlternates(`/blog/${post.slug || slug}`, locale);
     const ogImage = post.image || post.seo?.og_image;
 
     return {
       title,
       description,
-      alternates: {
-        canonical
-      },
+      alternates,
       openGraph: {
         title,
         description,
-        url: canonical,
+        url: alternates.canonical,
         type: "article",
         publishedTime: post.published_at || post.created_at,
         siteName: "Globfreight",

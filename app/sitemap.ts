@@ -1,8 +1,5 @@
+import { SITE_URL, SYSTEM_LOCALES } from "@/utils/seo";
 import type { MetadataRoute } from "next";
-
-const BASE_URL = "https://globfreight.com";
-
-const locales = ["en", "nl", "fr", "de", "ar"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
@@ -12,14 +9,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/ship-with-us",
     "/quote",
+    "/blog",
   ];
 
   const entries: MetadataRoute.Sitemap = [];
 
   for (const page of staticPages) {
-    for (const locale of locales) {
+    for (const locale of SYSTEM_LOCALES) {
       entries.push({
-        url: `${BASE_URL}/${locale}${page}`,
+        url: `${SITE_URL}/${locale}${page}`,
         lastModified: new Date(),
         changeFrequency: page === "" ? "weekly" : "monthly",
         priority: page === "" ? 1.0 : 0.8,

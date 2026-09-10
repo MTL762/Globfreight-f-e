@@ -1,4 +1,5 @@
 import { PublicHome } from "@/components/pages/home/public-home";
+import { getPageAlternates } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
@@ -10,7 +11,8 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "Home" });
   return {
     title: t("title"),
-    description: t("body")
+    description: t("body"),
+    alternates: getPageAlternates("", locale)
   };
 }
 
