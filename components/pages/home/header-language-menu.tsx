@@ -15,7 +15,7 @@ const LOCALES = [
   { code: "nl", label: "Nederlands", short: "NL" },
   { code: "fr", label: "Français", short: "FR" },
   { code: "de", label: "Deutsch", short: "DE" },
-  { code: "ar", label: "العربية", short: "AR" }
+  // { code: "ar", label: "العربية", short: "AR" }
 ] as const;
 
 export function HeaderLanguageMenu() {
