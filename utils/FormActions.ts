@@ -21,7 +21,7 @@ export async function FormAction<T = any>({
   reset?: UseFormReset<T extends FieldValues ? T : FieldValues>;
   data?: T & { id?: string | number };
   // data?: T & { id?: string | number; key?: string };
-  method?: "POST" | "PATCH"|"PUT";
+  method?: "POST" | "PATCH" | "PUT";
   redirectLink?: boolean | string;
   // redirectLink?: allRoutes;
   endpoint: endpointType;
@@ -39,16 +39,17 @@ export async function FormAction<T = any>({
       message: ""
     }
   };
+  console.log(data, 'sd2s')
   if (data?.id) {
     const id = data?.id;
     res = await fetchHelper({
-			endPoint: [...endpoint, ...(noId !== true ? [Number(id)] : [])],
+      endPoint: [...endpoint, ...(noId !== true ? [Number(id)] : [])],
       body: formData,
-      method: method || "PUT"
+      method: method || "POST"
     });
   } else {
     res = await fetchHelper({
-			endPoint: [...endpoint],
+      endPoint: [...endpoint],
       body: formData,
       method: method || "POST"
     });
@@ -86,6 +87,16 @@ export function MessageToast<T>({
     toast.success(t("Success"), {
       id: "success-toast"
     });
+  } else if (res?.status === 401) {
+    toast.error("Session Expired", {
+      id: "error-toast",
+      description: "Your session has expired. Please sign in again."
+    });
+    if (typeof window !== "undefined") {
+      setTimeout(() => {
+        window.location.href = "/signin";
+      }, 1000);
+    }
   } else {
     toast.error(res?.result?.message, {
       id: "error-toast",

@@ -1,43 +1,47 @@
 import type { FormInput } from "@/components/common/Form/CustomFormTypes.types";
+import { booleanOptions } from "@/utils/options/booleanOptions";
+import { useTranslations } from "next-intl";
 
 export const LanguagesInputs = (): FormInput[] => {
+  const t = useTranslations();
   const inputs: FormInput[] = [
     {
-        "name": "name",
-        "type": "text",
-        "label": "Language Name",
-        "required": true,
-        "cardId": "general"
+      name: "name",
+      type: "text",
+      label: "Language Name",
+      required: true,
+      cardId: "general"
     },
     {
-        "name": "code",
-        "type": "text",
-        "label": "Locale Code (e.g. en, ar, fr)",
-        "required": true,
-        "cardId": "general"
+      name: "code",
+      type: "text",
+      label: "Locale Code (e.g. en, ar, fr)",
+      required: true,
+      cardId: "general"
     },
     {
-        "name": "direction",
-        "type": "select",
-        "label": "Direction",
-        "cardId": "general",
-        "options": [
-            {
-                "label": "Left to Right (LTR)",
-                "value": "ltr"
-            },
-            {
-                "label": "Right to Left (RTL)",
-                "value": "rtl"
-            }
-        ]
+      name: "direction",
+      type: "select",
+      label: "Direction",
+      cardId: "general",
+      options: [
+        {
+          label: "Left to Right (LTR)",
+          value: "ltr"
+        },
+        {
+          label: "Right to Left (RTL)",
+          value: "rtl"
+        }
+      ]
     },
     {
-        "name": "is_default",
-        "type": "checkbox",
-        "label": "Is Default Language",
-        "cardId": "general"
+      name: "is_default",
+      type: "checkbox",
+      label: "Is Default Language",
+      options: booleanOptions(t),
+      cardId: "general"
     }
-];
+  ];
   return inputs;
 };

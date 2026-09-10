@@ -32,6 +32,7 @@ const TextInput = dynamic(() => import("../Inputs/text/TextInput"));
 const TimeInput = dynamic(() => import("../Inputs/text/TimeInput"));
 // const TimeInput = dynamic(() => import("../Inputs/TimeInput"));
 const YearInput = dynamic(() => import("../Inputs/date/year-input"));
+const TagInput = dynamic(() => import("../Inputs/select/tag-input"));
 
 const getErrorMessage = (errors: FieldErrors, name: string): string | undefined => {
   return name.split(".").length === 3
@@ -119,8 +120,8 @@ export const renderInput = (item: FormInput, field: any) => {
       return <MapPointerInput {...commonProps} />;
     case "map-zone":
       return <MapZoneInput {...commonProps} defaultCenter={item.map?.center} />;
-    // case "tag-input":
-    //   return <TagInput {...commonProps} />;
+    case "tag-input":
+      return <TagInput {...commonProps} suggestions={item.options?.map(o => String(o.value))} />;
     case "selectPaginated":
       return (
         <SelectPaginated

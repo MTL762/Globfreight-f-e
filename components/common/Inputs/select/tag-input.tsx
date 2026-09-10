@@ -1,170 +1,180 @@
-// "use client";
+"use client";
 
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
-// import { Input } from "@/components/ui/input";
-// import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-// import { cn } from "@/lib/utils";
-// import { Plus, X } from "lucide-react";
-// import { useTranslations } from "next-intl";
-// import type React from "react";
-// import { useRef, useState, type KeyboardEvent } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
+import type React from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 
-// interface TagInputProps {
-//   value?: string[];
-//   onChange: (values: string[]) => void;
-//   name: string;
-//   placeholder?: string;
-//   className?: string;
-//   suggestions?: string[];
-//   maxTags?: number;
-//   disabled?: boolean;
-// }
+interface TagInputProps {
+  value?: string[];
+  onChange?: (values: string[]) => void;
+  name?: string;
+  placeholder?: string;
+  className?: string;
+  suggestions?: string[];
+  maxTags?: number;
+  disabled?: boolean;
+}
 
-// const TagInput: React.FC<TagInputProps> = ({
-//   value = [],
-//   onChange,
-//   name,
-//   placeholder = "Type and press enter to add...",
-//   className = "",
-//   suggestions = [],
-//   maxTags,
-//   disabled = false
-// }) => {
-//   const [inputValue, setInputValue] = useState("");
-//   const safeValue = typeof value == "string" ? [value] : value || [];
-//   const [open, setOpen] = useState(false);
-//   const inputRef = useRef<HTMLInputElement>(null);
+const TagInput: React.FC<TagInputProps> = ({
+  value = [],
+  onChange,
+  name,
+  placeholder,
+  className = "",
+  suggestions = [],
+  maxTags,
+  disabled = false
+}) => {
+  const [inputValue, setInputValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations();
 
-//   const handleAddTag = (tag: string) => {
-//     const trimmedTag = tag.trim();
-//     if (!trimmedTag) return;
+  const safeValue: string[] = Array.isArray(value)
+    ? value.map(v => (typeof v === "string" ? v : (v as any)?.value ?? String(v)))
+    : typeof value === "string" && (value as string).trim()
+    ? (value as string).split(",").map(s => s.trim()).filter(Boolean)
+    : [];
 
-//     // Don't add if it already exists
-//     if (safeValue.includes(trimmedTag)) {
-//       setInputValue("");
-//       return;
-//     }
+  const handleAddTag = (tag: string) => {
+    const trimmedTag = tag.trim();
+    if (!trimmedTag) return;
 
-//     // Don't add if we've reached the maximum number of tags
-//     if (maxTags !== undefined && safeValue.length >= maxTags) return;
+    // Don't add duplicate
+    if (safeValue.includes(trimmedTag)) {
+      setInputValue("");
+      return;
+    }
 
-//     onChange([...safeValue, trimmedTag]);
-//     setInputValue("");
-//     setOpen(false);
-//   };
+    // Check maxTags
+    if (maxTags !== undefined && safeValue.length >= maxTags) return;
 
-//   const handleRemoveTag = (tagToRemove: string) => {
-//     onChange(safeValue.filter(tag => tag !== tagToRemove));
-//   };
+    const newValues = [...safeValue, trimmedTag];
+    onChange?.(newValues);
+    setInputValue("");
+  };
 
-//   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-//     if (e.key === "Enter" && inputValue) {
-//       e.preventDefault();
-//       handleAddTag(inputValue);
-//     } else if (e.key === "Backspace" && !inputValue && safeValue.length > 0) {
-//       handleRemoveTag(safeValue[safeValue.length - 1]);
-//     }
-//   };
+  const handleRemoveTag = (tagToRemove: string) => {
+    const newValues = safeValue.filter(tag => tag !== tagToRemove);
+    onChange?.(newValues);
+  };
 
-//   const filteredSuggestions = suggestions.filter(
-//     suggestion =>
-//       !safeValue.includes(suggestion) && suggestion.toLowerCase().includes(inputValue.toLowerCase())
-//   );
-//   const t = useTranslations();
-//   return (
-//     <div
-//       role="button"
-//       tabIndex={0}
-//       onKeyDown={e => {
-//         if (e.key === "Enter" || e.key === " ") {
-//           // Only prevent default if the input isn't already focused
-//           if (document.activeElement !== inputRef.current) {
-//             e.preventDefault();
-//             !disabled && inputRef.current?.focus();
-//           }
-//         }
-//       }}
-//       className={cn(
-//         "flex flex-wrap gap-1.5 p-1.5 rounded-md border border-input bg-background min-h-10 focus-within:ring-1 focus-within:ring-ring",
-//         disabled && "opacity-50 cursor-not-allowed",
-//         className
-//       )}
-//       onClick={() => !disabled && inputRef.current?.focus()}
-//     >
-//       {safeValue?.map(tag => (
-//         <Badge
-//           key={tag}
-//           variant="secondary"
-//           className="h-7 px-2 text-sm font-normal gap-1 truncate max-w-[200px]"
-//         >
-//           {tag}
-//           {!disabled && (
-//             <Button
-//               variant="ghost"
-//               size="icon"
-//               className="h-4 w-4 p-0 ml-1 rounded-full hover:bg-muted"
-//               onClick={e => {
-//                 e.stopPropagation();
-//                 handleRemoveTag(tag);
-//               }}
-//               aria-label={`Remove ${tag}`}
-//             >
-//               <X className="h-3 w-3" />
-//             </Button>
-//           )}
-//         </Badge>
-//       ))}
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      handleAddTag(inputValue);
+    } else if (e.key === "Backspace" && !inputValue && safeValue.length > 0) {
+      handleRemoveTag(safeValue[safeValue.length - 1]);
+    }
+  };
 
-//       <Popover open={open && filteredSuggestions.length > 0} onOpenChange={setOpen}>
-//         <PopoverTrigger asChild>
-//           <div className="flex-1 min-w-[120px] relative">
-//             <Input
-//               ref={inputRef}
-//               type="text"
-//               name={name}
-//               value={inputValue}
-//               onChange={e => {
-//                 setInputValue(e.target.value);
-//                 if (e.target.value) setOpen(true);
-//               }}
-//               onKeyDown={handleKeyDown}
-//               placeholder={safeValue.length === 0 ? placeholder : t("Type and press enter to add")}
-//               className="shadow-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-7 text-sm placeholder:text-muted-foreground pr-6"
-//               disabled={disabled || (maxTags !== undefined && safeValue.length >= maxTags)}
-//             />
-//             {inputValue && (
-//               <Plus
-//                 className={cn(
-//                   "h-4 w-4 absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground",
-//                   !disabled && "cursor-pointer hover:text-foreground transition-colors",
-//                   disabled && "opacity-50"
-//                 )}
-//                 onClick={() => !disabled && handleAddTag(inputValue)}
-//               />
-//             )}
-//           </div>
-//         </PopoverTrigger>
-//         <PopoverContent className="p-0 w-[200px]" align="start">
-//           <Command>
-//             <CommandGroup>
-//               {filteredSuggestions.map(suggestion => (
-//                 <CommandItem
-//                   key={suggestion}
-//                   onSelect={() => handleAddTag(suggestion)}
-//                   className="flex items-center gap-2 text-sm"
-//                 >
-//                   <Plus className="h-3 w-3" />
-//                   {suggestion}
-//                 </CommandItem>
-//               ))}
-//             </CommandGroup>
-//           </Command>
-//         </PopoverContent>
-//       </Popover>
-//     </div>
-//   );
-// };
+  const filteredSuggestions = suggestions.filter(
+    suggestion =>
+      !safeValue.includes(suggestion) &&
+      suggestion.toLowerCase().includes(inputValue.toLowerCase())
+  );
 
-// export default TagInput;
+  return (
+    <div
+      className={cn(
+        "relative flex flex-wrap items-center gap-1.5 p-1.5 min-h-10 rounded-md border border-input bg-background transition-colors",
+        isFocused && "ring-1 ring-ring border-input",
+        disabled && "opacity-50 cursor-not-allowed",
+        className
+      )}
+      onClick={() => !disabled && inputRef.current?.focus()}
+    >
+      {safeValue.map((tag, index) => (
+        <Badge
+          key={`${tag}-${index}`}
+          variant="secondary"
+          className="h-7 px-2.5 text-xs font-normal gap-1.5 max-w-[200px] truncate bg-muted hover:bg-muted/80 text-foreground transition-colors"
+        >
+          <span className="truncate">{tag}</span>
+          {!disabled && (
+            <button
+              type="button"
+              className="h-3.5 w-3.5 p-0 ml-0.5 rounded-full hover:bg-muted-foreground/20 inline-flex items-center justify-center cursor-pointer text-muted-foreground hover:text-foreground"
+              onClick={e => {
+                e.stopPropagation();
+                handleRemoveTag(tag);
+              }}
+              aria-label={`Remove ${tag}`}
+            >
+              <X className="h-3 w-3" />
+            </button>
+          )}
+        </Badge>
+      ))}
+
+      <div className="flex-1 min-w-[120px] relative flex items-center">
+        <Input
+          ref={inputRef}
+          type="text"
+          name={name}
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => {
+            setIsFocused(false);
+            if (inputValue.trim()) {
+              handleAddTag(inputValue);
+            }
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder={
+            safeValue.length === 0
+              ? placeholder
+                ? typeof placeholder === "string"
+                  ? t(placeholder)
+                  : placeholder
+                : t("Type and press enter to add")
+              : ""
+          }
+          className="shadow-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-7 text-sm placeholder:text-muted-foreground pr-6 bg-transparent"
+          disabled={disabled || (maxTags !== undefined && safeValue.length >= maxTags)}
+        />
+        {inputValue.trim() && (
+          <button
+            type="button"
+            className={cn(
+              "h-5 w-5 absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground inline-flex items-center justify-center",
+              !disabled && "cursor-pointer hover:text-foreground transition-colors",
+              disabled && "opacity-50"
+            )}
+            onClick={e => {
+              e.stopPropagation();
+              if (!disabled) handleAddTag(inputValue);
+            }}
+          >
+            <Plus className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
+
+      {isFocused && filteredSuggestions.length > 0 && (
+        <div className="absolute top-full left-0 mt-1 w-full bg-popover text-popover-foreground border rounded-md shadow-md z-50 max-h-48 overflow-auto p-1">
+          {filteredSuggestions.map(suggestion => (
+            <div
+              key={suggestion}
+              onMouseDown={e => {
+                e.preventDefault();
+                handleAddTag(suggestion);
+              }}
+              className="px-2 py-1.5 text-sm rounded hover:bg-accent hover:text-accent-foreground cursor-pointer flex items-center justify-between"
+            >
+              <span>{suggestion}</span>
+              <Plus className="h-3 w-3 text-muted-foreground" />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default TagInput;

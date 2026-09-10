@@ -1,3 +1,5 @@
+"use client";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTranslations } from "next-intl";
 import { Option } from "../../Form/CustomFormTypes.types";
@@ -14,6 +16,7 @@ function CheckBoxOption({
   onCheckedChange: (checked: boolean) => void;
 }) {
   const t = useTranslations();
+  const id = `${name}-${option.value.toString()}`;
 
   return (
     <div className="flex items-center gap-2" key={option.value.toString()}>
@@ -21,20 +24,12 @@ function CheckBoxOption({
         name={name}
         checked={isChecked}
         onCheckedChange={checked => onCheckedChange(!!checked)}
-        id={option.value.toString()}
+        id={id}
       />
       <label
-        htmlFor={option.value.toString()}
-        className="text-sm flex gap-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        htmlFor={id}
+        className="text-sm flex gap-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
       >
-        {/* {option.img && (
-					<Image
-						src={option.img}
-						width={20}
-						height={20}
-						alt={option.label}
-					/>
-				)} */}
         {t(option.label)}
       </label>
     </div>
@@ -45,36 +40,70 @@ export default function CheckBoxInput({
   value,
   onChange,
   name,
-  // error,
   options
-  // maxSelections = options.length
 }: {
-  value?: string[];
-  onChange: (e: string[]) => void;
+  value?: any;
+  onChange: (e: any) => void;
   name: string;
-  // error?: string;
-  options: Option[];
-  // maxSelections?: number;
+  options?: Option[];
 }) {
-  const handleCheckedChange = (checked: boolean, optionValue: string) => {
-    const newValue = checked
-      ? [...(value || []), optionValue]
-      : value?.filter(v => v != optionValue) || [];
+  const t = useTranslations();
+  const defaultOptions: Option[] = [
+    { label: t("true"), value: "1" },
+    { label: t("false"), value: "0" }
+  ];
+  const effectiveOptions = options && options.length > 0 ? options : defaultOptions;
 
-    onChange(newValue);
+  const handleCheckedChange = (checked: boolean, optionValue: string) => {
+    if (Array.isArray(value)) {
+      const newValue = checked
+        ? [...value, optionValue]
+        : value.filter(v => String(v) !== optionValue);
+      onChange(newValue);
+    } else if (typeof value === "boolean") {
+      onChange(checked);
+    } else {
+      if (optionValue === "1" || optionValue === "0") {
+        onChange(checked ? (optionValue === "0" ? "0" : "1") : (optionValue === "1" ? "0" : "1"));
+      } else if (optionValue === "true" || optionValue === "false") {
+        onChange(checked ? optionValue === "true" : optionValue !== "false");
+      } else {
+        onChange(checked ? optionValue : "");
+      }
+    }
   };
 
   const isChecked = (optionValue: string): boolean => {
-    return Array.isArray(value) ? value.includes(optionValue) : false;
+    if (Array.isArray(value)) {
+      return value.some(v => String(v) === optionValue);
+    }
+    if (typeof value === "boolean") {
+      return value
+        ? optionValue === "1" || optionValue === "true"
+        : optionValue === "0" || optionValue === "false";
+    }
+    if (typeof value === "number") {
+      return String(value) === optionValue;
+    }
+    if (typeof value === "string") {
+      if (optionValue === "1" || optionValue === "true") {
+        return value === "1" || value === "true";
+      }
+      if (optionValue === "0" || optionValue === "false") {
+        return value === "0" || value === "false";
+      }
+      return value === optionValue;
+    }
+    return false;
   };
+
   return (
-    <div className="flex  gap-2 items-center">
-      {options.map(option => (
+    <div className="flex gap-4 items-center">
+      {effectiveOptions.map(option => (
         <CheckBoxOption
           key={option.value.toString()}
           option={option}
           name={name}
-          data-testid={name}
           isChecked={isChecked(option.value.toString())}
           onCheckedChange={checked => handleCheckedChange(checked, option.value.toString())}
         />

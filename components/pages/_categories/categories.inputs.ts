@@ -1,13 +1,16 @@
 
 import type { FormInput } from "@/components/common/Form/CustomFormTypes.types";
+import { booleanOptions } from "@/utils/options/booleanOptions";
+import { useTranslations } from "next-intl";
 
 export const CategoriesInputs = () => {
+  const t = useTranslations()
   const inputs: FormInput[] = [
     { name: "name", type: "text", multiLang: true, cardId: 'lang', required: true },
     { name: "description", type: "text", multiLang: true, cardId: 'lang', required: true },
     { name: "slug", type: "text", label: "Slug", placeholder: "e.g. technology", cardId: 'general' },
     { name: "order", type: "number", cardId: 'general' },
-    { name: "is_active", type: "checkbox", label: "Active", cardId: 'general' },
+    { name: "is_active", options: booleanOptions(t), type: "checkbox", label: "Active", cardId: 'general' },
     { name: "image", type: "img", required: true, cardId: 'general' },
     // SEO Fields
     { name: "seo_meta_title", type: "text", multiLang: true, label: "Meta Title", cardId: 'seo' },

@@ -21,8 +21,8 @@ export const BlogSchema = (t: TFunction) => {
     contentFr: StringNotReq(),
     contentDe: StringNotReq(),
     status: z.enum(["published", "draft", "archived"]).default("published"),
-    is_featured: z.boolean().default(false).optional(),
-    tags: z.array(z.object({ value: z.string().min(1) })).optional().default([]),
+    is_featured: noSchema(),
+    tags: z.array(z.string()).optional().default([]),
     image: noSchema(),
     // SEO fields
     seo_meta_titleAr: StringNotReq(),

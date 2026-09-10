@@ -1,3 +1,4 @@
+import { fetchHelper } from "@/api/fetch";
 import { AppSidebar } from "@/components/app-sidebar";
 import LanguageSwitcher from "@/components/language-switcher";
 import PageTransitionWrapper from "@/components/layouts/PageTransitionWrapper";
@@ -6,8 +7,22 @@ import LogoutConfirmButton from "@/components/layouts/header/components/LogoutCo
 import ThemeSwitcher from "@/components/theme-switcher";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { TOKEN } from "@/utils/config";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
+};
 
 export default async function RoutesLayout({
   children,
@@ -22,6 +37,14 @@ export default async function RoutesLayout({
 
   if (!token) {
     redirect(`/${locale}/signin`);
+  }
+
+  const data = await fetchHelper({
+    endPoint: ['profile']
+  });
+
+  if (data?.status === 401) {
+    redirect(`/${locale}/signin?expired=true`);
   }
   return (
     <SidebarProvider>

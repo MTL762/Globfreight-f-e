@@ -3,17 +3,28 @@
 import { setToken } from "@/api/actions";
 import { fetchHelper } from "@/api/fetch";
 import { useRouter } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
-import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useFcmToken } from "./use-fcm-token";
 
 export function useLoginForm() {
   const locale = useLocale();
+  const t = useTranslations();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const hasNotifiedExpiry = useRef(false);
   const { notificationPermission, requestPermission } = useFcmToken();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("expired") === "true" && !hasNotifiedExpiry.current) {
+      hasNotifiedExpiry.current = true;
+      toast.error(t("Session expired. Please sign in again.") || "Session expired. Please sign in again.");
+    }
+  }, [searchParams, t]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);

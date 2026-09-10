@@ -1,64 +1,68 @@
 import type { FormInput } from "@/components/common/Form/CustomFormTypes.types";
+import { booleanOptions } from "@/utils/options/booleanOptions";
+import { useTranslations } from "next-intl";
 
 export const AnnouncementsInputs = (): FormInput[] => {
+  const t = useTranslations();
   const inputs: FormInput[] = [
     {
-        "name": "title",
-        "type": "text",
-        "label": "Title",
-        "required": true,
-        "cardId": "general"
+      name: "title",
+      type: "text",
+      label: "Title",
+      required: true,
+      cardId: "general"
     },
     {
-        "name": "priority",
-        "type": "select",
-        "label": "Priority",
-        "required": true,
-        "cardId": "general",
-        "options": [
-            {
-                "label": "Low",
-                "value": "low"
-            },
-            {
-                "label": "Medium",
-                "value": "medium"
-            },
-            {
-                "label": "High",
-                "value": "high"
-            },
-            {
-                "label": "Urgent",
-                "value": "urgent"
-            }
-        ]
+      name: "priority",
+      type: "select",
+      label: "Priority",
+      required: true,
+      cardId: "general",
+      options: [
+        {
+          label: "Low",
+          value: "low"
+        },
+        {
+          label: "Medium",
+          value: "medium"
+        },
+        {
+          label: "High",
+          value: "high"
+        },
+        {
+          label: "Urgent",
+          value: "urgent"
+        }
+      ]
     },
     {
-        "name": "is_published",
-        "type": "checkbox",
-        "label": "Is Published",
-        "cardId": "general"
+      name: "is_published",
+      type: "checkbox",
+      label: "Is Published",
+      options: booleanOptions(t),
+      cardId: "general"
     },
     {
-        "name": "published_at",
-        "type": "date",
-        "label": "Published Date",
-        "cardId": "general"
+      name: "published_at",
+      type: "date",
+      label: "Published Date",
+      cardId: "general"
     },
     {
-        "name": "expires_at",
-        "type": "date",
-        "label": "Expires Date",
-        "cardId": "general"
+      name: "expires_at",
+      type: "date",
+      label: "Expires Date",
+      cardId: "general"
     },
     {
-        "name": "content",
-        "type": "textarea",
-        "label": "Content",
-        "required": true,
-        "cardId": "general"
+      name: "content",
+      type: "textarea",
+      label: "Content",
+      required: true,
+      cardId: "general"
     }
-];
+  ];
   return inputs;
 };

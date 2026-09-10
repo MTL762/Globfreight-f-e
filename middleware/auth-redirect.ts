@@ -39,7 +39,7 @@ export function determineAuthRedirect(request: NextRequest): {
 } {
   const token = request.cookies.get(TOKEN)?.value;
   const pathSegments = request.nextUrl.pathname.split("/").filter(Boolean);
-  const supportedLocales = ["ar", "en"];
+  const supportedLocales = ["ar", "en", "nl", "fr", "de"];
 
   let locale = "en";
   let routeSegment = "";
@@ -66,8 +66,9 @@ export function determineAuthRedirect(request: NextRequest): {
       shouldRedirect = true;
     }
   } else {
-    // 2. Authenticated user trying to access auth pages (except removeToken) -> redirect to /[locale]/dashboard
-    if (isAuthRoute && routeSegment !== "removeToken") {
+    // 2. Authenticated user trying to access auth pages (except removeToken or expired session) -> redirect to /[locale]/dashboard
+    const isExpired = request.nextUrl.searchParams.get("expired") === "true";
+    if (isAuthRoute && routeSegment !== "removeToken" && !isExpired) {
       redirectUrl = `/${locale}/dashboard`;
       shouldRedirect = true;
     }

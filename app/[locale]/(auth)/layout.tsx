@@ -1,6 +1,20 @@
 import LanguageSwitcher from "@/components/language-switcher";
 import PageTransitionWrapper from "@/components/layouts/PageTransitionWrapper";
 import ThemeSwitcher from "@/components/theme-switcher";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
+};
 
 export default async function AuthLayout({
   children

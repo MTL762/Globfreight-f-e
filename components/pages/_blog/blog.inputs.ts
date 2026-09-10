@@ -1,6 +1,9 @@
 import type { FormInput } from "@/components/common/Form/CustomFormTypes.types";
+import { booleanOptions } from "@/utils/options/booleanOptions";
+import { useTranslations } from "next-intl";
 
 export const BlogInputs = (): FormInput[] => {
+  const t = useTranslations();
   const inputs: FormInput[] = [
     {
       name: "category_id",
@@ -31,8 +34,9 @@ export const BlogInputs = (): FormInput[] => {
     },
     {
       name: "is_featured",
-      type: "checkbox",
+      type: "radioGroup",
       label: "Featured Article",
+      options: booleanOptions(t),
       cardId: "general"
     },
     {
@@ -69,6 +73,13 @@ export const BlogInputs = (): FormInput[] => {
     { name: "seo_meta_description", type: "textarea", multiLang: true, label: "Meta Description", cardId: "seo" },
     { name: "seo_focus_keyphrase", type: "text", label: "Focus Keyphrase", placeholder: "e.g. AI logistics agents", cardId: "seo" },
     { name: "seo_canonical_url", type: "text", label: "Canonical URL", placeholder: "https://globfreight.com/blog/...", cardId: "seo" },
+    {
+      name: "tags",
+      type: "tag-input",
+      label: "Tags",
+      placeholder: "e.g. AI, Logistics, Shipping",
+      cardId: "seo"
+    },
     {
       name: "seo_schema_markup_type",
       type: "select",

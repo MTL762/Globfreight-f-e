@@ -72,6 +72,11 @@ export async function fetchHelper({
 
   // Handle 401 Unauthorized
   if (res.status === 401) {
+    try {
+      cookieStore.delete(TOKEN);
+    } catch {
+      // ignore if response headers are already closed
+    }
     return {
       success: false,
       data: [],

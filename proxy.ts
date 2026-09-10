@@ -2,6 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { determineAuthRedirect } from "./middleware/auth-redirect";
+import { TOKEN } from "./utils/config";
 
 const handler = createMiddleware(routing);
 
@@ -106,6 +107,11 @@ export default async function proxy(request: NextRequest) {
   // Get the response from the handler
   const response = handler(request);
 
+  if (params.get("expired") === "true") {
+    response.cookies.delete(TOKEN);
+    response.cookies.delete("accessToken");
+  }
+
   response.headers.set("header-URL", urlWithParams);
 
   return response;
@@ -113,7 +119,7 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   // Match only internationalized pathnames
-  matcher: ["/", "/(ar|en)/:path*"]
+  matcher: ["/", "/(ar|en|nl|fr|de)/:path*"]
 };
 
 export function getRequestConfig({ locale }) {

@@ -23,6 +23,17 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
           [item?.name]: dataObj[item.name]
         };
       }
+      if (item?.name.startsWith("seo_")) {
+        const seoKey = item.name.replace(/^seo_/, "");
+        const seoVal = dataObj[item.name] ?? dataObj.seo?.[seoKey];
+        const val =
+          typeof seoVal === "object" && seoVal !== null && !Array.isArray(seoVal)
+            ? seoVal.en ?? Object.values(seoVal)[0] ?? ""
+            : seoVal;
+        return {
+          [item.name]: val ?? ""
+        };
+      }
       return {
         [item.name]: dataObj[item.name]
       };

@@ -1,12 +1,24 @@
 import { ShipWithUsPage } from "@/components/pages/home/ship-with-us-page";
-import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Request a Freight Quote | Globfreight",
-  description:
-    "Request an instant sea freight quotation from Globfreight. Fast port customs clearance, container transport, and bonded warehousing across Antwerp, Rotterdam, Hamburg, and European gateways."
-};
-
-export default function QuoteRoute() {
-  return <ShipWithUsPage />;
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "ShipWithUs.meta" });
+  return {
+    title: t("title"),
+    description: t("description")
+  };
 }
+
+export default async function QuoteRoute(props: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await props.params;
+  setRequestLocale(locale);
+  return <ShipWithUsPage locale={locale} />;
+}
+

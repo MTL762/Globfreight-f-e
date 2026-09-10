@@ -5,6 +5,7 @@ declare namespace API {
     success: boolean;
     message: string;
     code?: number;
+    status?: number;
     total: number;
     limit?: number;
     result?: {
