@@ -3,27 +3,29 @@ import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
-    "",
-    "/services",
-    "/about",
-    "/contact",
-    "/ship-with-us",
-    "/quote",
-    "/blog",
+    { path: "", changeFrequency: "weekly" as const, priority: 1.0 },
+    { path: "/services", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/about", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/contact", changeFrequency: "monthly" as const, priority: 0.7 },
+    { path: "/ship-with-us", changeFrequency: "monthly" as const, priority: 0.9 },
+    { path: "/quote", changeFrequency: "monthly" as const, priority: 0.9 },
+    { path: "/blog", changeFrequency: "weekly" as const, priority: 0.8 },
   ];
 
-  const entries: MetadataRoute.Sitemap = [];
-
-  for (const page of staticPages) {
+  return staticPages.map((page) => {
+    const languages: Record<string, string> = {};
     for (const locale of SYSTEM_LOCALES) {
-      entries.push({
-        url: `${SITE_URL}/${locale}${page}`,
-        lastModified: new Date(),
-        changeFrequency: page === "" ? "weekly" : "monthly",
-        priority: page === "" ? 1.0 : 0.8,
-      });
+      languages[locale] = `${SITE_URL}/${locale}${page.path}`;
     }
-  }
 
-  return entries;
+    return {
+      url: `${SITE_URL}/en${page.path}`,
+      lastModified: new Date(),
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+      alternates: {
+        languages,
+      },
+    };
+  });
 }

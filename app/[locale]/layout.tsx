@@ -18,7 +18,8 @@ export async function generateMetadata({
   const { locale } = await params;
   const googleVerification =
     process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
-    process.env.GOOGLE_SITE_VERIFICATION;
+    process.env.GOOGLE_SITE_VERIFICATION ||
+    "7J7zaXa4pMRFVD1HGsvVbLSd3KsITxdkhjQrKzlM4ho";
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -66,10 +67,10 @@ export async function generateMetadata({
       locale: locale,
       images: [
         {
-          url: "/logo.png",
-          width: 512,
-          height: 512,
-          alt: `${PROJECT_NAME} Logo`,
+          url: "/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: `${PROJECT_NAME} – Ocean & Air Freight Solutions`,
         },
       ],
     },
@@ -78,7 +79,7 @@ export async function generateMetadata({
       title: `${PROJECT_NAME} – Ocean & Air Freight Solutions`,
       description:
         "Compare instant ocean and air freight quotations across 150+ shipping lines. Track containers in real time.",
-      images: ["/logo.png"],
+      images: ["/og-image.jpg"],
     },
     robots: {
       index: true,

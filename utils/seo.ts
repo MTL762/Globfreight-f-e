@@ -41,7 +41,33 @@ export const organizationJsonLd = {
         url: `${SITE_URL}/logo.png`,
         caption: "GlobFreight",
       },
-      image: `${SITE_URL}/logo.png`,
+      image: `${SITE_URL}/og-image.jpg`,
+      description:
+        "Bonded freight forwarding, direct seaport customs declarations, and rapid inland haulage across Antwerp, Rotterdam, and European trade corridors.",
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          availableLanguage: ["English", "Dutch", "French", "German", "Arabic"],
+        },
+      ],
+      areaServed: [
+        { "@type": "Continent", name: "Europe" },
+        { "@type": "Continent", name: "Asia" },
+        { "@type": "Continent", name: "Africa" },
+      ],
+      knowsAbout: [
+        "Ocean Freight",
+        "Air Freight",
+        "Customs Clearance",
+        "FCL Shipping",
+        "LCL Shipping",
+        "Container Tracking",
+        "Freight Forwarding",
+        "Supply Chain Management",
+        "Inland Haulage",
+        "Bonded Warehousing",
+      ],
     },
     {
       "@type": "WebSite",
@@ -56,6 +82,45 @@ export const organizationJsonLd = {
         target: `${SITE_URL}/en/blog?search={search_term_string}`,
         "query-input": "required name=search_term_string",
       },
+      inLanguage: ["en", "nl", "fr", "de", "ar"],
     },
   ],
 };
+
+/**
+ * Generates BreadcrumbList structured data for a page.
+ */
+export function getBreadcrumbJsonLd(
+  items: Array<{ name: string; url: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+/**
+ * Generates FAQPage structured data from a list of Q&A pairs.
+ */
+export function getFaqJsonLd(
+  faqs: Array<{ question: string; answer: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
