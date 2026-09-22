@@ -54,7 +54,7 @@ export async function SiteFooter() {
               <span>{tLanding("requestQuote")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>
-            <Link href="/signin" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/signin" rel="nofollow" className="inline-flex items-center justify-between hover:text-white transition-colors group">
               <span>{tLanding("staffPortal")}</span>
               <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
             </Link>

@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n/routing";
 import { PROJECT_NAME } from "@/utils/config";
-import { organizationJsonLd, SITE_URL } from "@/utils/seo";
+import { getPageAlternates, organizationJsonLd, SITE_URL } from "@/utils/seo";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -23,6 +23,7 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE_URL),
+    alternates: getPageAlternates("", locale),
     title: {
       default: `${PROJECT_NAME} – Ocean & Air Freight Solutions`,
       template: `%s | ${PROJECT_NAME}`,
