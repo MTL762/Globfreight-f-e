@@ -450,8 +450,8 @@
   "Height": "Height",
   "Home": {
     "heroBadge": "AEO-F Certified European Ingress",
-    "title": "Fast-Track Seaport Customs Clearance & European Logistics",
-    "body": "Globfreight delivers bonded freight forwarding, direct seaport customs declarations, and rapid inland haulage across Antwerp, Rotterdam, and European trade corridors.",
+    "title": "Search Freight Rates, Track Cargo & Ship Worldwide",
+    "body": "Compare instant ocean and air freight quotations across 150+ shipping lines, track live multimodal containers via AIS radar, and manage AEO-F certified customs declarations in one unified platform.",
     "quote": "Request Immediate Quote",
     "services": "Explore All Capabilities",
     "portsTitle": "Direct Gateway Access Across Primary Seaports",
@@ -474,8 +474,51 @@
       "step4Title": "Final Destination Delivery",
       "step4Desc": "Direct site delivery or bonded storage with real-time proof of delivery."
     },
-    "servicesTitle": "Comprehensive European Logistics Solutions",
-    "servicesSubtitle": "End-to-end management of your freight, customs compliance, and supply chain needs.",
+    "servicesTitle": "Streamlined Freight Booking Solutions",
+    "servicesSubtitle": "Fast, digital, and hassle-free cargo booking for ocean and air transport worldwide.",
+    "servicesItems": {
+      "badge": "Freight Services",
+      "ocean": {
+        "badge": "Ocean Freight",
+        "title": "Ocean Freight Booking",
+        "desc": "Instant slot and container booking for FCL (Full Container Load) across all equipment types: Dry (20ft, 40ft, 45ft), Reefer, Open Top, Flat Rack, Tank, and Insulated containers. Direct connections to major European gateway ports including Antwerp (Belgium), Rotterdam (Netherlands), and Hamburg (Germany).",
+        "feature1": "All FCL Equipment Types (Dry, Reefer, Open Top, Flat Rack, Tank, Insulated)",
+        "feature2": "Direct Gateways: Antwerp (BE), Rotterdam (NL), Hamburg (DE)",
+        "feature3": "Instant slot & allocation confirmation online",
+        "cta": "Search Ocean Rates"
+      },
+      "air": {
+        "badge": "Air Cargo",
+        "title": "Air Freight Booking",
+        "desc": "Quick and reliable cargo space reservation for all commercial sizes and commodity types, covering general cargo and temperature-controlled perishables across global airports, with key focus on Brussels, Amsterdam, and Düsseldorf airports.",
+        "feature1": "General cargo & temperature-controlled perishables",
+        "feature2": "Key hubs: Brussels (BRU), Amsterdam (AMS), Düsseldorf (DUS)",
+        "feature3": "Commercial flight space & chartered cargo slots",
+        "cta": "Calculate Air Rates"
+      },
+      "digital": {
+        "badge": "Digital Reservation",
+        "title": "Seamless Digital Reservation",
+        "desc": "A dedicated platform built for freight forwarders and businesses to secure their cargo allocations instantly without complex paperwork.",
+        "feature1": "Built for forwarders, cargo owners & 3PLs",
+        "feature2": "Paperless instant allocation booking",
+        "feature3": "Direct EDI integration with 150+ shipping lines",
+        "cta": "Start Instant Booking"
+      }
+    },
+    "about": {
+      "badge": "About Globfreight",
+      "title": "Bridging Businesses and Major Shipping Lines",
+      "desc": "At Globfreight, we simplify global trade through a seamless, tech-driven booking platform. We bridge the gap between businesses and major shipping lines, specializing exclusively in reliable ocean and air freight slot reservations. Backed by advanced digital tools and deep logistics expertise, we ensure your cargo bookings are handled with absolute speed, transparency, and efficiency.",
+      "pill1": "Tech-Driven Platform",
+      "pill1Desc": "Real-time rates & direct digital bookings",
+      "pill2": "Major Shipping Lines",
+      "pill2Desc": "Direct bridge to 150+ ocean & air carriers",
+      "pill3": "Reliable Slot Reservations",
+      "pill3Desc": "Guaranteed space for FCL & air cargo",
+      "pill4": "Speed, Transparency & Efficiency",
+      "pill4Desc": "Zero paperwork & instant digital confirmation"
+    },
     "tabs": {
       "customs": "Customs Clearance",
       "transport": "Road & Inland Haulage",
@@ -2754,9 +2797,9 @@
       "quoteButton": "Instant Freight Quote"
     },
     "homeSection": {
-      "badge": "Market Intelligence & Advisories",
-      "title": "Latest Insights & Logistics Advisories",
-      "description": "Industry updates, customs regulations, and European supply chain intelligence from Globfreight specialists.",
+      "badge": "Blog",
+      "title": "Logistics Insights & Booking Guides",
+      "description": "Expert container guides, digital freight strategies, and key European gateway intelligence.",
       "viewAll": "View all publications"
     }
   },

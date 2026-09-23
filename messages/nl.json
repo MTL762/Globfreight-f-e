@@ -450,8 +450,8 @@
   "Height": "Height",
   "Home": {
     "heroBadge": "AEO-F Gecertificeerde Europese Toegang",
-    "title": "Snelle Haven Douaneafhandeling & Europese Logistiek",
-    "body": "Globfreight verzorgt entrepot expeditie, directe douaneaangiften in zeehavens en snel wegvervoer door Antwerpen, Rotterdam en Europese handelscorridors.",
+    "title": "Zoek vrachttarieven, volg lading & verscheep wereldwijd",
+    "body": "Vergelijk directe zee- en luchtvrachtoffertes van 150+ rederijen, volg multimodale containers live via AIS-radar en beheer AEO-F gecertificeerde douaneaangiften op één uniform platform.",
     "quote": "Vraag directe offerte aan",
     "services": "Bekijk alle diensten",
     "portsTitle": "Directe toegang tot de belangrijkste zeehavens",
@@ -474,8 +474,51 @@
       "step4Title": "Levering op eindbestemming",
       "step4Desc": "Rechtstreekse levering ter plaatse of entrepotopslag met real-time bewijs van aflevering."
     },
-    "servicesTitle": "Complete Europese Logistieke Oplossingen",
-    "servicesSubtitle": "End-to-end beheer van uw vracht, douaneformaliteiten en supply chain.",
+    "servicesTitle": "Gestroomlijnde oplossingen voor vrachtboeking",
+    "servicesSubtitle": "Snel, digitaal en zorgeloos vracht boeken voor zee- en luchttransport wereldwijd.",
+    "servicesItems": {
+      "badge": "Vrachtdiensten",
+      "ocean": {
+        "badge": "Zeevracht",
+        "title": "Zeevracht Boeking",
+        "desc": "Directe slot- en containerboeking voor FCL (Full Container Load) over alle types: Dry (20ft, 40ft, 45ft), Reefer, Open Top, Flat Rack, Tank en geïsoleerde containers. Directe verbindingen met grote Europese gateway-havens waaronder Antwerpen (België), Rotterdam (Nederland) en Hamburg (Duitsland).",
+        "feature1": "Alle FCL-containertypen (Dry, Reefer, Open Top, Tank, Flat Rack)",
+        "feature2": "Gateway-havens: Antwerpen (BE), Rotterdam (NL), Hamburg (DE)",
+        "feature3": "Directe online slotreservering en bevestiging",
+        "cta": "Zoek zeevrachttarieven"
+      },
+      "air": {
+        "badge": "Luchtvracht",
+        "title": "Luchtvracht Boeking",
+        "desc": "Snelle en betrouwbare vrachtruimtereservering voor alle commerciële volumes en goederensoorten, inclusief algemene lading en temperatuurgevoelige bederfelijke waren via luchthavens wereldwijd, met focus op Brussel, Amsterdam en Düsseldorf.",
+        "feature1": "Algemene vracht & temperatuurgecontroleerde goederen",
+        "feature2": "Hoofdhubs: Brussel (BRU), Amsterdam (AMS), Düsseldorf (DUS)",
+        "feature3": "Commerciële vluchtruimte en chartertoewijzingen",
+        "cta": "Bereken luchtvrachttarieven"
+      },
+      "digital": {
+        "badge": "Digitaal Platform",
+        "title": "Naadloze Digitale Reservering",
+        "desc": "Een platform speciaal ontwikkeld voor expediteurs en bedrijven om vrachtcapaciteit direct vast te leggen zonder ingewikkeld papierwerk.",
+        "feature1": "Ontworpen voor expediteurs, verladers en logistieke teams",
+        "feature2": "100% papierloos en directe boeking",
+        "feature3": "Directe EDI-koppeling met 150+ rederijen",
+        "cta": "Start direct met boeken"
+      }
+    },
+    "about": {
+      "badge": "Over Globfreight",
+      "title": "Wereldwijde handel vereenvoudigen via digitale technologie",
+      "desc": "Bij Globfreight vereenvoudigen we wereldwijde handel via een naadloos, digitaal boekingsplatform. Wij slaan de brug tussen bedrijven en grote rederijen, uitsluitend gespecialiseerd in betrouwbare slotreserveringen voor zee- en luchtvracht. Gesteund door geavanceerde digitale tools en diepgaande logistieke expertise zorgen wij ervoor dat uw vrachtboekingen met absolute snelheid, transparantie en efficiëntie worden afgehandeld.",
+      "pill1": "Technologiegedreven Platform",
+      "pill1Desc": "Real-time tarieven en directe digitale boekingen",
+      "pill2": "Grote Rederijen en Luchtvaartmaatschappijen",
+      "pill2Desc": "Directe koppeling met 150+ wereldwijde carriers",
+      "pill3": "Betrouwbare Slotreserveringen",
+      "pill3Desc": "Gegarandeerde capaciteit voor FCL en luchtvracht",
+      "pill4": "Snelheid, Transparantie & Efficiëntie",
+      "pill4Desc": "Zonder papierwerk en met directe bevestiging"
+    },
     "tabs": {
       "customs": "Douaneafhandeling",
       "transport": "Weg- en containertransport",
@@ -2757,9 +2800,9 @@
       "quoteButton": "Directe Vrachttarief Aanvraag"
     },
     "homeSection": {
-      "badge": "Marktinzichten & Adviezen",
-      "title": "Laatste Inzichten & Logistieke Adviezen",
-      "description": "Sectorupdates, douaneregelgeving en Europese supply chain-inzichten van Globfreight-specialisten.",
+      "badge": "Blog",
+      "title": "Logistieke Inzichten & Boekingsgidsen",
+      "description": "Deskundige containertips, digitale vrachtstrategieën en actuele inzichten in Europese toegangshavens.",
       "viewAll": "Bekijk alle publicaties"
     }
   },

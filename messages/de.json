@@ -450,8 +450,8 @@
   "Height": "Height",
   "Home": {
     "heroBadge": "AEO-F zertifizierter europäischer Zugang",
-    "title": "Express-Seehafen-Zollabfertigung & Europäische Logistik",
-    "body": "Globfreight bietet Zolllogistik, direkte Seehafen-Zollerklärungen und schnellen Containertransport über Antwerpen, Rotterdam und europäische Handelskorridore.",
+    "title": "Frachttarife suchen, Sendung verfolgen & Weltweit versenden",
+    "body": "Vergleichen Sie direkte See- und Luftfrachtangebote von über 150 Reedereien, verfolgen Sie multimodale Container live per AIS-Radar und verwalten Sie AEO-F-zertifizierte Zollerklärungen auf einer zentralen Plattform.",
     "quote": "Sofortangebot anfordern",
     "services": "Alle Leistungen entdecken",
     "portsTitle": "Direkter Gateway-Zugang zu den wichtigsten Seehäfen",
@@ -474,8 +474,51 @@
       "step4Title": "Zustellung am Bestimmungsort",
       "step4Desc": "Direkte Standortlieferung oder Zolllagerung mit digitalem Abliefernachweis in Echtzeit."
     },
-    "servicesTitle": "Ganzheitliche europäische Logistiklösungen",
-    "servicesSubtitle": "End-to-End-Management für Ihre Fracht, Zollformalitäten und Lieferkette.",
+    "servicesTitle": "Optimierte Lösungen für die Frachtbuchung",
+    "servicesSubtitle": "Schnelle, digitale und unkomplizierte Frachtbuchung für See- und Lufttransporte weltweit.",
+    "servicesItems": {
+      "badge": "Frachtdienste",
+      "ocean": {
+        "badge": "Seefracht",
+        "title": "Seefracht-Buchung",
+        "desc": "Sofortige Stellplatz- und Containerbuchung für FCL (Vollcontainer) über alle Ausrüstungstypen: Standard (20ft, 40ft, 45ft), Reefer (Kühlcontainer), Open Top, Flat Rack, Tank und isolierte Container. Direkte Verbindungen zu europäischen Haupthäfen wie Antwerpen (Belgien), Rotterdam (Niederlande) und Hamburg (Deutschland).",
+        "feature1": "Alle FCL-Ausrüstungstypen (Standard, Reefer, Open Top, Tank, Flat Rack)",
+        "feature2": "Gateway-Häfen: Antwerpen (BE), Rotterdam (NL), Hamburg (DE)",
+        "feature3": "Sofortige Online-Stellplatzbuchung und Bestätigung",
+        "cta": "Seefrachttarife suchen"
+      },
+      "air": {
+        "badge": "Luftfracht",
+        "title": "Luftfracht-Buchung",
+        "desc": "Schnelle und zuverlässige Frachtraumreservierung für alle kommerziellen Ladungsgrößen und Güterarten, einschließlich allgemeiner Fracht und temperaturgeführter verderblicher Waren über weltweite Flughäfen, mit Schwerpunkt auf Brüssel, Amsterdam und Düsseldorf.",
+        "feature1": "Allgemeine Fracht & temperaturgeführte Güter",
+        "feature2": "Hauptdrehkreuze: Brüssel (BRU), Amsterdam (AMS), Düsseldorf (DUS)",
+        "feature3": "IATA-Linienfracht und dedizierte Charterkapazitäten",
+        "cta": "Luftfrachttarife berechnen"
+      },
+      "digital": {
+        "badge": "Digitale Plattform",
+        "title": "Nahtlose digitale Reservierung",
+        "desc": "Eine spezialisierte Plattform für Spediteure und Unternehmen zur sofortigen Sicherung von Frachtkontingenten ohne komplizierten Papierkram.",
+        "feature1": "Entwickelt für Spediteure, Verlader und Frachtführer",
+        "feature2": "100% papierlose und sofortige Buchung",
+        "feature3": "Direkte EDI-Anbindung an 150+ Reedereien",
+        "cta": "Sofortige Buchung starten"
+      }
+    },
+    "about": {
+      "badge": "Über Globfreight",
+      "title": "Den globalen Handel durch moderne Buchungstechnologie vereinfachen",
+      "desc": "Bei Globfreight vereinfachen wir den weltweiten Handel durch eine nahtlose, technologiebasierte Buchungsplattform. Wir schließen die Lücke zwischen Unternehmen und großen Reedereien und sind ausschließlich auf zuverlässige Stellplatzreservierungen für See- und Luftfracht spezialisiert. Gestützt auf fortschrittliche digitale Werkzeuge und tiefgreifende Logistikexpertise stellen wir sicher, dass Ihre Frachtbuchungen mit höchster Geschwindigkeit, Transparenz und Effizienz abgewickelt werden.",
+      "pill1": "Technologiebasierte Plattform",
+      "pill1Desc": "Echtzeit-Tarife & direkte digitale Buchungen",
+      "pill2": "Führende Reedereien & Airlines",
+      "pill2Desc": "Direkte Anbindung an über 150 Frachtgesellschaften",
+      "pill3": "Zuverlässige Stellplatzreservierung",
+      "pill3Desc": "Garantierte Kapazitäten für FCL und Luftfracht",
+      "pill4": "Geschwindigkeit, Transparenz & Effizienz",
+      "pill4Desc": "Ohne Papieraufwand und mit sofortiger Bestätigung"
+    },
     "tabs": {
       "customs": "Zollabfertigung",
       "transport": "Straßen- & Containertransport",
@@ -2757,9 +2800,9 @@
       "quoteButton": "Sofortiges Frachtangebot"
     },
     "homeSection": {
-      "badge": "Markt-Intelligence & Hinweise",
-      "title": "Aktuelle Einblicke & Logistikberatung",
-      "description": "Branchenupdates, Zollvorschriften und europäische Supply-Chain-Intelligence von Globfreight-Spezialisten.",
+      "badge": "Blog",
+      "title": "Logistik-Einblicke & Buchungsleitfäden",
+      "description": "Praxisnahe Container-Tipps, digitale Frachtstrategien und aktuelle Einblicke in europäische Gateway-Häfen.",
       "viewAll": "Alle Publikationen anzeigen"
     }
   },

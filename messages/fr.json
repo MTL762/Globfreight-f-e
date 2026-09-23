@@ -450,8 +450,8 @@
   "Height": "Height",
   "Home": {
     "heroBadge": "Accès européen certifié OEA-F",
-    "title": "Dédouanement portuaire accéléré & Logistique européenne",
-    "body": "Globfreight assure l'expédition sous douane, les déclarations directes en douane portuaire et le transport routier rapide à travers Anvers, Rotterdam et les corridors européens.",
+    "title": "Recherchez des tarifs de fret, suivez votre cargaison & expédiez dans le monde entier",
+    "body": "Comparez les devis instantanés de fret maritime et aérien auprès de plus de 150 compagnies maritimes, suivez vos conteneurs multimodaux en direct par radar AIS et gérez vos déclarations douanières certifiées OEA-F sur une plateforme unifiée.",
     "quote": "Demander un devis immédiat",
     "services": "Explorer tous les services",
     "portsTitle": "Accès direct aux principaux ports maritimes",
@@ -474,8 +474,51 @@
       "step4Title": "Livraison à destination finale",
       "step4Desc": "Livraison directe sur site ou stockage sous douane avec preuve de livraison en temps réel."
     },
-    "servicesTitle": "Solutions logistiques européennes complètes",
-    "servicesSubtitle": "Gestion de bout en bout de votre fret, de vos formalités douanières et de votre supply chain.",
+    "servicesTitle": "Solutions de réservation de fret rationalisées",
+    "servicesSubtitle": "Réservation de fret rapide, numérique et sans tracas pour le transport maritime et aérien dans le monde entier.",
+    "servicesItems": {
+      "badge": "Services de fret",
+      "ocean": {
+        "badge": "Fret maritime",
+        "title": "Réservation de fret maritime",
+        "desc": "Réservation instantanée de créneaux et conteneurs pour FCL (pleine charge) sur tous types d'équipements : Dry (20', 40', 45'), Reefer, Open Top, Flat Rack, Tank et conteneurs isothermes. Liaisons directes avec les grands ports européens, notamment Anvers (Belgique), Rotterdam (Pays-Bas) et Hambourg (Allemagne).",
+        "feature1": "Tous types de conteneurs FCL (Dry, Reefer, Open Top, Tank, Flat Rack)",
+        "feature2": "Ports de transit directs : Anvers (BE), Rotterdam (NL), Hambourg (DE)",
+        "feature3": "Réservation et confirmation instantanées en ligne",
+        "cta": "Rechercher les tarifs maritimes"
+      },
+      "air": {
+        "badge": "Fret aérien",
+        "title": "Réservation de fret aérien",
+        "desc": "Réservation rapide et fiable d'espaces de fret pour toutes tailles commerciales et types de marchandises, y compris fret général et denrées périssables sous température dirigée via les aéroports mondiaux, avec accent sur Bruxelles, Amsterdam et Düsseldorf.",
+        "feature1": "Marchandises générales et périssables sous température contrôlée",
+        "feature2": "Hubs majeurs : Bruxelles (BRU), Amsterdam (AMS), Düsseldorf (DUS)",
+        "feature3": "Vols réguliers IATA et créneaux charters dédiés",
+        "cta": "Calculer les tarifs aériens"
+      },
+      "digital": {
+        "badge": "Plateforme numérique",
+        "title": "Réservation numérique fluide",
+        "desc": "Une plateforme dédiée conçue pour les transitaires et les entreprises afin de sécuriser instantanément leurs allocations de fret sans formalités administratives complexes.",
+        "feature1": "Conçue pour transitaires, chargeurs et équipes logistiques",
+        "feature2": "Processus 100% numérique et sans papier",
+        "feature3": "Interconnexion directe EDI avec plus de 150 compagnies maritimes",
+        "cta": "Démarrer la réservation"
+      }
+    },
+    "about": {
+      "badge": "À propos de Globfreight",
+      "title": "Simplifier le commerce mondial grâce aux technologies de réservation",
+      "desc": "Chez Globfreight, nous simplifions le commerce mondial grâce à une plateforme de réservation fluide et technologique. Nous faisons le pont entre les entreprises et les grandes compagnies maritimes, en nous spécialisant exclusivement dans la réservation fiable de créneaux de fret maritime et aérien. Soutenus par des outils numériques avancés et une solide expertise logistique, nous veillons à ce que vos expéditions soient gérées avec une rapidité, une transparence et une efficacité absolues.",
+      "pill1": "Plateforme technologique",
+      "pill1Desc": "Tarifs en temps réel et réservations directes",
+      "pill2": "Grandes compagnies maritimes",
+      "pill2Desc": "Pont direct avec 150+ transporteurs mondiaux",
+      "pill3": "Réservations de créneaux fiables",
+      "pill3Desc": "Capacités garanties pour conteneurs FCL et fret aérien",
+      "pill4": "Rapidité, transparence & efficacité",
+      "pill4Desc": "Zéro contrainte administrative et confirmation instantanée"
+    },
     "tabs": {
       "customs": "Dédouanement",
       "transport": "Transport routier & conteneurs",
@@ -2757,9 +2800,9 @@
       "quoteButton": "Devis de Fret Immédiat"
     },
     "homeSection": {
-      "badge": "Veille de Marché & Conseils",
-      "title": "Dernières Perspectives & Conseils Logistiques",
-      "description": "Actualités du secteur, réglementations douanières et veille européenne de la chaîne logistique par Globfreight.",
+      "badge": "Blog",
+      "title": "Perspectives Logistiques & Guides de Réservation",
+      "description": "Guides experts sur les conteneurs, stratégies de fret numérique et actualités des hubs portuaires européens.",
       "viewAll": "Voir toutes les publications"
     }
   },
