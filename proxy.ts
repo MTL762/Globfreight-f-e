@@ -95,6 +95,16 @@ const handler = createMiddleware(routing);
 
 export default async function proxy(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
+
+  // Keep one permanent, crawlable entry point for the default locale. The
+  // locale middleware otherwise responds to `/` with a temporary redirect,
+  // which leaves search engines with two competing homepage URLs.
+  if (currentPath === "/") {
+    const canonicalUrl = request.nextUrl.clone();
+    canonicalUrl.pathname = "/en";
+    return NextResponse.redirect(canonicalUrl, 308);
+  }
+
   const params = request.nextUrl.searchParams;
   const searchParamsString = params.toString();
   const urlWithParams = `${currentPath}${searchParamsString ? `?${searchParamsString}` : ""}`;

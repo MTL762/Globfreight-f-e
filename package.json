@@ -14,6 +14,8 @@
     "server:start": "npm run build && npm run start && pm2 list",
     "format": "prettier --write './{app,src,components,lib,context,pages}/**/*.{ts,tsx,js,jsx}'",
     "lint:format": "prettier --check './{app,src,components,lib,context,pages}/**/*.{ts,tsx,js,jsx}'",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "prebuild": "npm run sitemap",
     "create-crud": "node createCRUD.js"
   },
   "dependencies": {
