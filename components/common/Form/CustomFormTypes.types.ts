@@ -76,11 +76,11 @@ export type FormInput = {
 };
 
 export const FORM_LANGUAGES = [
-  { code: "ar", key: "Ar", label: "العربية" },
-  { code: "en", key: "En", label: "English" },
-  { code: "nl", key: "Nl", label: "Nederlands" },
-  { code: "fr", key: "Fr", label: "Français" },
-  { code: "de", key: "De", label: "Deutsch" }
+  { code: "ar", key: "Ar", label: "العربية", flag: "🇸🇦" },
+  { code: "en", key: "En", label: "English", flag: "🇬🇧" },
+  { code: "nl", key: "Nl", label: "Nederlands", flag: "🇳🇱" },
+  { code: "fr", key: "Fr", label: "Français", flag: "🇫🇷" },
+  { code: "de", key: "De", label: "Deutsch", flag: "🇩🇪" }
 ] as const;
 
 export type FormLangKey = (typeof FORM_LANGUAGES)[number]["key"];

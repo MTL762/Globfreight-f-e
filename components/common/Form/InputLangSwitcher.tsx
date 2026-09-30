@@ -56,7 +56,7 @@ export default function InputLangSwitcher({
             ...(selectedLang === lang.key ? styles.activeButton : {})
           }}
         >
-          {lang.label}
+          <span style={{ marginRight: "4px" }}>{lang.flag}</span>{lang.label}
         </button>
       ))}
       <hr />
