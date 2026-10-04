@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n/routing";
 import { PROJECT_NAME } from "@/utils/config";
-import { getPageAlternates, organizationJsonLd, SITE_URL } from "@/utils/seo";
+import { DEFAULT_OG_IMAGE, getOpenGraphImages, getPageAlternates, organizationJsonLd, SITE_URL } from "@/utils/seo";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -66,21 +66,14 @@ export async function generateMetadata({
         "Compare instant ocean and air freight quotations across 150+ shipping lines. Track containers in real time and manage customs declarations in one unified platform.",
       url: `${SITE_URL}/${locale}`,
       locale: locale,
-      images: [
-        {
-          url: "/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${PROJECT_NAME} – Ocean & Air Freight Solutions`,
-        },
-      ],
+      images: getOpenGraphImages(),
     },
     twitter: {
       card: "summary_large_image",
       title: `${PROJECT_NAME} – Ocean & Air Freight Solutions`,
       description:
         "Compare instant ocean and air freight quotations across 150+ shipping lines. Track containers in real time.",
-      images: ["/og-image.jpg"],
+      images: [DEFAULT_OG_IMAGE],
     },
     robots: {
       index: true,

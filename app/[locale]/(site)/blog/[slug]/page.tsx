@@ -2,7 +2,7 @@ import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogDetail } from "@/components/pages/blog/public-blog-detail";
 import { BlogPost, getBlogText } from "@/types/blog";
-import { getPageAlternates } from "@/utils/seo";
+import { getArticleJsonLd, getBreadcrumbJsonLd, getOpenGraphImages, getPageAlternates, SITE_URL } from "@/utils/seo";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -60,7 +60,7 @@ export async function generateMetadata({
                 alt: title
               }
             ]
-          : undefined
+          : getOpenGraphImages(title)
       }
     };
   } catch {
@@ -106,9 +106,44 @@ export default async function BlogDetailPage(props: {
     .filter((p: BlogPost) => p.id !== post.id && p.slug !== post.slug)
     .slice(0, 3);
 
+  const title =
+    getBlogText(post.seo?.meta_title, locale) ||
+    `${getBlogText(post.title, locale)} | Globfreight`;
+  const description =
+    getBlogText(post.seo?.meta_description, locale) ||
+    getBlogText(post.excerpt, locale) ||
+    "Globfreight supply chain and logistics intelligence article.";
+  const postUrl = `${SITE_URL}/${locale}/blog/${post.slug || slug}`;
+  const ogImage = post.image || post.seo?.og_image;
+
+  const articleJsonLd = getArticleJsonLd({
+    title,
+    description,
+    url: postUrl,
+    image: ogImage,
+    datePublished: post.published_at || post.created_at,
+    dateModified: post.published_at || post.created_at,
+    authorName: post.author?.name || "Globfreight Logistics Expert"
+  });
+
+  const breadcrumbsJsonLd = getBreadcrumbJsonLd([
+    { name: "Home", url: `${SITE_URL}/${locale}` },
+    { name: "Blog", url: `${SITE_URL}/${locale}/blog` },
+    { name: title, url: postUrl }
+  ]);
+
   return (
     <PublicShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+      />
       <PublicBlogDetail post={post} relatedPosts={relatedPosts} locale={locale} />
     </PublicShell>
   );
 }
+

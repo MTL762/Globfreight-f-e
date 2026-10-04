@@ -1,5 +1,5 @@
 import { StandardPage } from "@/components/pages/home/standard-page";
-import { getPageAlternates, getBreadcrumbJsonLd, getServiceJsonLd, SITE_URL } from "@/utils/seo";
+import { getBreadcrumbJsonLd, getOpenGraphImages, getPageAlternates, getServiceJsonLd, SITE_URL } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
@@ -23,7 +23,7 @@ export async function generateMetadata({
       url: alternates.canonical,
       type: "website",
       siteName: "GlobFreight",
-      images: [{ url: `${SITE_URL}/og-image.jpg`, width: 1200, height: 630, alt: title }]
+      images: getOpenGraphImages(title)
     }
   };
 }

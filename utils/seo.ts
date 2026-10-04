@@ -26,6 +26,32 @@ export function getPageAlternates(path: string = "", currentLocale: string = "en
   };
 }
 
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/logo-preview.png`;
+
+/**
+ * Returns WhatsApp and social-media optimized OpenGraph images.
+ * Priority 1: 600x600 square logo (<100KB, perfect for WhatsApp chat link previews).
+ * Priority 2: 1200x630 banner for Twitter/LinkedIn rich cards.
+ */
+export function getOpenGraphImages(title?: string) {
+  return [
+    {
+      url: `${SITE_URL}/logo-preview.png`,
+      width: 600,
+      height: 600,
+      type: "image/png",
+      alt: title ? `${title} – GlobFreight` : "GlobFreight Logo",
+    },
+    {
+      url: `${SITE_URL}/og-image.jpg`,
+      width: 1200,
+      height: 630,
+      type: "image/jpeg",
+      alt: title ? `${title} – GlobFreight` : "GlobFreight – Ocean & Air Freight Solutions",
+    },
+  ];
+}
+
 export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -289,6 +315,55 @@ export function getPageCompleteJsonLd({
   return {
     "@context": "https://schema.org",
     "@graph": graph,
+  };
+}
+
+/**
+ * Generates BlogPosting structured data for articles to enhance Google indexing and SERP appearance.
+ */
+export function getArticleJsonLd({
+  title,
+  description,
+  url,
+  image,
+  datePublished,
+  dateModified,
+  authorName = "Globfreight Logistics",
+}: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string | null;
+  datePublished?: string;
+  dateModified?: string;
+  authorName?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    url,
+    image: image ? [image] : [`${SITE_URL}/og-image.jpg`],
+    datePublished: datePublished || new Date().toISOString(),
+    dateModified: dateModified || datePublished || new Date().toISOString(),
+    author: {
+      "@type": "Organization",
+      name: authorName,
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "GlobFreight",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
   };
 }
 

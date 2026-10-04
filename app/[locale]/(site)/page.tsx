@@ -1,5 +1,5 @@
 import { PublicHome } from "@/components/pages/home/public-home";
-import { getPageAlternates, SITE_URL } from "@/utils/seo";
+import { DEFAULT_OG_IMAGE, getOpenGraphImages, getPageAlternates, SITE_URL } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
@@ -27,20 +27,13 @@ export async function generateMetadata({
       url: canonicalUrl,
       type: "website",
       siteName: "GlobFreight",
-      images: [
-        {
-          url: `${SITE_URL}/og-image.jpg`,
-          width: 1200,
-          height: 630,
-          alt: "GlobFreight – Ocean & Air Freight Solutions"
-        }
-      ]
+      images: getOpenGraphImages(title)
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [`${SITE_URL}/og-image.jpg`]
+      images: [DEFAULT_OG_IMAGE]
     }
   };
 }
