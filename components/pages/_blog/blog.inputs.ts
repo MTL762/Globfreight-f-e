@@ -62,7 +62,7 @@ export const BlogInputs = (): FormInput[] => {
     },
     {
       name: "content",
-      type: "textEditor",
+      type: "textarea",
       multiLang: true,
       label: "Full Article Content",
       cardId: "lang",
