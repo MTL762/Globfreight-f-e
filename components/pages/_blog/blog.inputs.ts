@@ -11,14 +11,16 @@ export const BlogInputs = (): FormInput[] => {
       apiUrl: ["adminCategories"],
       label: "Category",
       required: true,
-      cardId: "general"
+      cardId: "general",
+      width: 3
     },
     {
       name: "sub_category_id",
       type: "selectPaginated",
       apiUrl: ["adminSubCategories"],
       label: "Sub Category",
-      cardId: "general"
+      cardId: "general",
+      width: 3
     },
     {
       name: "status",
@@ -30,20 +32,23 @@ export const BlogInputs = (): FormInput[] => {
         { label: "Archived", value: "archived" }
       ],
       required: true,
-      cardId: "general"
+      cardId: "general",
+      width: 3
     },
     {
       name: "is_featured",
       type: "radioGroup",
       label: "Featured Article",
       options: booleanOptions(t),
-      cardId: "general"
+      cardId: "general",
+      width: 3
     },
     {
       name: "image",
       type: "img",
       label: "Featured Image",
-      cardId: "general"
+      cardId: "general",
+      width: 6
     },
     {
       name: "title",
@@ -51,14 +56,16 @@ export const BlogInputs = (): FormInput[] => {
       multiLang: true,
       label: "Article Title",
       cardId: "lang",
-      required: true
+      required: true,
+      width: 6
     },
     {
       name: "excerpt",
       type: "textarea",
       multiLang: true,
       label: "Short Excerpt",
-      cardId: "lang"
+      cardId: "lang",
+      width: 6
     },
     {
       name: "content",
@@ -66,19 +73,49 @@ export const BlogInputs = (): FormInput[] => {
       multiLang: true,
       label: "Full Article Content",
       cardId: "lang",
-      required: true
+      required: true,
+      width: 6
     },
     // SEO Fields
-    { name: "seo_meta_title", type: "text", multiLang: true, label: "Meta Title", cardId: "seo" },
-    { name: "seo_meta_description", type: "textarea", multiLang: true, label: "Meta Description", cardId: "seo" },
-    { name: "seo_focus_keyphrase", type: "text", label: "Focus Keyphrase", placeholder: "e.g. AI logistics agents", cardId: "seo" },
-    { name: "seo_canonical_url", type: "text", label: "Canonical URL", placeholder: "https://globfreight.com/blog/...", cardId: "seo" },
+    {
+      name: "seo_meta_title",
+      type: "text",
+      multiLang: true,
+      label: "Meta Title",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_meta_description",
+      type: "textarea",
+      multiLang: true,
+      label: "Meta Description",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_focus_keyphrase",
+      type: "text",
+      label: "Focus Keyphrase",
+      placeholder: "e.g. AI logistics agents",
+      cardId: "seo",
+      width: 3
+    },
+    {
+      name: "seo_canonical_url",
+      type: "text",
+      label: "Canonical URL",
+      placeholder: "https://globfreight.com/blog/...",
+      cardId: "seo",
+      width: 3
+    },
     {
       name: "tags",
       type: "tag-input",
       label: "Tags",
       placeholder: "e.g. AI, Logistics, Shipping",
-      cardId: "seo"
+      cardId: "seo",
+      width: 3
     },
     {
       name: "seo_schema_markup_type",
@@ -89,7 +126,8 @@ export const BlogInputs = (): FormInput[] => {
         { label: "BlogPosting", value: "BlogPosting" },
         { label: "WebPage", value: "WebPage" },
       ],
-      cardId: "seo"
+      cardId: "seo",
+      width: 3
     },
   ];
 
@@ -103,6 +141,7 @@ export const BlogTagInputs = (): FormInput[] => [
     type: "text",
     label: "Tag",
     placeholder: "e.g. AI, Logistics, Shipping",
-    required: true
+    required: true,
+    width: 6
   }
 ];
