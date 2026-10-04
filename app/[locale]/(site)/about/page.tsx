@@ -1,5 +1,5 @@
 import { StandardPage } from "@/components/pages/home/standard-page";
-import { getPageAlternates } from "@/utils/seo";
+import { getPageAlternates, getBreadcrumbJsonLd, SITE_URL } from "@/utils/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateMetadata({
@@ -9,10 +9,22 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Pages.about" });
+  const title = t("title") as string;
+  const description = t("body") as string;
+  const desc = description.length > 155 ? description.slice(0, 152) + "…" : description;
+  const alternates = getPageAlternates("/about", locale);
   return {
-    title: t("title"),
-    description: t("body"),
-    alternates: getPageAlternates("/about", locale)
+    title,
+    description: desc,
+    alternates,
+    openGraph: {
+      title,
+      description: desc,
+      url: alternates.canonical,
+      type: "website",
+      siteName: "GlobFreight",
+      images: [{ url: `${SITE_URL}/og-image.jpg`, width: 1200, height: 630, alt: title }]
+    }
   };
 }
 
@@ -21,6 +33,21 @@ export default async function AboutPage(props: {
 }) {
   const { locale } = await props.params;
   setRequestLocale(locale);
-  return <StandardPage kind="about" />;
+  const pageUrl = `${SITE_URL}/${locale}/about`;
+  const breadcrumbJsonLd = getBreadcrumbJsonLd([
+    { name: "Home", url: `${SITE_URL}/${locale}` },
+    { name: "About", url: pageUrl }
+  ]);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <StandardPage kind="about" />
+    </>
+  );
 }
+
 

@@ -124,3 +124,171 @@ export function getFaqJsonLd(
     })),
   };
 }
+
+/**
+ * Generates Service structured data for European logistics & customs clearance.
+ */
+export function getServiceJsonLd({
+  name,
+  description,
+  serviceType = "FreightForwarding",
+  areaServed = ["Belgium", "Netherlands", "Germany", "France", "European Union"],
+  url = SITE_URL,
+}: {
+  name: string;
+  description: string;
+  serviceType?: string;
+  areaServed?: string | string[];
+  url?: string;
+}) {
+  return {
+    "@type": "Service",
+    "@id": `${url}/#service`,
+    name,
+    description,
+    serviceType,
+    provider: {
+      "@type": "Organization",
+      name: "Globfreight",
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.png`,
+    },
+    areaServed: Array.isArray(areaServed)
+      ? areaServed.map(area => ({ "@type": "AdministrativeArea", name: area }))
+      : [{ "@type": "AdministrativeArea", name: areaServed }],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Maritime Seaport Clearance & Bonded Haulage",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Direct Seaport EDI Customs Clearance (Antwerp & Rotterdam)",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Type II Bonded Storage & EU VAT Deferment (Article 23)",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Intermodal Container Inland Haulage & Fast-Track Dispatch",
+          },
+        },
+      ],
+    },
+  };
+}
+
+/**
+ * Generates LocalBusiness structured data for Globfreight seaport branch offices.
+ */
+export function getLocalBusinessJsonLd({
+  name = "Globfreight European Seaport Logistics & Customs",
+  url = SITE_URL,
+  image = `${SITE_URL}/og-image.jpg`,
+}: {
+  name?: string;
+  url?: string;
+  image?: string;
+} = {}) {
+  return {
+    "@type": "LocalBusiness",
+    "@id": `${url}/#localbusiness`,
+    name,
+    url,
+    image,
+    telephone: "+32 3 205 90 00",
+    email: "operations@globfreight.com",
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Haven 1025, Scheldelaan",
+      addressLocality: "Antwerp",
+      postalCode: "2030",
+      addressCountry: "BE",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "51.2980",
+      longitude: "4.3310",
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+        ],
+        opens: "07:00",
+        closes: "19:00",
+      },
+    ],
+  };
+}
+
+/**
+ * Generates a unified JSON-LD graph combining Service + LocalBusiness + FAQPage + Breadcrumbs.
+ */
+export function getPageCompleteJsonLd({
+  title,
+  description,
+  url,
+  breadcrumbs = [],
+  faqs = [],
+  serviceType,
+  areaServed,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  faqs?: Array<{ question: string; answer: string }>;
+  serviceType?: string;
+  areaServed?: string | string[];
+}) {
+  const graph: any[] = [
+    {
+      "@type": "WebPage",
+      "@id": `${url}/#webpage`,
+      url,
+      name: title,
+      description,
+      isPartOf: {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+      },
+    },
+    getServiceJsonLd({ name: title, description, serviceType, areaServed, url }),
+    getLocalBusinessJsonLd({ url }),
+  ];
+
+  if (breadcrumbs.length > 0) {
+    graph.push({
+      ...getBreadcrumbJsonLd(breadcrumbs),
+      "@id": `${url}/#breadcrumb`,
+    });
+  }
+
+  if (faqs.length > 0) {
+    graph.push({
+      ...getFaqJsonLd(faqs),
+      "@id": `${url}/#faq`,
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
