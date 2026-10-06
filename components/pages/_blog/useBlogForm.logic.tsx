@@ -4,7 +4,7 @@ import { extractFormDefaultInputs } from "@/utils/extractFormDefaultInputs";
 import { extractFormNameInputs } from "@/utils/extractFormNameInputs";
 import { FormAction } from "@/utils/FormActions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { BlogInputs } from "./blog.inputs";
 import { BlogSchema, type BlogType } from "./blog.schema";
@@ -12,9 +12,10 @@ import { BlogSchema, type BlogType } from "./blog.schema";
 export default function useBlogLogic({ data }: { data?: BlogType }) {
   const t = useTranslations();
   const inputs = BlogInputs();
+  const locale = useLocale()
   const { control, handleSubmit, reset } = useForm<BlogType>({
     mode: "onSubmit",
-    resolver: zodResolver(BlogSchema(t)),
+    resolver: zodResolver(BlogSchema(t, locale)),
     defaultValues: {
       ...(extractFormDefaultInputs(inputs, data) as BlogType),
       tags: Array.isArray(data?.tags)
