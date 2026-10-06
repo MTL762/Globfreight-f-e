@@ -15,13 +15,13 @@ export default function BlogFormPage({ data }: { data?: BlogType }) {
         {
           id: "general",
           title: t("General Information"),
-          width: 5
+          width: 12
         },
         {
           id: "lang",
           title: t("Blog Information"),
           multiLang: true,
-          width: 7
+          width: 12
         },
         {
           id: "seo",

@@ -12,7 +12,6 @@ export const BlogInputs = (): FormInput[] => {
       label: "Category",
       required: true,
       cardId: "general",
-      width: 3
     },
     {
       name: "sub_category_id",
@@ -20,7 +19,6 @@ export const BlogInputs = (): FormInput[] => {
       apiUrl: ["adminSubCategories"],
       label: "Sub Category",
       cardId: "general",
-      width: 3
     },
     {
       name: "status",
@@ -33,7 +31,6 @@ export const BlogInputs = (): FormInput[] => {
       ],
       required: true,
       cardId: "general",
-      width: 3
     },
     {
       name: "is_featured",
@@ -41,7 +38,6 @@ export const BlogInputs = (): FormInput[] => {
       label: "Featured Article",
       options: booleanOptions(t),
       cardId: "general",
-      width: 3
     },
     {
       name: "image",
@@ -99,7 +95,6 @@ export const BlogInputs = (): FormInput[] => {
       label: "Focus Keyphrase",
       placeholder: "e.g. AI logistics agents",
       cardId: "seo",
-      width: 3
     },
     {
       name: "seo_canonical_url",
@@ -107,7 +102,6 @@ export const BlogInputs = (): FormInput[] => {
       label: "Canonical URL",
       placeholder: "https://globfreight.com/blog/...",
       cardId: "seo",
-      width: 3
     },
     {
       name: "tags",
@@ -115,7 +109,6 @@ export const BlogInputs = (): FormInput[] => {
       label: "Tags",
       placeholder: "e.g. AI, Logistics, Shipping",
       cardId: "seo",
-      width: 3
     },
     {
       name: "seo_schema_markup_type",
@@ -127,7 +120,6 @@ export const BlogInputs = (): FormInput[] => {
         { label: "WebPage", value: "WebPage" },
       ],
       cardId: "seo",
-      width: 3
     },
   ];
 
