@@ -99,7 +99,7 @@ function TableFilters({
   return (
     effectiveIsFiltersOpen && (
       <div className="flex flex-col gap-4">
-        <FormCardContainer index={filters?.length} width={6}>
+        <FormCardContainer index={filters?.length} width={12}>
           {filters?.map((filter, index) => {
             return (
               <React.Fragment key={index.toString()}>

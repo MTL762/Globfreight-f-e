@@ -30,7 +30,7 @@ export default function FormCard<T extends FieldValues>({
   if ((cardWidthObj?.id == "default" || cardWidthObj == undefined) && defaultConfig) {
     cardWidthObj = defaultConfig;
   }
-  const colSpan = cardWidthObj ? cardWidthObj.width : 6;
+  const colSpan = cardWidthObj ? cardWidthObj.width : 12;
   let cardTitle;
   if (cardConfig) {
     cardTitle = cardWidthObj;

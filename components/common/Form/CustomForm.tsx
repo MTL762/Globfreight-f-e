@@ -75,7 +75,7 @@ export default function CustomForm<T extends FieldValues>({
       <div className="flex flex-col gap-4 ">
         <div className="flex flex-col gap-2 ">
 
-          <div className="grid grid-cols-6 gap-4">
+          <div className="grid grid-cols-12 gap-4">
             {Object.entries(groupedInputs).map(([cardId, cardInputs]) => {
               return (
                 <FormCard<T>
