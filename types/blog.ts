@@ -28,6 +28,11 @@ export interface BlogPost {
     name: string | Record<string, string>;
     slug?: string;
   };
+  seo_meta_title?: string | Record<string, string>;
+  seo_meta_description?: string | Record<string, string>;
+  seo_focus_keyphrase?: string | Record<string, string>;
+  seo_canonical_url?: string;
+  seo_schema_markup_type?: string;
   seo?: {
     id?: number;
     meta_title?: string | Record<string, string>;

@@ -32,20 +32,42 @@ export async function generateMetadata({
       };
     }
 
-    const title =
-      getBlogText(post.seo?.meta_title, locale) ||
-      `${getBlogText(post.title, locale)} | Globfreight`;
+    const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
+    const postTitle = getBlogText(post.title, locale);
+    const title = metaTitleRaw || (postTitle ? `${postTitle} | Globfreight` : "Globfreight");
+
     const description =
-      getBlogText(post.seo?.meta_description, locale) ||
+      getBlogText(post.seo?.meta_description || post.seo_meta_description, locale) ||
       getBlogText(post.excerpt, locale) ||
       "Globfreight supply chain and logistics intelligence article.";
+
+    const customCanonical = post.seo?.canonical_url || post.seo_canonical_url;
     const alternates = getPageAlternates(`/blog/${post.slug || slug}`, locale);
+    if (customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== "") {
+      alternates.canonical = customCanonical.trim();
+    }
+
     const postImage = getBlogText(post.image, locale);
     const ogImage = postImage || post.seo?.og_image;
+
+    const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, locale);
+    const tags = Array.isArray(post.tags) ? post.tags : [];
+    const keywords = [
+      ...(focusKeyphrase ? [focusKeyphrase] : []),
+      ...tags,
+      "Globfreight",
+      "logistics",
+      "supply chain"
+    ];
+
+    const categoryName = post.category
+      ? (typeof post.category.name === "string" ? post.category.name : getBlogText(post.category.name, locale))
+      : undefined;
 
     return {
       title,
       description,
+      keywords,
       alternates,
       openGraph: {
         title,
@@ -53,7 +75,10 @@ export async function generateMetadata({
         url: alternates.canonical,
         type: "article",
         publishedTime: post.published_at || post.created_at,
+        modifiedTime: post.published_at || post.created_at,
         siteName: "Globfreight",
+        tags,
+        ...(categoryName ? { section: categoryName } : {}),
         images: ogImage
           ? [
               {
@@ -62,6 +87,16 @@ export async function generateMetadata({
               }
             ]
           : getOpenGraphImages(title)
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: ogImage ? [ogImage] : [`${SITE_URL}/og-image.jpg`]
+      },
+      robots: {
+        index: post.status !== "draft" && post.status !== "archived",
+        follow: true
       }
     };
   } catch {
@@ -107,16 +142,31 @@ export default async function BlogDetailPage(props: {
     .filter((p: BlogPost) => p.id !== post.id && p.slug !== post.slug)
     .slice(0, 3);
 
-  const title =
-    getBlogText(post.seo?.meta_title, locale) ||
-    `${getBlogText(post.title, locale)} | Globfreight`;
+  const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
+  const postTitle = getBlogText(post.title, locale);
+  const title = metaTitleRaw || (postTitle ? `${postTitle} | Globfreight` : "Globfreight");
+
   const description =
-    getBlogText(post.seo?.meta_description, locale) ||
+    getBlogText(post.seo?.meta_description || post.seo_meta_description, locale) ||
     getBlogText(post.excerpt, locale) ||
     "Globfreight supply chain and logistics intelligence article.";
-  const postUrl = `${SITE_URL}/${locale}/blog/${post.slug || slug}`;
+
+  const customCanonical = post.seo?.canonical_url || post.seo_canonical_url;
+  const postUrl = customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
+    ? customCanonical.trim()
+    : `${SITE_URL}/${locale}/blog/${post.slug || slug}`;
+
   const postImage = getBlogText(post.image, locale);
   const ogImage = postImage || post.seo?.og_image;
+
+  const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, locale);
+  const tags = Array.isArray(post.tags) ? post.tags : [];
+  const allKeywords = [...(focusKeyphrase ? [focusKeyphrase] : []), ...tags];
+
+  const schemaType = post.seo?.schema_markup_type || post.seo_schema_markup_type || "BlogPosting";
+  const categoryName = post.category
+    ? (typeof post.category.name === "string" ? post.category.name : getBlogText(post.category.name, locale))
+    : undefined;
 
   const articleJsonLd = getArticleJsonLd({
     title,
@@ -125,12 +175,16 @@ export default async function BlogDetailPage(props: {
     image: ogImage,
     datePublished: post.published_at || post.created_at,
     dateModified: post.published_at || post.created_at,
-    authorName: post.author?.name || "Globfreight Logistics Expert"
+    authorName: post.author?.name || "Globfreight Logistics Expert",
+    schemaType,
+    keywords: allKeywords,
+    articleSection: categoryName
   });
 
   const breadcrumbsJsonLd = getBreadcrumbJsonLd([
     { name: "Home", url: `${SITE_URL}/${locale}` },
     { name: "Blog", url: `${SITE_URL}/${locale}/blog` },
+    ...(categoryName ? [{ name: categoryName, url: `${SITE_URL}/${locale}/blog` }] : []),
     { name: title, url: postUrl }
   ]);
 
