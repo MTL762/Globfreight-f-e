@@ -6,21 +6,23 @@ import Image from "next/image";
 export function BrandMark({
   inverse = false,
   compact = false,
-  className = ""
+  className = "",
+  ariaHidden = false
 }: {
   inverse?: boolean;
   compact?: boolean;
   className?: string;
+  ariaHidden?: boolean;
 }) {
   return (
     <div
       className={`inline-flex items-center gap-2.5 ${className}`}
-      aria-label="Globfreight"
+      aria-hidden={ariaHidden ? true : undefined}
     >
       <div className="relative h-9 w-9 sm:h-10 sm:w-10 shrink-0">
         <Image
           src="/logo.png"
-          alt="Globfreight"
+          alt={ariaHidden ? "" : "Globfreight"}
           fill
           sizes="40px"
           priority

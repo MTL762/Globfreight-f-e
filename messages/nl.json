@@ -1179,7 +1179,22 @@
   "VENDOR": "VENDOR",
   "VERIFIED": "VERIFIED",
   "VIDEO": "VIDEO",
-  "VISA": "VISA",
+  "BlogTooltips": {
+    "category_id": "Selecteer de hoofdcategorie voor dit blogbericht.",
+    "sub_category_id": "Kies een optionele subcategorie om het onderwerp verder te classificeren.",
+    "status": "Publicatiestatus: Gepubliceerd (live op site), Concept (verborgen voor publiek), of Gearchiveerd.",
+    "is_featured": "Markeer dit artikel in het uitgelichte gedeelte bovenaan de blog-startpagina.",
+    "image": "Upload een taalspecifieke omslagafbeelding (aanbevolen verhouding 16:9, min. 1200x630px).",
+    "title": "Voer de hoofdtitel voor dit bericht in (aanbevolen minder dan 70 tekens).",
+    "excerpt": "Een korte samenvatting of teaser die wordt weergegeven op blogkaarten en sociale media.",
+    "content": "De volledige hoofdtekst van het artikel. Markdown en rich text worden ondersteund.",
+    "seo_meta_title": "Titeltag voor zoekmachines (SERP). Aanbevolen lengte is 50-60 tekens.",
+    "seo_meta_description": "Zoekmachinefragment dat het bericht samenvat. Aanbevolen lengte is 150-160 tekens.",
+    "seo_focus_keyphrase": "Het belangrijkste trefwoord of zoekwoordcombinatie waarop dit artikel zich richt.",
+    "seo_canonical_url": "De canonieke URL om straffen voor dubbele inhoud te voorkomen bij syndicatie.",
+    "tags": "Trefwoorden en tags om gerelateerde berichten te groeperen en te ordenen.",
+    "seo_schema_markup_type": "Gestructureerd JSON-LD schemaformaat voor zoekmachines (Article, BlogPosting, of WebPage)."
+  },
   "Validations": {
     "email": "Ongeldig e-mailadres",
     "invalidEmail": "Ongeldig e-mailadres",

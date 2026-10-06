@@ -1179,7 +1179,22 @@
   "VENDOR": "VENDOR",
   "VERIFIED": "VERIFIED",
   "VIDEO": "VIDEO",
-  "VISA": "VISA",
+  "BlogTooltips": {
+    "category_id": "Sélectionnez la catégorie principale pour cet article de blog.",
+    "sub_category_id": "Choisissez une sous-catégorie facultative pour préciser le sujet.",
+    "status": "Statut de publication : Publié (en ligne), Brouillon (masqué au public) ou Archivé.",
+    "is_featured": "Mettez cet article en avant dans la section principale de la page d'accueil du blog.",
+    "image": "Téléchargez une image de couverture spécifique à la langue (ratio recommandé 16:9, min 1200x630px).",
+    "title": "Saisissez le titre principal de cet article (recommandé moins de 70 caractères).",
+    "excerpt": "Un court résumé ou accroche affiché sur les cartes du blog et les aperçus sociaux.",
+    "content": "Le corps complet du texte de l'article. Prise en charge du markdown et du formatage enrichi.",
+    "seo_meta_title": "Balise de titre pour les moteurs de recherche (SERP). Longueur recommandée : 50-60 caractères.",
+    "seo_meta_description": "Extrait résumant l'article dans les résultats de recherche. Longueur recommandée : 150-160 caractères.",
+    "seo_focus_keyphrase": "Le mot-clé ou l'expression cible principale pour le référencement de cet article.",
+    "seo_canonical_url": "L'URL canonique pour éviter les pénalités de contenu dupliqué en cas de rediffusion.",
+    "tags": "Mots-clés et tags pour regrouper et organiser les articles associés pour les lecteurs.",
+    "seo_schema_markup_type": "Format de schéma structuré JSON-LD pour les moteurs de recherche (Article, BlogPosting ou WebPage)."
+  },
   "Validations": {
     "email": "E-mail invalide",
     "invalidEmail": "E-mail invalide",

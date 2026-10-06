@@ -7,7 +7,7 @@ const API_IMG_URL = process.env.NEXT_PUBLIC_API_IMG_URL;
 interface ImgInputProps {
   alt?: string;
   name?: string;
-  value?: string;
+  value?: string | File | null;
   className?: string;
   onChange?: (e: File | undefined) => void;
   accept?: string;
@@ -29,12 +29,25 @@ export default function ImgInput({
 
   useEffect(() => {
     if (value && typeof value === "string") {
-      setPreviewUrl(API_IMG_URL + value);
+      const fullUrl =
+        value.startsWith("http://") || value.startsWith("https://") || value.startsWith("blob:")
+          ? value
+          : (API_IMG_URL || "") + value;
+      setPreviewUrl(fullUrl);
       setFileName(value.split("/").pop() || "");
+    } else if (value instanceof File) {
+      const objectUrl = URL.createObjectURL(value);
+      setPreviewUrl(objectUrl);
+      setFileName(value.name);
+      return () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+    } else if (!value) {
+      setPreviewUrl("");
+      setFileName("");
     }
 
     return () => {
-      // Cleanup only blob URLs
       if (previewUrl && previewUrl.startsWith("blob:")) {
         URL.revokeObjectURL(previewUrl);
       }
@@ -140,6 +153,7 @@ export default function ImgInput({
             if (previewUrl && previewUrl.startsWith("blob:")) {
               URL.revokeObjectURL(previewUrl);
             }
+            onChange?.(undefined);
           }}
           className="text-xs text-orange-500 hover:text-orange-600 transition-colors"
           type="button"

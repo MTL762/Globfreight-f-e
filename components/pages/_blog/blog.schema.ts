@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StringReq, StringNotReq, noSchema } from "@/validations/String.schema";
+import { OptionalLinkSchema } from "@/validations/Link.schema";
 import { Locale } from "next-intl";
 
 export const BlogSchema = (t: TFunction, locale: Locale) => {
@@ -24,7 +25,12 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
     status: z.enum(["published", "draft", "archived"]).default("published"),
     is_featured: noSchema(),
     tags: z.array(z.string()).optional().default([]),
-    image: noSchema(),
+    image: noSchema().optional(),
+    imageAr: noSchema().optional(),
+    imageEn: noSchema().optional(),
+    imageNl: noSchema().optional(),
+    imageFr: noSchema().optional(),
+    imageDe: noSchema().optional(),
     // SEO fields
     seo_meta_titleAr: locale == "ar" ? StringReq(t, 2) : StringNotReq(),
     seo_meta_titleEn: locale == "en" ? StringReq(t, 2) : StringNotReq(),
@@ -37,7 +43,7 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
     seo_meta_descriptionFr: locale == "fr" ? StringReq(t, 5) : StringNotReq(),
     seo_meta_descriptionDe: locale == "de" ? StringReq(t, 5) : StringNotReq(),
     seo_focus_keyphrase: StringNotReq(),
-    seo_canonical_url: StringNotReq(),
+    seo_canonical_url: OptionalLinkSchema(t),
     seo_schema_markup_type: StringNotReq(),
   });
 };

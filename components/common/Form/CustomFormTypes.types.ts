@@ -63,6 +63,8 @@ export type FormInput = {
   width?: number;
   cardId?: number | string;
   toolTip?: string;
+  description?: string;
+  toolTipIcon?: "info" | "alert" | JSX.Element;
   onChange?: (value: Option[] | string) => void;
   map?: {
     center: {

@@ -1179,7 +1179,22 @@
   "VENDOR": "VENDOR",
   "VERIFIED": "VERIFIED",
   "VIDEO": "VIDEO",
-  "VISA": "VISA",
+  "BlogTooltips": {
+    "category_id": "Select the primary category for this blog post.",
+    "sub_category_id": "Choose an optional sub-category to further classify the topic.",
+    "status": "Publication status: Published (live on site), Draft (hidden from public), or Archived.",
+    "is_featured": "Highlight this article in the top featured showcase of the blog homepage.",
+    "image": "Upload a language-specific cover image (recommended 16:9 ratio, min 1200x630px).",
+    "title": "Enter the main headline for this post (recommended under 70 characters).",
+    "excerpt": "A short summary or teaser shown in blog listing cards and social media previews.",
+    "content": "The complete body text of the article. Markdown and rich formatting are supported.",
+    "seo_meta_title": "Search engine title tag (SERP). Recommended length is 50-60 characters.",
+    "seo_meta_description": "Search engine snippet summarizing the post. Recommended length is 150-160 characters.",
+    "seo_focus_keyphrase": "The primary keyword or keyphrase this article is targeting for search rankings.",
+    "seo_canonical_url": "The canonical URL to avoid duplicate content penalties if syndicated elsewhere.",
+    "tags": "Keywords and tags to group and organize related posts for readers.",
+    "seo_schema_markup_type": "Structured JSON-LD schema format for search crawlers (Article, BlogPosting, or WebPage)."
+  },
   "Validations": {
     "email": "Invalid Email",
     "invalidEmail": "Invalid Email",

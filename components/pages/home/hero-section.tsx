@@ -11,7 +11,7 @@ export async function HeroSection() {
   const t = await getTranslations("LandingPage.hero");
 
   return (
-    <section className="relative overflow-hidden border-b border-border/80 bg-background pt-8 sm:pt-12 lg:pt-14 pb-12 sm:pb-16">
+    <section aria-labelledby="hero-title" className="relative overflow-hidden border-b border-border/80 bg-background pt-8 sm:pt-12 lg:pt-14 pb-12 sm:pb-16">
       {/* Background Ambient Glows */}
       <div
         className="pointer-events-none absolute -top-40 right-1/4 h-[500px] w-[600px] rounded-full bg-primary/10 blur-[130px]"
@@ -27,17 +27,17 @@ export async function HeroSection() {
         <div className="max-w-4xl mx-auto text-center space-y-4 mb-8 sm:mb-10">
           {/* Live Status Pill */}
           <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-card border border-border/80 text-xs font-semibold text-foreground shadow-xs">
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
             <span className="font-bold text-primary">{t("poweredBadge")}</span>
-            <span className="text-muted-foreground">•</span>
+            <span className="text-muted-foreground" aria-hidden="true">•</span>
             <span>{t("engineBadge")}</span>
           </div>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold tracking-tight text-foreground leading-[1.12]">
+          <h1 id="hero-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold tracking-tight text-foreground leading-[1.12]">
             {t("title")}
           </h1>
 
@@ -47,21 +47,25 @@ export async function HeroSection() {
           </p>
 
           {/* Key Assurance Metrics Bar */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
-              <ShieldCheck size={14} className="text-primary shrink-0" />
+          <div
+            role="list"
+            aria-label="Operational certifications and service standards"
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-1"
+          >
+            <div role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
+              <ShieldCheck size={14} className="text-primary shrink-0" aria-hidden="true" />
               <span>{t("aeoBadge")}</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
-              <Clock size={14} className="text-emerald-600 shrink-0" />
+            <div role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
+              <Clock size={14} className="text-emerald-600 shrink-0" aria-hidden="true" />
               <span>{t("releaseBadge")}</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
-              <Globe2 size={14} className="text-primary shrink-0" />
+            <div role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
+              <Globe2 size={14} className="text-primary shrink-0" aria-hidden="true" />
               <span>{t("portsBadge")}</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
-              <CheckCircle2 size={14} className="text-emerald-600 shrink-0" />
+            <div role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-card border border-border/70 text-xs font-medium text-foreground">
+              <CheckCircle2 size={14} className="text-emerald-600 shrink-0" aria-hidden="true" />
               <span>{t("demurrageBadge")}</span>
             </div>
           </div>
