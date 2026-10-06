@@ -31,6 +31,7 @@ export function BlogFeaturedCard({
   const date = formatBlogDate(post.published_at || post.created_at, locale);
   const readTime = estimateReadTime(content);
   const href = post.slug ? `/blog/${post.slug}` : "/blog";
+  const postImage = getBlogText(post.image, locale, "");
 
   return (
     <div
@@ -38,9 +39,9 @@ export function BlogFeaturedCard({
     >
       {/* Media Column */}
       <div className="relative lg:col-span-6 h-64 sm:h-80 lg:h-auto min-h-[280px] bg-muted overflow-hidden">
-        {post.image ? (
+        {postImage ? (
           <Image
-            src={post.image}
+            src={postImage}
             alt={title}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"

@@ -10,8 +10,14 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
       }
       if (item.multiLang) {
         const langDefaults: Record<string, string> = {};
+        const rawDirect = dataObj[item.name] ?? (item.name === "image" ? dataObj["images"] : undefined);
         FORM_LANGUAGES.forEach(({ code, key }) => {
-          const directVal = dataObj[item.name]?.[code];
+          let directVal: any;
+          if (typeof rawDirect === "object" && rawDirect !== null) {
+            directVal = rawDirect[code];
+          } else if (typeof rawDirect === "string") {
+            directVal = rawDirect;
+          }
           const seoKey = item.name.startsWith("seo_") ? item.name.replace("seo_", "") : null;
           const seoVal = seoKey ? dataObj.seo?.[seoKey]?.[code] : undefined;
           langDefaults[`${item.name}${key}`] = directVal ?? seoVal ?? "";

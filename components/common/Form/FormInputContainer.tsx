@@ -26,7 +26,15 @@ export default function FormInputContainer({
                 ? "lg:col-span-4 md:col-span-3 col-span-6"
                 : width === 5
                   ? "lg:col-span-5 md:col-span-6 col-span-6"
-                  : "lg:col-span-6 md:col-span-6 col-span-6"
+                  : width === 6
+                    ? "lg:col-span-6 md:col-span-6 col-span-6"
+                    : width === 8
+                      ? "lg:col-span-8 md:col-span-6 col-span-6"
+                      : width === 10
+                        ? "lg:col-span-10 md:col-span-6 col-span-6"
+                        : width === 12
+                          ? "lg:col-span-12 md:col-span-6 col-span-6"
+                          : "lg:col-span-6 md:col-span-6 col-span-6"
         }`,
         className
       )}

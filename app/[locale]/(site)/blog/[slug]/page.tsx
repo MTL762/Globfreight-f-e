@@ -40,7 +40,8 @@ export async function generateMetadata({
       getBlogText(post.excerpt, locale) ||
       "Globfreight supply chain and logistics intelligence article.";
     const alternates = getPageAlternates(`/blog/${post.slug || slug}`, locale);
-    const ogImage = post.image || post.seo?.og_image;
+    const postImage = getBlogText(post.image, locale);
+    const ogImage = postImage || post.seo?.og_image;
 
     return {
       title,
@@ -114,7 +115,8 @@ export default async function BlogDetailPage(props: {
     getBlogText(post.excerpt, locale) ||
     "Globfreight supply chain and logistics intelligence article.";
   const postUrl = `${SITE_URL}/${locale}/blog/${post.slug || slug}`;
-  const ogImage = post.image || post.seo?.og_image;
+  const postImage = getBlogText(post.image, locale);
+  const ogImage = postImage || post.seo?.og_image;
 
   const articleJsonLd = getArticleJsonLd({
     title,

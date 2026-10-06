@@ -25,7 +25,6 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
     status: z.enum(["published", "draft", "archived"]).default("published"),
     is_featured: noSchema(),
     tags: z.array(z.string()).optional().default([]),
-    image: noSchema().optional(),
     imageAr: noSchema().optional(),
     imageEn: noSchema().optional(),
     imageNl: noSchema().optional(),

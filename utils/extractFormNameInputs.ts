@@ -26,6 +26,10 @@ export function extractFormNameInputs({
       if (dirtyFields && !dirtyFields[item]) return;
       if (data[item] == undefined) return;
 
+      // If the key directly matches a multiLang input (e.g. item === "image"), skip it because localized values are sent via language keys
+      const isDirectMulti = inputs.find(input => input.name === item)?.multiLang;
+      if (isDirectMulti) return;
+
       if (item.includes("phone") || item.includes("Phone")) {
         if (data[item]) formdata.append(item, `${data[item]}`);
         return;
@@ -45,7 +49,17 @@ export function extractFormNameInputs({
           const hasValue = val !== undefined && val !== null && val !== "";
 
           if (hasValue || (isDirty && val === "")) {
-            if (baseName.startsWith("seo_")) {
+            if (val instanceof File || val instanceof Blob) {
+              formdata.append(`${baseName}[${code}]`, val);
+            } else if (Array.isArray(val)) {
+              val.forEach(file => {
+                if (file instanceof File || file instanceof Blob) {
+                  formdata.append(`${baseName}[${code}][]`, file);
+                }
+              });
+            } else if (typeof val === "string" && val.includes("uploads/")) {
+              return;
+            } else if (baseName.startsWith("seo_")) {
               const seoKey = baseName.replace(/^seo_/, "");
               formdata.append(`seo[${seoKey}][${code}]`, `${val ?? ""}`);
             } else {
@@ -116,6 +130,9 @@ export function extractFormNameInputs({
     Object.keys(data).forEach((item: string) => {
       if (dirtyFields && !dirtyFields[item]) return;
       if (data[item] === undefined || data[item] === null) return;
+
+      const isDirectMulti = inputs.find(input => input.name === item)?.multiLang;
+      if (isDirectMulti) return;
 
       if (item.includes("phone") || item.includes("Phone")) {
         formdata[item] = `${data[item]}`;

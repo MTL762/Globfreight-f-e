@@ -10,7 +10,7 @@ export interface BlogPost {
   created_at?: string;
   views_count?: number;
   tags?: string[];
-  image?: string | null;
+  image?: string | Record<string, string> | null;
   author?: {
     id: number;
     name: string;

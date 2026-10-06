@@ -3,9 +3,11 @@
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlertCircle, Info } from "lucide-react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import type { FieldErrors } from "react-hook-form";
 import { DateTimeInput } from "../Inputs/date/date-time-input";
 import PdfInput from "../Inputs/files/PdfInput";
@@ -45,7 +47,9 @@ const InputWrapper = ({
   error,
   required,
   label,
-  name
+  name,
+  toolTip,
+  toolTipIcon
 }: {
   name: string;
   required?: boolean;
@@ -53,16 +57,50 @@ const InputWrapper = ({
   children: React.ReactNode;
   error?: string;
   multiLang?: boolean;
+  toolTip?: string;
+  toolTipIcon?: "info" | "alert" | JSX.Element;
 }) => {
   const t = useTranslations();
+  const labelText = typeof label === "string" ? (t.has?.(label) ? t(label) : label) : label;
+  const tooltipText = typeof toolTip === "string" ? (t.has?.(toolTip) ? t(toolTip) : toolTip) : toolTip;
+
   return (
-    <div className="w-full h-full flex flex-col gap-2 ">
-      <div className="flex justify-start">
-        <span className="text-red-500 mx-1">{required ? "*" : ""}</span>
-        {label && (
-          <label htmlFor={name} className="text-sm text-gray-600 dark:text-gray-300 ">
-            {typeof label === "string" ? t(label) : label}
+    <div className="w-full h-full flex flex-col gap-2">
+      <div className="flex items-center gap-1.5 flex-wrap">
+        {required && <span className="text-red-500 text-sm font-semibold leading-none">*</span>}
+        {labelText && (
+          <label htmlFor={name} className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            {labelText}
           </label>
+        )}
+        {tooltipText && (
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label={typeof labelText === "string" ? `${labelText} info` : "Information"}
+                  className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer p-0.5 rounded-full hover:bg-muted focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  {toolTipIcon === "alert" ? (
+                    <AlertCircle className="w-3.5 h-3.5 text-amber-500 hover:text-amber-600 shrink-0" />
+                  ) : React.isValidElement(toolTipIcon) ? (
+                    toolTipIcon
+                  ) : (
+                    <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-primary transition-colors shrink-0" />
+                  )}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                align="center"
+                className="max-w-xs text-xs font-normal shadow-lg px-2.5 py-1.5 leading-relaxed bg-popover text-popover-foreground border z-[9999]"
+              >
+                <span>{tooltipText}</span>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </div>
       <div className="flex flex-col h-[97%]">
@@ -219,6 +257,8 @@ export const renderInputComponent = ({
         required={item.required}
         // multiLang={item.multiLang}
         error={errorMessage}
+        toolTip={item.toolTip || item.description}
+        toolTipIcon={item.toolTipIcon}
       >
         {renderInput(item, field)}
       </InputWrapper>

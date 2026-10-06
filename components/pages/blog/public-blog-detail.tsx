@@ -49,6 +49,7 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
     : "";
   const date = formatBlogDate(post.published_at || post.created_at, currentLocale);
   const readTime = estimateReadTime(contentHtml);
+  const postImage = getBlogText(post.image, currentLocale, "");
 
   const handleCopyLink = async () => {
     try {
@@ -204,12 +205,12 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
       </header>
 
       {/* 3. Hero Image Banner */}
-      {post.image && (
+      {postImage && (
         <div className="py-8 sm:py-10 bg-background">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <div className="relative w-full h-[320px] sm:h-[420px] md:h-[500px] rounded-3xl overflow-hidden bg-muted border border-border/70 shadow-sm">
               <Image
-                src={post.image}
+                src={postImage}
                 alt={title}
                 fill
                 priority

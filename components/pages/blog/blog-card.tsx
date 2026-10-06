@@ -33,6 +33,7 @@ export function BlogCard({
   const readTime = estimateReadTime(getBlogText(post.content, locale));
   const date = formatBlogDate(post.published_at || post.created_at, locale);
   const href = post.slug ? `/blog/${post.slug}` : "/blog";
+  const postImage = getBlogText(post.image, locale, "");
 
   const isHome = variant === "home";
   const isCompact = variant === "compact";
@@ -48,9 +49,9 @@ export function BlogCard({
             isHome ? "h-48 sm:h-52" : isCompact ? "h-44" : "h-48 sm:h-52"
           }`}
         >
-          {post.image ? (
+          {postImage ? (
             <Image
-              src={post.image}
+              src={postImage}
               alt={title}
               fill
               sizes={

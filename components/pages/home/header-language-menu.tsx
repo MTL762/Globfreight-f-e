@@ -28,11 +28,10 @@ export function HeaderLanguageMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-border/70 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors cursor-pointer outline-none"
-          title={`Language: ${activeLang.label}`}
-          aria-label="Select language"
+          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-border/70 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          aria-label={`Select language (current: ${activeLang.label})`}
         >
-          <Globe2 size={14} className="text-primary shrink-0" />
+          <Globe2 size={14} className="text-primary shrink-0" aria-hidden="true" />
           <span className="uppercase font-bold tracking-wider sm:ml-0.5 text-[10px] px-1.5 py-0.5 rounded bg-muted text-foreground border border-border/60">
             {activeLang.short}
           </span>
@@ -46,15 +45,18 @@ export function HeaderLanguageMenu() {
               <Link
                 href={pathname}
                 locale={item.code}
-                className={`flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-medium cursor-pointer transition-colors ${isActive ? "bg-primary/10 text-primary font-bold" : "text-foreground hover:bg-muted"
+                aria-current={isActive ? "true" : undefined}
+                aria-label={`${item.label} (${item.short})${isActive ? " - selected" : ""}`}
+                className={`flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-medium cursor-pointer transition-colors focus-visible:ring-1 focus-visible:ring-primary ${isActive ? "bg-primary/10 text-primary font-bold" : "text-foreground hover:bg-muted"
                   }`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-5 uppercase font-bold text-[10px] text-muted-foreground">
+                  <span className="w-5 uppercase font-bold text-[10px] text-muted-foreground" aria-hidden="true">
                     {item.short}
                   </span>
+                  <span>{item.label}</span>
                 </div>
-                {isActive && <Check size={14} className="text-primary" />}
+                {isActive && <Check size={14} className="text-primary" aria-hidden="true" />}
               </Link>
             </DropdownMenuItem>
           );

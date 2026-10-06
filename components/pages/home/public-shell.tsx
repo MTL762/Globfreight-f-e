@@ -7,7 +7,9 @@ export async function PublicShell({ children }: { children: ReactNode }) {
   return (
     <>
       <SiteHeader />
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        {children}
+      </main>
       <SiteFooter />
       <FloatingWhatsApp />
     </>

@@ -22,11 +22,12 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
+type TabKey = "rates" | "tracking" | "air" | "schedules" | "load" | "quote";
+
 export function LogisticsSearchWidget() {
   const t = useTranslations("LandingPage.searchWidget");
-  const [activeTab, setActiveTab] = useState<
-    "rates" | "tracking" | "air" | "schedules" | "load" | "quote"
-  >("rates");
+  const [activeTab, setActiveTab] = useState<TabKey>("rates");
+  const [liveAnnouncement, setLiveAnnouncement] = useState("");
 
   // Rates State
   const [shippingMode, setShippingMode] = useState<"fcl" | "lcl" | "air" | "land">("fcl");
@@ -63,50 +64,84 @@ export function LogisticsSearchWidget() {
   const [boxQuantity, setBoxQuantity] = useState("32");
   const [loadContainer, setLoadContainer] = useState("40_hc");
 
+  const tabsList: { id: TabKey; icon: any; label: string }[] = [
+    { id: "rates", icon: Ship, label: t("tabs.rates") },
+    { id: "tracking", icon: Compass, label: t("tabs.tracking") },
+    { id: "air", icon: Plane, label: t("tabs.air") },
+    { id: "schedules", icon: Calendar, label: t("tabs.schedules") },
+    { id: "load", icon: Box, label: t("tabs.load") },
+    { id: "quote", icon: FileText, label: t("tabs.quote") }
+  ];
+
+  // Arrow key navigation between tabs (WAI-ARIA Tabs pattern)
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    let nextIndex = -1;
+    if (e.key === "ArrowRight") {
+      nextIndex = (index + 1) % tabsList.length;
+    } else if (e.key === "ArrowLeft") {
+      nextIndex = (index - 1 + tabsList.length) % tabsList.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = tabsList.length - 1;
+    }
+
+    if (nextIndex !== -1) {
+      e.preventDefault();
+      const targetTab = tabsList[nextIndex].id;
+      setActiveTab(targetTab);
+      const targetEl = document.getElementById(`tab-${targetTab}`);
+      targetEl?.focus();
+    }
+  };
+
   // Handler for Rates Search
   const handleSearchRates = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSearchingRates(true);
+    setLiveAnnouncement(t("rates.searching"));
     setTimeout(() => {
       setIsSearchingRates(false);
+      const routes = [
+        {
+          carrier: "MSC Shipping",
+          transitDays: "18 - 22 Days",
+          vessel: "MSC TINA / Voy 2408W",
+          rateRange: "$1,850 - $2,100",
+          direct: true,
+          co2: "1.42 tons",
+          validUntil: "Sep 30, 2026",
+          freeDays: "14 Days Demurrage-Free"
+        },
+        {
+          carrier: "Maersk Line",
+          transitDays: "20 - 24 Days",
+          vessel: "MAERSK MC-KINNEY / Voy 112E",
+          rateRange: "$1,920 - $2,180",
+          direct: true,
+          co2: "1.38 tons",
+          validUntil: "Sep 28, 2026",
+          freeDays: "12 Days Demurrage-Free"
+        },
+        {
+          carrier: "CMA CGM",
+          transitDays: "21 - 25 Days",
+          vessel: "CMA CGM ANTOINE / Voy 8810",
+          rateRange: "$1,790 - $2,050",
+          direct: false,
+          co2: "1.55 tons",
+          validUntil: "Oct 05, 2026",
+          freeDays: "10 Days Demurrage-Free"
+        }
+      ];
       setRatesResult({
         origin,
         destination,
         mode: shippingMode.toUpperCase(),
         container: containerType,
-        routes: [
-          {
-            carrier: "MSC Shipping",
-            transitDays: "18 - 22 Days",
-            vessel: "MSC TINA / Voy 2408W",
-            rateRange: "$1,850 - $2,100",
-            direct: true,
-            co2: "1.42 tons",
-            validUntil: "Sep 30, 2026",
-            freeDays: "14 Days Demurrage-Free"
-          },
-          {
-            carrier: "Maersk Line",
-            transitDays: "20 - 24 Days",
-            vessel: "MAERSK MC-KINNEY / Voy 112E",
-            rateRange: "$1,920 - $2,180",
-            direct: true,
-            co2: "1.38 tons",
-            validUntil: "Sep 28, 2026",
-            freeDays: "12 Days Demurrage-Free"
-          },
-          {
-            carrier: "CMA CGM",
-            transitDays: "21 - 25 Days",
-            vessel: "CMA CGM ANTOINE / Voy 8810",
-            rateRange: "$1,790 - $2,050",
-            direct: false,
-            co2: "1.55 tons",
-            validUntil: "Oct 05, 2026",
-            freeDays: "10 Days Demurrage-Free"
-          }
-        ]
+        routes
       });
+      setLiveAnnouncement(`Found ${routes.length} freight rates for ${origin} to ${destination}`);
     }, 600);
   };
 
@@ -114,9 +149,10 @@ export function LogisticsSearchWidget() {
   const handleTrackShipment = (e: React.FormEvent) => {
     e.preventDefault();
     setIsTracking(true);
+    setLiveAnnouncement(t("tracking.tracking"));
     setTimeout(() => {
       setIsTracking(false);
-      setTrackingResult({
+      const result = {
         number: trackingNumber || "MSCU9842173",
         carrier: trackingCarrier,
         status: "In Transit - Ocean Voyage",
@@ -134,7 +170,9 @@ export function LogisticsSearchWidget() {
           { label: "Discharge at Dest.", location: "Jebel Ali Terminal 2", date: "Sep 12, 08:00", done: false },
           { label: "Customs Clear & Out for Delivery", location: "Bonded Corridor", date: "Sep 13, 11:00", done: false }
         ]
-      });
+      };
+      setTrackingResult(result);
+      setLiveAnnouncement(`Shipment status for ${result.number}: ${result.status}, ETA ${result.eta}`);
     }, 600);
   };
 
@@ -148,141 +186,118 @@ export function LogisticsSearchWidget() {
 
   return (
     <div className="w-full rounded-2xl sm:rounded-3xl bg-card border border-border/80 shadow-xl overflow-hidden backdrop-blur-sm">
+      {/* Screen reader live region for dynamic search results */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {liveAnnouncement}
+      </div>
+
       {/* Top SeaRates Navigation Tabs */}
-      <div className="flex items-center overflow-x-auto border-b border-border/80 bg-muted/40 p-1.5 sm:p-2 gap-1 sm:gap-1.5 scrollbar-none">
-        <button
-          type="button"
-          onClick={() => setActiveTab("rates")}
-          className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === "rates"
-              ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-          }`}
-        >
-          <Ship size={16} className={activeTab === "rates" ? "text-primary" : ""} />
-          <span>{t("tabs.rates")}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("tracking")}
-          className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === "tracking"
-              ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-          }`}
-        >
-          <Compass size={16} className={activeTab === "tracking" ? "text-primary" : ""} />
-          <span>{t("tabs.tracking")}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("air")}
-          className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === "air"
-              ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-          }`}
-        >
-          <Plane size={16} className={activeTab === "air" ? "text-primary" : ""} />
-          <span>{t("tabs.air")}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("schedules")}
-          className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === "schedules"
-              ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-          }`}
-        >
-          <Calendar size={16} className={activeTab === "schedules" ? "text-primary" : ""} />
-          <span>{t("tabs.schedules")}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("load")}
-          className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === "load"
-              ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-          }`}
-        >
-          <Box size={16} className={activeTab === "load" ? "text-primary" : ""} />
-          <span>{t("tabs.load")}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab("quote")}
-          className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-            activeTab === "quote"
-              ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-          }`}
-        >
-          <FileText size={16} className={activeTab === "quote" ? "text-primary" : ""} />
-          <span>{t("tabs.quote")}</span>
-        </button>
+      <div
+        role="tablist"
+        aria-label="Freight calculation and tracking tools"
+        className="flex items-center overflow-x-auto border-b border-border/80 bg-muted/40 p-1.5 sm:p-2 gap-1 sm:gap-1.5 scrollbar-none"
+      >
+        {tabsList.map((tab, idx) => {
+          const Icon = tab.icon;
+          const isSelected = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              id={`tab-${tab.id}`}
+              aria-selected={isSelected}
+              aria-controls={`panel-${tab.id}`}
+              tabIndex={isSelected ? 0 : -1}
+              onClick={() => setActiveTab(tab.id)}
+              onKeyDown={(e) => handleTabKeyDown(e, idx)}
+              className={`flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                isSelected
+                  ? "bg-card text-primary shadow-xs border border-border/80 ring-1 ring-primary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+              }`}
+            >
+              <Icon size={16} className={isSelected ? "text-primary" : ""} aria-hidden="true" />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Tab Panels */}
-      <div className="p-4 sm:p-6 lg:p-7">
+      <div
+        role="tabpanel"
+        id={`panel-${activeTab}`}
+        aria-labelledby={`tab-${activeTab}`}
+        tabIndex={0}
+        className="p-4 sm:p-6 lg:p-7 outline-none"
+      >
         {/* TAB 1: LOGISTICS EXPLORER (FREIGHT RATES) */}
         {activeTab === "rates" && (
           <form onSubmit={handleSearchRates} className="space-y-5">
             {/* Mode selection pills */}
-            <div className="flex flex-wrap items-center gap-2 pb-2">
-              <span className="text-xs font-semibold text-muted-foreground mr-1">{t("modeLabel")}</span>
+            <div
+              role="radiogroup"
+              aria-labelledby="rates-mode-label"
+              className="flex flex-wrap items-center gap-2 pb-2"
+            >
+              <span id="rates-mode-label" className="text-xs font-semibold text-muted-foreground mr-1">
+                {t("modeLabel")}
+              </span>
               <button
                 type="button"
+                role="radio"
+                aria-checked={shippingMode === "fcl"}
                 onClick={() => setShippingMode("fcl")}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   shippingMode === "fcl"
                     ? "bg-primary text-primary-foreground shadow-xs"
                     : "bg-muted/60 text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Ship size={13} />
+                <Ship size={13} aria-hidden="true" />
                 <span>{t("modes.fcl")}</span>
               </button>
               <button
                 type="button"
+                role="radio"
+                aria-checked={shippingMode === "lcl"}
                 onClick={() => setShippingMode("lcl")}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   shippingMode === "lcl"
                     ? "bg-primary text-primary-foreground shadow-xs"
                     : "bg-muted/60 text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Box size={13} />
+                <Box size={13} aria-hidden="true" />
                 <span>{t("modes.lcl")}</span>
               </button>
               <button
                 type="button"
+                role="radio"
+                aria-checked={shippingMode === "air"}
                 onClick={() => setShippingMode("air")}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   shippingMode === "air"
                     ? "bg-primary text-primary-foreground shadow-xs"
                     : "bg-muted/60 text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Plane size={13} />
+                <Plane size={13} aria-hidden="true" />
                 <span>{t("modes.air")}</span>
               </button>
               <button
                 type="button"
+                role="radio"
+                aria-checked={shippingMode === "land"}
                 onClick={() => setShippingMode("land")}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   shippingMode === "land"
                     ? "bg-primary text-primary-foreground shadow-xs"
                     : "bg-muted/60 text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Truck size={13} />
+                <Truck size={13} aria-hidden="true" />
                 <span>{t("modes.land")}</span>
               </button>
             </div>
@@ -291,16 +306,19 @@ export function LogisticsSearchWidget() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 sm:gap-4">
               {/* Origin */}
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <MapPin size={13} className="text-primary" />
+                <label htmlFor="rates-origin-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <MapPin size={13} className="text-primary" aria-hidden="true" />
                   <span>{t("rates.originLabel")}</span>
                 </label>
                 <div className="relative">
                   <input
+                    id="rates-origin-input"
                     type="text"
                     value={origin}
                     onChange={(e) => setOrigin(e.target.value)}
                     placeholder="e.g. Antwerp, Rotterdam, Shanghai"
+                    autoComplete="off"
+                    aria-required="true"
                     className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                   />
                 </div>
@@ -308,16 +326,19 @@ export function LogisticsSearchWidget() {
 
               {/* Destination */}
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <MapPin size={13} className="text-emerald-500" />
+                <label htmlFor="rates-dest-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <MapPin size={13} className="text-emerald-500" aria-hidden="true" />
                   <span>{t("rates.destLabel")}</span>
                 </label>
                 <div className="relative">
                   <input
+                    id="rates-dest-input"
                     type="text"
                     value={destination}
                     onChange={(e) => setDestination(e.target.value)}
                     placeholder="e.g. Jebel Ali, Hamburg, Alexandria"
+                    autoComplete="off"
+                    aria-required="true"
                     className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                   />
                 </div>
@@ -325,11 +346,12 @@ export function LogisticsSearchWidget() {
 
               {/* Container Size / Cargo Type */}
               <div className="md:col-span-2 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <SlidersHorizontal size={13} className="text-muted-foreground" />
+                <label htmlFor="rates-container-select" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <SlidersHorizontal size={13} className="text-muted-foreground" aria-hidden="true" />
                   <span>{t("rates.containerLabel")}</span>
                 </label>
                 <select
+                  id="rates-container-select"
                   value={containerType}
                   onChange={(e) => setContainerType(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl bg-muted/40 border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
@@ -345,11 +367,12 @@ export function LogisticsSearchWidget() {
 
               {/* Ready Date */}
               <div className="md:col-span-2 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Calendar size={13} className="text-muted-foreground" />
+                <label htmlFor="rates-date-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Calendar size={13} className="text-muted-foreground" aria-hidden="true" />
                   <span>{t("rates.dateLabel")}</span>
                 </label>
                 <input
+                  id="rates-date-input"
                   type="date"
                   value={cargoReadyDate}
                   onChange={(e) => setCargoReadyDate(e.target.value)}
@@ -359,7 +382,11 @@ export function LogisticsSearchWidget() {
             </div>
 
             {/* Quick Popular Corridors */}
-            <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground pt-1">
+            <div
+              role="group"
+              aria-label={t("rates.popular")}
+              className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground pt-1"
+            >
               <span className="font-semibold text-foreground">{t("rates.popular")}</span>
               {[
                 ["Antwerp", "Jebel Ali"],
@@ -370,11 +397,15 @@ export function LogisticsSearchWidget() {
                 <button
                   key={idx}
                   type="button"
+                  aria-label={`Set corridor ${o} to ${d}`}
                   onClick={() => {
-                    setOrigin(`Port of ${o}`);
-                    setDestination(`Port of ${d}`);
+                    const orig = `Port of ${o}`;
+                    const dest = `Port of ${d}`;
+                    setOrigin(orig);
+                    setDestination(dest);
+                    setLiveAnnouncement(`Selected corridor: ${orig} to ${dest}`);
                   }}
-                  className="px-2.5 py-1 rounded-md bg-muted hover:bg-primary/10 hover:text-primary transition-colors font-medium cursor-pointer"
+                  className="px-2.5 py-1 rounded-md bg-muted hover:bg-primary/10 hover:text-primary transition-colors font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                 >
                   {o} → {d}
                 </button>
@@ -385,12 +416,12 @@ export function LogisticsSearchWidget() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-border/70">
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
-                  <ShieldCheck size={14} className="text-emerald-500" />
+                  <ShieldCheck size={14} className="text-emerald-500" aria-hidden="true" />
                   <span>{t("rates.aeo")}</span>
                 </span>
-                <span className="hidden sm:inline">•</span>
+                <span className="hidden sm:inline" aria-hidden="true">•</span>
                 <span className="inline-flex items-center gap-1">
-                  <Clock size={14} className="text-primary" />
+                  <Clock size={14} className="text-primary" aria-hidden="true" />
                   <span>{t("rates.realtime")}</span>
                 </span>
               </div>
@@ -398,18 +429,19 @@ export function LogisticsSearchWidget() {
               <button
                 type="submit"
                 disabled={isSearchingRates}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer"
+                aria-busy={isSearchingRates}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-70"
               >
                 {isSearchingRates ? (
                   <>
-                    <RefreshCw size={16} className="animate-spin" />
+                    <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
                     <span>{t("rates.searching")}</span>
                   </>
                 ) : (
                   <>
-                    <Search size={16} />
+                    <Search size={16} aria-hidden="true" />
                     <span>{t("rates.searchButton")}</span>
-                    <ArrowRight size={15} />
+                    <ArrowRight size={15} aria-hidden="true" />
                   </>
                 )}
               </button>
@@ -417,7 +449,11 @@ export function LogisticsSearchWidget() {
 
             {/* Rates Result Showcase */}
             {ratesResult && (
-              <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-muted/40 border border-primary/30 space-y-3.5 animate-fadeIn">
+              <section
+                aria-label={t("rates.resultsTitle")}
+                tabIndex={-1}
+                className="mt-5 p-4 sm:p-5 rounded-2xl bg-muted/40 border border-primary/30 space-y-3.5 animate-fadeIn outline-none"
+              >
                 <div className="flex items-center justify-between border-b border-border/80 pb-3">
                   <div>
                     <div className="text-xs font-bold text-primary uppercase tracking-wider">
@@ -454,9 +490,9 @@ export function LogisticsSearchWidget() {
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                           <span>⏱️ {route.transitDays}</span>
-                          <span>•</span>
+                          <span aria-hidden="true">•</span>
                           <span>🌱 CO₂: {route.co2}</span>
-                          <span>•</span>
+                          <span aria-hidden="true">•</span>
                           <span className="text-emerald-600 font-semibold">{route.freeDays}</span>
                         </div>
                       </div>
@@ -471,7 +507,8 @@ export function LogisticsSearchWidget() {
 
                         <Link
                           href={`/contact?origin=${encodeURIComponent(ratesResult.origin)}&destination=${encodeURIComponent(ratesResult.destination)}&mode=${ratesResult.mode}&carrier=${encodeURIComponent(route.carrier)}`}
-                          className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-xs hover:opacity-90 transition-all shrink-0"
+                          aria-label={`${t("rates.book")} with ${route.carrier} (${route.rateRange})`}
+                          className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-xs hover:opacity-90 transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         >
                           {t("rates.book")}
                         </Link>
@@ -479,7 +516,7 @@ export function LogisticsSearchWidget() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
           </form>
         )}
@@ -489,25 +526,29 @@ export function LogisticsSearchWidget() {
           <form onSubmit={handleTrackShipment} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 sm:gap-4">
               <div className="md:col-span-7 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Compass size={13} className="text-primary" />
+                <label htmlFor="tracking-num-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Compass size={13} className="text-primary" aria-hidden="true" />
                   <span>{t("tracking.numberLabel")}</span>
                 </label>
                 <input
+                  id="tracking-num-input"
                   type="text"
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
                   placeholder={t("tracking.placeholder")}
+                  autoComplete="off"
+                  aria-required="true"
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-mono font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
 
               <div className="md:col-span-5 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Ship size={13} className="text-muted-foreground" />
+                <label htmlFor="tracking-carrier-select" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Ship size={13} className="text-muted-foreground" aria-hidden="true" />
                   <span>{t("tracking.carrierLabel")}</span>
                 </label>
                 <select
+                  id="tracking-carrier-select"
                   value={trackingCarrier}
                   onChange={(e) => setTrackingCarrier(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl bg-muted/40 border border-border text-xs sm:text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
@@ -527,7 +568,7 @@ export function LogisticsSearchWidget() {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
-                  <CheckCircle2 size={14} className="text-emerald-500" />
+                  <CheckCircle2 size={14} className="text-emerald-500" aria-hidden="true" />
                   <span>{t("tracking.radarFeed")}</span>
                 </span>
               </div>
@@ -535,18 +576,19 @@ export function LogisticsSearchWidget() {
               <button
                 type="submit"
                 disabled={isTracking}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer"
+                aria-busy={isTracking}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-70"
               >
                 {isTracking ? (
                   <>
-                    <RefreshCw size={16} className="animate-spin" />
+                    <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
                     <span>{t("tracking.tracking")}</span>
                   </>
                 ) : (
                   <>
-                    <Search size={16} />
+                    <Search size={16} aria-hidden="true" />
                     <span>{t("tracking.trackButton")}</span>
-                    <ArrowRight size={15} />
+                    <ArrowRight size={15} aria-hidden="true" />
                   </>
                 )}
               </button>
@@ -554,7 +596,11 @@ export function LogisticsSearchWidget() {
 
             {/* Tracking Result View */}
             {trackingResult && (
-              <div className="mt-5 p-4 sm:p-6 rounded-2xl bg-muted/40 border border-border space-y-5 animate-fadeIn">
+              <section
+                aria-label={t("tracking.resultsTitle")}
+                tabIndex={-1}
+                className="mt-5 p-4 sm:p-6 rounded-2xl bg-muted/40 border border-border space-y-5 animate-fadeIn outline-none"
+              >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/80 pb-4">
                   <div>
                     <div className="flex items-center gap-2">
@@ -579,10 +625,14 @@ export function LogisticsSearchWidget() {
                 </div>
 
                 {/* Progress Milestones Timeline */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                <ol
+                  aria-label="Shipment milestone progression"
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 list-none p-0"
+                >
                   {trackingResult.milestones.map((m: any, idx: number) => (
-                    <div
+                    <li
                       key={idx}
+                      aria-current={m.current ? "step" : undefined}
                       className={`p-3 rounded-xl border flex flex-col justify-between space-y-2 ${
                         m.current
                           ? "bg-primary/10 border-primary shadow-xs"
@@ -596,14 +646,14 @@ export function LogisticsSearchWidget() {
                           0{idx + 1}
                         </span>
                         {m.done ? (
-                          <CheckCircle2 size={15} className="text-emerald-500" />
+                          <CheckCircle2 size={15} className="text-emerald-500" aria-label="Completed" />
                         ) : m.current ? (
-                          <span className="relative flex h-2 w-2">
+                          <span className="relative flex h-2 w-2" aria-label="Current stage">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                           </span>
                         ) : (
-                          <div className="w-2 h-2 rounded-full bg-border" />
+                          <div className="w-2 h-2 rounded-full bg-border" aria-hidden="true" />
                         )}
                       </div>
                       <div>
@@ -617,10 +667,10 @@ export function LogisticsSearchWidget() {
                       <div className="text-[10px] font-mono text-muted-foreground/80">
                         {m.date}
                       </div>
-                    </div>
+                    </li>
                   ))}
-                </div>
-              </div>
+                </ol>
+              </section>
             )}
           </form>
         )}
@@ -630,39 +680,44 @@ export function LogisticsSearchWidget() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 sm:gap-4">
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Plane size={13} className="text-primary" />
+                <label htmlFor="air-origin-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Plane size={13} className="text-primary" aria-hidden="true" />
                   <span>{t("air.originLabel")}</span>
                 </label>
                 <input
+                  id="air-origin-input"
                   type="text"
                   value={airOrigin}
                   onChange={(e) => setAirOrigin(e.target.value)}
                   placeholder="e.g. Brussels (BRU), Amsterdam (AMS)"
+                  autoComplete="off"
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
 
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <MapPin size={13} className="text-emerald-500" />
+                <label htmlFor="air-dest-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <MapPin size={13} className="text-emerald-500" aria-hidden="true" />
                   <span>{t("air.destLabel")}</span>
                 </label>
                 <input
+                  id="air-dest-input"
                   type="text"
                   value={airDest}
                   onChange={(e) => setAirDest(e.target.value)}
                   placeholder="e.g. Dubai (DXB), New York (JFK)"
+                  autoComplete="off"
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
 
               <div className="md:col-span-2 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Box size={13} className="text-muted-foreground" />
+                <label htmlFor="air-weight-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Box size={13} className="text-muted-foreground" aria-hidden="true" />
                   <span>{t("air.weightLabel")}</span>
                 </label>
                 <input
+                  id="air-weight-input"
                   type="number"
                   value={airWeight}
                   onChange={(e) => setAirWeight(e.target.value)}
@@ -671,30 +726,33 @@ export function LogisticsSearchWidget() {
               </div>
 
               <div className="md:col-span-2 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <FileText size={13} className="text-muted-foreground" />
+                <label htmlFor="air-awb-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <FileText size={13} className="text-muted-foreground" aria-hidden="true" />
                   <span>{t("air.awbLabel")}</span>
                 </label>
                 <input
+                  id="air-awb-input"
                   type="text"
                   value={airAwb}
                   onChange={(e) => setAirAwb(e.target.value)}
                   placeholder="020-12345678"
+                  autoComplete="off"
                   className="w-full h-11 px-3 rounded-xl bg-muted/40 border border-border text-xs sm:text-sm font-mono text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
               <span className="text-xs text-muted-foreground">
                 {t("air.tagline")}
               </span>
               <Link
                 href={`/contact?mode=AIR&origin=${encodeURIComponent(airOrigin)}&dest=${encodeURIComponent(airDest)}&weight=${airWeight}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all"
+                aria-label={t("air.instantQuote")}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 <span>{t("air.instantQuote")}</span>
-                <ArrowRight size={15} />
+                <ArrowRight size={15} aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -705,37 +763,42 @@ export function LogisticsSearchWidget() {
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 sm:gap-4">
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Anchor size={13} className="text-primary" />
+                <label htmlFor="sched-origin-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Anchor size={13} className="text-primary" aria-hidden="true" />
                   <span>{t("schedules.originLabel")}</span>
                 </label>
                 <input
+                  id="sched-origin-input"
                   type="text"
                   value={schedOrigin}
                   onChange={(e) => setSchedOrigin(e.target.value)}
+                  autoComplete="off"
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
 
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Anchor size={13} className="text-emerald-500" />
+                <label htmlFor="sched-dest-input" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Anchor size={13} className="text-emerald-500" aria-hidden="true" />
                   <span>{t("schedules.destLabel")}</span>
                 </label>
                 <input
+                  id="sched-dest-input"
                   type="text"
                   value={schedDest}
                   onChange={(e) => setSchedDest(e.target.value)}
+                  autoComplete="off"
                   className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
 
               <div className="md:col-span-4 space-y-1.5">
-                <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                  <Ship size={13} className="text-muted-foreground" />
+                <label htmlFor="sched-carrier-select" className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  <Ship size={13} className="text-muted-foreground" aria-hidden="true" />
                   <span>{t("schedules.carrierLabel")}</span>
                 </label>
                 <select
+                  id="sched-carrier-select"
                   value={schedCarrier}
                   onChange={(e) => setSchedCarrier(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl bg-muted/40 border border-border text-sm font-semibold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
@@ -749,38 +812,40 @@ export function LogisticsSearchWidget() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
               <span className="text-xs text-muted-foreground">
                 {t("schedules.hourlyTagline")}
               </span>
               <button
                 type="button"
-                onClick={() =>
-                  setSchedResult([
+                onClick={() => {
+                  const res = [
                     { carrier: "MSC", vessel: "MSC AMALFI", polCutoff: "Sep 03", etd: "Sep 05", eta: "Sep 24", transit: "19 Days" },
                     { carrier: "Maersk", vessel: "MAERSK HANOI", polCutoff: "Sep 06", etd: "Sep 08", eta: "Sep 28", transit: "20 Days" },
                     { carrier: "CMA CGM", vessel: "CMA CGM JACQUES", polCutoff: "Sep 09", etd: "Sep 11", eta: "Oct 01", transit: "20 Days" }
-                  ])
-                }
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all cursor-pointer"
+                  ];
+                  setSchedResult(res);
+                  setLiveAnnouncement(`Found ${res.length} scheduled sailings`);
+                }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 <span>{t("schedules.searchButton")}</span>
-                <ArrowRight size={15} />
+                <ArrowRight size={15} aria-hidden="true" />
               </button>
             </div>
 
             {schedResult && (
-              <div className="mt-4 space-y-2 animate-fadeIn">
+              <ul aria-label="Available sailing schedules" className="mt-4 space-y-2 animate-fadeIn list-none p-0">
                 {schedResult.map((item: any, i: number) => (
-                  <div
+                  <li
                     key={i}
-                    className="p-3 rounded-xl bg-card border border-border/80 flex items-center justify-between text-xs"
+                    className="p-3 rounded-xl bg-card border border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
                   >
                     <div className="flex items-center gap-3">
                       <strong className="font-bold text-foreground text-sm">{item.carrier}</strong>
                       <span className="text-muted-foreground">{item.vessel}</span>
                     </div>
-                    <div className="flex items-center gap-4 font-mono">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-mono">
                       <span>{t("schedules.cutoff")}: <strong className="text-foreground">{item.polCutoff}</strong></span>
                       <span>{t("schedules.etd")}: <strong className="text-primary">{item.etd}</strong></span>
                       <span>{t("schedules.eta")}: <strong className="text-emerald-600">{item.eta}</strong></span>
@@ -788,9 +853,9 @@ export function LogisticsSearchWidget() {
                         {item.transit}
                       </span>
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </div>
         )}
@@ -800,8 +865,9 @@ export function LogisticsSearchWidget() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">{t("load.length")}</label>
+                <label htmlFor="load-box-length" className="text-[11px] font-bold text-foreground">{t("load.length")}</label>
                 <input
+                  id="load-box-length"
                   type="number"
                   value={boxLength}
                   onChange={(e) => setBoxLength(e.target.value)}
@@ -809,8 +875,9 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">{t("load.width")}</label>
+                <label htmlFor="load-box-width" className="text-[11px] font-bold text-foreground">{t("load.width")}</label>
                 <input
+                  id="load-box-width"
                   type="number"
                   value={boxWidth}
                   onChange={(e) => setBoxWidth(e.target.value)}
@@ -818,8 +885,9 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">{t("load.height")}</label>
+                <label htmlFor="load-box-height" className="text-[11px] font-bold text-foreground">{t("load.height")}</label>
                 <input
+                  id="load-box-height"
                   type="number"
                   value={boxHeight}
                   onChange={(e) => setBoxHeight(e.target.value)}
@@ -827,8 +895,9 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">{t("load.weight")}</label>
+                <label htmlFor="load-box-weight" className="text-[11px] font-bold text-foreground">{t("load.weight")}</label>
                 <input
+                  id="load-box-weight"
                   type="number"
                   value={boxWeight}
                   onChange={(e) => setBoxWeight(e.target.value)}
@@ -836,8 +905,9 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">{t("load.quantity")}</label>
+                <label htmlFor="load-box-qty" className="text-[11px] font-bold text-foreground">{t("load.quantity")}</label>
                 <input
+                  id="load-box-qty"
                   type="number"
                   value={boxQuantity}
                   onChange={(e) => setBoxQuantity(e.target.value)}
@@ -845,8 +915,9 @@ export function LogisticsSearchWidget() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-foreground">{t("load.container")}</label>
+                <label htmlFor="load-container-type" className="text-[11px] font-bold text-foreground">{t("load.container")}</label>
                 <select
+                  id="load-container-type"
                   value={loadContainer}
                   onChange={(e) => setLoadContainer(e.target.value)}
                   className="w-full h-10 px-2 rounded-lg bg-muted/40 border border-border text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
@@ -858,17 +929,25 @@ export function LogisticsSearchWidget() {
               </div>
             </div>
 
-            {/* Visual Stuffing Utilization Bar */}
+            {/* Visual Stuffing Utilization Bar with Progressbar semantics */}
             <div className="p-4 rounded-xl bg-muted/40 border border-border/80 space-y-3">
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-foreground flex items-center gap-1.5">
-                  <Box size={14} className="text-primary" />
+                  <Box size={14} className="text-primary" aria-hidden="true" />
                   <span>{t("load.utilization")}</span>
                 </span>
                 <span className="text-primary font-mono">{utilPercent}% {t("load.full")}</span>
               </div>
 
-              <div className="w-full h-3.5 rounded-full bg-muted overflow-hidden">
+              <div
+                role="progressbar"
+                aria-valuenow={utilPercent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={t("load.utilization")}
+                aria-valuetext={`${utilPercent}% capacity utilized`}
+                className="w-full h-3.5 rounded-full bg-muted overflow-hidden"
+              >
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-primary to-orange-500 transition-all duration-500"
                   style={{ width: `${utilPercent}%` }}
@@ -908,27 +987,33 @@ export function LogisticsSearchWidget() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">{t("quote.pickup")}</label>
+                <label htmlFor="quote-pickup-input" className="text-xs font-bold text-foreground">{t("quote.pickup")}</label>
                 <input
+                  id="quote-pickup-input"
                   type="text"
                   placeholder={t("quote.pickupPlaceholder")}
-                  className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm"
+                  autoComplete="off"
+                  className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">{t("quote.delivery")}</label>
+                <label htmlFor="quote-delivery-input" className="text-xs font-bold text-foreground">{t("quote.delivery")}</label>
                 <input
+                  id="quote-delivery-input"
                   type="text"
                   placeholder={t("quote.deliveryPlaceholder")}
-                  className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm"
+                  autoComplete="off"
+                  className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">{t("quote.cargo")}</label>
+                <label htmlFor="quote-cargo-input" className="text-xs font-bold text-foreground">{t("quote.cargo")}</label>
                 <input
+                  id="quote-cargo-input"
                   type="text"
                   placeholder={t("quote.cargoPlaceholder")}
-                  className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm"
+                  autoComplete="off"
+                  className="w-full h-11 px-3.5 rounded-xl bg-muted/40 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:bg-background transition-all"
                 />
               </div>
             </div>
@@ -936,10 +1021,11 @@ export function LogisticsSearchWidget() {
             <div className="flex items-center justify-end pt-2">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all"
+                aria-label={t("quote.button")}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:opacity-90 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 <span>{t("quote.button")}</span>
-                <ArrowRight size={15} />
+                <ArrowRight size={15} aria-hidden="true" />
               </Link>
             </div>
           </div>

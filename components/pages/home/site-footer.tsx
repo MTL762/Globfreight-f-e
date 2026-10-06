@@ -18,73 +18,73 @@ export async function SiteFooter() {
           </p>
           <div className="flex flex-wrap gap-2 pt-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300">
-              <ShieldCheck size={13} className="text-primary" />
+              <ShieldCheck size={13} className="text-primary" aria-hidden="true" />
               <span>{tLanding("aeoCertified")}</span>
             </span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-300">
-              <CheckCircle2 size={13} className="text-emerald-400" />
+              <CheckCircle2 size={13} className="text-emerald-400" aria-hidden="true" />
               <span>{tLanding("nctsEdi")}</span>
             </span>
           </div>
         </div>
 
         {/* Links column */}
-        <div>
+        <nav aria-label="Footer quick links">
           <p className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
             {t("links")}
           </p>
           <div className="flex flex-col space-y-2.5 text-xs text-slate-400">
-            <Link href="/#about" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#about" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("about")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/#services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#services" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("allServices")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/blog" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/blog" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("blogInsights")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/#faq" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#faq" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("faqGuidance")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/#contact" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/#contact" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("requestQuote")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/signin" rel="nofollow" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/signin" rel="nofollow" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("staffPortal")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
           </div>
-        </div>
+        </nav>
 
         {/* Services column */}
-        <div>
+        <nav aria-label="Footer logistics services">
           <p className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
             {t("services")}
           </p>
           <div className="flex flex-col space-y-2.5 text-xs text-slate-400">
-            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("importExport")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("nctsTransit")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("portHaulage")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
-            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group">
+            <Link href="/services" className="inline-flex items-center justify-between hover:text-white transition-colors group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded">
               <span>{tLanding("bondedWarehousing")}</span>
-              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" />
+              <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
           </div>
-        </div>
+        </nav>
 
         {/* Contact column */}
         <address className="not-italic space-y-3">
@@ -92,29 +92,37 @@ export async function SiteFooter() {
             {t("contact")}
           </p>
           <div className="flex items-start gap-2.5 text-xs text-slate-400">
-            <MapPin size={15} className="text-primary shrink-0 mt-0.5" />
+            <MapPin size={15} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
             <span>{t("address")}</span>
           </div>
           <div>
-            <a href="tel:+32496322467" className="flex items-center gap-2.5 text-xs text-slate-400 hover:text-white transition-colors">
-              <Phone size={15} className="text-primary shrink-0" />
+            <a
+              href="tel:+32496322467"
+              aria-label="Call Globfreight dispatch at +32 496 32 24 67"
+              className="flex items-center gap-2.5 text-xs text-slate-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded"
+            >
+              <Phone size={15} className="text-primary shrink-0" aria-hidden="true" />
               <span>+32 496 32 24 67</span>
             </a>
           </div>
           <div>
-            <a href="mailto:info@globfreight.com" className="flex items-center gap-2.5 text-xs text-slate-400 hover:text-white transition-colors">
-              <Mail size={15} className="text-primary shrink-0" />
+            <a
+              href="mailto:info@globfreight.com"
+              aria-label="Email Globfreight at info@globfreight.com"
+              className="flex items-center gap-2.5 text-xs text-slate-400 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary rounded"
+            >
+              <Mail size={15} className="text-primary shrink-0" aria-hidden="true" />
               <span>info@globfreight.com</span>
             </a>
           </div>
-          <div className="flex items-center gap-2.5 text-xs text-slate-500 pt-1">
-            <Clock size={15} className="text-slate-500 shrink-0" />
+          <div className="flex items-center gap-2.5 text-xs text-slate-400 pt-1">
+            <Clock size={15} className="text-slate-400 shrink-0" aria-hidden="true" />
             <span>{tLanding("workingHours")}</span>
           </div>
         </address>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
         <span>{t("copyright")}</span>
         <div>
           <span>{tLanding("portsList")}</span>

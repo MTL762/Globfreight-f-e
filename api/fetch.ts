@@ -88,10 +88,12 @@ export async function fetchHelper({
 
   let result: any = null;
   const contentType = res.headers.get("content-type");
-
+  console.log("result", method, res);
   if (contentType && contentType.includes("application/json")) {
     try {
       result = await res.json();
+      console.log("result", method, result);
+
     } catch (e) {
       console.error("Error parsing JSON response", e);
       result = { message: "Error parsing JSON response" };

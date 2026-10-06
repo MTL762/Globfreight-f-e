@@ -67,7 +67,7 @@ export default function FormCard<T extends FieldValues>({
 
 
       {cardInputs.map((item: FormInput, index: number) => {
-        const inputWidth = item.width ?? 3;
+        const inputWidth = item.width ?? 6;
         const isMultiLang = item.multiLang && cardTitle?.multiLang;
 
         return (
