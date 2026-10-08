@@ -50,15 +50,6 @@ export default function UsersColumns(): ColumnDef<Record<string, unknown>>[] {
       }
     },
     {
-      accessorKey: "phone",
-      header: "Phone",
-      cell: ({ getValue }) => {
-        const val = getValue() as string;
-        if (!val) return <span className="text-muted-foreground text-xs">-</span>;
-        return <PhoneDirectionCol value={val} />;
-      }
-    },
-    {
       accessorKey: "role",
       header: "Role / Type",
       cell: ({ row }) => {

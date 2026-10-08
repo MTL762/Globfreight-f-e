@@ -1,16 +1,16 @@
 import { z } from "zod";
-import { StringReq, StringNotReq, noSchema } from "@/validations/String.schema";
+import { StringNotReq, noSchema } from "@/validations/String.schema";
 import { OptionalLinkSchema } from "@/validations/Link.schema";
 
 export const CategoriesSchema = (t: TFunction) => {
   return z.object({
-    nameAr: StringReq(t),
-    nameEn: StringReq(t),
+    nameAr: StringNotReq(),
+    nameEn: StringNotReq(),
     nameNl: StringNotReq(),
     nameFr: StringNotReq(),
     nameDe: StringNotReq(),
-    descriptionAr: StringReq(t),
-    descriptionEn: StringReq(t),
+    descriptionAr: StringNotReq(),
+    descriptionEn: StringNotReq(),
     descriptionNl: StringNotReq(),
     descriptionFr: StringNotReq(),
     descriptionDe: StringNotReq(),

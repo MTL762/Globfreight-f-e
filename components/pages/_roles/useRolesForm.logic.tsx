@@ -15,19 +15,19 @@ export default function useRolesLogic({ data }: { data?: any }) {
 
   const normalizedData = data
     ? {
-        ...data,
-        permission_ids: Array.isArray(data.permissions)
-          ? data.permissions.map((p: any) =>
-              typeof p === "object" && p !== null ? Number(p.id) : Number(p)
-            )
-          : Array.isArray(data.permission_ids)
-            ? data.permission_ids.map((p: any) => Number(p))
-            : []
-      }
+      ...data,
+      permission_ids: Array.isArray(data.permissions)
+        ? data.permissions.map((p: any) =>
+          typeof p === "object" && p !== null ? Number(p.id) : Number(p)
+        )
+        : Array.isArray(data.permission_ids)
+          ? data.permission_ids.map((p: any) => Number(p))
+          : []
+    }
     : {
-        name: "",
-        permission_ids: []
-      };
+      name: "",
+      permission_ids: []
+    };
 
   const {
     control,
@@ -50,6 +50,7 @@ export default function useRolesLogic({ data }: { data?: any }) {
       endpoint: ["roles"],
       reset: reset,
       redirectLink: "roles",
+      method: data ? "PUT" : "POST",
       t
     });
   };
