@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { StringReq, StringNotReq, noSchema } from "@/validations/String.schema";
 import { selectNotReq } from "@/validations/Select.schema";
+import { PriceSchema } from "@/validations/Number.schema";
 
 export const FaqSchema = (t: TFunction) => {
   return z.object({
@@ -16,7 +17,7 @@ export const FaqSchema = (t: TFunction) => {
     answerFr: StringNotReq(),
     answerDe: StringNotReq(),
     is_active: noSchema(),
-    order: z.coerce.number().optional().nullable()
+    order: PriceSchema(t, 0),
   });
 };
 

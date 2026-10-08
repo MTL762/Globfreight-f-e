@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StringReq, StringNotReq } from "@/validations/String.schema";
+import { PriceSchema } from "@/validations/Number.schema";
 
 export const SubCategoriesSchema = (t: TFunction) => {
   return z.object({
@@ -20,7 +21,7 @@ export const SubCategoriesSchema = (t: TFunction) => {
     slugNl: StringNotReq(),
     slugFr: StringNotReq(),
     slugDe: StringNotReq(),
-    order: z.coerce.number().optional().nullable(),
+    order: PriceSchema(t, 0),
     is_active: z.boolean().default(true),
     image: z.any().optional(),
     // SEO fields
