@@ -1,11 +1,20 @@
 import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogDetail } from "@/components/pages/blog/public-blog-detail";
-import { BlogPost, getBlogText } from "@/types/blog";
+import { BlogPost, BlogPostFetchResult, getBlogText } from "@/types/blog";
 import { getArticleJsonLd, getBreadcrumbJsonLd, getOpenGraphImages, SITE_URL, SYSTEM_LOCALES } from "@/utils/seo";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+
+async function getBlogPostBySlug(slug: string, locale: string): Promise<BlogPostFetchResult> {
+  const safeSlug = encodeURIComponent(decodeURIComponent(slug));
+  return fetchHelper({
+    endPoint: ["blogPostsSlug", safeSlug],
+    method: "GET",
+    locale: locale as any
+  });
+}
 
 export async function generateMetadata({
   params
@@ -16,24 +25,16 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "BlogPage.meta" });
 
   try {
-    const safeSlug = encodeURIComponent(decodeURIComponent(slug));
-    const res = await fetchHelper({
-      endPoint: ["blogPostsSlug", safeSlug],
-      method: "GET"
-    });
+    const res = await getBlogPostBySlug(slug, locale);
 
-    if (res?.status === 301 || res?.data?.is_redirect || res?.isRedirect) {
-      const newSlug = res?.data?.new_slug || res?.newSlug;
+    if (res.status === 301 || res.isRedirect) {
+      const newSlug = res.data?.new_slug || res.newSlug;
       if (newSlug) {
         redirect(`/${locale}/blog/${encodeURIComponent(newSlug)}`);
       }
     }
 
-    const post: BlogPost | undefined =
-      res?.success && res?.data && !Array.isArray(res.data) && res.data?.id
-        ? res.data
-        : undefined;
-
+    const post = res.success && res.data && "id" in res.data ? res.data : undefined;
     if (!post) {
       return {
         title: t("notFoundTitle")
@@ -95,17 +96,17 @@ export async function generateMetadata({
         url: alternates.canonical,
         type: "article",
         publishedTime: post.published_at || post.created_at,
-        modifiedTime: post.published_at || post.created_at,
+        modifiedTime: post.updated_at || post.published_at || post.created_at,
         siteName: "Globfreight",
         tags,
         ...(categoryName ? { section: categoryName } : {}),
         images: ogImage
           ? [
-              {
-                url: ogImage,
-                alt: title
-              }
-            ]
+            {
+              url: ogImage,
+              alt: title
+            }
+          ]
           : getOpenGraphImages(title)
       },
       twitter: {
@@ -132,16 +133,11 @@ export default async function BlogDetailPage(props: {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
 
-  const safeSlug = encodeURIComponent(decodeURIComponent(slug));
-
   // Fetch article and related posts concurrently
   const [postRes, relatedRes] = await Promise.all([
-    fetchHelper({
-      endPoint: ["blogPostsSlug", safeSlug],
-      method: "GET"
-    }).catch(err => {
+    getBlogPostBySlug(slug, locale).catch(err => {
       console.error("Failed to fetch blog post by slug:", err);
-      return { data: null };
+      return { success: false, status: 500 } as BlogPostFetchResult;
     }),
     fetchHelper({
       endPoint: ["blogPosts"],
@@ -151,17 +147,14 @@ export default async function BlogDetailPage(props: {
   ]);
 
   // 1. في حالة التحويل الدائم 301
-  if (postRes?.status === 301 || postRes?.data?.is_redirect || postRes?.isRedirect) {
-    const newSlug = postRes?.data?.new_slug || postRes?.newSlug;
+  if (postRes.status === 301 || postRes.isRedirect) {
+    const newSlug = postRes.data?.new_slug || postRes.newSlug;
     if (newSlug) {
       redirect(`/${locale}/blog/${encodeURIComponent(newSlug)}`);
     }
   }
 
-  const post: BlogPost | undefined =
-    postRes?.success && postRes?.data && !Array.isArray(postRes.data) && postRes.data?.id
-      ? postRes.data
-      : undefined;
+  const post = postRes.success && postRes.data && "id" in postRes.data ? postRes.data : undefined;
 
   // 2. في حالة عدم وجود المقال نهائياً
   if (!post) {

@@ -14,8 +14,7 @@ export default function FormCardContainer({
     <Card
       key={index}
       className={cn(
-        index !== "default" && "border border-border/60",
-        "h-full rounded-2xl p-5 shadow-sm",
+        "h-full rounded-2xl border border-border/80 bg-card p-6 sm:p-7 shadow-xs transition-colors duration-200",
         width === 1
           ? "col-span-12 md:col-span-2 lg:col-span-1"
           : width === 2
@@ -41,7 +40,7 @@ export default function FormCardContainer({
                               : "col-span-12"
       )}
     >
-      <div className="grid grid-cols-12 relative gap-5">{children}</div>
+      <div className="grid grid-cols-12 relative gap-x-5 gap-y-5 sm:gap-y-6">{children}</div>
     </Card>
   );
 }

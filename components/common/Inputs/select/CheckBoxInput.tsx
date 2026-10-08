@@ -1,6 +1,7 @@
 "use client";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { Option } from "../../Form/CustomFormTypes.types";
 
@@ -19,20 +20,24 @@ function CheckBoxOption({
   const id = `${name}-${option.value.toString()}`;
 
   return (
-    <div className="flex items-center gap-2" key={option.value.toString()}>
+    <label
+      key={option.value.toString()}
+      htmlFor={id}
+      className={cn(
+        "inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-medium cursor-pointer transition-all duration-150 select-none",
+        isChecked
+          ? "border-primary/50 bg-primary/10 text-primary shadow-xs ring-1 ring-primary/20"
+          : "border-border/80 bg-background/70 text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+      )}
+    >
       <Checkbox
         name={name}
         checked={isChecked}
         onCheckedChange={checked => onCheckedChange(!!checked)}
         id={id}
       />
-      <label
-        htmlFor={id}
-        className="text-sm flex gap-2 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-      >
-        {t(option.label)}
-      </label>
-    </div>
+      <span>{t(option.label)}</span>
+    </label>
   );
 }
 

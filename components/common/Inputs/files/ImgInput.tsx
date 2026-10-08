@@ -76,18 +76,17 @@ export default function ImgInput({
   const [width, height] = ratio.split(":").map(Number);
 
   return (
-    <div className={`flex flex-col-reverse justify-end gap-2 h-full items  ${className}`}>
+    <div className={`flex flex-col-reverse justify-end gap-3 h-full ${className || ""}`}>
       <div className="flex justify-center items-center">
         <div
-          className="relative w-full flex items-center  rounded-lg overflow-hidden dark:bg-gray-800 bg-gray-100"
+          className="relative w-full flex items-center justify-center rounded-xl border border-border/70 overflow-hidden bg-muted/40"
           style={{
             alignContent: "center",
             width: `${width * ratioStep}px`,
             height: `${height * ratioStep}px`
-            // aspectRatio: getAspectRatio()
           }}
         >
-          <div className="max-w-[250px] max-h-[350px] ">
+          <div className="max-w-[250px] max-h-[350px] w-full h-full relative">
             {previewUrl ? (
               <Image
                 src={previewUrl}
@@ -97,12 +96,11 @@ export default function ImgInput({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="absolute flex-col inset-0 flex items-center justify-center">
-                <ImageIcon className="size-12 text-gray-400" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 p-3 text-center">
+                <ImageIcon className="size-10 text-muted-foreground/60" />
                 {ratio && (
-                  <span className="font-normal text-sm text-gray-500">
-                    {" "}
-                    {t("ratio")} : <span className="text-red-500">{ratio}</span>
+                  <span className="font-medium text-xs text-muted-foreground">
+                    {t("ratio")}: <span className="text-primary font-semibold">{ratio}</span>
                   </span>
                 )}
               </div>
@@ -112,15 +110,12 @@ export default function ImgInput({
       </div>
 
       <label
-        className="flex items-center gap-3 mt-1 p-1 border-2 border-dashed 
-                         dark:border-gray-800 border-gray-300 rounded-lg hover:border-gray-400 
-                          cursor-pointer transition-colors"
+        className="flex items-center gap-3 p-2.5 border border-dashed border-border/80 bg-muted/20 hover:bg-muted/40 hover:border-primary/60 rounded-xl cursor-pointer transition-all duration-150"
       >
         <div
-          className="flex items-center justify-center w-8 h-8  dark:bg-gray-800
-                               bg-gray-50 rounded-lg text-gray-500"
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-background text-muted-foreground shadow-xs shrink-0"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -129,11 +124,11 @@ export default function ImgInput({
             />
           </svg>
         </div>
-        <div className="flex-1 text-sm">
+        <div className="flex-1 min-w-0 text-xs sm:text-sm">
           {fileName ? (
-            <span className="text-gray-700 text-wrap truncate">{fileName.length > 25 ? fileName.slice(0, 25) + "..." : fileName}</span>
+            <span className="text-foreground font-medium truncate block">{fileName}</span>
           ) : (
-            <span className="text-gray-500">{t("Choose image file")}...</span>
+            <span className="text-muted-foreground">{t("Choose image file")}...</span>
           )}
         </div>
         <input
@@ -155,7 +150,7 @@ export default function ImgInput({
             }
             onChange?.(undefined);
           }}
-          className="text-xs text-orange-500 hover:text-orange-600 transition-colors"
+          className="text-xs text-destructive hover:underline transition-colors font-medium self-end"
           type="button"
         >
           {t("Remove file")}

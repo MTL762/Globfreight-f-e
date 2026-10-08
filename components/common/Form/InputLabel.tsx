@@ -26,22 +26,21 @@ export default function InputLabel({
         <TooltipProvider delayDuration={150}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <span
-                role="button"
-                tabIndex={0}
+              <button
+                type="button"
                 aria-label={`${displayLabel} info`}
-                className="cursor-pointer inline-flex items-center text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full"
+                className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
               >
                 {toolTipIcon === "alert" ? (
-                  <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 ) : React.isValidElement(toolTipIcon) ? (
                   toolTipIcon
                 ) : (
-                  <Info className="w-3.5 h-3.5" />
+                  <Info className="w-3.5 h-3.5 shrink-0" />
                 )}
-              </span>
+              </button>
             </TooltipTrigger>
-            <TooltipContent side="top" align="center" className="max-w-xs text-xs z-[9999]">
+            <TooltipContent side="top" align="center" className="max-w-xs text-xs font-normal shadow-md px-3 py-2 leading-relaxed bg-popover text-popover-foreground border z-[9999] rounded-lg">
               <span>{tip}</span>
             </TooltipContent>
           </Tooltip>

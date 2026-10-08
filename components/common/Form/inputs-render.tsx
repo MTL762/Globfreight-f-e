@@ -65,37 +65,49 @@ const InputWrapper = ({
   const tooltipText = typeof toolTip === "string" ? (t.has?.(toolTip) ? t(toolTip) : toolTip) : toolTip;
 
   return (
-    <div className="w-full h-full flex flex-col gap-2">
-      <div className="flex items-center gap-1.5 flex-wrap">
-        {required && <span className="text-red-500 text-sm font-semibold leading-none">*</span>}
-        {labelText && (
-          <label htmlFor={name} className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {labelText}
-          </label>
-        )}
+    <div className="w-full h-full flex flex-col justify-start">
+      <div className="flex items-center justify-between gap-1.5 mb-1.5">
+        <div className="flex items-center gap-1 flex-wrap min-w-0">
+          {labelText && (
+            <label
+              htmlFor={name}
+              className="text-xs sm:text-sm font-medium text-foreground/90 select-none cursor-pointer tracking-normal"
+            >
+              {labelText}
+            </label>
+          )}
+          {required && (
+            <span
+              className="text-destructive font-bold text-xs leading-none"
+              title="Required"
+              aria-hidden="true"
+            >
+              *
+            </span>
+          )}
+        </div>
         {tooltipText && (
           <TooltipProvider delayDuration={150}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span
-                  role="button"
-                  tabIndex={0}
+                <button
+                  type="button"
                   aria-label={typeof labelText === "string" ? `${labelText} info` : "Information"}
-                  className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer p-0.5 rounded-full hover:bg-muted focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                 >
                   {toolTipIcon === "alert" ? (
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-500 hover:text-amber-600 shrink-0" />
+                    <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                   ) : React.isValidElement(toolTipIcon) ? (
                     toolTipIcon
                   ) : (
                     <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-primary transition-colors shrink-0" />
                   )}
-                </span>
+                </button>
               </TooltipTrigger>
               <TooltipContent
                 side="top"
                 align="center"
-                className="max-w-xs text-xs font-normal shadow-lg px-2.5 py-1.5 leading-relaxed bg-popover text-popover-foreground border z-[9999]"
+                className="max-w-xs text-xs font-normal shadow-md px-3 py-2 leading-relaxed bg-popover text-popover-foreground border z-[9999] rounded-lg"
               >
                 <span>{tooltipText}</span>
               </TooltipContent>
@@ -103,9 +115,9 @@ const InputWrapper = ({
           </TooltipProvider>
         )}
       </div>
-      <div className="flex flex-col h-[97%]">
+      <div className="relative w-full flex-1 flex flex-col justify-start">
         {children}
-        <div className="flex-1">{error && <ErrorMessage error={error} />}</div>
+        {error && <ErrorMessage error={error} />}
       </div>
     </div>
   );
@@ -210,8 +222,10 @@ export const renderInput = (item: FormInput, field: any) => {
       return <DateInput {...commonProps} min={item?.min as Date} multiple={item?.isMulti} />;
 
     case "text":
+      return <Input {...commonProps} type="text" />;
+
     case "link":
-      return <Input {...commonProps} type="link" />;
+      return <Input {...commonProps} type="url" />;
 
     case "number":
       return <NumberInput {...commonProps} pattern="[0-9]*\.?[0-9]*" />;
@@ -268,8 +282,8 @@ export const renderInputComponent = ({
 
 const InputSkeleton = () => (
   <div className="w-full flex flex-col space-y-2 animate-pulse">
-    <div className="h-5 w-1/4 rounded-md bg-gray-200 dark:bg-gray-700"></div>
-    <div className="h-10 w-full rounded-md bg-gray-200 dark:bg-gray-700"></div>
-    <div className="h-4 w-full"></div> {/* Space for potential error message */}
+    <div className="h-4 w-1/4 rounded-md bg-muted"></div>
+    <div className="h-10 w-full rounded-xl bg-muted/60"></div>
   </div>
 );
+

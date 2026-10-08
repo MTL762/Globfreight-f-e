@@ -71,28 +71,25 @@ export default function CustomForm<T extends FieldValues>({
   }
 
   return (
-    <form onSubmit={handleSubmit} className={"dark:!bg-dark-backGround rounded-md"}>
-      <div className="flex flex-col gap-4 ">
-        <div className="flex flex-col gap-2 ">
-
-          <div className="grid grid-cols-12 gap-4">
-            {Object.entries(groupedInputs).map(([cardId, cardInputs]) => {
-              return (
-                <FormCard<T>
-                  key={cardId}
-                  cardId={cardId}
-                  cardInputs={cardInputs}
-                  changeLang={changeLang}
-                  cardConfig={cardConfig}
-                  defaultConfig={defaultConfig}
-                  control={control}
-                />
-              );
-            })}
-          </div>
-          <div className="w-full">{children}</div>
-          <SubmitSection btnName={btnName} id={id} />
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="flex flex-col gap-6 sm:gap-8">
+        <div className="grid grid-cols-12 gap-5 sm:gap-6">
+          {Object.entries(groupedInputs).map(([cardId, cardInputs]) => {
+            return (
+              <FormCard<T>
+                key={cardId}
+                cardId={cardId}
+                cardInputs={cardInputs}
+                changeLang={changeLang}
+                cardConfig={cardConfig}
+                defaultConfig={defaultConfig}
+                control={control}
+              />
+            );
+          })}
         </div>
+        {children && <div className="w-full">{children}</div>}
+        <SubmitSection btnName={btnName} id={id} />
       </div>
     </form>
   );

@@ -39,13 +39,12 @@ export async function FormAction<T = any>({
       message: ""
     }
   };
-  console.log(data, 'sd2s')
   if (data?.id) {
     const id = data?.id;
     res = await fetchHelper({
       endPoint: [...endpoint, ...(noId !== true ? [Number(id)] : [])],
       body: formData,
-      method: method || "POST"
+      method: method || "PUT"
     });
   } else {
     res = await fetchHelper({
