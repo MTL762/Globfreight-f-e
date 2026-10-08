@@ -17,7 +17,6 @@ export default function useSubCategoriesLogic({ data }: { data?: SubCategoriesTy
     resolver: zodResolver(SubCategoriesSchema(t)),
     defaultValues: extractFormDefaultInputs(inputs, data) as SubCategoriesType
   });
-
   const onSubmit = async (formData: SubCategoriesType) => {
     await FormAction({
       data,

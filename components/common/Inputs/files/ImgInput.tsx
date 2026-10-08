@@ -28,13 +28,35 @@ export default function ImgInput({
   const t = useTranslations();
 
   useEffect(() => {
+    let active = true;
+
     if (value && typeof value === "string") {
       const fullUrl =
         value.startsWith("http://") || value.startsWith("https://") || value.startsWith("blob:")
           ? value
           : (API_IMG_URL || "") + value;
       setPreviewUrl(fullUrl);
-      setFileName(value.split("/").pop() || "");
+      const extractedName = value.split("/").pop()?.split("?")[0] || "image.png";
+      setFileName(extractedName);
+
+      // Convert image link to File object via proxy to prevent CORS issues
+      const fetchTarget = fullUrl.startsWith("blob:")
+        ? fullUrl
+        : `/api/proxy-image?url=${encodeURIComponent(fullUrl)}`;
+      fetch(fetchTarget)
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to fetch image");
+          return res.blob();
+        })
+        .then(blob => {
+          if (!active) return;
+          const mimeType = blob.type || "image/png";
+          const file = new File([blob], extractedName, { type: mimeType });
+          onChange?.(file);
+        })
+        .catch(err => {
+          console.error("Failed to convert image link to file:", err);
+        });
     } else if (value instanceof File) {
       const objectUrl = URL.createObjectURL(value);
       setPreviewUrl(objectUrl);
@@ -48,6 +70,7 @@ export default function ImgInput({
     }
 
     return () => {
+      active = false;
       if (previewUrl && previewUrl.startsWith("blob:")) {
         URL.revokeObjectURL(previewUrl);
       }
