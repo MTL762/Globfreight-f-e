@@ -41,11 +41,13 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
   const title = getBlogText(post.title, currentLocale, "Untitled Article");
   const excerpt = getBlogText(post.excerpt, currentLocale, "");
   const contentHtml = getBlogText(post.content, currentLocale, "");
+  const catSlugFallback = post.category ? getBlogText(post.category.slug, currentLocale, "") : "";
   const categoryName = post.category
-    ? getBlogText(post.category.name, currentLocale, post.category.slug || "")
+    ? getBlogText(post.category.name, currentLocale, catSlugFallback)
     : "";
+  const subCatSlugFallback = post.sub_category ? getBlogText(post.sub_category.slug, currentLocale, "") : "";
   const subCategoryName = post.sub_category
-    ? getBlogText(post.sub_category.name, currentLocale, post.sub_category.slug || "")
+    ? getBlogText(post.sub_category.name, currentLocale, subCatSlugFallback)
     : "";
   const date = formatBlogDate(post.published_at || post.created_at, currentLocale);
   const readTime = estimateReadTime(contentHtml);

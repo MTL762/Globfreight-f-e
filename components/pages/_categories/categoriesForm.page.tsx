@@ -15,13 +15,13 @@ export default function CategoriesFormPage({ data }: { data?: CategoriesType }) 
         {
           id: "general",
           title: t("General"),
-          width: 5
+          width: 12
         },
         {
           id: "lang",
           title: t("Categories Information"),
           multiLang: true,
-          width: 7
+          width: 12
         },
         {
           id: "seo",

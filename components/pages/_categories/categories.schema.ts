@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StringReq, StringNotReq, noSchema } from "@/validations/String.schema";
+import { OptionalLinkSchema } from "@/validations/Link.schema";
 
 export const CategoriesSchema = (t: TFunction) => {
   return z.object({
@@ -13,10 +14,19 @@ export const CategoriesSchema = (t: TFunction) => {
     descriptionNl: StringNotReq(),
     descriptionFr: StringNotReq(),
     descriptionDe: StringNotReq(),
-    slug: StringNotReq(),
+    // slug: StringNotReq(),
+    slugAr: StringNotReq(),
+    slugEn: StringNotReq(),
+    slugNl: StringNotReq(),
+    slugFr: StringNotReq(),
+    slugDe: StringNotReq(),
     order: z.coerce.number().optional().nullable(),
     is_active: noSchema(),
-    image: noSchema(),
+    imageAr: noSchema().optional(),
+    imageEn: noSchema().optional(),
+    imageNl: noSchema().optional(),
+    imageFr: noSchema().optional(),
+    imageDe: noSchema().optional(),
     // SEO fields
     seo_meta_titleAr: StringNotReq(),
     seo_meta_titleEn: StringNotReq(),
@@ -29,7 +39,7 @@ export const CategoriesSchema = (t: TFunction) => {
     seo_meta_descriptionFr: StringNotReq(),
     seo_meta_descriptionDe: StringNotReq(),
     seo_focus_keyphrase: StringNotReq(),
-    seo_canonical_url: StringNotReq(),
+    seo_canonical_url: OptionalLinkSchema(t),
     seo_schema_markup_type: StringNotReq(),
   });
 };

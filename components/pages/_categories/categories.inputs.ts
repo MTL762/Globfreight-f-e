@@ -8,10 +8,26 @@ export const CategoriesInputs = () => {
   const inputs: FormInput[] = [
     { name: "name", type: "text", multiLang: true, cardId: 'lang', required: true },
     { name: "description", type: "text", multiLang: true, cardId: 'lang', required: true },
-    { name: "slug", type: "text", label: "Slug", placeholder: "e.g. technology", cardId: 'general' },
+    {
+      name: "image",
+      type: "img",
+      multiLang: true,
+      label: "Featured Image",
+      toolTip: t("BlogTooltips.image"),
+      cardId: "lang",
+      width: 6
+    },
+    {
+      name: "slug",
+      type: "text",
+      multiLang: true,
+      label: "Slug",
+      placeholder: "e.g. technology",
+      cardId: "lang",
+      width: 6
+    },
     { name: "order", type: "number", cardId: 'general' },
-    { name: "is_active", options: booleanOptions(t), type: "checkbox", label: "Active", cardId: 'general' },
-    { name: "image", type: "img", required: true, cardId: 'general' },
+    { name: "is_active", options: booleanOptions(t), type: "radioGroup", label: "Active", cardId: 'general' },
     // SEO Fields
     { name: "seo_meta_title", type: "text", multiLang: true, label: "Meta Title", cardId: 'seo' },
     { name: "seo_meta_description", type: "textarea", multiLang: true, label: "Meta Description", cardId: 'seo' },

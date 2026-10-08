@@ -63,6 +63,16 @@ export const BlogInputs = (): FormInput[] => {
       width: 6
     },
     {
+      name: "slug",
+      type: "text",
+      multiLang: true,
+      label: "Slug",
+      placeholder: "e.g. logistics-trends-2026",
+      toolTip: t("BlogTooltips.slug"),
+      cardId: "lang",
+      width: 6
+    },
+    {
       name: "excerpt",
       type: "textarea",
       multiLang: true,

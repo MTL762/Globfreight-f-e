@@ -55,23 +55,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const rawPosts = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
 
       for (const post of rawPosts) {
-        const slug = post.slug || post.id?.toString();
-        if (!slug) continue;
+        if (!post?.slug && !post?.id) continue;
 
-        const path = `/blog/${slug}`;
         const languages: Record<string, string> = {};
         for (const loc of SYSTEM_LOCALES) {
-          languages[loc] = `${SITE_URL}/${loc}${path}`;
+          const locSlug =
+            typeof post.slug === "object" && post.slug !== null
+              ? post.slug[loc] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
+              : post.slug || post.id?.toString();
+          if (locSlug) {
+            languages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`;
+          }
         }
-        languages["x-default"] = `${SITE_URL}/en${path}`;
+        const defaultSlug =
+          typeof post.slug === "object" && post.slug !== null
+            ? post.slug.en || Object.values(post.slug)[0]
+            : post.slug || post.id?.toString();
+        languages["x-default"] = `${SITE_URL}/en/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
 
         const lastModified = post.updated_at || post.updatedAt || post.created_at || post.createdAt
           ? new Date(post.updated_at || post.updatedAt || post.created_at || post.createdAt)
           : new Date();
 
         for (const locale of SYSTEM_LOCALES) {
+          const locSlug =
+            typeof post.slug === "object" && post.slug !== null
+              ? post.slug[locale] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
+              : post.slug || post.id?.toString();
+          if (!locSlug) continue;
+
           entries.push({
-            url: `${SITE_URL}/${locale}${path}`,
+            url: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`,
             lastModified,
             changeFrequency: "weekly",
             priority: 0.7,

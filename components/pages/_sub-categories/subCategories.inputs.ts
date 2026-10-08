@@ -15,7 +15,15 @@ export const SubCategoriesInputs = (): FormInput[] => {
     },
     { name: "name", type: "text", multiLang: true, cardId: "lang", required: true },
     { name: "description", type: "text", multiLang: true, cardId: "lang" },
-    { name: "slug", type: "text", label: "Slug", placeholder: "e.g. artificial-intelligence", cardId: "general" },
+    {
+      name: "slug",
+      type: "text",
+      multiLang: true,
+      label: "Slug",
+      placeholder: "e.g. artificial-intelligence",
+      cardId: "lang",
+      width: 6
+    },
     { name: "order", type: "number", cardId: "general" },
     { name: "is_active", options: booleanOptions(t), type: "checkbox", label: "Active", cardId: "general" },
     { name: "image", type: "img", cardId: "general" },

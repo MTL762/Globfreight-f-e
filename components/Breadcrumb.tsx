@@ -8,9 +8,9 @@ interface BreadcrumbProps {
   items: (
     | undefined
     | {
-        label: string;
-        href?: string;
-      }
+      label: string;
+      href?: string;
+    }
   )[];
   children?: React.ReactNode;
 }
@@ -19,7 +19,7 @@ export async function Breadcrumb({ items, children }: BreadcrumbProps) {
   const t = await getTranslations();
   return (
     <nav
-      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 px-3 rounded-2xl bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm  transition-all duration-300"
+      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 px-3 rounded-2xl backdrop-blur-sm  transition-all duration-300"
       aria-label="Breadcrumb"
     >
       <div className="flex items-center overflow-x-auto no-scrollbar">

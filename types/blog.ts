@@ -1,16 +1,40 @@
+// كائن اللغات المدعومة
+export interface MultilingualString {
+  ar?: string;
+  nl?: string;
+  fr?: string;
+  de?: string;
+  en?: string;
+  [key: string]: string | undefined;
+}
+
+// كائن استجابة الـ 301 Redirect
+export interface SlugRedirectResponse {
+  status: 301;
+  message: string;
+  data: {
+    new_slug: string;
+    current_slug: string;
+    is_redirect: true;
+  };
+}
+
+// نموذج المقال
 export interface BlogPost {
   id: number;
-  title: string | Record<string, string>;
-  slug: string;
-  excerpt?: string | Record<string, string>;
-  content?: string | Record<string, string>;
-  status?: "published" | "draft" | "archived" | string;
+  title: string | MultilingualString;
+  slug: string | MultilingualString;
+  excerpt?: string | MultilingualString;
+  content?: string | MultilingualString;
+  category_id?: number;
+  status?: "draft" | "published" | "archived" | string;
   is_featured?: boolean | number;
   published_at?: string;
   created_at?: string;
+  updated_at?: string;
   views_count?: number;
   tags?: string[];
-  image?: string | Record<string, string> | null;
+  image?: string | MultilingualString | null;
   author?: {
     id: number;
     name: string;
@@ -19,25 +43,25 @@ export interface BlogPost {
   };
   category?: {
     id: number;
-    name: string | Record<string, string>;
-    slug?: string;
-    description?: string | Record<string, string>;
+    name: string | MultilingualString;
+    slug?: string | MultilingualString;
+    description?: string | MultilingualString;
   };
   sub_category?: {
     id: number;
-    name: string | Record<string, string>;
-    slug?: string;
+    name: string | MultilingualString;
+    slug?: string | MultilingualString;
   };
-  seo_meta_title?: string | Record<string, string>;
-  seo_meta_description?: string | Record<string, string>;
-  seo_focus_keyphrase?: string | Record<string, string>;
+  seo_meta_title?: string | MultilingualString;
+  seo_meta_description?: string | MultilingualString;
+  seo_focus_keyphrase?: string | MultilingualString;
   seo_canonical_url?: string;
   seo_schema_markup_type?: string;
   seo?: {
     id?: number;
-    meta_title?: string | Record<string, string>;
-    meta_description?: string | Record<string, string>;
-    focus_keyphrase?: string | Record<string, string>;
+    meta_title?: string | MultilingualString;
+    meta_description?: string | MultilingualString;
+    focus_keyphrase?: string | MultilingualString;
     canonical_url?: string;
     schema_markup_type?: string;
     og_title?: string | null;
@@ -46,8 +70,19 @@ export interface BlogPost {
   };
 }
 
+// نموذج القسم
+export interface Category {
+  id: number;
+  name: string | MultilingualString;
+  slug: string | MultilingualString;
+  description?: string | MultilingualString;
+  is_active: boolean;
+  order: number;
+  sub_categories?: Category[];
+}
+
 export function getBlogText(
-  val: string | Record<string, string> | undefined | null,
+  val: string | MultilingualString | Record<string, string> | undefined | null,
   locale: string = "en",
   fallback: string = ""
 ): string {

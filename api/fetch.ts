@@ -17,7 +17,8 @@ export async function fetchHelper({
   cache,
   locale,
   tags,
-  revalidate
+  revalidate,
+  redirect: redirectOption
 }: {
   isLocalized?: boolean;
   headers?: HeadersInit;
@@ -29,6 +30,7 @@ export async function fetchHelper({
   body?: unknown;
   cache?: "no-cache" | "default" | "reload" | "force-cache" | "only-if-cached";
   params?: any;
+  redirect?: RequestRedirect;
 }): Promise<any> {
   "use server";
 
@@ -45,6 +47,7 @@ export async function fetchHelper({
     ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(token?.value ? { Authorization: `Bearer ${token.value}` } : {}),
     Accept: "application/json",
+    "Accept-Language": locale,
     ...(headers ?? {})
   };
 
@@ -53,6 +56,7 @@ export async function fetchHelper({
     res = await fetch(url, {
       method,
       headers: requestHeaders,
+      redirect: redirectOption ?? "follow",
       next: {
         revalidate,
         tags: tags ? [tags.join("")] : []
@@ -88,18 +92,30 @@ export async function fetchHelper({
 
   let result: any = null;
   const contentType = res.headers.get("content-type");
-  console.log("result", method, res);
   if (contentType && contentType.includes("application/json")) {
     try {
       result = await res.json();
-      console.log("result", method, result);
-
     } catch (e) {
       console.error("Error parsing JSON response", e);
       result = { message: "Error parsing JSON response" };
     }
   } else {
     result = { message: res.statusText || "Something went wrong" };
+  }
+
+  // Handle 301 Moved Permanently / Permanent Redirect
+  if (res.status === 301 || result?.status === 301 || result?.data?.is_redirect) {
+    const locationHeader = res.headers.get("location");
+    const newSlug = result?.data?.new_slug || result?.data?.current_slug || locationHeader;
+    return {
+      success: false,
+      status: 301,
+      isRedirect: true,
+      data: result?.data || { new_slug: newSlug, current_slug: newSlug, is_redirect: true },
+      newSlug,
+      message: result?.message || "Resource permanently moved to new slug.",
+      result
+    };
   }
 
   if (!res.ok) {
@@ -132,8 +148,13 @@ function handleUrl(endPoint: endpointType, params: UrlSearchParamsInterface | an
       if (typeof item === "number" || Boolean(Number(item))) {
         return `/${item}`;
       } else {
-        const ep = (endpoints as Record<string, string>)[item as string] || item;
-        return typeof ep === "string" ? (ep.startsWith("/") ? ep : `/${ep}`) : "";
+        const ep = (endpoints as Record<string, string>)[item as string];
+        if (ep) {
+          return ep.startsWith("/") ? ep : `/${ep}`;
+        }
+        const str = String(item);
+        const encoded = encodeURIComponent(decodeURIComponent(str));
+        return `/${encoded}`;
       }
     })
     .join("");

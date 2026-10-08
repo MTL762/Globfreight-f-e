@@ -115,24 +115,38 @@ async function generateSitemap() {
   // 2. Dynamic Blog Posts
   const posts = await fetchBlogPosts();
   for (const post of posts) {
-    const slug = post.slug || post.id?.toString();
-    if (!slug) continue;
+    if (!post?.slug && !post?.id) continue;
 
-    const pagePath = `/blog/${slug}`;
-    const alternates = LOCALES.map((locale) => ({
-      locale,
-      url: `${SITE_URL}/${locale}${pagePath}`
-    }));
+    const alternates = LOCALES.map((locale) => {
+      const locSlug =
+        typeof post.slug === "object" && post.slug !== null
+          ? post.slug[locale] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
+          : post.slug || post.id?.toString();
+      return {
+        locale,
+        url: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`
+      };
+    });
+    const defaultSlug =
+      typeof post.slug === "object" && post.slug !== null
+        ? post.slug.en || Object.values(post.slug)[0]
+        : post.slug || post.id?.toString();
     alternates.push({
       locale: "x-default",
-      url: `${SITE_URL}/${DEFAULT_LOCALE}${pagePath}`
+      url: `${SITE_URL}/${DEFAULT_LOCALE}/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
     });
 
     const postDate = formatDate(post.updated_at || post.updatedAt || post.created_at || post.createdAt || buildDate);
 
     for (const locale of LOCALES) {
+      const locSlug =
+        typeof post.slug === "object" && post.slug !== null
+          ? post.slug[locale] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
+          : post.slug || post.id?.toString();
+      if (!locSlug) continue;
+
       items.push({
-        loc: `${SITE_URL}/${locale}${pagePath}`,
+        loc: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`,
         alternates,
         lastmod: postDate,
         changefreq: "weekly",

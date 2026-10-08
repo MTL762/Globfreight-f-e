@@ -1193,6 +1193,7 @@
     "seo_focus_keyphrase": "The primary keyword or keyphrase this article is targeting for search rankings.",
     "seo_canonical_url": "The canonical URL to avoid duplicate content penalties if syndicated elsewhere.",
     "tags": "Keywords and tags to group and organize related posts for readers.",
+    "slug": "URL slug for this post. Leave empty to auto-generate from title. Supports language-specific custom URLs.",
     "seo_schema_markup_type": "Structured JSON-LD schema format for search crawlers (Article, BlogPosting, or WebPage)."
   },
   "Validations": {

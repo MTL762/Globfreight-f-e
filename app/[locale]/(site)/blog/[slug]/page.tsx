@@ -2,8 +2,8 @@ import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogDetail } from "@/components/pages/blog/public-blog-detail";
 import { BlogPost, getBlogText } from "@/types/blog";
-import { getArticleJsonLd, getBreadcrumbJsonLd, getOpenGraphImages, getPageAlternates, SITE_URL } from "@/utils/seo";
-import { notFound } from "next/navigation";
+import { getArticleJsonLd, getBreadcrumbJsonLd, getOpenGraphImages, SITE_URL, SYSTEM_LOCALES } from "@/utils/seo";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
@@ -16,10 +16,18 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "BlogPage.meta" });
 
   try {
+    const safeSlug = encodeURIComponent(decodeURIComponent(slug));
     const res = await fetchHelper({
-      endPoint: ["blogPostsSlug", slug],
+      endPoint: ["blogPostsSlug", safeSlug],
       method: "GET"
     });
+
+    if (res?.status === 301 || res?.data?.is_redirect || res?.isRedirect) {
+      const newSlug = res?.data?.new_slug || res?.newSlug;
+      if (newSlug) {
+        redirect(`/${locale}/blog/${encodeURIComponent(newSlug)}`);
+      }
+    }
 
     const post: BlogPost | undefined =
       res?.success && res?.data && !Array.isArray(res.data) && res.data?.id
@@ -32,6 +40,7 @@ export async function generateMetadata({
       };
     }
 
+    const currentSlug = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || slug);
     const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
     const postTitle = getBlogText(post.title, locale);
     const title = metaTitleRaw || (postTitle ? `${postTitle} | Globfreight` : "Globfreight");
@@ -42,10 +51,21 @@ export async function generateMetadata({
       "Globfreight supply chain and logistics intelligence article.";
 
     const customCanonical = post.seo?.canonical_url || post.seo_canonical_url;
-    const alternates = getPageAlternates(`/blog/${post.slug || slug}`, locale);
-    if (customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== "") {
-      alternates.canonical = customCanonical.trim();
+    const alternatesLanguages: Record<string, string> = {};
+    for (const loc of SYSTEM_LOCALES) {
+      const locSlug = typeof post.slug === "object" ? (post.slug[loc] || getBlogText(post.slug, loc)) : post.slug;
+      alternatesLanguages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(locSlug || currentSlug)}`;
     }
+    const defaultSlug = typeof post.slug === "object" ? (post.slug.en || getBlogText(post.slug, "en")) : post.slug;
+    alternatesLanguages["x-default"] = `${SITE_URL}/en/blog/${encodeURIComponent(defaultSlug || currentSlug)}`;
+
+    const alternates = {
+      canonical:
+        customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
+          ? customCanonical.trim()
+          : `${SITE_URL}/${locale}/blog/${encodeURIComponent(currentSlug)}`,
+      languages: alternatesLanguages
+    };
 
     const postImage = getBlogText(post.image, locale);
     const ogImage = postImage || post.seo?.og_image;
@@ -112,10 +132,12 @@ export default async function BlogDetailPage(props: {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
 
+  const safeSlug = encodeURIComponent(decodeURIComponent(slug));
+
   // Fetch article and related posts concurrently
   const [postRes, relatedRes] = await Promise.all([
     fetchHelper({
-      endPoint: ["blogPostsSlug", slug],
+      endPoint: ["blogPostsSlug", safeSlug],
       method: "GET"
     }).catch(err => {
       console.error("Failed to fetch blog post by slug:", err);
@@ -128,18 +150,32 @@ export default async function BlogDetailPage(props: {
     }).catch(() => ({ data: [] }))
   ]);
 
+  // 1. في حالة التحويل الدائم 301
+  if (postRes?.status === 301 || postRes?.data?.is_redirect || postRes?.isRedirect) {
+    const newSlug = postRes?.data?.new_slug || postRes?.newSlug;
+    if (newSlug) {
+      redirect(`/${locale}/blog/${encodeURIComponent(newSlug)}`);
+    }
+  }
+
   const post: BlogPost | undefined =
     postRes?.success && postRes?.data && !Array.isArray(postRes.data) && postRes.data?.id
       ? postRes.data
       : undefined;
 
+  // 2. في حالة عدم وجود المقال نهائياً
   if (!post) {
     notFound();
   }
 
+  const currentSlug = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || slug);
+
   // Filter out the current post from related publications
   const relatedPosts: BlogPost[] = (Array.isArray(relatedRes?.data) ? relatedRes.data : [])
-    .filter((p: BlogPost) => p.id !== post.id && p.slug !== post.slug)
+    .filter((p: BlogPost) => {
+      const pSlug = typeof p.slug === "object" ? getBlogText(p.slug, locale) : p.slug;
+      return p.id !== post.id && pSlug !== currentSlug;
+    })
     .slice(0, 3);
 
   const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
@@ -152,9 +188,10 @@ export default async function BlogDetailPage(props: {
     "Globfreight supply chain and logistics intelligence article.";
 
   const customCanonical = post.seo?.canonical_url || post.seo_canonical_url;
-  const postUrl = customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
-    ? customCanonical.trim()
-    : `${SITE_URL}/${locale}/blog/${post.slug || slug}`;
+  const postUrl =
+    customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
+      ? customCanonical.trim()
+      : `${SITE_URL}/${locale}/blog/${encodeURIComponent(currentSlug)}`;
 
   const postImage = getBlogText(post.image, locale);
   const ogImage = postImage || post.seo?.og_image;

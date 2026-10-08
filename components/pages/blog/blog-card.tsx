@@ -32,7 +32,8 @@ export function BlogCard({
   const tag = catName || post.tags?.[0] || t("card.defaultTag");
   const readTime = estimateReadTime(getBlogText(post.content, locale));
   const date = formatBlogDate(post.published_at || post.created_at, locale);
-  const href = post.slug ? `/blog/${post.slug}` : "/blog";
+  const slugStr = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || "");
+  const href = slugStr ? `/blog/${encodeURIComponent(decodeURIComponent(slugStr))}` : "/blog";
   const postImage = getBlogText(post.image, locale, "");
 
   const isHome = variant === "home";

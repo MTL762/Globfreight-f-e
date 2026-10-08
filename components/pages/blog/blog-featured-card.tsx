@@ -25,12 +25,14 @@ export function BlogFeaturedCard({
   const title = getBlogText(post.title, locale, "Featured Publication");
   const excerpt = getBlogText(post.excerpt, locale, "");
   const content = getBlogText(post.content, locale, "");
+  const categorySlug = post.category ? getBlogText(post.category.slug, locale, "") : "";
   const categoryName = post.category
-    ? getBlogText(post.category.name, locale, post.category.slug || "")
+    ? getBlogText(post.category.name, locale, categorySlug)
     : "";
   const date = formatBlogDate(post.published_at || post.created_at, locale);
   const readTime = estimateReadTime(content);
-  const href = post.slug ? `/blog/${post.slug}` : "/blog";
+  const slugStr = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || "");
+  const href = slugStr ? `/blog/${encodeURIComponent(decodeURIComponent(slugStr))}` : "/blog";
   const postImage = getBlogText(post.image, locale, "");
 
   return (
