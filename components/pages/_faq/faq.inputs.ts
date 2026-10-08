@@ -9,7 +9,7 @@ export const FaqInputs = () => {
     { name: "category_id", type: "selectPaginated", apiUrl: ["adminCategories"] },
     { name: "question", type: "text", multiLang: true, cardId: 'lang', required: true },
     { name: "answer", type: "textarea", multiLang: true, cardId: 'lang', required: true },
-    { name: "is_active", options: booleanOptions(t), type: "checkbox", label: "Active" },
+    { name: "is_active", options: booleanOptions(t), type: "radioGroup", label: "Active" },
     { name: "order", type: "number" }
   ];
   return inputs;
