@@ -25,6 +25,7 @@ export default function useSubCategoriesLogic({ data }: { data?: SubCategoriesTy
       endpoint: ["adminSubCategories"],
       reset: reset,
       redirectLink: "sub-categories",
+      method: 'POST',
       t
     });
   };
