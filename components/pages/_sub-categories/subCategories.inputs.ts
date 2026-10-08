@@ -26,7 +26,14 @@ export const SubCategoriesInputs = (): FormInput[] => {
     },
     { name: "order", type: "number", cardId: "general", min: 0 },
     { name: "is_active", options: booleanOptions(t), type: "radioGroup", label: "Active", cardId: "general" },
-    { name: "image", type: "img", cardId: "general" },
+    {
+      name: "image",
+      type: "img",
+      multiLang: true,
+      label: "Featured Image",
+      cardId: "lang",
+      width: 6
+    },
     // SEO Fields
     { name: "seo_meta_title", type: "text", multiLang: true, label: "Meta Title", cardId: "seo" },
     { name: "seo_meta_description", type: "textarea", multiLang: true, label: "Meta Description", cardId: "seo" },

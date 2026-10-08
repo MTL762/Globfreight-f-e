@@ -57,7 +57,18 @@ export function extractFormNameInputs({
                   formdata.append(`${baseName}[${code}][]`, file);
                 }
               });
-            } else if (typeof val === "string" && val.includes("uploads/")) {
+            } else if (
+              (baseName === "image" || baseName === "images" || baseName.includes("image")) &&
+              !(val instanceof File || val instanceof Blob)
+            ) {
+              return;
+            } else if (
+              typeof val === "string" &&
+              (val.includes("uploads/") ||
+                val.includes("storage/") ||
+                val.startsWith("http://") ||
+                val.startsWith("https://"))
+            ) {
               return;
             } else if (baseName.startsWith("seo_")) {
               const seoKey = baseName.replace(/^seo_/, "");
@@ -110,7 +121,15 @@ export function extractFormNameInputs({
         return;
       }
 
-      if (typeof data[item] === "string" && data[item].includes("uploads/")) {
+      if (
+        typeof data[item] === "string" &&
+        (data[item].includes("uploads/") ||
+          data[item].includes("storage/") ||
+          data[item].startsWith("http://") ||
+          data[item].startsWith("https://") ||
+          item.includes("image") ||
+          item.includes("Image"))
+      ) {
         return;
       }
 

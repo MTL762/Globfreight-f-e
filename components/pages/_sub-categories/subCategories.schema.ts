@@ -23,7 +23,11 @@ export const SubCategoriesSchema = (t: TFunction) => {
     slugDe: StringNotReq(),
     order: PriceSchema(t, 0),
     is_active: noSchema(),
-    image: z.any().optional(),
+    imageAr: noSchema().optional(),
+    imageEn: noSchema().optional(),
+    imageNl: noSchema().optional(),
+    imageFr: noSchema().optional(),
+    imageDe: noSchema().optional(),
     // SEO fields
     seo_meta_titleAr: StringNotReq(),
     seo_meta_titleEn: StringNotReq(),
