@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { StringReq, StringNotReq } from "@/validations/String.schema";
+import { StringReq, StringNotReq, noSchema } from "@/validations/String.schema";
 import { PriceSchema } from "@/validations/Number.schema";
 
 export const SubCategoriesSchema = (t: TFunction) => {
@@ -22,7 +22,7 @@ export const SubCategoriesSchema = (t: TFunction) => {
     slugFr: StringNotReq(),
     slugDe: StringNotReq(),
     order: PriceSchema(t, 0),
-    is_active: z.boolean().default(true),
+    is_active: noSchema(),
     image: z.any().optional(),
     // SEO fields
     seo_meta_titleAr: StringNotReq(),
