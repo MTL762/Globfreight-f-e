@@ -24,8 +24,8 @@ export const SubCategoriesInputs = (): FormInput[] => {
       cardId: "lang",
       width: 6
     },
-    { name: "order", type: "number", cardId: "general" },
-    { name: "is_active", options: booleanOptions(t), type: "checkbox", label: "Active", cardId: "general" },
+    { name: "order", type: "number", cardId: "general", min: 0 },
+    { name: "is_active", options: booleanOptions(t), type: "radioGroup", label: "Active", cardId: "general" },
     { name: "image", type: "img", cardId: "general" },
     // SEO Fields
     { name: "seo_meta_title", type: "text", multiLang: true, label: "Meta Title", cardId: "seo" },
