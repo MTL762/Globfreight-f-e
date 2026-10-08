@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { StringNotReq, noSchema } from "@/validations/String.schema";
 import { OptionalLinkSchema } from "@/validations/Link.schema";
+import { PriceSchema } from "@/validations/Number.schema";
 
 export const CategoriesSchema = (t: TFunction) => {
   return z.object({
@@ -20,7 +21,7 @@ export const CategoriesSchema = (t: TFunction) => {
     slugNl: StringNotReq(),
     slugFr: StringNotReq(),
     slugDe: StringNotReq(),
-    order: z.coerce.number().optional().nullable(),
+    order: PriceSchema(t, 0),
     is_active: noSchema(),
     imageAr: noSchema().optional(),
     imageEn: noSchema().optional(),

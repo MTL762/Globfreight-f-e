@@ -5,7 +5,7 @@ import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginForm } from "@/features/auth/login/hooks/use-login-form";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { CheckCircle2, Eye, EyeOff, Lock, Mail, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -138,25 +138,72 @@ export function LoginForm() {
               </footer>
             </CardContent>
           </div>
+          {/* Right Visual Brand Showcase Panel */}
+          <div className="relative hidden md:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#001738] via-[#002855] to-[#041226] p-8 lg:p-10 select-none">
+            {/* Ambient Background Glows */}
+            <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-[#FE6F00]/20 blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-sky-500/15 blur-3xl pointer-events-none" />
 
-          <div className="relative hidden md:block bg-gradient-to-br from-[#022c22] via-[#065f46] to-[#022c22]">
-            <div className="absolute inset-0">
-              <Image
-                src="/login-hr.svg"
-                alt="HR system dashboard illustration"
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-[#022c22]/40 via-[#065f46]/30 to-[#022c22]/70" />
+            {/* Subtle Geometric Dot Grid */}
+            <div
+              className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none"
+              aria-hidden="true"
+            />
+
+            {/* Top Pill / Badge */}
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-white text-xs font-medium shadow-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FE6F00] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FE6F00]" />
+                </span>
+                <span>Globfreight Operations</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 text-xs text-white/70 font-medium bg-white/5 px-2.5 py-1 rounded-full border border-white/10 backdrop-blur-sm">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Enterprise Secured</span>
+              </div>
             </div>
-            <div className="absolute inset-x-8 bottom-8 rounded-2xl bg-white/95 dark:bg-gray-900/95 p-4 shadow-lg backdrop-blur-sm border border-white/10">
-              <p className="text-sm font-medium text-foreground">
-                {t("Modern HR workspace with instant employee insights")}
-              </p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                {t("Manage, monitor, and empower your team from one clean dashboard")}
-              </p>
+
+            {/* Center Dynamic Visual: Vector Illustration & Overlay */}
+            <div className="relative z-10 my-auto py-6 flex flex-col items-center justify-center">
+              <div className="relative w-full aspect-[4/3] max-w-md mx-auto transition-transform duration-500 hover:scale-[1.02]">
+                <Image
+                  src="/login-hr.svg"
+                  alt="Modern HR Workspace Dashboard"
+                  fill
+                  className="object-contain drop-shadow-2xl"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Bottom Glassmorphic Value Card */}
+            <div className="relative z-10 rounded-2xl bg-white/10 dark:bg-black/30 p-5 shadow-2xl backdrop-blur-xl border border-white/20 text-white">
+              <div className="flex items-start gap-3.5">
+                <div className="p-2.5 rounded-xl bg-gradient-to-br from-[#FE6F00] to-[#E15A00] text-white shadow-lg shadow-[#FE6F00]/25 shrink-0">
+                  <Sparkles className="h-5 w-5" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-white tracking-tight leading-snug">
+                    {t("Modern HR workspace with instant employee insights")}
+                  </p>
+                  <p className="text-xs text-white/80 leading-relaxed">
+                    {t("Manage, monitor, and empower your team from one clean dashboard")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-white/75">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                  {t("Attendance Tracking")}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <TrendingUp className="h-3.5 w-3.5 text-[#FF9343]" />
+                  {t("Performance Insights")}
+                </span>
+              </div>
             </div>
           </div>
         </div>
