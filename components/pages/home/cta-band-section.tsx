@@ -1,6 +1,7 @@
-import { ArrowRight, Phone } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { CtaCopyPhoneButton } from "./cta-copy-phone-button";
 
 export async function CtaBandSection() {
   const t = await getTranslations("Home");
@@ -34,14 +35,12 @@ export async function CtaBandSection() {
             <span>{t("ctaButton")}</span>
             <ArrowRight size={17} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
           </Link>
-          <a
-            href="tel:+32496322467"
-            aria-label={`${t("ctaCall")} at +32 496 32 24 67`}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm border border-slate-800 active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-          >
-            <Phone size={16} className="text-primary" aria-hidden="true" />
-            <span>{t("ctaCall")}</span>
-          </a>
+          <CtaCopyPhoneButton
+            label={t("ctaCall")}
+            phoneNumber="+32 496 32 24 67"
+            copiedLabel={t("ctaCopied")}
+            successToast={t("ctaCopySuccess")}
+          />
         </div>
       </div>
     </section>

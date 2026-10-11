@@ -11,10 +11,7 @@ export async function SiteHeader() {
 
   const nav = [
     ["home", "/"],
-    // ["services", "/#services"],
-    // ["about", "/#about"],
-    // ["blog", "/#blog"],
-    // ["faq", "/#faq"],
+    ["blog", "/blog"],
     ["ship", "/ship-with-us"]
   ] as const;
 
