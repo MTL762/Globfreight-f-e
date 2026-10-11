@@ -2,7 +2,6 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import DateCol from "@/components/common/table/columns/date.column";
-import PhoneDirectionCol from "@/components/common/table/columns/Phone.direction";
 import TableStatusBadge from "@/components/common/table/tableHelperComponents/TableStatusBadge";
 import { Shield } from "lucide-react";
 
