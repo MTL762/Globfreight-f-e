@@ -72,7 +72,7 @@ export async function HeroSection() {
         </div>
 
         {/* Centerpiece: SeaRates-Style Multimodal Search & Tracking Command Terminal */}
-        <div className="max-w-5xl mx-auto">
+        <div className="w-full max-w-6xl xl:max-w-7xl mx-auto">
           <LogisticsSearchWidget />
         </div>
       </div>
