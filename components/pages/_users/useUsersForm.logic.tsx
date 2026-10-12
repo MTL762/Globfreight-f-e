@@ -16,9 +16,9 @@ export default function useUsersLogic({ data }: { data?: any }) {
 
   const initialValues = data
     ? {
-        ...data,
-        role_id: data.role_id || data.role?.id || ""
-      }
+      ...data,
+      role_id: data.role_id || data.role?.id || ""
+    }
     : {};
 
   const { control, handleSubmit, reset } = useForm<UsersType>({
@@ -40,6 +40,7 @@ export default function useUsersLogic({ data }: { data?: any }) {
       formData: extractFormNameInputs({ inputs, data: payload }),
       endpoint: ["adminUsers"],
       reset: reset,
+      method: 'POST',
       redirectLink: "users",
       t
     });
