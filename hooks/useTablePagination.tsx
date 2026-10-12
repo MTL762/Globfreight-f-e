@@ -12,9 +12,9 @@ export default function useTablePagination() {
 		page: searchParams.get('page')
 			? parseInt(searchParams.get('page') as string)
 			: 1,
-		per_page: searchParams.get('limit')
-			? parseInt(searchParams.get('limit') as string)
-			: 5,
+		per_page: searchParams.get('limit') || searchParams.get('per_page')
+			? parseInt((searchParams.get('limit') || searchParams.get('per_page')) as string)
+			: 15,
 		setPage: (page: number) => {
 			router.push(
 				`?${new URLSearchParams({ ...oldSearchParams, page }).toString()}`,
@@ -22,7 +22,7 @@ export default function useTablePagination() {
 		},
 		setPer_page: (per_page: number) => {
 			router.push(
-				`?${new URLSearchParams({ ...oldSearchParams, limit: per_page }).toString()}`,
+				`?${new URLSearchParams({ ...oldSearchParams, limit: per_page, per_page }).toString()}`,
 			);
 		},
 	};

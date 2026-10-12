@@ -31,10 +31,11 @@ export function TablePagination({ pagination }: PaginationProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Get current page and limit from URL, fallback to defaults
+  // Get current page and limit from URL, fallback to defaults (default 15)
   const currentPage = Number(searchParams.get("page")) || 1;
-  const currentLimit = Number(searchParams.get("limit")) || 10;
+  const currentLimit = Number(searchParams.get("limit") || searchParams.get("per_page")) || 15;
   const totalPages = Math.max(1, Math.ceil(pagination.total / currentLimit));
+  const limitOptions = Array.from(new Set([15, 30, 50, currentLimit])).sort((a, b) => a - b);
 
   // Correct page if it exceeds total pages or is invalid
   useEffect(() => {
@@ -55,6 +56,7 @@ export function TablePagination({ pagination }: PaginationProps) {
   const handleLimitChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("limit", value);
+    params.set("per_page", value);
     params.set("page", "1"); // Reset to first page on limit change
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -86,7 +88,7 @@ export function TablePagination({ pagination }: PaginationProps) {
               <SelectValue placeholder={currentLimit.toString()} />
             </SelectTrigger>
             <SelectContent>
-              {[10, 20, 40].map(val => (
+              {limitOptions.map(val => (
                 <SelectItem key={val} value={val.toString()}>
                   {val}
                 </SelectItem>
