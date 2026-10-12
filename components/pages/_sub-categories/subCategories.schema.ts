@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { StringReq, StringNotReq, noSchema } from "@/validations/String.schema";
+import { StringNotReq, noSchema } from "@/validations/String.schema";
 import { PriceSchema } from "@/validations/Number.schema";
 
 export const SubCategoriesSchema = (t: TFunction) => {
   return z.object({
     category_id: z.coerce.number().min(1, { message: t("Validations.required") }),
-    nameAr: StringReq(t),
-    nameEn: StringReq(t),
+    nameAr: StringNotReq(),
+    nameEn: StringNotReq(),
     nameNl: StringNotReq(),
     nameFr: StringNotReq(),
     nameDe: StringNotReq(),

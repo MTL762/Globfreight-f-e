@@ -228,11 +228,23 @@ export const renderInput = (item: FormInput, field: any) => {
       return <Input {...commonProps} type="url" />;
 
     case "number":
-      return <NumberInput {...commonProps} pattern="[0-9]*\.?[0-9]*" />;
+      return (
+        <NumberInput
+          {...commonProps}
+          min={item.min as number | string}
+          max={item.max}
+          pattern="[0-9]*\.?[0-9]*"
+        />
+      );
     case "price":
       return (
         <div className="flex gap-4 items-center">
-          <NumberInput {...commonProps} pattern="[0-9]*\.?[0-9]*" />
+          <NumberInput
+            {...commonProps}
+            min={item.min as number | string}
+            max={item.max}
+            pattern="[0-9]*\.?[0-9]*"
+          />
         </div>
       );
 
