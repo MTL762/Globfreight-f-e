@@ -1,5 +1,5 @@
 
- "use client";
+"use client";
 
 import { extractFormDefaultInputs } from "@/utils/extractFormDefaultInputs";
 import { extractFormNameInputs } from "@/utils/extractFormNameInputs";
@@ -8,14 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { CategoriesInputs } from "./categories.inputs";
-import { CategoriesSchema , type CategoriesType } from "./categories.schema";
+import { CategoriesSchema, type CategoriesType } from "./categories.schema";
 
 export default function useCategoriesLogic({ data }: { data?: CategoriesType }) {
 	const t = useTranslations();
 	const inputs = CategoriesInputs();
 	const {
 		control,
-		
+
 		handleSubmit,
 		reset,
 	} = useForm<CategoriesType>({
@@ -27,23 +27,23 @@ export default function useCategoriesLogic({ data }: { data?: CategoriesType }) 
 	const onSubmit = async (formData: CategoriesType) => {
 		await FormAction({
 			data,
-			formData: extractFormNameInputs({inputs, data:formData}),
+			formData: extractFormNameInputs({ inputs, data: formData }),
 			endpoint: ['adminCategories'],
 			reset: reset,
+			method: 'POST',
 			redirectLink: "categories",
 			t,
 		});
 	};
-        
-              const formSubmit = handleSubmit(onSubmit);
 
-	 return {
-    
-    control,
-    inputs,
-    formSubmit,
-    t
-  };
+	const formSubmit = handleSubmit(onSubmit);
+
+	return {
+
+		control,
+		inputs,
+		formSubmit,
+		t
+	};
 }
 
-  
