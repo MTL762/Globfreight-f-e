@@ -26,6 +26,7 @@ export default function useCustomersLogic({ data }: { data?: any }) {
       reset: reset,
       redirectLink: "customers",
       t,
+      method: 'POST'
     });
   };
 
