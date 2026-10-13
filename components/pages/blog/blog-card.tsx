@@ -29,7 +29,12 @@ export function BlogCard({
   const title = getBlogText(post.title, locale, "Untitled Article");
   const excerpt = getBlogText(post.excerpt, locale, "");
   const catName = post.category ? getBlogText(post.category.name, locale, "") : "";
-  const tag = catName || post.tags?.[0] || t("card.defaultTag");
+  const firstTag = Array.isArray(post.tags)
+    ? post.tags[0]
+    : typeof post.tags === "object" && post.tags !== null
+    ? ((post.tags as any)[locale]?.[0] || (post.tags as any).en?.[0])
+    : undefined;
+  const tag = catName || firstTag || t("card.defaultTag");
   const readTime = estimateReadTime(getBlogText(post.content, locale));
   const date = formatBlogDate(post.published_at || post.created_at, locale);
   const slugStr = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || "");

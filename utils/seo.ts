@@ -329,6 +329,7 @@ export function getArticleJsonLd({
   datePublished,
   dateModified,
   authorName = "Globfreight Logistics",
+  authorBio,
   schemaType = "BlogPosting",
   keywords,
   articleSection
@@ -340,13 +341,19 @@ export function getArticleJsonLd({
   datePublished?: string;
   dateModified?: string;
   authorName?: string;
+  authorBio?: string;
   schemaType?: string;
   keywords?: string[];
   articleSection?: string;
 }) {
+  const resolvedType =
+    typeof schemaType === "string" && schemaType.trim() !== ""
+      ? schemaType.trim()
+      : "BlogPosting";
+
   return {
     "@context": "https://schema.org",
-    "@type": schemaType || "BlogPosting",
+    "@type": resolvedType,
     headline: title,
     description,
     mainEntityOfPage: {
@@ -359,11 +366,16 @@ export function getArticleJsonLd({
     dateModified: dateModified || datePublished || new Date().toISOString(),
     ...(keywords && keywords.length > 0 ? { keywords: keywords.join(", ") } : {}),
     ...(articleSection ? { articleSection } : {}),
-    author: {
-      "@type": "Organization",
-      name: authorName,
-      url: SITE_URL,
-    },
+    author: authorBio
+      ? {
+          "@type": "Person",
+          name: authorName,
+          description: authorBio,
+        }
+      : {
+          "@type": "Person",
+          name: authorName,
+        },
     publisher: {
       "@type": "Organization",
       name: "GlobFreight",

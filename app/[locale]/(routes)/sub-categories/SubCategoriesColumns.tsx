@@ -24,11 +24,17 @@ export default function SubCategoriesColumns(): ColumnDef<Record<string, unknown
     {
       accessorKey: "slug",
       header: "Slug",
-      cell: ({ getValue }) => (
-        <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
-          {String(getValue() || "-")}
-        </span>
-      )
+      cell: ({ getValue }) => {
+        const val = getValue();
+        if (!val) return <span className="text-muted-foreground">-</span>;
+        return typeof val === "object" ? (
+          <LocaleViewColumn value={val as any} showBoth={false} />
+        ) : (
+          <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs font-mono text-muted-foreground">
+            {String(val)}
+          </span>
+        );
+      }
     },
     {
       accessorKey: "category",

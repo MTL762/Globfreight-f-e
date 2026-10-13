@@ -33,13 +33,33 @@ export function PublicBlogList({ posts, locale, categories }: PublicBlogListProp
     return list;
   }, [categories, currentLocale, t]);
 
-  // Filtered posts based on search and category
+  // Filtered posts based on search, category, and per-language publication status
   const filteredPosts = useMemo(() => {
     return posts.filter(post => {
-      const title = getBlogText(post.title, currentLocale, "").toLowerCase();
+      // 1. Status per language check: don't show empty translations or un-published translations in this language
+      const langStatus =
+        typeof post.status === "object" && post.status !== null
+          ? (post.status as any)[currentLocale] || (post.status as any).en || "published"
+          : post.status;
+      const rawTitle = getBlogText(post.title, currentLocale, "");
+
+      const isPublished =
+        (langStatus === "published" || !langStatus) &&
+        rawTitle.trim().length > 0 &&
+        post.status !== "draft" &&
+        post.status !== "archived";
+
+      if (!isPublished) return false;
+
+      const title = rawTitle.toLowerCase();
       const excerpt = getBlogText(post.excerpt, currentLocale, "").toLowerCase();
       const catSlug = post.category?.slug || String(post.category?.id || "");
-      const tags = (post.tags || []).join(" ").toLowerCase();
+      const postTags = Array.isArray(post.tags)
+        ? post.tags
+        : typeof post.tags === "object" && post.tags !== null
+        ? ((post.tags as any)[currentLocale] || (post.tags as any).en || [])
+        : [];
+      const tags = postTags.join(" ").toLowerCase();
 
       const matchesSearch =
         !searchQuery ||
@@ -56,11 +76,11 @@ export function PublicBlogList({ posts, locale, categories }: PublicBlogListProp
     });
   }, [posts, currentLocale, searchQuery, selectedCategory]);
 
-  // Featured publication (shown on initial unfiltered state)
+  // Featured publication (shown on initial unfiltered state from published posts)
   const featuredPost = useMemo(() => {
     if (selectedCategory !== "all" || searchQuery) return null;
-    return posts.find(p => Boolean(p.is_featured)) || posts[0] || null;
-  }, [posts, selectedCategory, searchQuery]);
+    return filteredPosts.find(p => Boolean(p.is_featured)) || filteredPosts[0] || null;
+  }, [filteredPosts, selectedCategory, searchQuery]);
 
   // Regular grid posts (excluding featured post when featured banner is displayed)
   const gridPosts = useMemo(() => {

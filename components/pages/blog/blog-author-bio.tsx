@@ -13,21 +13,30 @@ export function BlogAuthorBio({ author, className = "" }: BlogAuthorBioProps) {
 
   const name = author?.name || t("authorTitle");
   const initial = (name ? name.charAt(0) : "G").toUpperCase();
+  const bio = author?.bio || t("authorBio");
 
   return (
     <div
       className={`rounded-3xl border border-border/60 bg-muted/30 p-6 sm:p-8 flex flex-col sm:flex-row items-center sm:items-start gap-5 ${className}`}
     >
-      <div className="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xl border border-primary/20 shrink-0">
-        {initial}
-      </div>
+      {author?.avatar ? (
+        <img
+          src={author.avatar}
+          alt={name}
+          className="h-14 w-14 rounded-2xl object-cover border border-primary/20 shrink-0"
+        />
+      ) : (
+        <div className="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xl border border-primary/20 shrink-0">
+          {initial}
+        </div>
+      )}
       <div className="space-y-2 text-center sm:text-start">
         <div className="space-y-0.5">
           <h4 className="text-base font-bold text-foreground">{name}</h4>
           <p className="text-xs text-primary font-semibold">{t("authorSubtitle")}</p>
         </div>
         <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-          {t("authorBio")}
+          {bio}
         </p>
       </div>
     </div>

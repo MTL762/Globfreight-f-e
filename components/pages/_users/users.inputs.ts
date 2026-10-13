@@ -27,6 +27,14 @@ export const UsersInputs = (isEdit = false): FormInput[] => {
       cardId: "general"
     },
     {
+      name: "bio",
+      type: "textarea",
+      label: "Author / User Bio",
+      placeholder: "International logistics specialist with 10+ years of experience...",
+      toolTip: "E-E-A-T professional bio displayed on published blog articles and author profile",
+      cardId: "general"
+    },
+    {
       name: "password",
       type: "password",
       label: isEdit ? "New Password (leave empty to keep current)" : "Password",

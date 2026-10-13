@@ -95,21 +95,25 @@ export default function ImgInput({
       onChange?.(undefined);
     }
   };
-  const ratioStep = 100;
-  const [width, height] = ratio.split(":").map(Number);
+  const [width, height] = (ratio || "1:1")
+    .replace(/[×xX]/g, ":")
+    .split(":")
+    .map(Number);
+  const isValidRatio = width > 0 && height > 0;
+  const aspectRatioVal = isValidRatio ? width / height : 1;
 
   return (
     <div className={`flex flex-col-reverse justify-end gap-3 h-full ${className || ""}`}>
       <div className="flex justify-center items-center">
         <div
-          className="relative w-full flex items-center justify-center rounded-xl border border-border/70 overflow-hidden bg-muted/40"
+          className="relative max-w-full flex items-center justify-center rounded-xl border border-border/70 overflow-hidden bg-muted/40 shadow-xs"
           style={{
-            alignContent: "center",
-            width: `${width * ratioStep}px`,
-            height: `${height * ratioStep}px`
+            width: aspectRatioVal >= 1 ? "280px" : `${Math.round(200 * aspectRatioVal)}px`,
+            aspectRatio: isValidRatio ? `${width} / ${height}` : "1 / 1",
+            maxHeight: "180px"
           }}
         >
-          <div className="max-w-[250px] max-h-[350px] w-full h-full relative">
+          <div className="w-full h-full relative">
             {previewUrl ? (
               <Image
                 src={previewUrl}
@@ -120,7 +124,7 @@ export default function ImgInput({
               />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 p-3 text-center">
-                <ImageIcon className="size-10 text-muted-foreground/60" />
+                <ImageIcon className="size-8 text-muted-foreground/60" />
                 {ratio && (
                   <span className="font-medium text-xs text-muted-foreground">
                     {t("ratio")}: <span className="text-primary font-semibold">{ratio}</span>

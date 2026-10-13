@@ -22,6 +22,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { BlogPost, formatBlogDate, getBlogText, estimateReadTime } from "@/types/blog";
 import { BlogCard } from "./blog-card";
 import { BlogAuthorBio } from "./blog-author-bio";
+import { sanitizeHtml } from "@/utils/sanitizeHtml";
 
 interface PublicBlogDetailProps {
   post: BlogPost;
@@ -213,7 +214,7 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
             <div className="relative w-full h-[320px] sm:h-[420px] md:h-[500px] rounded-3xl overflow-hidden bg-muted border border-border/70 shadow-sm">
               <Image
                 src={postImage}
-                alt={title}
+                alt={getBlogText(post.image_alt, currentLocale, title)}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 896px"
@@ -230,38 +231,59 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
           <div className="bg-card rounded-3xl border border-border/60 p-6 sm:p-10 md:p-14 shadow-xs">
             {/* HTML Article Content */}
             <div
-              className="prose prose-base sm:prose-lg dark:prose-invert max-w-none
+              dir={isRtl ? "rtl" : "ltr"}
+              className={`prose prose-base sm:prose-lg dark:prose-invert max-w-none text-start
                 prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground
                 prose-h2:text-2xl sm:prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4
                 prose-h3:text-xl sm:prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:leading-relaxed prose-p:text-muted-foreground sm:prose-p:text-base
+                prose-h4:text-lg sm:prose-h4:text-xl prose-h4:mt-6 prose-h4:mb-2
+                prose-p:leading-relaxed prose-p:text-muted-foreground sm:prose-p:text-base prose-p:my-4
                 prose-strong:text-foreground prose-strong:font-bold
-                prose-ul:my-6 prose-li:text-muted-foreground
-                prose-blockquote:border-s-primary prose-blockquote:bg-muted/30 prose-blockquote:py-2 prose-blockquote:px-5 prose-blockquote:rounded-r-xl prose-blockquote:italic
-                prose-img:rounded-2xl prose-img:border prose-img:border-border/60
-                prose-a:text-primary prose-a:underline hover:prose-a:opacity-80 transition-opacity"
-              dangerouslySetInnerHTML={{ __html: contentHtml || `<p>${excerpt}</p>` }}
+                prose-ul:my-6 prose-ul:list-disc prose-ul:ps-6 prose-li:my-1.5 prose-li:text-muted-foreground
+                prose-ol:my-6 prose-ol:list-decimal prose-ol:ps-6
+                prose-table:w-full prose-table:my-8 prose-table:border-collapse prose-table:border prose-table:border-border/70 prose-table:rounded-xl prose-table:overflow-hidden
+                prose-th:bg-muted/60 prose-th:p-3 sm:prose-th:p-4 prose-th:text-start prose-th:font-bold prose-th:text-foreground prose-th:border prose-th:border-border/60
+                prose-td:p-3 sm:prose-td:p-4 prose-td:border prose-td:border-border/60 prose-td:text-muted-foreground prose-tr:even:bg-muted/15 prose-tr:hover:bg-muted/30
+                prose-blockquote:border-s-4 prose-blockquote:border-s-primary prose-blockquote:bg-muted/30 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-e-xl prose-blockquote:italic prose-blockquote:text-foreground/90 prose-blockquote:my-6
+                prose-img:rounded-2xl prose-img:border prose-img:border-border/60 prose-img:my-8 prose-img:shadow-sm prose-img:max-w-full prose-img:h-auto
+                prose-a:text-primary prose-a:font-medium prose-a:underline hover:prose-a:opacity-80 transition-opacity
+                prose-pre:bg-zinc-950 prose-pre:text-zinc-100 prose-pre:rounded-2xl prose-pre:p-5 prose-pre:border prose-pre:border-border/60 prose-pre:overflow-x-auto
+                prose-code:font-mono prose-code:text-xs sm:prose-code:text-sm prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-foreground prose-code:font-medium
+                prose-hr:my-10 prose-hr:border-border/80 ${
+                  isRtl ? "rtl:prose-blockquote:border-r-primary rtl:prose-blockquote:border-l-0 rtl:prose-blockquote:rounded-l-xl rtl:prose-blockquote:rounded-r-none leading-[1.8]" : ""
+                }`}
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(contentHtml || (excerpt ? `<p>${excerpt}</p>` : ""))
+              }}
             />
 
             {/* Tags & Keywords */}
-            {post.tags && post.tags.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-border/60 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                  <Tag className="h-3.5 w-3.5" />
-                  <span>Topic Tags:</span>
-                </h4>
-                <div className="flex flex-wrap items-center gap-2">
-                  {post.tags.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-muted text-xs font-medium text-foreground border border-border/50"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
+            {(() => {
+              const tagsList = Array.isArray(post.tags)
+                ? post.tags
+                : typeof post.tags === "object" && post.tags !== null
+                ? ((post.tags as any)[currentLocale] || (post.tags as any).en || [])
+                : [];
+              if (!tagsList || tagsList.length === 0) return null;
+              return (
+                <div className="mt-12 pt-8 border-t border-border/60 space-y-3">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Tag className="h-3.5 w-3.5" />
+                    <span>Topic Tags:</span>
+                  </h4>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {tagsList.map((tag: string, idx: number) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-muted text-xs font-medium text-foreground border border-border/50"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* Bottom Share & Action Bar */}
             <div className="mt-8 pt-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -280,6 +302,38 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
               </div>
             </div>
           </div>
+
+          {/* FAQ Accordion Section (Google Rich Snippets & User Guidance) */}
+          {Array.isArray(post.seo?.faqs) && post.seo.faqs.length > 0 && (
+            <div className="mt-8 bg-card rounded-3xl border border-border/60 p-6 sm:p-8 shadow-xs space-y-4">
+              <div className="flex items-center gap-2.5 pb-2 border-b border-border/50">
+                <div className="h-8 w-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                  ?
+                </div>
+                <h3 className="text-lg font-bold text-foreground">
+                  {currentLocale === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions"}
+                </h3>
+              </div>
+              <div className="space-y-3 pt-1">
+                {post.seo.faqs.map((faq, idx) => (
+                  <details
+                    key={idx}
+                    className="group rounded-2xl border border-border/60 bg-muted/20 open:bg-muted/40 transition-colors p-4"
+                  >
+                    <summary className="font-semibold text-sm sm:text-base text-foreground cursor-pointer list-none flex items-center justify-between gap-3 select-none">
+                      <span>{faq.question}</span>
+                      <span className="text-primary font-bold transition-transform group-open:rotate-180 text-xs">
+                        ▼
+                      </span>
+                    </summary>
+                    <p className="mt-3 text-xs sm:text-sm text-muted-foreground leading-relaxed ps-1">
+                      {faq.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Author Box Component */}
           <BlogAuthorBio author={post.author} className="mt-8" />

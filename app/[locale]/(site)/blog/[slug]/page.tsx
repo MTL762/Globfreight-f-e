@@ -2,7 +2,7 @@ import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogDetail } from "@/components/pages/blog/public-blog-detail";
 import { BlogPost, BlogPostFetchResult, getBlogText } from "@/types/blog";
-import { getArticleJsonLd, getBreadcrumbJsonLd, getOpenGraphImages, SITE_URL, SYSTEM_LOCALES } from "@/utils/seo";
+import { getArticleJsonLd, getBreadcrumbJsonLd, getFaqJsonLd, getOpenGraphImages, SITE_URL, SYSTEM_LOCALES } from "@/utils/seo";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -51,7 +51,12 @@ export async function generateMetadata({
       getBlogText(post.excerpt, locale) ||
       "Globfreight supply chain and logistics intelligence article.";
 
-    const customCanonical = post.seo?.canonical_url || post.seo_canonical_url;
+    const rawCanonical = post.seo?.canonical_url || post.seo_canonical_url;
+    const customCanonical =
+      typeof rawCanonical === "object" && rawCanonical !== null
+        ? getBlogText(rawCanonical, locale)
+        : rawCanonical;
+
     const alternatesLanguages: Record<string, string> = {};
     for (const loc of SYSTEM_LOCALES) {
       const locSlug = typeof post.slug === "object" ? (post.slug[loc] || getBlogText(post.slug, loc)) : post.slug;
@@ -69,12 +74,36 @@ export async function generateMetadata({
     };
 
     const postImage = getBlogText(post.image, locale);
-    const ogImage = postImage || post.seo?.og_image;
+    const ogImage = post.seo?.og_image || postImage;
+    const ogTitle = getBlogText(post.seo?.og_title, locale) || title;
+    const ogDescription = getBlogText(post.seo?.og_description, locale) || description;
+    const ogImageAlt =
+      getBlogText(post.seo?.og_image_alt, locale) ||
+      getBlogText(post.image_alt, locale) ||
+      title;
+
+    const twitterCard =
+      (post.seo?.twitter_card === "summary" ? "summary" : "summary_large_image") as "summary" | "summary_large_image";
+    const twitterTitle = getBlogText(post.seo?.twitter_title, locale) || ogTitle;
+    const twitterDescription = getBlogText(post.seo?.twitter_description, locale) || ogDescription;
+    const twitterImage = post.seo?.twitter_image || ogImage;
 
     const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, locale);
-    const tags = Array.isArray(post.tags) ? post.tags : [];
+    const tags = Array.isArray(post.tags)
+      ? post.tags
+      : typeof post.tags === "object" && post.tags !== null
+      ? ((post.tags as any)[locale] || (post.tags as any).en || [])
+      : [];
+
+    const backendKeywords = Array.isArray(post.seo?.keywords)
+      ? post.seo.keywords
+      : typeof post.seo?.keywords === "string"
+      ? post.seo.keywords.split(",").map(k => k.trim()).filter(Boolean)
+      : [];
+
     const keywords = [
       ...(focusKeyphrase ? [focusKeyphrase] : []),
+      ...backendKeywords,
       ...tags,
       "Globfreight",
       "logistics",
@@ -85,14 +114,25 @@ export async function generateMetadata({
       ? (typeof post.category.name === "string" ? post.category.name : getBlogText(post.category.name, locale))
       : undefined;
 
+    const langStatus =
+      typeof post.status === "object" && post.status !== null
+        ? (post.status as any)[locale] || (post.status as any).en || "published"
+        : post.status;
+    const hasTranslationContent = Boolean(postTitle);
+    const isLive = langStatus === "published" && hasTranslationContent && post.status !== "draft" && post.status !== "archived";
+
+    const metaRobotsRaw = post.seo?.meta_robots?.toLowerCase() || "";
+    const shouldIndex = metaRobotsRaw.includes("noindex") ? false : isLive;
+    const shouldFollow = metaRobotsRaw.includes("nofollow") ? false : true;
+
     return {
       title,
       description,
       keywords,
       alternates,
       openGraph: {
-        title,
-        description,
+        title: ogTitle,
+        description: ogDescription,
         url: alternates.canonical,
         type: "article",
         publishedTime: post.published_at || post.created_at,
@@ -104,20 +144,20 @@ export async function generateMetadata({
           ? [
             {
               url: ogImage,
-              alt: title
+              alt: ogImageAlt
             }
           ]
           : getOpenGraphImages(title)
       },
       twitter: {
-        card: "summary_large_image",
-        title,
-        description,
-        images: ogImage ? [ogImage] : [`${SITE_URL}/og-image.jpg`]
+        card: twitterCard,
+        title: twitterTitle,
+        description: twitterDescription,
+        images: twitterImage ? [twitterImage] : ogImage ? [ogImage] : [`${SITE_URL}/og-image.jpg`]
       },
       robots: {
-        index: post.status !== "draft" && post.status !== "archived",
-        follow: true
+        index: shouldIndex,
+        follow: shouldFollow
       }
     };
   } catch {
@@ -180,7 +220,12 @@ export default async function BlogDetailPage(props: {
     getBlogText(post.excerpt, locale) ||
     "Globfreight supply chain and logistics intelligence article.";
 
-  const customCanonical = post.seo?.canonical_url || post.seo_canonical_url;
+  const rawCanonical = post.seo?.canonical_url || post.seo_canonical_url;
+  const customCanonical =
+    typeof rawCanonical === "object" && rawCanonical !== null
+      ? getBlogText(rawCanonical, locale)
+      : rawCanonical;
+
   const postUrl =
     customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
       ? customCanonical.trim()
@@ -190,10 +235,19 @@ export default async function BlogDetailPage(props: {
   const ogImage = postImage || post.seo?.og_image;
 
   const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, locale);
-  const tags = Array.isArray(post.tags) ? post.tags : [];
+  const tags = Array.isArray(post.tags)
+    ? post.tags
+    : typeof post.tags === "object" && post.tags !== null
+    ? ((post.tags as any)[locale] || (post.tags as any).en || [])
+    : [];
   const allKeywords = [...(focusKeyphrase ? [focusKeyphrase] : []), ...tags];
 
-  const schemaType = post.seo?.schema_markup_type || post.seo_schema_markup_type || "BlogPosting";
+  const rawSchema = post.seo?.schema_markup_type || post.seo_schema_markup_type;
+  const schemaType =
+    (typeof rawSchema === "object" && rawSchema !== null
+      ? getBlogText(rawSchema, locale)
+      : rawSchema) || "BlogPosting";
+
   const categoryName = post.category
     ? (typeof post.category.name === "string" ? post.category.name : getBlogText(post.category.name, locale))
     : undefined;
@@ -204,8 +258,9 @@ export default async function BlogDetailPage(props: {
     url: postUrl,
     image: ogImage,
     datePublished: post.published_at || post.created_at,
-    dateModified: post.published_at || post.created_at,
+    dateModified: post.updated_at || post.published_at || post.created_at,
     authorName: post.author?.name || "Globfreight Logistics Expert",
+    authorBio: post.author?.bio || undefined,
     schemaType,
     keywords: allKeywords,
     articleSection: categoryName
@@ -218,6 +273,10 @@ export default async function BlogDetailPage(props: {
     { name: title, url: postUrl }
   ]);
 
+  const hasFaqs = Array.isArray(post.seo?.faqs) && post.seo.faqs.length > 0;
+  const faqJsonLd = hasFaqs ? getFaqJsonLd(post.seo!.faqs!) : null;
+  const customSchemaMarkup = post.seo?.schema_markup;
+
   return (
     <PublicShell>
       <script
@@ -228,6 +287,22 @@ export default async function BlogDetailPage(props: {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      {customSchemaMarkup && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: typeof customSchemaMarkup === "object"
+              ? JSON.stringify(customSchemaMarkup)
+              : customSchemaMarkup
+          }}
+        />
+      )}
       <PublicBlogDetail post={post} relatedPosts={relatedPosts} locale={locale} />
     </PublicShell>
   );

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { StringNotReq, noSchema } from "@/validations/String.schema";
+import { OptionalLinkSchema } from "@/validations/Link.schema";
 import { PriceSchema } from "@/validations/Number.schema";
 
 export const SubCategoriesSchema = (t: TFunction) => {
@@ -15,7 +16,6 @@ export const SubCategoriesSchema = (t: TFunction) => {
     descriptionNl: StringNotReq(),
     descriptionFr: StringNotReq(),
     descriptionDe: StringNotReq(),
-    // slug: StringNotReq(),
     slugAr: StringNotReq(),
     slugEn: StringNotReq(),
     slugNl: StringNotReq(),
@@ -28,6 +28,11 @@ export const SubCategoriesSchema = (t: TFunction) => {
     imageNl: noSchema().optional(),
     imageFr: noSchema().optional(),
     imageDe: noSchema().optional(),
+    image_altAr: StringNotReq(),
+    image_altEn: StringNotReq(),
+    image_altNl: StringNotReq(),
+    image_altFr: StringNotReq(),
+    image_altDe: StringNotReq(),
     // SEO fields
     seo_meta_titleAr: StringNotReq(),
     seo_meta_titleEn: StringNotReq(),
@@ -39,8 +44,60 @@ export const SubCategoriesSchema = (t: TFunction) => {
     seo_meta_descriptionNl: StringNotReq(),
     seo_meta_descriptionFr: StringNotReq(),
     seo_meta_descriptionDe: StringNotReq(),
+    seo_focus_keyphrase: StringNotReq(),
+    seo_focus_keyphraseAr: StringNotReq(),
+    seo_focus_keyphraseEn: StringNotReq(),
+    seo_focus_keyphraseNl: StringNotReq(),
+    seo_focus_keyphraseFr: StringNotReq(),
+    seo_focus_keyphraseDe: StringNotReq(),
+    seo_canonical_url: OptionalLinkSchema(t),
+    seo_canonical_urlAr: OptionalLinkSchema(t),
+    seo_canonical_urlEn: OptionalLinkSchema(t),
+    seo_canonical_urlNl: OptionalLinkSchema(t),
+    seo_canonical_urlFr: OptionalLinkSchema(t),
+    seo_canonical_urlDe: OptionalLinkSchema(t),
+    seo_meta_robots: z.string().optional().default("index, follow"),
+    seo_keywords: StringNotReq(),
+    seo_schema_markup_type: z.string().optional().default("Service"),
+    seo_schema_markup_typeAr: StringNotReq(),
+    seo_schema_markup_typeEn: StringNotReq(),
+    seo_schema_markup_typeNl: StringNotReq(),
+    seo_schema_markup_typeFr: StringNotReq(),
+    seo_schema_markup_typeDe: StringNotReq(),
+    // Open Graph
+    seo_og_titleAr: StringNotReq(),
+    seo_og_titleEn: StringNotReq(),
+    seo_og_titleNl: StringNotReq(),
+    seo_og_titleFr: StringNotReq(),
+    seo_og_titleDe: StringNotReq(),
+    seo_og_descriptionAr: StringNotReq(),
+    seo_og_descriptionEn: StringNotReq(),
+    seo_og_descriptionNl: StringNotReq(),
+    seo_og_descriptionFr: StringNotReq(),
+    seo_og_descriptionDe: StringNotReq(),
+    seo_og_image: noSchema().optional(),
+    seo_og_image_altAr: StringNotReq(),
+    seo_og_image_altEn: StringNotReq(),
+    seo_og_image_altNl: StringNotReq(),
+    seo_og_image_altFr: StringNotReq(),
+    seo_og_image_altDe: StringNotReq(),
+    // Twitter
+    seo_twitter_card: z.enum(["summary_large_image", "summary"]).optional().default("summary_large_image"),
+    seo_twitter_image: noSchema().optional(),
+    seo_twitter_titleAr: StringNotReq(),
+    seo_twitter_titleEn: StringNotReq(),
+    seo_twitter_titleNl: StringNotReq(),
+    seo_twitter_titleFr: StringNotReq(),
+    seo_twitter_titleDe: StringNotReq(),
+    seo_twitter_descriptionAr: StringNotReq(),
+    seo_twitter_descriptionEn: StringNotReq(),
+    seo_twitter_descriptionNl: StringNotReq(),
+    seo_twitter_descriptionFr: StringNotReq(),
+    seo_twitter_descriptionDe: StringNotReq(),
+    // Schema & FAQs
+    seo_schema_markup: StringNotReq(),
+    seo_faqs: z.array(z.object({ question: z.string().optional(), answer: z.string().optional() })).optional().default([]),
   });
 };
 
 export type SubCategoriesType = z.infer<ReturnType<typeof SubCategoriesSchema>>;
-

@@ -35,6 +35,8 @@ const TimeInput = dynamic(() => import("../Inputs/text/TimeInput"));
 // const TimeInput = dynamic(() => import("../Inputs/TimeInput"));
 const YearInput = dynamic(() => import("../Inputs/date/year-input"));
 const TagInput = dynamic(() => import("../Inputs/select/tag-input"));
+const HtmlCodeBox = dynamic(() => import("../Inputs/text/HtmlCodeBox"));
+const FaqListInput = dynamic(() => import("../Inputs/other/FaqListInput"));
 
 const getErrorMessage = (errors: FieldErrors, name: string): string | undefined => {
   return name.split(".").length === 3
@@ -49,7 +51,9 @@ const InputWrapper = ({
   label,
   name,
   toolTip,
-  toolTipIcon
+  toolTipIcon,
+  charLimit,
+  currentLength
 }: {
   name: string;
   required?: boolean;
@@ -59,6 +63,8 @@ const InputWrapper = ({
   multiLang?: boolean;
   toolTip?: string;
   toolTipIcon?: "info" | "alert" | JSX.Element;
+  charLimit?: number;
+  currentLength?: number;
 }) => {
   const t = useTranslations();
   const labelText = typeof label === "string" ? (t.has?.(label) ? t(label) : label) : label;
@@ -66,7 +72,7 @@ const InputWrapper = ({
 
   return (
     <div className="w-full h-full flex flex-col justify-start">
-      <div className="flex items-center justify-between gap-1.5 mb-1.5">
+      <div className="flex items-center justify-between gap-1.5 mb-1.5 flex-wrap">
         <div className="flex items-center gap-1 flex-wrap min-w-0">
           {labelText && (
             <label
@@ -86,34 +92,52 @@ const InputWrapper = ({
             </span>
           )}
         </div>
-        {tooltipText && (
-          <TooltipProvider delayDuration={150}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  aria-label={typeof labelText === "string" ? `${labelText} info` : "Information"}
-                  className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+
+        <div className="flex items-center gap-1.5 ms-auto">
+          {typeof charLimit === "number" && typeof currentLength === "number" && (
+            <span
+              className={`text-[11px] font-mono px-2 py-0.5 rounded-full border transition-colors ${
+                currentLength > charLimit
+                  ? "bg-destructive/15 text-destructive border-destructive/30 font-bold"
+                  : currentLength >= charLimit - 10
+                  ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30 font-semibold"
+                  : "bg-muted text-muted-foreground border-border/60 font-medium"
+              }`}
+              title={`${currentLength} characters used out of recommended ${charLimit}`}
+            >
+              {currentLength}/{charLimit}
+            </span>
+          )}
+
+          {tooltipText && (
+            <TooltipProvider delayDuration={150}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label={typeof labelText === "string" ? `${labelText} info` : "Information"}
+                    className="inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted focus:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+                  >
+                    {toolTipIcon === "alert" ? (
+                      <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                    ) : React.isValidElement(toolTipIcon) ? (
+                      toolTipIcon
+                    ) : (
+                      <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-primary transition-colors shrink-0" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  align="center"
+                  className="max-w-xs text-xs font-normal shadow-md px-3 py-2 leading-relaxed bg-popover text-popover-foreground border z-[9999] rounded-lg"
                 >
-                  {toolTipIcon === "alert" ? (
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  ) : React.isValidElement(toolTipIcon) ? (
-                    toolTipIcon
-                  ) : (
-                    <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-primary transition-colors shrink-0" />
-                  )}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent
-                side="top"
-                align="center"
-                className="max-w-xs text-xs font-normal shadow-md px-3 py-2 leading-relaxed bg-popover text-popover-foreground border z-[9999] rounded-lg"
-              >
-                <span>{tooltipText}</span>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
+                  <span>{tooltipText}</span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       </div>
       <div className="relative w-full flex-1 flex flex-col justify-start">
         {children}
@@ -257,8 +281,22 @@ export const renderInput = (item: FormInput, field: any) => {
     case "space":
       return <div className="w-full h-4" />;
 
+    case "html":
+    case "html-box":
+    case "htmlEditor":
+      return <HtmlCodeBox {...commonProps} />;
+
     case "file":
       return <PdfInput {...commonProps} />;
+
+    case "faq-list":
+      return (
+        <FaqListInput
+          value={field.value}
+          onChange={field.onChange}
+          name={item.name}
+        />
+      );
 
     default:
       return null;
@@ -275,6 +313,19 @@ export const renderInputComponent = ({
   errors: FieldErrors;
 }): JSX.Element => {
   const errorMessage = getErrorMessage(errors, item.name);
+
+  // Auto-detect character limits for SEO fields or explicit charLimit
+  const lowerName = item.name.toLowerCase();
+  const detectedLimit =
+    item.charLimit ||
+    (lowerName.includes("meta_title")
+      ? 60
+      : lowerName.includes("meta_description")
+      ? 155
+      : undefined);
+
+  const currentLength = typeof field.value === "string" ? field.value.length : undefined;
+
   return (
     <Suspense fallback={<InputSkeleton />}>
       <InputWrapper
@@ -285,6 +336,8 @@ export const renderInputComponent = ({
         error={errorMessage}
         toolTip={item.toolTip || item.description}
         toolTipIcon={item.toolTipIcon}
+        charLimit={detectedLimit}
+        currentLength={currentLength}
       >
         {renderInput(item, field)}
       </InputWrapper>

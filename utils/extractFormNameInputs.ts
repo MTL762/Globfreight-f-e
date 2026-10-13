@@ -1,4 +1,5 @@
 import { FORM_LANGUAGES, type FormInput } from "@/components/common/Form/CustomFormTypes.types";
+import { sanitizeHtml } from "@/utils/sanitizeHtml";
 
 export function extractFormNameInputs({
   inputs,
@@ -8,7 +9,8 @@ export function extractFormNameInputs({
   inputs: FormInput[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
-  dirtyFields?: Record<string, boolean | boolean[]> | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dirtyFields?: Record<string, any> | undefined;
 }): FormData | Record<string, unknown> {
   const formdata = new FormData();
   const isFormData = inputs.some(
@@ -52,17 +54,24 @@ export function extractFormNameInputs({
             if (val instanceof File || val instanceof Blob) {
               formdata.append(`${baseName}[${code}]`, val);
             } else if (Array.isArray(val)) {
-              val.forEach(file => {
-                if (file instanceof File || file instanceof Blob) {
-                  formdata.append(`${baseName}[${code}][]`, file);
+              val.forEach(subVal => {
+                if (subVal instanceof File || subVal instanceof Blob) {
+                  formdata.append(`${baseName}[${code}][]`, subVal);
+                } else if (subVal !== undefined && subVal !== null && subVal !== "") {
+                  formdata.append(`${baseName}[${code}][]`, `${subVal}`);
                 }
               });
             } else if (
+              !baseName.includes("alt") &&
+              !baseName.includes("Alt") &&
               (baseName === "image" || baseName === "images" || baseName.includes("image")) &&
               !(val instanceof File || val instanceof Blob)
             ) {
               return;
             } else if (
+              !baseName.includes("alt") &&
+              !baseName.includes("Alt") &&
+              (baseName === "image" || baseName === "images" || baseName.includes("image")) &&
               typeof val === "string" &&
               (val.includes("uploads/") ||
                 val.includes("storage/") ||
@@ -74,7 +83,8 @@ export function extractFormNameInputs({
               const seoKey = baseName.replace(/^seo_/, "");
               formdata.append(`seo[${seoKey}][${code}]`, `${val ?? ""}`);
             } else {
-              formdata.append(`${baseName}[${code}]`, `${val ?? ""}`);
+              const safeVal = (baseName === "content" && typeof val === "string") ? sanitizeHtml(val) : val;
+              formdata.append(`${baseName}[${code}]`, `${safeVal ?? ""}`);
             }
           }
         });
@@ -84,8 +94,17 @@ export function extractFormNameInputs({
       if (item.startsWith("seo_")) {
         const seoKey = item.replace(/^seo_/, "");
         if (data[item] !== "" && data[item] !== undefined && data[item] !== null) {
-          if (seoKey === "focus_keyphrase") {
+          if (seoKey === "faqs" && Array.isArray(data[item])) {
+            data[item].forEach((faq: { question?: string; answer?: string }, idx: number) => {
+              if (faq?.question?.trim() || faq?.answer?.trim()) {
+                formdata.append(`seo[faqs][${idx}][question]`, faq.question || "");
+                formdata.append(`seo[faqs][${idx}][answer]`, faq.answer || "");
+              }
+            });
+          } else if (seoKey === "focus_keyphrase") {
             formdata.append(`seo[${seoKey}][en]`, `${data[item]}`);
+          } else if (data[item] instanceof File || data[item] instanceof Blob) {
+            formdata.append(`seo[${seoKey}]`, data[item]);
           } else {
             formdata.append(`seo[${seoKey}]`, `${data[item]}`);
           }
@@ -121,14 +140,18 @@ export function extractFormNameInputs({
         return;
       }
 
+      const isImageField =
+        !item.includes("alt") &&
+        !item.includes("Alt") &&
+        (item.includes("image") || item.includes("Image") || item === "file" || item === "avatar" || item === "logo");
+
       if (
+        isImageField &&
         typeof data[item] === "string" &&
         (data[item].includes("uploads/") ||
           data[item].includes("storage/") ||
           data[item].startsWith("http://") ||
-          data[item].startsWith("https://") ||
-          item.includes("image") ||
-          item.includes("Image"))
+          data[item].startsWith("https://"))
       ) {
         return;
       }
@@ -172,7 +195,7 @@ export function extractFormNameInputs({
           const val = data[langKey];
           const hasValue = val !== undefined && val !== null && val !== "";
           if (hasValue || (isDirty && val === "")) {
-            langObj[code] = `${val ?? ""}`;
+            langObj[code] = Array.isArray(val) ? (val as any) : `${val ?? ""}`;
           }
         });
 
@@ -192,7 +215,11 @@ export function extractFormNameInputs({
         const seoKey = item.replace(/^seo_/, "");
         if (data[item] !== "") {
           if (!formdata.seo) formdata.seo = {};
-          if (seoKey === "focus_keyphrase") {
+          if (seoKey === "faqs" && Array.isArray(data[item])) {
+            formdata.seo[seoKey] = data[item].filter(
+              (faq: { question?: string; answer?: string }) => faq?.question?.trim() || faq?.answer?.trim()
+            );
+          } else if (seoKey === "focus_keyphrase") {
             formdata.seo[seoKey] = typeof data[item] === "object" ? data[item] : { en: `${data[item]}` };
           } else {
             formdata.seo[seoKey] = data[item];

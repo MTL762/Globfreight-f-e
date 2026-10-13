@@ -9,17 +9,29 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
         return;
       }
       if (item.multiLang) {
-        const langDefaults: Record<string, string> = {};
+        const langDefaults: Record<string, any> = {};
         const rawDirect = dataObj[item.name] ?? (item.name === "image" ? dataObj["images"] : undefined);
         FORM_LANGUAGES.forEach(({ code, key }) => {
           let directVal: any;
-          if (typeof rawDirect === "object" && rawDirect !== null) {
+          if (rawDirect !== null && typeof rawDirect === "object" && !Array.isArray(rawDirect)) {
             directVal = rawDirect[code];
+          } else if (Array.isArray(rawDirect)) {
+            directVal = code === "en" ? rawDirect : [];
           } else if (typeof rawDirect === "string") {
             directVal = rawDirect;
           }
+
           const seoKey = item.name.startsWith("seo_") ? item.name.replace("seo_", "") : null;
-          const seoVal = seoKey ? dataObj.seo?.[seoKey]?.[code] : undefined;
+          let seoVal: any;
+          if (seoKey && dataObj.seo) {
+            const rawSeo = dataObj.seo[seoKey];
+            if (rawSeo !== null && typeof rawSeo === "object" && !Array.isArray(rawSeo)) {
+              seoVal = rawSeo[code];
+            } else if (typeof rawSeo === "string") {
+              seoVal = rawSeo;
+            }
+          }
+
           langDefaults[`${item.name}${key}`] = directVal ?? seoVal ?? "";
         });
         return langDefaults;
@@ -32,6 +44,11 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
       if (item?.name.startsWith("seo_")) {
         const seoKey = item.name.replace(/^seo_/, "");
         const seoVal = dataObj[item.name] ?? dataObj.seo?.[seoKey];
+        if (seoKey === "faqs") {
+          return {
+            [item.name]: Array.isArray(seoVal) ? seoVal : []
+          };
+        }
         const val =
           typeof seoVal === "object" && seoVal !== null && !Array.isArray(seoVal)
             ? seoVal.en ?? Object.values(seoVal)[0] ?? ""
@@ -46,4 +63,3 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
     })
     .reduce((acc, curr) => ({ ...acc, ...curr }), {});
 }
-

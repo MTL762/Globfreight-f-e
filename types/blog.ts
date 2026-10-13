@@ -35,9 +35,11 @@ export interface BlogPost {
   views_count?: number;
   tags?: string[] | null;
   image?: string | MultilingualString | null;
+  image_alt?: string | MultilingualString | null;
   author?: {
     id: number;
     name: string;
+    bio?: string | null;
     email?: string;
     phone?: string | null;
     type?: string;
@@ -54,6 +56,7 @@ export interface BlogPost {
     order?: number;
     parent_id?: number | null;
     image?: string | null;
+    image_alt?: string | MultilingualString | null;
     created_at?: string;
     updated_at?: string;
   };
@@ -66,6 +69,7 @@ export interface BlogPost {
     is_active?: boolean;
     order?: number;
     image?: string | null;
+    image_alt?: string | MultilingualString | null;
     created_at?: string;
     updated_at?: string;
   };
@@ -81,12 +85,18 @@ export interface BlogPost {
     focus_keyphrase?: string | MultilingualString | null;
     canonical_url?: string | null;
     schema_markup_type?: string | null;
-    schema_markup?: string | null;
-    og_title?: string | null;
-    og_description?: string | null;
+    schema_markup?: string | object | null;
+    og_title?: string | MultilingualString | null;
+    og_description?: string | MultilingualString | null;
     og_image?: string | null;
+    og_image_alt?: string | MultilingualString | null;
+    twitter_card?: "summary_large_image" | "summary" | string | null;
+    twitter_title?: string | MultilingualString | null;
+    twitter_description?: string | MultilingualString | null;
+    twitter_image?: string | null;
     meta_robots?: string | null;
     keywords?: string[] | string | null;
+    faqs?: Array<{ question: string; answer: string }> | null;
     created_at?: string;
     updated_at?: string;
   };

@@ -26,8 +26,12 @@ export type inputTypes =
   | "filesUpload"
   | "title"
   | "color"
+  | "html"
+  | "html-box"
+  | "htmlEditor"
   | "space"
   | "video"
+  | "faq-list"
   | "date";
 export type CardConfig = {
   id?: number | string;
@@ -57,6 +61,7 @@ export type FormInput = {
   isMulti?: boolean;
   onLabelAction?: (data: unknown) => any;
   max?: number;
+  charLimit?: number;
   onRemove?: (file: string) => Promise<void | {
     success: boolean;
   }>;
