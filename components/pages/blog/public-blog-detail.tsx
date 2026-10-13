@@ -45,7 +45,6 @@ export function PublicBlogDetail({
   post,
   relatedPosts,
   locale,
-  slugsByLocale,
   alternatesLanguages
 }: PublicBlogDetailProps) {
   const currentLocale = useLocale() || locale;

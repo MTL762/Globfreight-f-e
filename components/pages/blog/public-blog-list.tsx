@@ -183,7 +183,7 @@ export function PublicBlogList({ posts, locale, categories, initialCategory, cat
               {searchQuery
                 ? `${t("list.searchResults")} (${filteredPosts.length})`
                 : selectedCategory !== "all"
-                ? `${categoryOptions.find(c => c.id === selectedCategory)?.label || ""} (${filteredPosts.length})`
+                ? `${categoryTitle || categoryOptions.find(c => c.id === selectedCategory)?.label || ""} (${filteredPosts.length})`
                 : t("list.allPublications")}
             </h2>
             <span className="text-xs text-muted-foreground">

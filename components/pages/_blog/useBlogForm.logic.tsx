@@ -17,47 +17,74 @@ export default function useBlogLogic({ data }: { data?: any }) {
   const inputs = BlogInputs();
   const locale = useLocale();
 
-  // Extract initial tags per language
-  const initialTags: Record<string, string[]> = {};
-  FORM_LANGUAGES.forEach(({ code, key }) => {
-    let langTags: any[] = [];
-    if (data?.tags && typeof data.tags === "object" && !Array.isArray(data.tags)) {
-      langTags = data.tags[code] || [];
-    } else if (Array.isArray(data?.tags)) {
-      // If scalar array from backend, assign to english or active locale
-      if (code === "en" || code === locale) {
-        langTags = data.tags;
+  // Normalize incoming data from API (flatten nested relations)
+  const normalizedData = data
+    ? {
+        ...data,
+        category_id: data.category_id ?? data.category?.id ?? "",
+        sub_category_id: data.sub_category_id ?? data.sub_category?.id ?? ""
       }
-    }
-    initialTags[`tags${key}`] = Array.isArray(langTags)
-      ? langTags.map((item: any) => (typeof item === "string" ? item : item?.value ?? ""))
-      : [];
-  });
+    : data;
 
-  const formDefaults = extractFormDefaultInputs(inputs, data) as Record<string, any>;
+  // Extract initial tags per language
+  const getInitialTags = (sourceData: any) => {
+    const tagsMap: Record<string, string[]> = {};
+    FORM_LANGUAGES.forEach(({ code, key }) => {
+      let langTags: any[] = [];
+      if (sourceData?.tags && typeof sourceData.tags === "object" && !Array.isArray(sourceData.tags)) {
+        langTags = sourceData.tags[code] || [];
+      } else if (Array.isArray(sourceData?.tags)) {
+        if (code === "en" || code === locale) {
+          langTags = sourceData.tags;
+        }
+      }
+      tagsMap[`tags${key}`] = Array.isArray(langTags)
+        ? langTags.map((item: any) => (typeof item === "string" ? item : item?.value ?? ""))
+        : [];
+    });
+    return tagsMap;
+  };
+
+  const initialTags = getInitialTags(normalizedData);
+  const formDefaults = extractFormDefaultInputs(inputs, normalizedData) as Record<string, any>;
+
+  const buildDefaultValues = (sourceData: any, defaults: Record<string, any>, tags: Record<string, string[]>) => ({
+    ...defaults,
+    category_id: defaults.category_id || sourceData?.category_id || sourceData?.category?.id || "",
+    sub_category_id: defaults.sub_category_id || sourceData?.sub_category_id || sourceData?.sub_category?.id || "",
+    is_featured: sourceData?.is_featured !== undefined ? Boolean(sourceData.is_featured) : false,
+    status: sourceData?.status || "published",
+    statusEn: defaults.statusEn || sourceData?.status?.en || sourceData?.status || "published",
+    statusAr: defaults.statusAr || sourceData?.status?.ar || "draft",
+    statusNl: defaults.statusNl || sourceData?.status?.nl || "draft",
+    statusFr: defaults.statusFr || sourceData?.status?.fr || "draft",
+    statusDe: defaults.statusDe || sourceData?.status?.de || "draft",
+    seo_schema_markup_type: defaults.seo_schema_markup_type || sourceData?.seo?.schema_markup_type || "Article",
+    seo_meta_robots: defaults.seo_meta_robots || sourceData?.seo?.meta_robots || "index, follow",
+    seo_twitter_card: defaults.seo_twitter_card || sourceData?.seo?.twitter_card || "summary_large_image",
+    seo_faqs: Array.isArray(defaults.seo_faqs) ? defaults.seo_faqs : Array.isArray(sourceData?.seo?.faqs) ? sourceData.seo.faqs : [],
+    ...tags
+  });
 
   const { control, handleSubmit, reset, setValue, formState: { dirtyFields } } = useForm<BlogType>({
     mode: "onSubmit",
     resolver: zodResolver(BlogSchema(t, locale as any)),
-    defaultValues: {
-      ...formDefaults,
-      // Featured Article default value to False
-      is_featured: data?.is_featured !== undefined ? Boolean(data.is_featured) : false,
-      // Status defaults per language: empty translations default to 'draft'
-      status: data?.status || "published",
-      statusEn: formDefaults.statusEn || data?.status?.en || data?.status || "published",
-      statusAr: formDefaults.statusAr || data?.status?.ar || "draft",
-      statusNl: formDefaults.statusNl || data?.status?.nl || "draft",
-      statusFr: formDefaults.statusFr || data?.status?.fr || "draft",
-      statusDe: formDefaults.statusDe || data?.status?.de || "draft",
-      // Schema Markup defaults
-      seo_schema_markup_type: formDefaults.seo_schema_markup_type || data?.seo?.schema_markup_type || "Article",
-      seo_meta_robots: formDefaults.seo_meta_robots || data?.seo?.meta_robots || "index, follow",
-      seo_twitter_card: formDefaults.seo_twitter_card || data?.seo?.twitter_card || "summary_large_image",
-      seo_faqs: Array.isArray(formDefaults.seo_faqs) ? formDefaults.seo_faqs : Array.isArray(data?.seo?.faqs) ? data.seo.faqs : [],
-      ...initialTags,
-    } as any
+    defaultValues: buildDefaultValues(normalizedData, formDefaults, initialTags) as any
   });
+
+  // Re-populate form whenever data is loaded / changed
+  useEffect(() => {
+    if (data) {
+      const refreshedData = {
+        ...data,
+        category_id: data.category_id ?? data.category?.id ?? "",
+        sub_category_id: data.sub_category_id ?? data.sub_category?.id ?? ""
+      };
+      const refreshedDefaults = extractFormDefaultInputs(inputs, refreshedData) as Record<string, any>;
+      const refreshedTags = getInitialTags(refreshedData);
+      reset(buildDefaultValues(refreshedData, refreshedDefaults, refreshedTags) as any);
+    }
+  }, [data]);
 
   // Watch titles and slugs to auto-generate slugs and self-referencing canonical URLs
   const watchedTitles = useWatch({
@@ -98,21 +125,23 @@ export default function useBlogLogic({ data }: { data?: any }) {
         }
       }
     });
-  }, [watchedTitles, dirtyFields, setValue]);
+  }, [watchedTitles, dirtyFields, setValue, locale]);
 
   const onSubmit = async (formData: BlogType) => {
-    // Top-level fallback for scalar-only APIs
     const payload = {
       ...formData,
+      category_id: formData.category_id || data?.category_id || data?.category?.id,
+      sub_category_id: formData.sub_category_id || data?.sub_category_id || data?.sub_category?.id || undefined,
       status: formData.statusEn || formData.status || "published",
       is_featured: formData.is_featured ? 1 : 0
     };
 
     await FormAction({
       data,
-      formData: extractFormNameInputs({ inputs, data: payload, dirtyFields }),
+      formData: extractFormNameInputs({ inputs, data: payload }),
       endpoint: ["adminBlogPosts"],
       reset: reset,
+      method: "POST",
       redirectLink: "admin/blog",
       t
     });

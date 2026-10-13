@@ -14,7 +14,7 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
         FORM_LANGUAGES.forEach(({ code, key }) => {
           let directVal: any;
           if (rawDirect !== null && typeof rawDirect === "object" && !Array.isArray(rawDirect)) {
-            directVal = rawDirect[code];
+            directVal = rawDirect[code] ?? rawDirect.en ?? rawDirect.ar ?? Object.values(rawDirect)[0];
           } else if (Array.isArray(rawDirect)) {
             directVal = code === "en" ? rawDirect : [];
           } else if (typeof rawDirect === "string") {
@@ -26,7 +26,7 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
           if (seoKey && dataObj.seo) {
             const rawSeo = dataObj.seo[seoKey];
             if (rawSeo !== null && typeof rawSeo === "object" && !Array.isArray(rawSeo)) {
-              seoVal = rawSeo[code];
+              seoVal = rawSeo[code] ?? rawSeo.en ?? rawSeo.ar ?? Object.values(rawSeo)[0];
             } else if (typeof rawSeo === "string") {
               seoVal = rawSeo;
             }
@@ -35,6 +35,16 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
           langDefaults[`${item.name}${key}`] = directVal ?? seoVal ?? "";
         });
         return langDefaults;
+      }
+      if (item?.name === "category_id") {
+        return {
+          [item.name]: dataObj.category_id ?? dataObj.category?.id ?? ""
+        };
+      }
+      if (item?.name === "sub_category_id") {
+        return {
+          [item.name]: dataObj.sub_category_id ?? dataObj.sub_category?.id ?? ""
+        };
       }
       if (item?.name == "phone") {
         return {

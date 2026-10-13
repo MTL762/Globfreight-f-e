@@ -47,7 +47,6 @@ export async function generateMetadata({
     const slugsByLocale = await resolveAllPostSlugs(slug, post);
     const alternates = getBlogPostAlternates(slugsByLocale, locale);
 
-    const currentSlug = slugsByLocale[locale] || slug;
     const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
     const postTitle = getBlogText(post.title, locale);
     const title = metaTitleRaw || (postTitle ? `${postTitle} | Globfreight` : "Globfreight");
