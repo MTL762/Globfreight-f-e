@@ -44,6 +44,11 @@ export function BlogCard({
   const isHome = variant === "home";
   const isCompact = variant === "compact";
 
+  const catSlug = post.category
+    ? (typeof post.category.slug === "object" ? getBlogText(post.category.slug, locale) : (post.category.slug || ""))
+    : "";
+  const catHref = catSlug ? `/blog/category/${encodeURIComponent(decodeURIComponent(catSlug))}` : null;
+
   return (
     <article
       className={`group rounded-2xl border border-border/80 bg-card overflow-hidden flex flex-col justify-between shadow-xs hover:border-primary/50 hover:shadow-md transition-all duration-300 ${className}`}
@@ -85,6 +90,13 @@ export function BlogCard({
                 <Sparkles className="h-3 w-3" />
                 <span>{t("featured.badge")}</span>
               </span>
+            ) : catHref ? (
+              <Link
+                href={catHref}
+                className="inline-block text-[11px] font-bold uppercase tracking-wider bg-background/90 text-primary hover:bg-primary hover:text-primary-foreground backdrop-blur-md px-2.5 py-1 rounded-full border border-border/40 shadow-xs transition-colors"
+              >
+                {tag}
+              </Link>
             ) : (
               <span className="inline-block text-[11px] font-bold uppercase tracking-wider bg-background/90 text-primary backdrop-blur-md px-2.5 py-1 rounded-full border border-border/40 shadow-xs">
                 {tag}

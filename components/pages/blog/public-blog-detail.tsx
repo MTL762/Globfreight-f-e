@@ -15,7 +15,8 @@ import {
   ChevronRight,
   ChevronLeft,
   Layers,
-  Sparkles
+  Sparkles,
+  Globe2
 } from "lucide-react";
 import { toast } from "sonner";
 import { useLocale, useTranslations } from "next-intl";
@@ -24,13 +25,29 @@ import { BlogCard } from "./blog-card";
 import { BlogAuthorBio } from "./blog-author-bio";
 import { sanitizeHtml } from "@/utils/sanitizeHtml";
 
+const ARTICLE_LOCALES = [
+  { code: "en", label: "English", short: "EN" },
+  { code: "ar", label: "العربية", short: "AR" },
+  { code: "nl", label: "Nederlands", short: "NL" },
+  { code: "fr", label: "Français", short: "FR" },
+  { code: "de", label: "Deutsch", short: "DE" }
+] as const;
+
 interface PublicBlogDetailProps {
   post: BlogPost;
   relatedPosts: BlogPost[];
   locale: string;
+  slugsByLocale?: Record<string, string>;
+  alternatesLanguages?: Record<string, string>;
 }
 
-export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetailProps) {
+export function PublicBlogDetail({
+  post,
+  relatedPosts,
+  locale,
+  slugsByLocale,
+  alternatesLanguages
+}: PublicBlogDetailProps) {
   const currentLocale = useLocale() || locale;
   const t = useTranslations("BlogPage");
   const isRtl = currentLocale === "ar";
@@ -46,11 +63,24 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
   const categoryName = post.category
     ? getBlogText(post.category.name, currentLocale, catSlugFallback)
     : "";
+  const categoryUrl = catSlugFallback
+    ? `/blog/category/${encodeURIComponent(decodeURIComponent(catSlugFallback))}`
+    : `/blog`;
+
   const subCatSlugFallback = post.sub_category ? getBlogText(post.sub_category.slug, currentLocale, "") : "";
   const subCategoryName = post.sub_category
     ? getBlogText(post.sub_category.name, currentLocale, subCatSlugFallback)
     : "";
-  const date = formatBlogDate(post.published_at || post.created_at, currentLocale);
+
+  const publishedDate = formatBlogDate(post.published_at || post.created_at, currentLocale);
+  const updatedDate = post.updated_at ? formatBlogDate(post.updated_at, currentLocale) : "";
+  const isUpdated = Boolean(
+    post.updated_at &&
+    updatedDate &&
+    updatedDate !== publishedDate &&
+    new Date(post.updated_at).getTime() > new Date(post.published_at || post.created_at || 0).getTime() + 86400000
+  );
+
   const readTime = estimateReadTime(contentHtml);
   const postImage = getBlogText(post.image, currentLocale, "");
 
@@ -96,7 +126,9 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
             {categoryName && (
               <>
                 <ChevronIcon className="h-3 w-3 shrink-0 opacity-50" />
-                <span className="text-muted-foreground">{categoryName}</span>
+                <Link href={categoryUrl} className="hover:text-foreground transition-colors">
+                  {categoryName}
+                </Link>
               </>
             )}
             <ChevronIcon className="h-3 w-3 shrink-0 opacity-50" />
@@ -113,10 +145,13 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
           {/* Badges & Meta */}
           <div className="flex flex-wrap items-center gap-3">
             {categoryName && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+              <Link
+                href={categoryUrl}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+              >
                 <Layers className="h-3.5 w-3.5" />
-                {categoryName}
-              </span>
+                <span>{categoryName}</span>
+              </Link>
             )}
             {subCategoryName && (
               <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-muted text-muted-foreground border border-border/60">
@@ -143,32 +178,38 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
             </p>
           )}
 
-          {/* Author, Date, Reading Time, Share */}
+          {/* Author, Dates, Reading Time, Share */}
           <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-border/60">
-            {/* Author */}
+            {/* Author & Published/Updated Dates */}
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm border border-primary/20">
+              <div className="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm border border-primary/20 shrink-0">
                 {post.author?.name?.charAt(0).toUpperCase() || "G"}
               </div>
-              <div className="text-xs space-y-0.5">
+              <div className="text-xs space-y-1">
                 <p className="font-bold text-foreground text-sm">
                   {post.author?.name || t("detail.authorTitle")}
                 </p>
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  {date && (
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground">
+                  {publishedDate && (
                     <span className="inline-flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {date}
+                      <Calendar className="h-3 w-3 text-muted-foreground/70" />
+                      <span>{t("detail.published") || "Published"}: <time dateTime={post.published_at || post.created_at} className="font-medium text-foreground">{publishedDate}</time></span>
+                    </span>
+                  )}
+                  {isUpdated && (
+                    <span className="inline-flex items-center gap-1 text-primary">
+                      <Clock className="h-3 w-3 text-primary" />
+                      <span>{t("detail.updated") || "Updated"}: <time dateTime={post.updated_at} className="font-semibold">{updatedDate}</time></span>
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {readTime} {t("detail.minRead")}
+                    <Clock className="h-3 w-3 text-muted-foreground/70" />
+                    <span>{readTime} {t("detail.minRead")}</span>
                   </span>
                   {post.views_count !== undefined && post.views_count > 0 && (
                     <span className="inline-flex items-center gap-1">
-                      <Eye className="h-3 w-3" />
-                      {post.views_count.toLocaleString(currentLocale)}
+                      <Eye className="h-3 w-3 text-muted-foreground/70" />
+                      <span>{post.views_count.toLocaleString(currentLocale)}</span>
                     </span>
                   )}
                 </div>
@@ -204,6 +245,49 @@ export function PublicBlogDetail({ post, relatedPosts, locale }: PublicBlogDetai
               </button>
             </div>
           </div>
+
+          {/* On-Page Language Switcher Bar */}
+          {alternatesLanguages && Object.keys(alternatesLanguages).length > 0 && (
+            <div className="pt-3 border-t border-border/40 flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5 me-1">
+                <Globe2 className="h-3.5 w-3.5 text-primary" />
+                <span>{t("detail.readInOtherLanguages") || "Read in other languages"}:</span>
+              </span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {ARTICLE_LOCALES.map(lang => {
+                  const isActive = lang.code === currentLocale;
+                  const targetUrl = alternatesLanguages[lang.code];
+                  if (!targetUrl) return null;
+                  const pathnameOnly = targetUrl.startsWith("http") ? new URL(targetUrl).pathname : targetUrl;
+
+                  if (isActive) {
+                    return (
+                      <span
+                        key={lang.code}
+                        aria-current="page"
+                        className="px-2.5 py-1 rounded-lg text-xs font-bold bg-primary text-primary-foreground shadow-xs cursor-default inline-flex items-center gap-1"
+                      >
+                        <span>{lang.label}</span>
+                        <span className="text-[10px] opacity-80 uppercase">({lang.short})</span>
+                      </span>
+                    );
+                  }
+
+                  return (
+                    <a
+                      key={lang.code}
+                      href={pathnameOnly}
+                      title={`Read this article in ${lang.label}`}
+                      className="px-2.5 py-1 rounded-lg text-xs font-medium bg-muted/60 hover:bg-primary/10 hover:text-primary text-muted-foreground border border-border/60 transition-all inline-flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>{lang.label}</span>
+                      <span className="text-[10px] opacity-70 uppercase">({lang.short})</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </header>
 

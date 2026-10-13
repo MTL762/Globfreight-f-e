@@ -1,8 +1,10 @@
 import { fetchHelper } from "@/api/fetch";
 import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogDetail } from "@/components/pages/blog/public-blog-detail";
+import { SetAlternateLinks } from "@/components/alternate-links-context";
 import { BlogPost, BlogPostFetchResult, getBlogText } from "@/types/blog";
-import { getArticleJsonLd, getBreadcrumbJsonLd, getFaqJsonLd, getOpenGraphImages, SITE_URL, SYSTEM_LOCALES } from "@/utils/seo";
+import { getArticleJsonLd, getBreadcrumbJsonLd, getFaqJsonLd, getOpenGraphImages, SITE_URL } from "@/utils/seo";
+import { getBlogPostAlternates, resolveAllPostSlugs } from "@/utils/multilingual-slugs";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
@@ -30,7 +32,7 @@ export async function generateMetadata({
     if (res.status === 301 || res.isRedirect) {
       const newSlug = res.data?.new_slug || res.newSlug;
       if (newSlug) {
-        redirect(`/${locale}/blog/${encodeURIComponent(newSlug)}`);
+        redirect(`/${locale}/blog/${encodeURIComponent(decodeURIComponent(newSlug))}`);
       }
     }
 
@@ -41,7 +43,11 @@ export async function generateMetadata({
       };
     }
 
-    const currentSlug = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || slug);
+    // Resolve per-language translated slugs for hreflang alternates
+    const slugsByLocale = await resolveAllPostSlugs(slug, post);
+    const alternates = getBlogPostAlternates(slugsByLocale, locale);
+
+    const currentSlug = slugsByLocale[locale] || slug;
     const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
     const postTitle = getBlogText(post.title, locale);
     const title = metaTitleRaw || (postTitle ? `${postTitle} | Globfreight` : "Globfreight");
@@ -57,21 +63,9 @@ export async function generateMetadata({
         ? getBlogText(rawCanonical, locale)
         : rawCanonical;
 
-    const alternatesLanguages: Record<string, string> = {};
-    for (const loc of SYSTEM_LOCALES) {
-      const locSlug = typeof post.slug === "object" ? (post.slug[loc] || getBlogText(post.slug, loc)) : post.slug;
-      alternatesLanguages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(locSlug || currentSlug)}`;
+    if (customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== "") {
+      alternates.canonical = customCanonical.trim();
     }
-    const defaultSlug = typeof post.slug === "object" ? (post.slug.en || getBlogText(post.slug, "en")) : post.slug;
-    alternatesLanguages["x-default"] = `${SITE_URL}/en/blog/${encodeURIComponent(defaultSlug || currentSlug)}`;
-
-    const alternates = {
-      canonical:
-        customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
-          ? customCanonical.trim()
-          : `${SITE_URL}/${locale}/blog/${encodeURIComponent(currentSlug)}`,
-      languages: alternatesLanguages
-    };
 
     const postImage = getBlogText(post.image, locale);
     const ogImage = post.seo?.og_image || postImage;
@@ -190,7 +184,7 @@ export default async function BlogDetailPage(props: {
   if (postRes.status === 301 || postRes.isRedirect) {
     const newSlug = postRes.data?.new_slug || postRes.newSlug;
     if (newSlug) {
-      redirect(`/${locale}/blog/${encodeURIComponent(newSlug)}`);
+      redirect(`/${locale}/blog/${encodeURIComponent(decodeURIComponent(newSlug))}`);
     }
   }
 
@@ -201,13 +195,23 @@ export default async function BlogDetailPage(props: {
     notFound();
   }
 
-  const currentSlug = typeof post.slug === "object" ? getBlogText(post.slug, locale) : (post.slug || slug);
+  // 3. Resolve translated slugs for all supported languages
+  const slugsByLocale = await resolveAllPostSlugs(slug, post);
+  const currentCanonicalSlug = slugsByLocale[locale] || slug;
+
+  // If the user arrived with a mismatched slug (e.g. accessed with English slug on an Arabic locale)
+  // permanently redirect to the correct localized canonical slug
+  if (decodeURIComponent(slug) !== decodeURIComponent(currentCanonicalSlug)) {
+    redirect(`/${locale}/blog/${encodeURIComponent(decodeURIComponent(currentCanonicalSlug))}`);
+  }
+
+  const alternates = getBlogPostAlternates(slugsByLocale, locale);
 
   // Filter out the current post from related publications
   const relatedPosts: BlogPost[] = (Array.isArray(relatedRes?.data) ? relatedRes.data : [])
     .filter((p: BlogPost) => {
       const pSlug = typeof p.slug === "object" ? getBlogText(p.slug, locale) : p.slug;
-      return p.id !== post.id && pSlug !== currentSlug;
+      return p.id !== post.id && pSlug !== currentCanonicalSlug;
     })
     .slice(0, 3);
 
@@ -229,7 +233,7 @@ export default async function BlogDetailPage(props: {
   const postUrl =
     customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
       ? customCanonical.trim()
-      : `${SITE_URL}/${locale}/blog/${encodeURIComponent(currentSlug)}`;
+      : alternates.canonical;
 
   const postImage = getBlogText(post.image, locale);
   const ogImage = postImage || post.seo?.og_image;
@@ -251,14 +255,20 @@ export default async function BlogDetailPage(props: {
   const categoryName = post.category
     ? (typeof post.category.name === "string" ? post.category.name : getBlogText(post.category.name, locale))
     : undefined;
+  const categorySlug = post.category
+    ? (typeof post.category.slug === "string" ? post.category.slug : getBlogText(post.category.slug, locale))
+    : undefined;
+
+  const publishedDateIso = post.published_at || post.created_at || new Date().toISOString();
+  const modifiedDateIso = post.updated_at || post.published_at || post.created_at || new Date().toISOString();
 
   const articleJsonLd = getArticleJsonLd({
     title,
     description,
     url: postUrl,
     image: ogImage,
-    datePublished: post.published_at || post.created_at,
-    dateModified: post.updated_at || post.published_at || post.created_at,
+    datePublished: publishedDateIso,
+    dateModified: modifiedDateIso,
     authorName: post.author?.name || "Globfreight Logistics Expert",
     authorBio: post.author?.bio || undefined,
     schemaType,
@@ -266,10 +276,14 @@ export default async function BlogDetailPage(props: {
     articleSection: categoryName
   });
 
+  const categoryUrl = categorySlug
+    ? `${SITE_URL}/${locale}/blog/category/${encodeURIComponent(decodeURIComponent(categorySlug))}`
+    : `${SITE_URL}/${locale}/blog`;
+
   const breadcrumbsJsonLd = getBreadcrumbJsonLd([
     { name: "Home", url: `${SITE_URL}/${locale}` },
     { name: "Blog", url: `${SITE_URL}/${locale}/blog` },
-    ...(categoryName ? [{ name: categoryName, url: `${SITE_URL}/${locale}/blog` }] : []),
+    ...(categoryName ? [{ name: categoryName, url: categoryUrl }] : []),
     { name: title, url: postUrl }
   ]);
 
@@ -279,6 +293,9 @@ export default async function BlogDetailPage(props: {
 
   return (
     <PublicShell>
+      {/* Set alternate links in context so the Header language switcher navigates to the exact translated article */}
+      <SetAlternateLinks links={alternates.languages} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -303,8 +320,13 @@ export default async function BlogDetailPage(props: {
           }}
         />
       )}
-      <PublicBlogDetail post={post} relatedPosts={relatedPosts} locale={locale} />
+      <PublicBlogDetail
+        post={post}
+        relatedPosts={relatedPosts}
+        locale={locale}
+        slugsByLocale={slugsByLocale}
+        alternatesLanguages={alternates.languages}
+      />
     </PublicShell>
   );
 }
-

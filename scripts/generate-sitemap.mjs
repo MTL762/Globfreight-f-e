@@ -19,7 +19,7 @@ const STATIC_PAGES = [
 ];
 
 function escapeXml(unsafe) {
-  return unsafe.replace(/[<>&'"]/g, (c) => {
+  return String(unsafe).replace(/[<>&'"]/g, (c) => {
     switch (c) {
       case "<": return "&lt;";
       case ">": return "&gt;";
@@ -36,30 +36,80 @@ function formatDate(date) {
   return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
 }
 
-async function fetchBlogPosts() {
-  const url = `${API_BASE_URL}/blog-posts?per_page=100`;
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { Accept: "application/json" }
-    });
-    clearTimeout(timeoutId);
+async function fetchCategoriesAcrossLocales() {
+  const categoryMap = new Map();
 
-    if (!res.ok) {
-      console.warn(chalk.yellow(`⚠️ Blog API returned HTTP ${res.status}. Proceeding with static pages only.`));
-      return [];
-    }
+  await Promise.all(
+    LOCALES.map(async (loc) => {
+      try {
+        const url = `${API_BASE_URL}/categories`;
+        const res = await fetch(url, {
+          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc }
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const items = Array.isArray(json?.data) ? json.data : [];
+          for (const cat of items) {
+            if (!cat?.id) continue;
+            const existing = categoryMap.get(cat.id) || {
+              slugs: {},
+              lastmod: cat.updated_at || new Date().toISOString()
+            };
+            const catSlug = typeof cat.slug === "object" && cat.slug !== null
+              ? cat.slug[loc] || cat.slug.en || cat.slug.ar || Object.values(cat.slug)[0]
+              : cat.slug || String(cat.id);
 
-    const data = await res.json();
-    const posts = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
-    console.log(chalk.green(`✓ Fetched ${posts.length} blog post(s) from API`));
-    return posts;
-  } catch (err) {
-    console.warn(chalk.yellow(`⚠️ Could not reach blog API (${url}): ${err.message}. Proceeding with static pages only.`));
-    return [];
-  }
+            if (catSlug) existing.slugs[loc] = catSlug;
+            if (cat.updated_at) existing.lastmod = cat.updated_at;
+            categoryMap.set(cat.id, existing);
+          }
+        }
+      } catch (err) {
+        console.warn(chalk.yellow(`⚠️ Could not fetch categories for locale ${loc}: ${err.message}`));
+      }
+    })
+  );
+
+  return categoryMap;
+}
+
+async function fetchBlogPostsAcrossLocales() {
+  const postMap = new Map();
+
+  await Promise.all(
+    LOCALES.map(async (loc) => {
+      try {
+        const url = `${API_BASE_URL}/blog-posts?per_page=100`;
+        const res = await fetch(url, {
+          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc }
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const items = Array.isArray(json?.data) ? json.data : [];
+          for (const post of items) {
+            if (!post?.id) continue;
+            const existing = postMap.get(post.id) || {
+              slugs: {},
+              lastmod: post.updated_at || post.published_at || post.created_at || new Date().toISOString()
+            };
+            const postSlug = typeof post.slug === "object" && post.slug !== null
+              ? post.slug[loc] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
+              : post.slug || String(post.id);
+
+            if (postSlug) existing.slugs[loc] = postSlug;
+            if (post.updated_at || post.published_at) {
+              existing.lastmod = post.updated_at || post.published_at;
+            }
+            postMap.set(post.id, existing);
+          }
+        }
+      } catch (err) {
+        console.warn(chalk.yellow(`⚠️ Could not fetch blog posts for locale ${loc}: ${err.message}`));
+      }
+    })
+  );
+
+  return postMap;
 }
 
 function buildXmlItem({ loc, alternates, lastmod, changefreq, priority }) {
@@ -112,39 +162,64 @@ async function generateSitemap() {
     }
   }
 
-  // 2. Dynamic Blog Posts
-  const posts = await fetchBlogPosts();
-  for (const post of posts) {
-    if (!post?.slug && !post?.id) continue;
+  // 2. Dynamic Categories across all locales
+  const categoryMap = await fetchCategoriesAcrossLocales();
+  console.log(chalk.green(`✓ Processed ${categoryMap.size} category entries across all locales`));
+
+  for (const [, { slugs, lastmod }] of categoryMap.entries()) {
+    const defaultSlug = slugs.en || Object.values(slugs)[0];
+    if (!defaultSlug) continue;
 
     const alternates = LOCALES.map((locale) => {
-      const locSlug =
-        typeof post.slug === "object" && post.slug !== null
-          ? post.slug[locale] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
-          : post.slug || post.id?.toString();
+      const locSlug = slugs[locale] || defaultSlug;
+      return {
+        locale,
+        url: `${SITE_URL}/${locale}/blog/category/${encodeURIComponent(decodeURIComponent(locSlug))}`
+      };
+    });
+    alternates.push({
+      locale: "x-default",
+      url: `${SITE_URL}/${DEFAULT_LOCALE}/blog/category/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
+    });
+
+    const categoryDate = formatDate(lastmod || buildDate);
+
+    for (const locale of LOCALES) {
+      const locSlug = slugs[locale] || defaultSlug;
+      items.push({
+        loc: `${SITE_URL}/${locale}/blog/category/${encodeURIComponent(decodeURIComponent(locSlug))}`,
+        alternates,
+        lastmod: categoryDate,
+        changefreq: "weekly",
+        priority: "0.8"
+      });
+    }
+  }
+
+  // 3. Dynamic Blog Posts across all locales
+  const postMap = await fetchBlogPostsAcrossLocales();
+  console.log(chalk.green(`✓ Processed ${postMap.size} blog post entries across all locales`));
+
+  for (const [, { slugs, lastmod }] of postMap.entries()) {
+    const defaultSlug = slugs.en || Object.values(slugs)[0];
+    if (!defaultSlug) continue;
+
+    const alternates = LOCALES.map((locale) => {
+      const locSlug = slugs[locale] || defaultSlug;
       return {
         locale,
         url: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`
       };
     });
-    const defaultSlug =
-      typeof post.slug === "object" && post.slug !== null
-        ? post.slug.en || Object.values(post.slug)[0]
-        : post.slug || post.id?.toString();
     alternates.push({
       locale: "x-default",
       url: `${SITE_URL}/${DEFAULT_LOCALE}/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
     });
 
-    const postDate = formatDate(post.updated_at || post.updatedAt || post.created_at || post.createdAt || buildDate);
+    const postDate = formatDate(lastmod || buildDate);
 
     for (const locale of LOCALES) {
-      const locSlug =
-        typeof post.slug === "object" && post.slug !== null
-          ? post.slug[locale] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
-          : post.slug || post.id?.toString();
-      if (!locSlug) continue;
-
+      const locSlug = slugs[locale] || defaultSlug;
       items.push({
         loc: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`,
         alternates,
@@ -155,7 +230,7 @@ async function generateSitemap() {
     }
   }
 
-  // 3. Assemble complete XML
+  // 4. Assemble complete XML
   const xmlContent = [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`,
@@ -165,7 +240,7 @@ async function generateSitemap() {
     ""
   ].join("\n");
 
-  // 4. Output path
+  // 5. Output path
   const publicDir = path.join(process.cwd(), "public");
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });

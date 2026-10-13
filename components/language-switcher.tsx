@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useAlternateLinks } from "@/components/alternate-links-context";
 import { MdLanguage } from "react-icons/md";
 import { Check } from "lucide-react";
 import {
@@ -12,20 +13,29 @@ import {
 
 const LOCALES = [
   { code: "en", label: "English", short: "EN" },
+  // { code: "ar", label: "العربية", short: "AR" },
   { code: "nl", label: "Nederlands", short: "NL" },
   { code: "fr", label: "Français", short: "FR" },
-  { code: "de", label: "Deutsch", short: "DE" },
-  // { code: "ar", label: "العربية", short: "AR" }
+  { code: "de", label: "Deutsch", short: "DE" }
 ] as const;
 
 const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { alternateLinks } = useAlternateLinks();
   const currentLocale = pathname.split("/")[1] || "en";
 
   const changeLocale = (newLocale: string) => {
     if (newLocale === currentLocale) return;
+
+    if (alternateLinks?.[newLocale]) {
+      const targetUrl = alternateLinks[newLocale];
+      const targetPath = targetUrl.startsWith("http") ? new URL(targetUrl).pathname : targetUrl;
+      router.push(targetPath);
+      return;
+    }
+
     const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
     const path = url.split("/")[1];
     const newUrl = url.replace(path, newLocale);

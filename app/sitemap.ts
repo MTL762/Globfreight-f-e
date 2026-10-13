@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const entries: MetadataRoute.Sitemap = [];
 
+  // 1. Static Pages with hreflang alternates across all languages + x-default
   for (const page of staticPages) {
     const languages: Record<string, string> = {};
     for (const loc of SYSTEM_LOCALES) {
@@ -42,58 +43,142 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Include published blog posts dynamically if API is reachable
+  const apiBase = (process.env.API_BASE_URL || process.env.baseUrl || "https://api.globfreight.com").replace(/\/$/, "");
+
+  // 2. Dynamic Categories with localized slugs and hreflang alternates
   try {
-    const apiBase = process.env.API_BASE_URL || process.env.baseUrl || "https://api.globfreight.com";
-    const res = await fetch(`${apiBase}/blog-posts?per_page=100`, {
-      next: { revalidate: 3600 },
-      headers: { Accept: "application/json" },
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      const rawPosts = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
-
-      for (const post of rawPosts) {
-        if (!post?.slug && !post?.id) continue;
-
-        const languages: Record<string, string> = {};
-        for (const loc of SYSTEM_LOCALES) {
-          const locSlug =
-            typeof post.slug === "object" && post.slug !== null
-              ? post.slug[loc] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
-              : post.slug || post.id?.toString();
-          if (locSlug) {
-            languages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`;
-          }
-        }
-        const defaultSlug =
-          typeof post.slug === "object" && post.slug !== null
-            ? post.slug.en || Object.values(post.slug)[0]
-            : post.slug || post.id?.toString();
-        languages["x-default"] = `${SITE_URL}/en/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
-
-        const lastModified = post.updated_at || post.updatedAt || post.created_at || post.createdAt
-          ? new Date(post.updated_at || post.updatedAt || post.created_at || post.createdAt)
-          : new Date();
-
-        for (const locale of SYSTEM_LOCALES) {
-          const locSlug =
-            typeof post.slug === "object" && post.slug !== null
-              ? post.slug[locale] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
-              : post.slug || post.id?.toString();
-          if (!locSlug) continue;
-
-          entries.push({
-            url: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`,
-            lastModified,
-            changeFrequency: "weekly",
-            priority: 0.7,
-            alternates: {
-              languages,
-            },
+    const catResponses = await Promise.all(
+      SYSTEM_LOCALES.map(async (loc) => {
+        try {
+          const res = await fetch(`${apiBase}/categories`, {
+            headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc },
+            next: { revalidate: 3600 }
           });
+          if (res.ok) {
+            const json = await res.json();
+            return { loc, items: Array.isArray(json?.data) ? json.data : [] };
+          }
+        } catch {}
+        return { loc, items: [] };
+      })
+    );
+
+    const categoryMap = new Map<number, { slugs: Record<string, string>; lastModified: Date }>();
+
+    for (const { loc, items } of catResponses) {
+      for (const cat of items) {
+        if (!cat?.id) continue;
+        const existing = categoryMap.get(cat.id) || {
+          slugs: {},
+          lastModified: cat.updated_at ? new Date(cat.updated_at) : new Date()
+        };
+        const catSlug = typeof cat.slug === "object" && cat.slug !== null
+          ? cat.slug[loc] || cat.slug.en || cat.slug.ar || Object.values(cat.slug)[0]
+          : cat.slug || String(cat.id);
+
+        if (catSlug) {
+          existing.slugs[loc] = catSlug;
         }
+        if (cat.updated_at) {
+          existing.lastModified = new Date(cat.updated_at);
+        }
+        categoryMap.set(cat.id, existing);
+      }
+    }
+
+    for (const [, { slugs, lastModified }] of categoryMap.entries()) {
+      const languages: Record<string, string> = {};
+      const defaultSlug = slugs.en || Object.values(slugs)[0];
+      if (!defaultSlug) continue;
+
+      for (const loc of SYSTEM_LOCALES) {
+        const s = slugs[loc] || defaultSlug;
+        languages[loc] = `${SITE_URL}/${loc}/blog/category/${encodeURIComponent(decodeURIComponent(s))}`;
+      }
+      languages["x-default"] = `${SITE_URL}/en/blog/category/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
+
+      for (const locale of SYSTEM_LOCALES) {
+        const s = slugs[locale] || defaultSlug;
+        entries.push({
+          url: `${SITE_URL}/${locale}/blog/category/${encodeURIComponent(decodeURIComponent(s))}`,
+          lastModified,
+          changeFrequency: "weekly",
+          priority: 0.8,
+          alternates: {
+            languages,
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Failed to include categories in sitemap:", err);
+  }
+
+  // 3. Dynamic Blog Posts with localized slugs and hreflang alternates
+  try {
+    const postResponses = await Promise.all(
+      SYSTEM_LOCALES.map(async (loc) => {
+        try {
+          const res = await fetch(`${apiBase}/blog-posts?per_page=100`, {
+            headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc },
+            next: { revalidate: 3600 }
+          });
+          if (res.ok) {
+            const json = await res.json();
+            return { loc, items: Array.isArray(json?.data) ? json.data : [] };
+          }
+        } catch {}
+        return { loc, items: [] };
+      })
+    );
+
+    const postMap = new Map<number, { slugs: Record<string, string>; lastModified: Date }>();
+
+    for (const { loc, items } of postResponses) {
+      for (const post of items) {
+        if (!post?.id) continue;
+        const existing = postMap.get(post.id) || {
+          slugs: {},
+          lastModified: post.updated_at || post.published_at || post.created_at
+            ? new Date(post.updated_at || post.published_at || post.created_at)
+            : new Date()
+        };
+        const postSlug = typeof post.slug === "object" && post.slug !== null
+          ? post.slug[loc] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
+          : post.slug || String(post.id);
+
+        if (postSlug) {
+          existing.slugs[loc] = postSlug;
+        }
+        if (post.updated_at || post.published_at) {
+          existing.lastModified = new Date(post.updated_at || post.published_at);
+        }
+        postMap.set(post.id, existing);
+      }
+    }
+
+    for (const [, { slugs, lastModified }] of postMap.entries()) {
+      const languages: Record<string, string> = {};
+      const defaultSlug = slugs.en || Object.values(slugs)[0];
+      if (!defaultSlug) continue;
+
+      for (const loc of SYSTEM_LOCALES) {
+        const s = slugs[loc] || defaultSlug;
+        languages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(decodeURIComponent(s))}`;
+      }
+      languages["x-default"] = `${SITE_URL}/en/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
+
+      for (const locale of SYSTEM_LOCALES) {
+        const s = slugs[locale] || defaultSlug;
+        entries.push({
+          url: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(s))}`,
+          lastModified,
+          changeFrequency: "weekly",
+          priority: 0.7,
+          alternates: {
+            languages,
+          },
+        });
       }
     }
   } catch (err) {
@@ -102,4 +187,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return entries;
 }
-

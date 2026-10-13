@@ -5,8 +5,9 @@ import { DEFAULT_OG_IMAGE, getOpenGraphImages, getPageAlternates, organizationJs
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
+import { ThemeProvider } from "next-themes";
+import { AlternateLinksProvider } from "@/components/alternate-links-context";
 import NextTopLoader from "nextjs-toploader";
 import "../globals.css";
 
@@ -133,10 +134,10 @@ export default async function AppLayout(props: {
           disableTransitionOnChange
         >
           <NextIntlClientProvider locale={locale} messages={await getMessages({ locale })}>
-            {/* <IntlErrorHandlingProvider locale={locale}> */}
-            {children}
-            <Toaster duration={8000} richColors={true} />
-            {/* </IntlErrorHandlingProvider> */}
+            <AlternateLinksProvider>
+              {children}
+              <Toaster duration={8000} richColors={true} />
+            </AlternateLinksProvider>
 
             <NextTopLoader
               crawl

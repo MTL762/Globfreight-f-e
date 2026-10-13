@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Search, FileText, Layers, SlidersHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { BlogPost, getBlogText } from "@/types/blog";
 import { BlogCard } from "./blog-card";
 import { BlogFeaturedCard } from "./blog-featured-card";
@@ -11,23 +12,30 @@ import { BlogAdvisoryCta } from "./blog-advisory-cta";
 interface PublicBlogListProps {
   posts: BlogPost[];
   locale: string;
-  categories: Array<{ id: number; name: string | Record<string, string>; slug?: string }>;
+  categories: Array<{ id: number; name: string | Record<string, string>; slug?: string | Record<string, string> }>;
+  initialCategory?: string;
+  categoryTitle?: string;
 }
 
-export function PublicBlogList({ posts, locale, categories }: PublicBlogListProps) {
+export function PublicBlogList({ posts, locale, categories, initialCategory, categoryTitle }: PublicBlogListProps) {
   const currentLocale = useLocale() || locale;
   const t = useTranslations("BlogPage");
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory || "all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // Category filter options
   const categoryOptions = useMemo(() => {
-    const list = [{ id: "all", label: t("hero.allArticles") }];
+    const list = [{ id: "all", label: t("hero.allArticles"), href: "/blog" }];
     categories.forEach(cat => {
-      const name = getBlogText(cat.name, currentLocale, cat.slug || "");
+      const name = getBlogText(cat.name, currentLocale, typeof cat.slug === "string" ? cat.slug : "");
+      const catSlug = typeof cat.slug === "object" ? getBlogText(cat.slug, currentLocale) : (cat.slug || String(cat.id));
       if (name) {
-        list.push({ id: cat.slug || String(cat.id), label: name });
+        list.push({
+          id: catSlug,
+          label: name,
+          href: `/blog/category/${encodeURIComponent(decodeURIComponent(catSlug))}`
+        });
       }
     });
     return list;
@@ -139,9 +147,9 @@ export function PublicBlogList({ posts, locale, categories }: PublicBlogListProp
               {categoryOptions.map(cat => {
                 const isActive = selectedCategory === cat.id;
                 return (
-                  <button
+                  <Link
                     key={cat.id}
-                    type="button"
+                    href={cat.href}
                     onClick={() => setSelectedCategory(cat.id)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                       isActive
@@ -150,7 +158,7 @@ export function PublicBlogList({ posts, locale, categories }: PublicBlogListProp
                     }`}
                   >
                     {cat.label}
-                  </button>
+                  </Link>
                 );
               })}
             </div>
