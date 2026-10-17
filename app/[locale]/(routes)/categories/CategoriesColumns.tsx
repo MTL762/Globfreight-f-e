@@ -9,15 +9,6 @@ import { Layers } from "lucide-react";
 export default function CategoriesColumns(): ColumnDef<Record<string, unknown>>[] {
   return [
     {
-      accessorKey: "id",
-      header: "Id",
-      cell: ({ getValue }) => (
-        <span className="font-mono text-xs text-muted-foreground font-semibold">
-          #{String(getValue())}
-        </span>
-      )
-    },
-    {
       accessorKey: "name",
       header: "Name",
       cell: ({ getValue }) => <LocaleViewColumn value={getValue() as any} />
