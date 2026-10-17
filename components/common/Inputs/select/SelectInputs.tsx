@@ -18,48 +18,72 @@ interface CustomSelectProps {
 }
 
 export default function SelectInput({
-  options,
+  options = [],
   value,
   placeholder,
+  className,
   onChange,
   name,
   controllerChange,
   pageSize = 500
 }: CustomSelectProps) {
   const t = useTranslations();
-  const [displayedOptions, setDisplayedOptions] = useState<Option[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+  const [displayedOptions, setDisplayedOptions] = useState<Option[]>(() =>
+    options ? options.slice(0, pageSize) : []
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setDisplayedOptions(options.slice(0, pageSize));
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (options) {
+      setDisplayedOptions(options.slice(0, pageSize));
+    }
   }, [options, pageSize]);
-  const { theme } = useTheme();
+
+  const { theme, resolvedTheme } = useTheme();
+  const isDarkMode = (resolvedTheme || theme) === "dark";
+
+  const selectedOption =
+    displayedOptions?.find(opt => String(opt.value) === String(value)) ||
+    options?.find(opt => String(opt.value) === String(value)) ||
+    (value !== undefined && value !== null && value !== ""
+      ? { label: String(value), value }
+      : null);
 
   return (
     <div className="flex w-full flex-col gap-3">
       <Select
+        instanceId={name}
         isMulti={false}
         onChange={e => {
-          const selectedOption = e as Option | null;
-          if (selectedOption) {
-            onChange?.(selectedOption.value.toString());
-            controllerChange?.(selectedOption.value.toString());
+          const selected = e as Option | null;
+          if (selected) {
+            onChange?.(selected.value.toString());
+            controllerChange?.(selected.value.toString());
+          } else {
+            onChange?.("");
+            controllerChange?.(null);
           }
         }}
         options={displayedOptions}
-        value={displayedOptions?.find(opt => opt.value == value)}
-        placeholder={placeholder ? t(placeholder) : t("select")}
+        value={selectedOption}
+        placeholder={placeholder ? (t.has?.(placeholder) ? t(placeholder) : placeholder) : t("select")}
         name={name}
         data-testid={name}
         classNames={{
           control: () => "border-0 shadow-none"
         }}
-        styles={customStyles(theme === "dark")}
-        className="w-full"
+        styles={customStyles(isDarkMode)}
+        className={className || "w-full"}
+        menuPortalTarget={isMounted && typeof document !== "undefined" ? document.body : null}
         menuPosition="fixed"
         menuPlacement="auto"
         onMenuScrollToBottom={() => {
-          if (!isLoading) {
+          if (!isLoading && options) {
             setIsLoading(true);
             const currentLength = displayedOptions.length;
             const nextBatch = options.slice(currentLength, currentLength + pageSize);
