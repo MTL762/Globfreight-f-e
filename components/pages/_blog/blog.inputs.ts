@@ -37,7 +37,6 @@ export const BlogInputs = (): FormInput[] => {
     {
       name: "status",
       type: "select",
-      multiLang: true,
       label: "Status (Published)",
       toolTip: "Status per language so empty translations don't go live",
       options: [
@@ -46,7 +45,7 @@ export const BlogInputs = (): FormInput[] => {
         { label: "Archived", value: "archived" }
       ],
       required: true,
-      cardId: "lang",
+      cardId: "general",
       width: 6,
     },
     {
@@ -223,7 +222,7 @@ export const BlogInputs = (): FormInput[] => {
     },
     {
       name: "seo_og_image",
-      type: "img",
+      type: "text",
       multiLang: false,
       ratio: "1200:630",
       label: "Open Graph Image (1200×630)",
@@ -256,7 +255,7 @@ export const BlogInputs = (): FormInput[] => {
     },
     {
       name: "seo_twitter_image",
-      type: "img",
+      type: "text",
       multiLang: false,
       ratio: "1200:630",
       label: "Twitter / X Image (1200×630)",
