@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
@@ -7,7 +8,7 @@ import { customStyles } from "./select.config";
 
 interface CustomSelectProps {
   options: Option[];
-  value?: Option[];
+  value?: any;
   placeholder?: string;
   name?: string;
   onChange?: (selectedOptions: (string | number | boolean)[]) => void;
@@ -15,7 +16,7 @@ interface CustomSelectProps {
 }
 
 export default function MultiSelectInput({
-  options,
+  options = [],
   value,
   placeholder,
   name,
@@ -25,10 +26,22 @@ export default function MultiSelectInput({
   const t = useTranslations();
   const { resolvedTheme } = useTheme();
 
+  const formattedValue = useMemo(() => {
+    if (!value) return [];
+    if (Array.isArray(value)) {
+      return value.map(val => {
+        if (val && typeof val === "object" && "value" in val) return val;
+        const found = options?.find(opt => String(opt.value) === String(val));
+        return found || { label: String(val), value: val };
+      });
+    }
+    return [];
+  }, [value, options]);
+
   return (
     <div className="flex flex-col w-full gap-2">
       <Select
-        value={value}
+        value={formattedValue}
         isMulti={true}
         onChange={(selectedOptions: MultiValue<Option>) => {
           const data = selectedOptions.map(item => item.value);

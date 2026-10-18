@@ -25,8 +25,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
   });
 
   if (!data) return <div>Error...</div>;
-  console.log(data, 'sad2s')
-  const filteredData = data?.data
+  const filteredData = data?.data;
 
   return (
     <>

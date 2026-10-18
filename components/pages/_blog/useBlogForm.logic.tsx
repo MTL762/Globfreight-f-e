@@ -54,6 +54,11 @@ export default function useBlogLogic({ data }: { data?: any }) {
     sub_category_id: defaults.sub_category_id || sourceData?.sub_category_id || sourceData?.sub_category?.id || "",
     is_featured: sourceData?.is_featured !== undefined ? Boolean(sourceData.is_featured) : false,
     status: sourceData?.status || "published",
+    published_locales: Array.isArray(sourceData?.published_locales)
+      ? sourceData.published_locales
+      : Array.isArray(defaults?.published_locales)
+      ? defaults.published_locales
+      : [],
     statusEn: defaults.statusEn || sourceData?.status?.en || sourceData?.status || "published",
     statusAr: defaults.statusAr || sourceData?.status?.ar || "draft",
     statusNl: defaults.statusNl || sourceData?.status?.nl || "draft",
@@ -132,8 +137,9 @@ export default function useBlogLogic({ data }: { data?: any }) {
       ...formData,
       category_id: formData.category_id || data?.category_id || data?.category?.id,
       sub_category_id: formData.sub_category_id || data?.sub_category_id || data?.sub_category?.id || undefined,
-      status: formData.statusEn || formData.status || "published",
-      is_featured: formData.is_featured ? 1 : 0
+      status: formData.status || "published",
+      is_featured: formData.is_featured ? 1 : 0,
+      published_locales: Array.isArray(formData.published_locales) ? formData.published_locales : []
     };
 
     await FormAction({

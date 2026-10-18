@@ -37,14 +37,31 @@ export const BlogInputs = (): FormInput[] => {
     {
       name: "status",
       type: "select",
-      label: "Status (Published)",
-      toolTip: "Status per language so empty translations don't go live",
+      label: "Lifecycle Status",
+      toolTip: "Controls overall lifecycle: published, draft, or archived",
+      defaultValue: "published",
       options: [
         { label: "Published", value: "published" },
         { label: "Draft", value: "draft" },
         { label: "Archived", value: "archived" }
       ],
       required: true,
+      cardId: "general",
+      width: 6,
+    },
+    {
+      name: "published_locales",
+      type: "multiSelect",
+      label: "Live Published Languages",
+      placeholder: "Select live languages (e.g. en, ar)...",
+      toolTip: "Controls which language versions are live for visitors. If omitted or empty on publish, auto-publishes all translated languages.",
+      options: [
+        { label: "English (en)", value: "en" },
+        { label: "العربية (ar)", value: "ar" },
+        { label: "Nederlands (nl)", value: "nl" },
+        { label: "Français (fr)", value: "fr" },
+        { label: "Deutsch (de)", value: "de" }
+      ],
       cardId: "general",
       width: 6,
     },

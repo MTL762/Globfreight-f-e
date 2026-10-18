@@ -155,19 +155,29 @@ export function RecentBlogPosts({ posts = [], locale }: RecentBlogPostsProps) {
                       </div>
                     )}
 
-                    {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {post.tags.map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center gap-1 rounded-md bg-background border border-border/50 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
-                          >
-                            <Tag className="h-2.5 w-2.5 opacity-60" />
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    {(() => {
+                      const tagsList = Array.isArray(post.tags)
+                        ? post.tags
+                        : typeof post.tags === "object" && post.tags !== null
+                        ? ((post.tags as any).en || (post.tags as any).ar || Object.values(post.tags)[0] || [])
+                        : typeof post.tags === "string"
+                        ? (post.tags as string).split(",").map(t => t.trim()).filter(Boolean)
+                        : [];
+                      if (!Array.isArray(tagsList) || tagsList.length === 0) return null;
+                      return (
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {tagsList.slice(0, 3).map((tag: string, idx: number) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1 rounded-md bg-background border border-border/50 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                            >
+                              <Tag className="h-2.5 w-2.5 opacity-60" />
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>

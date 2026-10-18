@@ -44,6 +44,28 @@ export default function BlogColumns(): ColumnDef<Record<string, unknown>>[] {
       cell: ({ getValue }) => <TableStatusBadge status={getValue() as string} />
     },
     {
+      accessorKey: "published_locales",
+      header: "Live Locales",
+      cell: ({ getValue }) => {
+        const locales = getValue() as string[] | undefined;
+        if (!locales || !Array.isArray(locales) || locales.length === 0) {
+          return <span className="text-muted-foreground text-[11px] italic">All translated</span>;
+        }
+        return (
+          <div className="flex flex-wrap gap-1 items-center">
+            {locales.map((loc) => (
+              <span
+                key={loc}
+                className="inline-flex items-center uppercase rounded bg-primary/10 text-primary border border-primary/20 px-1.5 py-0.2 text-[10px] font-bold font-mono"
+              >
+                {loc}
+              </span>
+            ))}
+          </div>
+        );
+      }
+    },
+    {
       accessorKey: "is_featured",
       header: "Featured",
       cell: ({ getValue }) => {

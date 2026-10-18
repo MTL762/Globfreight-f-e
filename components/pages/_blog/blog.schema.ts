@@ -24,8 +24,9 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
       contentFr: StringNotReq(),
       contentDe: StringNotReq(),
 
-      // Status per language
+      // Status & Published Locales
       status: z.enum(["published", "draft", "archived"]).optional().default("published"),
+      published_locales: z.array(z.string()).optional().default([]),
       statusAr: z.enum(["published", "draft", "archived"]).optional().default("draft"),
       statusEn: z.enum(["published", "draft", "archived"]).optional().default("published"),
       statusNl: z.enum(["published", "draft", "archived"]).optional().default("draft"),

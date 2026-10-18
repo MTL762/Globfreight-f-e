@@ -40,7 +40,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
         tableActions={{
           onEdit: true,
           onDelete: ["adminBlogPosts"],
-          //onInfo: true,
+          onInfo: true,
         }}
         cardHeader={t("Blog")}
         filters={[{"name":"name","type":"text","width":3}]}

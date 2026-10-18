@@ -53,6 +53,16 @@ export function extractFormNameInputs({
           if (hasValue || (isDirty && val === "")) {
             if (val instanceof File || val instanceof Blob) {
               formdata.append(`${baseName}[${code}]`, val);
+            } else if (baseName === "tags") {
+              const tagString = Array.isArray(val)
+                ? val
+                    .map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? ""))
+                    .filter(Boolean)
+                    .join(", ")
+                : `${val ?? ""}`;
+              if (tagString || (isDirty && val === "")) {
+                formdata.append(`tags[${code}]`, tagString);
+              }
             } else if (Array.isArray(val)) {
               val.forEach(subVal => {
                 if (subVal instanceof File || subVal instanceof Blob) {
@@ -188,14 +198,23 @@ export function extractFormNameInputs({
         if (processedMultiLang.has(baseName)) return;
         processedMultiLang.add(baseName);
 
-        const langObj: Record<string, string> = {};
+        const langObj: Record<string, any> = {};
         FORM_LANGUAGES.forEach(({ code, key }) => {
           const langKey = `${baseName}${key}`;
           const isDirty = dirtyFields ? Boolean(dirtyFields[langKey]) : false;
           const val = data[langKey];
           const hasValue = val !== undefined && val !== null && val !== "";
           if (hasValue || (isDirty && val === "")) {
-            langObj[code] = Array.isArray(val) ? (val as any) : `${val ?? ""}`;
+            if (baseName === "tags") {
+              const tagList = Array.isArray(val)
+                ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
+                : typeof val === "string"
+                ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
+                : [];
+              langObj[code] = tagList;
+            } else {
+              langObj[code] = Array.isArray(val) ? (val as any) : `${val ?? ""}`;
+            }
           }
         });
 
@@ -213,7 +232,7 @@ export function extractFormNameInputs({
 
       if (item.startsWith("seo_")) {
         const seoKey = item.replace(/^seo_/, "");
-        if (data[item] !== "") {
+        if (data[item] !== "" && data[item] !== undefined && data[item] !== null) {
           if (!formdata.seo) formdata.seo = {};
           if (seoKey === "faqs" && Array.isArray(data[item])) {
             formdata.seo[seoKey] = data[item].filter(
@@ -221,6 +240,16 @@ export function extractFormNameInputs({
             );
           } else if (seoKey === "focus_keyphrase") {
             formdata.seo[seoKey] = typeof data[item] === "object" ? data[item] : { en: `${data[item]}` };
+          } else if (seoKey === "schema_markup") {
+            if (typeof data[item] === "string" && data[item].trim().startsWith("{")) {
+              try {
+                formdata.seo[seoKey] = JSON.parse(data[item]);
+              } catch {
+                formdata.seo[seoKey] = data[item];
+              }
+            } else {
+              formdata.seo[seoKey] = data[item];
+            }
           } else {
             formdata.seo[seoKey] = data[item];
           }

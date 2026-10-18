@@ -1,14 +1,26 @@
 "use client";
 import { Tag } from "lucide-react";
 
-export default function TagsCol({ tags }: { tags?: string[] | string | null }) {
+export default function TagsCol({ tags }: { tags?: string[] | string | Record<string, string[] | string> | null }) {
   if (!tags) return <span className="text-muted-foreground text-xs">-</span>;
 
-  const tagList: string[] = Array.isArray(tags)
-    ? tags
-    : typeof tags === "string"
-    ? tags.split(",").map((t) => t.trim()).filter(Boolean)
-    : [];
+  let tagList: string[] = [];
+  if (Array.isArray(tags)) {
+    tagList = tags;
+  } else if (typeof tags === "string") {
+    tagList = tags.split(",").map((t) => t.trim()).filter(Boolean);
+  } else if (typeof tags === "object" && tags !== null) {
+    tagList = Object.values(tags)
+      .flatMap((val) =>
+        Array.isArray(val)
+          ? val
+          : typeof val === "string"
+          ? val.split(",").map((s) => s.trim())
+          : []
+      )
+      .filter(Boolean);
+    tagList = Array.from(new Set(tagList));
+  }
 
   if (tagList.length === 0) return <span className="text-muted-foreground text-xs">-</span>;
 

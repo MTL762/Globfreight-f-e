@@ -112,7 +112,16 @@ export async function generateMetadata({
         ? (post.status as any)[locale] || (post.status as any).en || "published"
         : post.status;
     const hasTranslationContent = Boolean(postTitle);
-    const isLive = langStatus === "published" && hasTranslationContent && post.status !== "draft" && post.status !== "archived";
+    const isLocalePublished =
+      !post.published_locales ||
+      post.published_locales.length === 0 ||
+      post.published_locales.includes(locale);
+    const isLive =
+      langStatus === "published" &&
+      hasTranslationContent &&
+      isLocalePublished &&
+      post.status !== "draft" &&
+      post.status !== "archived";
 
     const metaRobotsRaw = post.seo?.meta_robots?.toLowerCase() || "";
     const shouldIndex = metaRobotsRaw.includes("noindex") ? false : isLive;
@@ -189,8 +198,13 @@ export default async function BlogDetailPage(props: {
 
   const post = postRes.success && postRes.data && "id" in postRes.data ? postRes.data : undefined;
 
-  // 2. في حالة عدم وجود المقال نهائياً
-  if (!post) {
+  // 2. في حالة عدم وجود المقال نهائياً أو عدم نشره باللغة الحالية
+  const isLocalePublished =
+    !post?.published_locales ||
+    post.published_locales.length === 0 ||
+    post.published_locales.includes(locale);
+
+  if (!post || !isLocalePublished) {
     notFound();
   }
 

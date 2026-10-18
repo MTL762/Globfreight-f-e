@@ -126,6 +126,9 @@ export const columnsIcons = {
   title: FileText,
   notes: FileText,
   priority: Activity,
+  admin: Folder,
+  Admin: Folder,
+
   date: Calendar,
   overall_rating: Star,
   category: Folder,

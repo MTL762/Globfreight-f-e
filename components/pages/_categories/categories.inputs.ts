@@ -79,7 +79,7 @@ export const CategoriesInputs = () => {
     // Open Graph
     { name: "seo_og_title", type: "text", multiLang: true, label: "Open Graph Title", cardId: "seo", width: 6 },
     { name: "seo_og_description", type: "textarea", multiLang: true, label: "Open Graph Description", cardId: "seo", width: 6 },
-    { name: "seo_og_image", type: "img", multiLang: false, ratio: "1200:630", label: "Open Graph Image (1200×630)", cardId: "seo", width: 6 },
+    { name: "seo_og_image", type: "text", multiLang: false, ratio: "1200:630", label: "Open Graph Image (1200×630)", placeholder: "https://globfreight.com/images/...", cardId: "seo", width: 6 },
     { name: "seo_og_image_alt", type: "text", multiLang: true, label: "Open Graph Image Alt Text", cardId: "seo", width: 6 },
     // Twitter
     {
@@ -95,7 +95,7 @@ export const CategoriesInputs = () => {
       cardId: "seo",
       width: 6
     },
-    { name: "seo_twitter_image", type: "img", multiLang: false, ratio: "1200:630", label: "Twitter Image (1200×630)", cardId: "seo", width: 6 },
+    { name: "seo_twitter_image", type: "text", multiLang: false, ratio: "1200:630", label: "Twitter Image (1200×630)", placeholder: "https://globfreight.com/images/...", cardId: "seo", width: 6 },
     { name: "seo_twitter_title", type: "text", multiLang: true, label: "Twitter / X Title", cardId: "seo", width: 6 },
     { name: "seo_twitter_description", type: "textarea", multiLang: true, label: "Twitter / X Description", cardId: "seo", width: 6 },
     // Schema & FAQs

@@ -28,12 +28,13 @@ export interface BlogPost {
   content?: string | MultilingualString;
   category_id?: number;
   status?: "draft" | "published" | "archived" | string;
+  published_locales?: string[];
   is_featured?: boolean | number;
   published_at?: string;
   created_at?: string;
   updated_at?: string;
   views_count?: number;
-  tags?: string[] | null;
+  tags?: string[] | MultilingualString | Record<string, string[]> | null;
   image?: string | MultilingualString | null;
   image_alt?: string | MultilingualString | null;
   author?: {

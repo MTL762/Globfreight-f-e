@@ -94,19 +94,29 @@ export function BlogFeaturedCard({
           )}
 
           {/* Tags */}
-          {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1">
-              {post.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium bg-muted/70 text-muted-foreground px-2.5 py-0.5 rounded-md"
-                >
-                  <Tag className="h-2.5 w-2.5 opacity-60" />
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+          {(() => {
+            const tagsList = Array.isArray(post.tags)
+              ? post.tags
+              : typeof post.tags === "object" && post.tags !== null
+              ? ((post.tags as any)[locale] || (post.tags as any).en || Object.values(post.tags)[0] || [])
+              : typeof post.tags === "string"
+              ? (post.tags as string).split(",").map(t => t.trim()).filter(Boolean)
+              : [];
+            if (!Array.isArray(tagsList) || tagsList.length === 0) return null;
+            return (
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                {tagsList.map((tag: string, i: number) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium bg-muted/70 text-muted-foreground px-2.5 py-0.5 rounded-md"
+                  >
+                    <Tag className="h-2.5 w-2.5 opacity-60" />
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Footer */}
