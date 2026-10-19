@@ -296,11 +296,10 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
             <button
               type="button"
               onClick={() => setActiveTab("preview")}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                activeTab === "preview"
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "preview"
                   ? "bg-background text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
-              }`}
+                }`}
             >
               <Eye className="h-3.5 w-3.5 text-primary" />
               <span>{adminLocale === "ar" ? "معاينة كالموقع" : "Site Preview"}</span>
@@ -309,11 +308,10 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
             <button
               type="button"
               onClick={() => setActiveTab("seo")}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                activeTab === "seo"
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "seo"
                   ? "bg-background text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
-              }`}
+                }`}
             >
               <Search className="h-3.5 w-3.5 text-blue-500" />
               <span>{adminLocale === "ar" ? "تحسين محركات البحث SEO" : "SEO & Social"}</span>
@@ -322,11 +320,10 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
             <button
               type="button"
               onClick={() => setActiveTab("metadata")}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                activeTab === "metadata"
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "metadata"
                   ? "bg-background text-foreground shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
-              }`}
+                }`}
             >
               <BarChart3 className="h-3.5 w-3.5 text-emerald-500" />
               <span>{adminLocale === "ar" ? "البيانات والتحليلات" : "Metadata & Analytics"}</span>
@@ -348,11 +345,10 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                   key={lang.code}
                   type="button"
                   onClick={() => setPreviewLocale(lang.code)}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    isSelected
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${isSelected
                       ? "bg-primary text-primary-foreground shadow-xs ring-2 ring-primary/30"
                       : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/50"
-                  }`}
+                    }`}
                   title={`${lang.label} - ${coverage.hasContent ? "Has Content" : "No Content"}`}
                 >
                   <span>{lang.flag}</span>
@@ -388,9 +384,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
               <button
                 type="button"
                 onClick={() => setDeviceMode("desktop")}
-                className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                  deviceMode === "desktop" ? "bg-primary text-primary-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`p-1.5 rounded-md transition-colors cursor-pointer ${deviceMode === "desktop" ? "bg-primary text-primary-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+                  }`}
                 title="Desktop View (Full Width)"
               >
                 <Monitor className="h-4 w-4" />
@@ -398,9 +393,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
               <button
                 type="button"
                 onClick={() => setDeviceMode("tablet")}
-                className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                  deviceMode === "tablet" ? "bg-primary text-primary-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`p-1.5 rounded-md transition-colors cursor-pointer ${deviceMode === "tablet" ? "bg-primary text-primary-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+                  }`}
                 title="Tablet View (768px)"
               >
                 <Tablet className="h-4 w-4" />
@@ -408,9 +402,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
               <button
                 type="button"
                 onClick={() => setDeviceMode("mobile")}
-                className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                  deviceMode === "mobile" ? "bg-primary text-primary-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`p-1.5 rounded-md transition-colors cursor-pointer ${deviceMode === "mobile" ? "bg-primary text-primary-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+                  }`}
                 title="Mobile View (Phone Simulation)"
               >
                 <Smartphone className="h-4 w-4" />
@@ -421,13 +414,12 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
           {/* Viewport Render Container */}
           <div className="flex justify-center w-full transition-all duration-300">
             <div
-              className={`transition-all duration-300 w-full ${
-                deviceMode === "desktop"
+              className={`transition-all duration-300 w-full ${deviceMode === "desktop"
                   ? "max-w-5xl"
                   : deviceMode === "tablet"
-                  ? "max-w-2xl border-4 border-muted rounded-3xl shadow-xl overflow-hidden"
-                  : "max-w-[400px] border-8 border-zinc-800 dark:border-zinc-700 rounded-[44px] shadow-2xl overflow-hidden bg-background"
-              }`}
+                    ? "max-w-2xl border-4 border-muted rounded-3xl shadow-xl overflow-hidden"
+                    : "max-w-[400px] border-8 border-zinc-800 dark:border-zinc-700 rounded-[44px] shadow-2xl overflow-hidden bg-background"
+                }`}
             >
               {/* Smartphone Bezel Header when in mobile mode */}
               {deviceMode === "mobile" && (
@@ -564,33 +556,6 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                       </div>
                     </div>
 
-                    {/* Language Switcher Simulation Bar */}
-                    <div className="pt-3 border-t border-border/40 flex flex-wrap items-center gap-2">
-                      <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5 me-1">
-                        <Globe2 className="h-3.5 w-3.5 text-primary" />
-                        <span>{t("detail.readInOtherLanguages") || "Read in other languages"}:</span>
-                      </span>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {LOCALES.map((lang) => {
-                          const isActive = lang.code === previewLocale;
-                          return (
-                            <button
-                              key={lang.code}
-                              type="button"
-                              onClick={() => setPreviewLocale(lang.code)}
-                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1 cursor-pointer ${
-                                isActive
-                                  ? "bg-primary text-primary-foreground shadow-xs"
-                                  : "bg-muted/60 hover:bg-primary/10 text-muted-foreground border border-border/60"
-                              }`}
-                            >
-                              <span>{lang.label}</span>
-                              <span className="text-[10px] opacity-80 uppercase">({lang.code})</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
                   </div>
                 </header>
 
@@ -645,8 +610,7 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                             prose-blockquote:border-s-4 prose-blockquote:border-s-primary prose-blockquote:bg-muted/30 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-e-xl prose-blockquote:italic prose-blockquote:text-foreground/90 prose-blockquote:my-6
                             prose-img:rounded-2xl prose-img:border prose-img:border-border/60 prose-img:my-6 prose-img:shadow-sm prose-img:max-w-full prose-img:h-auto
                             prose-a:text-primary prose-a:font-medium prose-a:underline hover:prose-a:opacity-80 transition-opacity
-                            prose-code:font-mono prose-code:text-xs prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-foreground ${
-                              isRtl ? "rtl:prose-blockquote:border-r-primary rtl:prose-blockquote:border-l-0 rtl:prose-blockquote:rounded-l-xl rtl:prose-blockquote:rounded-r-none leading-[1.85]" : ""
+                            prose-code:font-mono prose-code:text-xs prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-foreground ${isRtl ? "rtl:prose-blockquote:border-r-primary rtl:prose-blockquote:border-l-0 rtl:prose-blockquote:rounded-l-xl rtl:prose-blockquote:rounded-r-none leading-[1.85]" : ""
                             }`}
                           dangerouslySetInnerHTML={{
                             __html: sanitizeHtml(contentHtml)
@@ -772,18 +736,16 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                 <button
                   type="button"
                   onClick={() => setSerpDevice("desktop")}
-                  className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${
-                    serpDevice === "desktop" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${serpDevice === "desktop" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+                    }`}
                 >
                   Desktop
                 </button>
                 <button
                   type="button"
                   onClick={() => setSerpDevice("mobile")}
-                  className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${
-                    serpDevice === "mobile" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${serpDevice === "mobile" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+                    }`}
                 >
                   Mobile
                 </button>
@@ -825,9 +787,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                 </div>
                 <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                   <div
-                    className={`h-full transition-all ${
-                      metaTitle.length > 60 ? "bg-amber-500" : metaTitle.length < 30 ? "bg-blue-400" : "bg-emerald-500"
-                    }`}
+                    className={`h-full transition-all ${metaTitle.length > 60 ? "bg-amber-500" : metaTitle.length < 30 ? "bg-blue-400" : "bg-emerald-500"
+                      }`}
                     style={{ width: `${Math.min(100, (metaTitle.length / 60) * 100)}%` }}
                   />
                 </div>
@@ -847,9 +808,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                 </div>
                 <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                   <div
-                    className={`h-full transition-all ${
-                      metaDescription.length > 160 ? "bg-amber-500" : metaDescription.length < 80 ? "bg-blue-400" : "bg-emerald-500"
-                    }`}
+                    className={`h-full transition-all ${metaDescription.length > 160 ? "bg-amber-500" : metaDescription.length < 80 ? "bg-blue-400" : "bg-emerald-500"
+                      }`}
                     style={{ width: `${Math.min(100, (metaDescription.length / 160) * 100)}%` }}
                   />
                 </div>

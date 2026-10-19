@@ -215,78 +215,8 @@ export function PublicBlogDetail({
               </div>
             </div>
 
-            {/* Social Share Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handleShare("linkedin")}
-                aria-label="Share on LinkedIn"
-                className="h-9 px-3 rounded-xl border border-border/70 bg-card hover:bg-muted text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                LinkedIn
-              </button>
-              <button
-                type="button"
-                onClick={() => handleShare("twitter")}
-                aria-label="Share on X"
-                className="h-9 px-3 rounded-xl border border-border/70 bg-card hover:bg-muted text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                X (Twitter)
-              </button>
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                aria-label="Copy link"
-                className="h-9 px-3 rounded-xl border border-primary/30 bg-primary/5 hover:bg-primary/10 text-xs font-semibold text-primary transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-              >
-                {copied ? <Check className="h-3.5 w-3.5" /> : <Share2 className="h-3.5 w-3.5" />}
-                <span>{copied ? t("detail.copied") : t("detail.copyLink")}</span>
-              </button>
-            </div>
           </div>
 
-          {/* On-Page Language Switcher Bar */}
-          {alternatesLanguages && Object.keys(alternatesLanguages).length > 0 && (
-            <div className="pt-3 border-t border-border/40 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-muted-foreground inline-flex items-center gap-1.5 me-1">
-                <Globe2 className="h-3.5 w-3.5 text-primary" />
-                <span>{t("detail.readInOtherLanguages") || "Read in other languages"}:</span>
-              </span>
-              <div className="flex flex-wrap items-center gap-1.5">
-                {ARTICLE_LOCALES.map(lang => {
-                  const isActive = lang.code === currentLocale;
-                  const targetUrl = alternatesLanguages[lang.code];
-                  if (!targetUrl) return null;
-                  const pathnameOnly = targetUrl.startsWith("http") ? new URL(targetUrl).pathname : targetUrl;
-
-                  if (isActive) {
-                    return (
-                      <span
-                        key={lang.code}
-                        aria-current="page"
-                        className="px-2.5 py-1 rounded-lg text-xs font-bold bg-primary text-primary-foreground shadow-xs cursor-default inline-flex items-center gap-1"
-                      >
-                        <span>{lang.label}</span>
-                        <span className="text-[10px] opacity-80 uppercase">({lang.short})</span>
-                      </span>
-                    );
-                  }
-
-                  return (
-                    <a
-                      key={lang.code}
-                      href={pathnameOnly}
-                      title={`Read this article in ${lang.label}`}
-                      className="px-2.5 py-1 rounded-lg text-xs font-medium bg-muted/60 hover:bg-primary/10 hover:text-primary text-muted-foreground border border-border/60 transition-all inline-flex items-center gap-1 cursor-pointer"
-                    >
-                      <span>{lang.label}</span>
-                      <span className="text-[10px] opacity-70 uppercase">({lang.short})</span>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
       </header>
 
@@ -332,8 +262,7 @@ export function PublicBlogDetail({
                 prose-a:text-primary prose-a:font-medium prose-a:underline hover:prose-a:opacity-80 transition-opacity
                 prose-pre:bg-zinc-950 prose-pre:text-zinc-100 prose-pre:rounded-2xl prose-pre:p-5 prose-pre:border prose-pre:border-border/60 prose-pre:overflow-x-auto
                 prose-code:font-mono prose-code:text-xs sm:prose-code:text-sm prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-foreground prose-code:font-medium
-                prose-hr:my-10 prose-hr:border-border/80 ${
-                  isRtl ? "rtl:prose-blockquote:border-r-primary rtl:prose-blockquote:border-l-0 rtl:prose-blockquote:rounded-l-xl rtl:prose-blockquote:rounded-r-none leading-[1.8]" : ""
+                prose-hr:my-10 prose-hr:border-border/80 ${isRtl ? "rtl:prose-blockquote:border-r-primary rtl:prose-blockquote:border-l-0 rtl:prose-blockquote:rounded-l-xl rtl:prose-blockquote:rounded-r-none leading-[1.8]" : ""
                 }`}
               dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(contentHtml || (excerpt ? `<p>${excerpt}</p>` : ""))
@@ -345,8 +274,8 @@ export function PublicBlogDetail({
               const tagsList = Array.isArray(post.tags)
                 ? post.tags
                 : typeof post.tags === "object" && post.tags !== null
-                ? ((post.tags as any)[currentLocale] || (post.tags as any).en || [])
-                : [];
+                  ? ((post.tags as any)[currentLocale] || (post.tags as any).en || [])
+                  : [];
               if (!tagsList || tagsList.length === 0) return null;
               return (
                 <div className="mt-12 pt-8 border-t border-border/60 space-y-3">

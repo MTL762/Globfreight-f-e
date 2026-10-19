@@ -2,6 +2,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '20mb',
+    },
+  },
   images: {
     // remotePatterns: [
     //   ...(NEXT_IMAGE_URL
@@ -15,7 +20,7 @@ const nextConfig = {
     // ]
     unoptimized: true
   },
- 
+
 
   // Custom error handling
 };
