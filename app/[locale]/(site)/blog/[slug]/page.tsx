@@ -45,7 +45,7 @@ export async function generateMetadata({
 
     // Resolve per-language translated slugs for hreflang alternates
     const slugsByLocale = await resolveAllPostSlugs(slug, post);
-    const alternates = getBlogPostAlternates(slugsByLocale, locale);
+    const alternates = getBlogPostAlternates(slugsByLocale, locale, post.published_locales);
 
     const metaTitleRaw = getBlogText(post.seo?.meta_title || post.seo_meta_title, locale);
     const postTitle = getBlogText(post.title, locale);
@@ -218,7 +218,7 @@ export default async function BlogDetailPage(props: {
     redirect(`/${locale}/blog/${encodeURIComponent(decodeURIComponent(currentCanonicalSlug))}`);
   }
 
-  const alternates = getBlogPostAlternates(slugsByLocale, locale);
+  const alternates = getBlogPostAlternates(slugsByLocale, locale, post.published_locales);
 
   // Filter out the current post from related publications
   const relatedPosts: BlogPost[] = (Array.isArray(relatedRes?.data) ? relatedRes.data : [])

@@ -136,10 +136,16 @@ export default function useBlogLogic({ data }: { data?: any }) {
     const payload = {
       ...formData,
       category_id: formData.category_id || data?.category_id || data?.category?.id,
-      sub_category_id: formData.sub_category_id || data?.sub_category_id || data?.sub_category?.id || undefined,
+      sub_category_id:
+        formData.sub_category_id && Number(formData.sub_category_id) > 0
+          ? Number(formData.sub_category_id)
+          : undefined,
       status: formData.status || "published",
       is_featured: formData.is_featured ? 1 : 0,
-      published_locales: Array.isArray(formData.published_locales) ? formData.published_locales : []
+      published_locales:
+        Array.isArray(formData.published_locales) && formData.published_locales.length > 0
+          ? formData.published_locales
+          : undefined
     };
 
     await FormAction({

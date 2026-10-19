@@ -109,15 +109,29 @@ export async function resolveAllCategorySlugs(
  */
 export function getBlogPostAlternates(
   slugsByLocale: Record<string, string>,
-  currentLocale: string
+  currentLocale: string,
+  publishedLocales?: string[]
 ) {
   const languages: Record<string, string> = {};
-  for (const loc of SYSTEM_LOCALES) {
+  const allowedLocales =
+    Array.isArray(publishedLocales) && publishedLocales.length > 0
+      ? SYSTEM_LOCALES.filter(loc => publishedLocales.includes(loc))
+      : SYSTEM_LOCALES;
+
+  for (const loc of allowedLocales) {
     const s = slugsByLocale[loc] || slugsByLocale.en || Object.values(slugsByLocale)[0];
-    languages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(decodeURIComponent(s))}`;
+    if (s) {
+      languages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(decodeURIComponent(s))}`;
+    }
   }
-  const defaultSlug = slugsByLocale.en || Object.values(slugsByLocale)[0];
-  languages["x-default"] = `${SITE_URL}/en/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
+  const defaultSlug =
+    (allowedLocales.includes("en" as any) ? slugsByLocale.en : undefined) ||
+    slugsByLocale[allowedLocales[0]] ||
+    Object.values(slugsByLocale)[0];
+  if (defaultSlug) {
+    const defaultLoc = allowedLocales.includes("en" as any) ? "en" : allowedLocales[0] || "en";
+    languages["x-default"] = `${SITE_URL}/${defaultLoc}/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
+  }
 
   const currentSlug = slugsByLocale[currentLocale] || defaultSlug;
 

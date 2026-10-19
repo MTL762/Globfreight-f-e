@@ -104,6 +104,17 @@ export function extractFormNameInputs({
       if (item.startsWith("seo_")) {
         const seoKey = item.replace(/^seo_/, "");
         if (data[item] !== "" && data[item] !== undefined && data[item] !== null) {
+          if (seoKey === "og_image" || seoKey === "twitter_image") {
+            if (data[item] instanceof File || data[item] instanceof Blob) {
+              formdata.append(`seo[${seoKey}]`, data[item]);
+            } else if (
+              Array.isArray(data[item]) &&
+              (data[item][0] instanceof File || data[item][0] instanceof Blob)
+            ) {
+              formdata.append(`seo[${seoKey}]`, data[item][0]);
+            }
+            return;
+          }
           if (seoKey === "faqs" && Array.isArray(data[item])) {
             data[item].forEach((faq: { question?: string; answer?: string }, idx: number) => {
               if (faq?.question?.trim() || faq?.answer?.trim()) {
@@ -247,6 +258,18 @@ export function extractFormNameInputs({
               } catch {
                 formdata.seo[seoKey] = data[item];
               }
+            } else {
+              formdata.seo[seoKey] = data[item];
+            }
+          } else if (seoKey === "og_image" || seoKey === "twitter_image") {
+            if (
+              typeof data[item] === "string" &&
+              (data[item].includes("uploads/") ||
+                data[item].includes("storage/") ||
+                data[item].startsWith("http://") ||
+                data[item].startsWith("https://"))
+            ) {
+              // Existing media URL - do not overwrite
             } else {
               formdata.seo[seoKey] = data[item];
             }

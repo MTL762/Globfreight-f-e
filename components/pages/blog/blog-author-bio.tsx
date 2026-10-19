@@ -1,7 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { BlogPost } from "@/types/blog";
+import { useLocale, useTranslations } from "next-intl";
+import { BlogPost, getBlogText } from "@/types/blog";
 
 export interface BlogAuthorBioProps {
   author?: BlogPost["author"];
@@ -10,10 +10,15 @@ export interface BlogAuthorBioProps {
 
 export function BlogAuthorBio({ author, className = "" }: BlogAuthorBioProps) {
   const t = useTranslations("BlogPage.detail");
+  const locale = useLocale();
 
-  const name = author?.name || t("authorTitle");
+  const name =
+    (typeof author?.name === "object" ? getBlogText(author?.name, locale) : author?.name) ||
+    t("authorTitle");
   const initial = (name ? name.charAt(0) : "G").toUpperCase();
-  const bio = author?.bio || t("authorBio");
+  const bio =
+    (typeof author?.bio === "object" ? getBlogText(author?.bio, locale) : author?.bio) ||
+    t("authorBio");
 
   return (
     <div

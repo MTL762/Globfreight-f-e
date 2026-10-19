@@ -239,11 +239,11 @@ export const BlogInputs = (): FormInput[] => {
     },
     {
       name: "seo_og_image",
-      type: "text",
+      type: "img",
       multiLang: false,
       ratio: "1200:630",
       label: "Open Graph Image (1200×630)",
-      toolTip: "Dedicated social share banner URL (recommended: 1200×630)",
+      toolTip: "Image file upload (jpeg, png, webp, jpg, max 10MB) for social sharing banner",
       cardId: "seo",
       width: 6
     },
@@ -272,11 +272,11 @@ export const BlogInputs = (): FormInput[] => {
     },
     {
       name: "seo_twitter_image",
-      type: "text",
+      type: "img",
       multiLang: false,
       ratio: "1200:630",
       label: "Twitter / X Image (1200×630)",
-      toolTip: "Dedicated Twitter / X image URL",
+      toolTip: "Image file upload (jpeg, png, webp, jpg, max 10MB) for Twitter / X card",
       cardId: "seo",
       width: 6
     },

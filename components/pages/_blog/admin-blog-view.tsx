@@ -117,6 +117,9 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
   const ogTitle = getBlogText(post.seo?.og_title, previewLocale) || metaTitle;
   const ogDescription = getBlogText(post.seo?.og_description, previewLocale) || metaDescription;
   const ogImage = post.seo?.og_image || postImage;
+  const twitterTitle = getBlogText(post.seo?.twitter_title, previewLocale) || ogTitle;
+  const twitterDescription = getBlogText(post.seo?.twitter_description, previewLocale) || ogDescription;
+  const twitterImage = post.seo?.twitter_image || ogImage;
 
   // Tags list
   const tagsList = (() => {
@@ -157,7 +160,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
     dateModified: post.updated_at || post.published_at || post.created_at,
     author: {
       "@type": "Person",
-      name: post.author?.name || "Globfreight Logistics Analysts"
+      name: post.author?.name || "Globfreight Logistics Analysts",
+      ...(post.author?.bio ? { description: post.author.bio } : {})
     },
     publisher: {
       "@type": "Organization",
@@ -855,13 +859,15 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
             <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
                 <Send className="h-3.5 w-3.5 text-blue-400" />
-                <span>X / Twitter Summary Large Image</span>
+                <span>
+                  X / Twitter {post.seo?.twitter_card === "summary" ? "Summary Card" : "Summary Large Image"}
+                </span>
               </h4>
 
               <div className="rounded-xl border border-border/70 overflow-hidden bg-muted/20">
-                {ogImage ? (
+                {twitterImage ? (
                   <div className="relative w-full h-44 bg-muted">
-                    <Image src={ogImage} alt="Twitter Card" fill className="object-cover" />
+                    <Image src={twitterImage} alt="Twitter Card" fill className="object-cover" />
                   </div>
                 ) : (
                   <div className="h-36 bg-muted/60 flex items-center justify-center text-xs text-muted-foreground">
@@ -872,8 +878,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                   <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground">
                     globfreight.com
                   </span>
-                  <p className="text-xs sm:text-sm font-bold text-foreground line-clamp-1">{ogTitle}</p>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{ogDescription}</p>
+                  <p className="text-xs sm:text-sm font-bold text-foreground line-clamp-1">{twitterTitle}</p>
+                  <p className="text-xs text-muted-foreground line-clamp-2">{twitterDescription}</p>
                 </div>
               </div>
             </div>
