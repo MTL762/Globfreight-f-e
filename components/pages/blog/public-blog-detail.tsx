@@ -16,7 +16,6 @@ import {
   ChevronLeft,
   Layers,
   Sparkles,
-  Globe2
 } from "lucide-react";
 import { toast } from "sonner";
 import { useLocale, useTranslations } from "next-intl";
@@ -24,14 +23,6 @@ import { BlogPost, formatBlogDate, getBlogText, estimateReadTime } from "@/types
 import { BlogCard } from "./blog-card";
 import { BlogAuthorBio } from "./blog-author-bio";
 import { sanitizeHtml } from "@/utils/sanitizeHtml";
-
-const ARTICLE_LOCALES = [
-  { code: "en", label: "English", short: "EN" },
-  { code: "ar", label: "العربية", short: "AR" },
-  { code: "nl", label: "Nederlands", short: "NL" },
-  { code: "fr", label: "Français", short: "FR" },
-  { code: "de", label: "Deutsch", short: "DE" }
-] as const;
 
 interface PublicBlogDetailProps {
   post: BlogPost;
@@ -45,7 +36,6 @@ export function PublicBlogDetail({
   post,
   relatedPosts,
   locale,
-  alternatesLanguages
 }: PublicBlogDetailProps) {
   const currentLocale = useLocale() || locale;
   const t = useTranslations("BlogPage");
@@ -96,18 +86,6 @@ export function PublicBlogDetail({
     }
   };
 
-  const handleShare = (platform: "twitter" | "linkedin") => {
-    if (typeof window === "undefined") return;
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(title);
-
-    const shareUrl =
-      platform === "twitter"
-        ? `https://twitter.com/intent/tweet?text=${text}&url=${url}`
-        : `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
-
-    window.open(shareUrl, "_blank", "noopener,noreferrer");
-  };
 
   return (
     <article className="w-full bg-background min-h-screen">
