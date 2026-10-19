@@ -2790,6 +2790,8 @@
       "home": "Home",
       "blog": "Blog",
       "featured": "Featured",
+      "published": "Published",
+      "updated": "Updated",
       "minRead": "min read",
       "shareArticle": "Share Article",
       "copyLink": "Copy Link",
