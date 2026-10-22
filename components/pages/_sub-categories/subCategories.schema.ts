@@ -96,7 +96,8 @@ export const SubCategoriesSchema = (t: TFunction) => {
     seo_twitter_descriptionDe: StringNotReq(),
     // Schema & FAQs
     seo_schema_markup: StringNotReq(),
-    seo_faqs: z.array(z.object({ question: z.string().optional(), answer: z.string().optional() })).optional().default([]),
+    seo_faq_ids: z.array(z.union([z.number(), z.string(), z.object({ id: z.union([z.number(), z.string()]).optional(), question: z.string().optional() })])).optional().default([]),
+    seo_faqs: z.any().optional().default([]),
   });
 };
 

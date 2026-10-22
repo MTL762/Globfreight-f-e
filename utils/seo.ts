@@ -135,19 +135,21 @@ export function getBreadcrumbJsonLd(
  * Generates FAQPage structured data from a list of Q&A pairs.
  */
 export function getFaqJsonLd(
-  faqs: Array<{ question: string; answer: string }>,
+  faqs: Array<{ question: string; answer?: string | null }>,
 ) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
+    mainEntity: faqs
+      .filter((faq) => faq.question && faq.answer)
+      .map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer || "",
+        },
+      })),
   };
 }
 

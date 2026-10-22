@@ -112,16 +112,35 @@ export function extractFormNameInputs({
               (data[item][0] instanceof File || data[item][0] instanceof Blob)
             ) {
               formdata.append(`seo[${seoKey}]`, data[item][0]);
+            } else if (
+              typeof FileList !== "undefined" &&
+              data[item] instanceof FileList &&
+              data[item][0]
+            ) {
+              formdata.append(`seo[${seoKey}]`, data[item][0]);
             }
             return;
           }
-          if (seoKey === "faqs" && Array.isArray(data[item])) {
-            data[item].forEach((faq: { question?: string; answer?: string }, idx: number) => {
-              if (faq?.question?.trim() || faq?.answer?.trim()) {
-                formdata.append(`seo[faqs][${idx}][question]`, faq.question || "");
-                formdata.append(`seo[faqs][${idx}][answer]`, faq.answer || "");
+          if (
+            (seoKey === "faq_ids" || seoKey === "faqs") &&
+            (Array.isArray(data[item]) || typeof data[item] === "number" || typeof data[item] === "string")
+          ) {
+            const arr = Array.isArray(data[item]) ? data[item] : [data[item]];
+            arr.forEach((faqItem: any, idx: number) => {
+              if (typeof faqItem === "number" || typeof faqItem === "string") {
+                if (String(faqItem).trim() !== "" && !isNaN(Number(faqItem))) {
+                  formdata.append(`seo[faq_ids][]`, String(faqItem));
+                }
+              } else if (typeof faqItem === "object" && faqItem !== null) {
+                if (faqItem.id !== undefined && faqItem.id !== null) {
+                  formdata.append(`seo[faq_ids][]`, String(faqItem.id));
+                } else if (faqItem.question?.trim() || faqItem.answer?.trim()) {
+                  formdata.append(`seo[faqs][${idx}][question]`, faqItem.question || "");
+                  formdata.append(`seo[faqs][${idx}][answer]`, faqItem.answer || "");
+                }
               }
             });
+            return;
           } else if (seoKey === "focus_keyphrase") {
             formdata.append(`seo[${seoKey}][en]`, `${data[item]}`);
           } else if (data[item] instanceof File || data[item] instanceof Blob) {
@@ -245,10 +264,26 @@ export function extractFormNameInputs({
         const seoKey = item.replace(/^seo_/, "");
         if (data[item] !== "" && data[item] !== undefined && data[item] !== null) {
           if (!formdata.seo) formdata.seo = {};
-          if (seoKey === "faqs" && Array.isArray(data[item])) {
-            formdata.seo[seoKey] = data[item].filter(
-              (faq: { question?: string; answer?: string }) => faq?.question?.trim() || faq?.answer?.trim()
+          if (
+            (seoKey === "faq_ids" || seoKey === "faqs") &&
+            (Array.isArray(data[item]) || typeof data[item] === "number" || typeof data[item] === "string")
+          ) {
+            const arr = Array.isArray(data[item]) ? data[item] : [data[item]];
+            const hasNumericIds = arr.some(
+              (x: any) =>
+                typeof x === "number" ||
+                (typeof x === "string" && !isNaN(Number(x))) ||
+                (typeof x === "object" && x?.id !== undefined)
             );
+            if (hasNumericIds) {
+              formdata.seo.faq_ids = arr
+                .map((x: any) => (typeof x === "object" && x !== null ? Number(x.id) : Number(x)))
+                .filter((x: any) => !isNaN(x) && x > 0);
+            } else {
+              formdata.seo[seoKey] = arr.filter(
+                (faq: { question?: string; answer?: string }) => faq?.question?.trim() || faq?.answer?.trim()
+              );
+            }
           } else if (seoKey === "focus_keyphrase") {
             formdata.seo[seoKey] = typeof data[item] === "object" ? data[item] : { en: `${data[item]}` };
           } else if (seoKey === "schema_markup") {

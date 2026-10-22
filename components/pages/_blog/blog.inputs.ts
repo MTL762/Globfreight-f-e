@@ -310,11 +310,11 @@ export const BlogInputs = (): FormInput[] => {
       width: 12
     },
     {
-      name: "seo_faqs",
-      type: "faq-list",
+      name: "seo_faq_ids",
+      type: "faq-select",
       multiLang: false,
-      label: "FAQ Items (Auto FAQPage Schema)",
-      toolTip: "List of FAQs for generating Google FAQ rich snippet schema",
+      label: "Frequently Asked Questions (FAQ Selection)",
+      toolTip: "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
       cardId: "seo",
       width: 12
     }

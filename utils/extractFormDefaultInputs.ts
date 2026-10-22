@@ -79,7 +79,17 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
       if (item?.name.startsWith("seo_")) {
         const seoKey = item.name.replace(/^seo_/, "");
         const seoVal = dataObj[item.name] ?? dataObj.seo?.[seoKey];
-        if (seoKey === "faqs") {
+        if (seoKey === "faqs" || seoKey === "faq_ids") {
+          if (Array.isArray(dataObj.seo?.faq_ids) && dataObj.seo.faq_ids.length > 0) {
+            return {
+              [item.name]: dataObj.seo.faq_ids
+            };
+          }
+          if (Array.isArray(dataObj.seo?.faqs)) {
+            return {
+              [item.name]: dataObj.seo.faqs
+            };
+          }
           return {
             [item.name]: Array.isArray(seoVal) ? seoVal : []
           };

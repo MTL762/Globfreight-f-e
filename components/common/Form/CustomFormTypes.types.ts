@@ -32,6 +32,7 @@ export type inputTypes =
   | "space"
   | "video"
   | "faq-list"
+  | "faq-select"
   | "date";
 export type CardConfig = {
   id?: number | string;

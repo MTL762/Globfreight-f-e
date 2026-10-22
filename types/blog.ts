@@ -97,7 +97,8 @@ export interface BlogPost {
     twitter_image?: string | null;
     meta_robots?: string | null;
     keywords?: string[] | string | null;
-    faqs?: Array<{ question: string; answer: string }> | null;
+    faq_ids?: number[] | null;
+    faqs?: Array<{ id?: number; question: string; answer?: string }> | null;
     created_at?: string;
     updated_at?: string;
   };

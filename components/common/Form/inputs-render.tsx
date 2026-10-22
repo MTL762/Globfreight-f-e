@@ -290,6 +290,7 @@ export const renderInput = (item: FormInput, field: any) => {
       return <PdfInput {...commonProps} />;
 
     case "faq-list":
+    case "faq-select":
       return (
         <FaqListInput
           value={field.value}

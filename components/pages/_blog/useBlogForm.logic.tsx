@@ -67,6 +67,13 @@ export default function useBlogLogic({ data }: { data?: any }) {
     seo_schema_markup_type: defaults.seo_schema_markup_type || sourceData?.seo?.schema_markup_type || "Article",
     seo_meta_robots: defaults.seo_meta_robots || sourceData?.seo?.meta_robots || "index, follow",
     seo_twitter_card: defaults.seo_twitter_card || sourceData?.seo?.twitter_card || "summary_large_image",
+    seo_faq_ids: Array.isArray(defaults.seo_faq_ids)
+      ? defaults.seo_faq_ids
+      : Array.isArray(sourceData?.seo?.faq_ids)
+      ? sourceData.seo.faq_ids
+      : Array.isArray(sourceData?.seo?.faqs)
+      ? sourceData.seo.faqs
+      : [],
     seo_faqs: Array.isArray(defaults.seo_faqs) ? defaults.seo_faqs : Array.isArray(sourceData?.seo?.faqs) ? sourceData.seo.faqs : [],
     ...tags
   });

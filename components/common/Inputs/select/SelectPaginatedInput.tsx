@@ -86,7 +86,7 @@ Readonly<SelectPaginatedProps>) {
               (acc, curr) => ({ ...acc, [curr]: searchParams.get(curr) }),
               {}
             ),
-            ...(searchTerm ? { locate: searchTerm } : {}),
+            ...(searchTerm ? { [searchTermKey || "search"]: searchTerm, locate: searchTerm } : {}),
             ...searchFilters?.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {}),
             limit: (currentPage * 15).toString() // Adjust the number of items per page as needed
           }

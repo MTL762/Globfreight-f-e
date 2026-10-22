@@ -137,7 +137,8 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
       seo_schema_markup_typeDe: StringNotReq(),
 
       seo_schema_markup: StringNotReq(),
-      seo_faqs: z.array(z.object({ question: z.string().optional(), answer: z.string().optional() })).optional().default([]),
+      seo_faq_ids: z.array(z.union([z.number(), z.string(), z.object({ id: z.union([z.number(), z.string()]).optional(), question: z.string().optional() })])).optional().default([]),
+      seo_faqs: z.any().optional().default([]),
     })
     .refine(
       (data) => Boolean(data.titleEn || data.titleAr || data.titleNl || data.titleFr || data.titleDe),

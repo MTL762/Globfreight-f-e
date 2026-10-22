@@ -123,6 +123,6 @@ export const SubCategoriesInputs = (): FormInput[] => {
     { name: "seo_twitter_description", type: "textarea", multiLang: true, label: "Twitter / X Description", cardId: "seo", width: 6 },
     // Schema & FAQs
     { name: "seo_schema_markup", type: "textarea", multiLang: false, label: "Custom Schema Markup (JSON-LD)", cardId: "seo", width: 12 },
-    { name: "seo_faqs", type: "faq-list", multiLang: false, label: "FAQ Items (FAQPage Schema)", cardId: "seo", width: 12 },
+    { name: "seo_faq_ids", type: "faq-select", multiLang: false, label: "Frequently Asked Questions (FAQ Selection)", toolTip: "Select existing FAQs from the FAQ module by ID (faq_ids).", cardId: "seo", width: 12 },
   ];
 };

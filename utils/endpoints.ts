@@ -16,6 +16,7 @@ export const endpoints = {
   adminSubCategories: "/admin/sub-categories",
   adminBlogPosts: "/admin/blog-posts",
   adminFaqItems: "/admin/faq-items",
+  adminFaqItemsSelectMenu: "/admin/faq-items/select_menu",
   adminContactUs: "/admin/contact-us",
   adminPriceRequests: "/admin/price-requests",
   adminCustomers: "/admin/customers",
