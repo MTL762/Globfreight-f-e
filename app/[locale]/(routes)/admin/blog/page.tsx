@@ -43,7 +43,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
           onInfo: true,
         }}
         cardHeader={t("Blog")}
-        filters={[{"name":"name","type":"text","width":3}]}
+        filters={[{"name":"title","type":"text","width":3}]}
       />
     </>
   );

@@ -47,7 +47,7 @@ export function ComposeEmailForm() {
         router.push(`/${locale}/sent-emails`);
         router.refresh();
       } else {
-        toast.error(res?.message || (isRtl ? "فشل إرسال البريد الإلكتروني" : "Failed to send email"));
+        toast.error(res?.result?.message || res?.message || (isRtl ? "فشل إرسال البريد الإلكتروني" : "Failed to send email"));
       }
     } catch {
       toast.error(isRtl ? "حدث خطأ أثناء إرسال البريد" : "An error occurred while sending email");
