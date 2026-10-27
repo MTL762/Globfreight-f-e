@@ -43,3 +43,18 @@ export function EmailReq(t: TFunction) {
 export function noSchema() {
   return z.any();
 }
+
+// Optional phone: digits with an optional leading "+", 7-15 digits (E.164 length)
+export function PhoneNotReq(t: TFunction) {
+  return z
+    .string()
+    .nullable()
+    .optional()
+    .refine(
+      val => {
+        const v = (val ?? "").replace(/[\s-]/g, "");
+        return v === "" || /^\+?\d{7,15}$/.test(v);
+      },
+      { message: t(`Validations.invalid_phone_format`) }
+    );
+}
