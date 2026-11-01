@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/components/theme-provider";
 import { AlternateLinksProvider } from "@/components/alternate-links-context";
 import NextTopLoader from "nextjs-toploader";
 import "../globals.css";
