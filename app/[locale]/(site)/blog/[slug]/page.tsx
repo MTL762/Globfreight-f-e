@@ -85,14 +85,14 @@ export async function generateMetadata({
     const tags = Array.isArray(post.tags)
       ? post.tags
       : typeof post.tags === "object" && post.tags !== null
-      ? ((post.tags as any)[locale] || (post.tags as any).en || [])
-      : [];
+        ? ((post.tags as any)[locale] || (post.tags as any).en || [])
+        : [];
 
     const backendKeywords = Array.isArray(post.seo?.keywords)
       ? post.seo.keywords
       : typeof post.seo?.keywords === "string"
-      ? post.seo.keywords.split(",").map(k => k.trim()).filter(Boolean)
-      : [];
+        ? post.seo.keywords.split(",").map(k => k.trim()).filter(Boolean)
+        : [];
 
     const keywords = [
       ...(focusKeyphrase ? [focusKeyphrase] : []),
@@ -187,7 +187,10 @@ export default async function BlogDetailPage(props: {
       method: "GET"
     }).catch(() => ({ data: [] }))
   ]);
-
+  if ((postRes as any)?.result?.code == 404 || postRes.status == 404) {
+    return redirect(`/${locale}`);
+  }
+  console.log(postRes, 'dsa2esd')
   // 1. في حالة التحويل الدائم 301
   if (postRes.status === 301 || postRes.isRedirect) {
     const newSlug = postRes.data?.new_slug || postRes.newSlug;
@@ -255,8 +258,8 @@ export default async function BlogDetailPage(props: {
   const tags = Array.isArray(post.tags)
     ? post.tags
     : typeof post.tags === "object" && post.tags !== null
-    ? ((post.tags as any)[locale] || (post.tags as any).en || [])
-    : [];
+      ? ((post.tags as any)[locale] || (post.tags as any).en || [])
+      : [];
   const allKeywords = [...(focusKeyphrase ? [focusKeyphrase] : []), ...tags];
 
   const rawSchema = post.seo?.schema_markup_type || post.seo_schema_markup_type;
