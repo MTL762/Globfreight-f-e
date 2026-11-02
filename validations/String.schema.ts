@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isPhoneEmpty, isPhoneValidForCountry } from "@/utils/phoneValidation";
 export function StringReq(t: TFunction, min: number = 3) {
   return z
     .string({
@@ -44,17 +45,33 @@ export function noSchema() {
   return z.any();
 }
 
-// Optional phone: digits with an optional leading "+", 7-15 digits (E.164 length)
-export function PhoneNotReq(t: TFunction) {
+// Optional phone: validates based on country key if entered, passes if empty or only dial code
+export function PhoneNotReq(t?: TFunction, defaultCountry?: string) {
   return z
-    .string()
-    .nullable()
-    .optional()
+    .union([z.string().nullable().optional(), z.number().nullable().optional()])
+    .transform(val => {
+      if (isPhoneEmpty(val)) return "";
+      return String(val);
+    })
     .refine(
       val => {
-        const v = (val ?? "").replace(/[\s-]/g, "");
-        return v === "" || /^\+?\d{7,15}$/.test(v);
+        if (val === "") return true;
+        return isPhoneValidForCountry(val, defaultCountry);
       },
-      { message: t(`Validations.invalid_phone_format`) }
+      { message: t ? t(`Validations.invalid_phone_format`) : "Invalid phone number format" }
+    );
+}
+
+// Required phone: requires a subscriber number and validates based on country key
+export function PhoneReq(t?: TFunction, defaultCountry?: string) {
+  return z
+    .union([z.string().nullable().optional(), z.number().nullable().optional()])
+    .refine(val => !isPhoneEmpty(val), {
+      message: t ? t(`Validations.required`) : "This field is required"
+    })
+    .transform(val => String(val))
+    .refine(
+      val => isPhoneValidForCountry(val, defaultCountry),
+      { message: t ? t(`Validations.invalid_phone_format`) : "Invalid phone number format" }
     );
 }

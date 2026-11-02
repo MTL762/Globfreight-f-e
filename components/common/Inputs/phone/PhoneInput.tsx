@@ -1,139 +1,105 @@
-import { useEffect, useState } from "react";
+import {
+  isPhoneEmpty,
+  isPhoneValidForCountry as validatePhoneForCountry,
+  getCountryFromPhone,
+} from "@/utils/phoneValidation";
+import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
+import React, { useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
-// Comprehensive styles to override react-phone-input-2 default ugly styles
-// and make it look like a native Shadcn/Tailwind component.
-const customStyles = `
-  /* General Container Override */
-  .react-tel-input .form-control {
-    width: 100% !important;
-    height: 2.75rem !important; /* h-11 */
-    font-size: 0.875rem !important; /* text-sm */
-    line-height: 1.25rem !important;
-    padding-left: 3.5rem !important; /* space for flag */
-    border-radius: 9999px !important; /* rounded-full */
-    border: 1px solid hsl(var(--input)) !important;
-    background-color: hsl(var(--background)) !important;
-    color: hsl(var(--foreground)) !important;
-    transition: all 0.2s ease-in-out !important;
-  }
+// Dark mode styles, invalid-number styles, and custom Syria flag
+const darkModeStyles = `
+.dark .react-tel-input .form-control {
+   background-color: #1f2937;
+   color: #e5e7eb;
+   border-color: #4b5563;
+}
 
-  /* Focus State */
-  .react-tel-input .form-control:focus {
-    border-color: hsl(var(--ring)) !important;
-    box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2) !important;
-    outline: none !important;
-  }
+.dark .react-tel-input .selected-flag {
+   background-color: #374151;
+}
 
-  /* Flag Section Override */
-  .react-tel-input .flag-dropdown {
-    border: none !important;
-    background-color: transparent !important;
-    border-radius: 9999px 0 0 9999px !important;
-    padding-left: 0.5rem !important;
-  }
+.dark .react-tel-input .selected-flag:hover {
+   background-color: #4b5563;
+}
 
-  .react-tel-input .selected-flag {
-    background-color: transparent !important;
-    border-radius: 9999px 0 0 9999px !important;
-    padding: 0 0.5rem !important;
-    width: 38px !important;
-    transition: background-color 0.2s;
-  }
+.dark .react-tel-input .country-list {
+   background-color: #1f2937;
+   border-color: #4b5563;
+}
 
-  .react-tel-input .selected-flag:hover,
-  .react-tel-input .selected-flag.open {
-    background-color: hsl(var(--muted)) !important;
-  }
+.dark .react-tel-input .country-list .country {
+   color: #e5e7eb;
+}
 
-  .react-tel-input .selected-flag .arrow {
-    border-top-color: hsl(var(--muted-foreground)) !important;
-  }
+.dark .react-tel-input .country-list .country:hover {
+   background-color: #374151;
+}
 
-  .react-tel-input .selected-flag.open .arrow {
-    border-top-color: hsl(var(--primary)) !important;
-  }
+.dark .react-tel-input .country-list .country.highlight {
+   background-color: #4b5563;
+}
 
-  /* Dropdown Menu Override */
-  .react-tel-input .country-list {
-    background-color: hsl(var(--popover)) !important;
-    color: hsl(var(--popover-foreground)) !important;
-    border: 1px solid hsl(var(--border)) !important;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05) !important;
-    border-radius: 0.75rem !important;
-    margin-top: 0.5rem !important;
-    width: 280px !important;
-    max-height: 250px !important;
-    z-index: 100 !important;
-    
-    /* Scrollbar styling for the list */
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
-  }
+.dark .react-tel-input .flag-dropdown.open {
+   background-color: #1f2937;
+   border-color: #4b5563;
+}
 
-  /* Dark mode specific shadow */
-  .dark .react-tel-input .country-list {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -2px rgb(0 0 0 / 0.3) !important;
-  }
+.dark .react-tel-input .search-box {
+   background-color: #1f2937;
+   color: #e5e7eb;
+   border-color: #4b5563;
+}
 
-  .react-tel-input .country-list::-webkit-scrollbar {
-    width: 6px;
-  }
-  .react-tel-input .country-list::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground) / 0.3);
-    border-radius: 9999px;
-  }
+/* Invalid number state styles */
+.react-tel-input .form-control.invalid-number {
+   border-color: #ef4444 !important;
+}
 
-  /* Dropdown Items */
-  .react-tel-input .country-list .country {
-    padding: 0.625rem 0.75rem !important;
-    transition: background-color 0.15s ease;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.75rem !important;
-  }
+.react-tel-input .form-control.invalid-number:focus {
+   border-color: #ef4444 !important;
+   box-shadow: 0 0 0 1px #ef4444 !important;
+}
 
-  .react-tel-input .country-list .country:hover {
-    background-color: hsl(var(--muted)) !important;
-  }
+.dark .react-tel-input .form-control.invalid-number {
+   background-color: #1f2937 !important;
+   border-color: #ef4444 !important;
+   color: #fca5a5 !important;
+}
 
-  .react-tel-input .country-list .country.highlight {
-    background-color: hsl(var(--accent)) !important;
-    color: hsl(var(--accent-foreground)) !important;
-  }
+.dark .react-tel-input .form-control.invalid-number:focus {
+   border-color: #ef4444 !important;
+   box-shadow: 0 0 0 1px #ef4444 !important;
+}
 
-  .react-tel-input .country-list .country .dial-code {
-    color: hsl(var(--muted-foreground)) !important;
-    font-size: 0.8rem;
-  }
-  
-  /* Search Box */
-  .react-tel-input .search {
-    background-color: hsl(var(--popover)) !important;
-    padding: 8px !important;
-    position: sticky !important;
-    top: 0;
-    z-index: 1;
-    border-bottom: 1px solid hsl(var(--border)) !important;
-  }
-
-  .react-tel-input .search-box {
-    margin: 0 !important;
-    width: 100% !important;
-    border: 1px solid hsl(var(--input)) !important;
-    background-color: hsl(var(--background)) !important;
-    color: hsl(var(--foreground)) !important;
-    border-radius: 0.5rem !important;
-    padding: 0.5rem !important;
-    height: 2rem !important;
-    font-size: 0.875rem !important;
-  }
-  
-  .react-tel-input .search-box::placeholder {
-    color: hsl(var(--muted-foreground)) !important;
-  }
+/* Custom Syria flag override */
+.react-tel-input .flag.sy,
+.react-tel-input .country-list .country .flag.sy,
+.react-tel-input .selected-flag .flag.sy {
+   background-image: url('/media/flags/syria.svg') !important;
+   background-position: center !important;
+   background-repeat: no-repeat !important;
+   background-size: cover !important;
+   box-shadow: 0 0 1px #0003;
+   border-radius: 2px;
+}
 `;
+
+export const isPhoneValidForCountry = validatePhoneForCountry;
+
+export interface CustomPhoneInputProps {
+  value?: string;
+  name: string;
+  placeholder?: string;
+  disabled?: boolean;
+  onChange: (value: string, isValid?: boolean) => void;
+  defaultCountry?: string;
+  error?: string;
+  showInlineError?: boolean;
+  onBlur?: (e?: React.FocusEvent<HTMLInputElement>) => void;
+}
 
 const CustomPhoneInput = ({
   name,
@@ -141,40 +107,73 @@ const CustomPhoneInput = ({
   disabled,
   value,
   onChange,
-  inputClassName = ""
-}: {
-  value?: string;
-  name: string;
-  placeholder?: string;
-  disabled?: boolean;
-  onChange: (value: string) => void;
-  inputClassName?: string;
-}) => {
+  defaultCountry = "sa",
+  error,
+  showInlineError = false,
+  onBlur,
+}: CustomPhoneInputProps) => {
   const [phoneValue, setPhoneValue] = useState(value || "");
-  const [country, setCountry] = useState("eg");
+  const [country, setCountry] = useState(defaultCountry);
+  const [isTouched, setIsTouched] = useState(false);
+  const { theme } = useTheme();
+  const t = useTranslations();
 
-  const handleChange = (inputValue: string, countryData: any) => {
+  useEffect(() => {
+    if (value !== undefined && value !== phoneValue) {
+      setPhoneValue(value || "");
+      if (value) {
+        const detected = getCountryFromPhone(value);
+        if (detected) {
+          setCountry(detected.toLowerCase());
+        }
+      }
+    }
+  }, [value]);
+
+  const handleChange = (
+    inputValue: string,
+    countryData: any,
+    _event: React.ChangeEvent<HTMLInputElement>,
+    _formattedValue: string,
+  ) => {
     setPhoneValue(inputValue);
 
-    // Update internal country state
-    if (countryData && countryData.countryCode) {
-      setCountry(countryData.countryCode);
+    const selectedCountry =
+      countryData?.countryCode?.toLowerCase() || country;
+    if (selectedCountry && selectedCountry !== country) {
+      setCountry(selectedCountry);
     }
 
-    onChange("+" + inputValue);
+    // Detect if user entered a number with a different international calling code
+    const detectedCountry = getCountryFromPhone(inputValue, selectedCountry);
+    if (detectedCountry && detectedCountry.toLowerCase() !== country) {
+      setCountry(detectedCountry.toLowerCase());
+    }
+
+    const valid = validatePhoneForCountry(inputValue, selectedCountry);
+    onChange(inputValue, valid);
   };
 
-  // Inject styles globally for this component
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement>,
+    _data: any,
+  ) => {
+    setIsTouched(true);
+    onBlur?.(e);
+  };
+
+  // Inject dark mode styles
   useEffect(() => {
-    const styleId = "react-phone-input-custom-styles";
-    if (!document.getElementById(styleId)) {
+    if (!document.getElementById("phone-input-dark-mode-styles")) {
       const styleElement = document.createElement("style");
-      styleElement.id = styleId;
-      styleElement.innerHTML = customStyles;
+      styleElement.id = "phone-input-dark-mode-styles";
+      styleElement.innerHTML = darkModeStyles;
       document.head.appendChild(styleElement);
 
       return () => {
-        const styleTag = document.getElementById(styleId);
+        const styleTag = document.getElementById(
+          "phone-input-dark-mode-styles",
+        );
         if (styleTag) {
           document.head.removeChild(styleTag);
         }
@@ -182,32 +181,53 @@ const CustomPhoneInput = ({
     }
   }, []);
 
+  const hasEnteredNumber = !isPhoneEmpty(phoneValue);
+  const isValid = hasEnteredNumber ? validatePhoneForCountry(phoneValue, country) : true;
+  const isInvalid = isTouched && hasEnteredNumber && !isValid;
+
   return (
-    <div className="w-full relative group">
-      <div dir="ltr" className="w-full">
+    <div className=" !w-full">
+      <div
+        dir="ltr"
+        className={`border-none w-full focus-visible:!border-none focus:border-none border-gray-300 dark:border-gray-700 rounded-md`}
+      >
         <PhoneInput
           autoFormat
           enableAreaCodeStretch
+          containerClass="w-full"
+          inputClass={`w-full border dark:bg-gray-800 dark:text-gray-200 ${theme === "dark" ? "dark:border-gray-700" : "border-gray-300"
+            }`}
+          buttonClass="rounded-md !bg-transparent mr-[2rem]"
+          searchClass="mr-2"
+          dropdownClass="w-full !overflow-x-hidden"
           enableSearch
           disableSearchIcon
           value={phoneValue}
+          country={country || undefined}
           onChange={handleChange}
-          disabled={disabled}
-          placeholder={placeholder || "Enter phone number"}
-          containerClass="!w-full"
-          dropdownClass="!w-full"
-          inputClass={inputClassName}
-          countryCodeEditable
+          onBlur={handleBlur}
+          isValid={(inputNumber, countryData: any) => {
+            if (!inputNumber) return true;
+            if (isPhoneEmpty(inputNumber)) return true;
+            const currentCountry = countryData?.countryCode || country;
+            return validatePhoneForCountry(inputNumber, currentCountry);
+          }}
           inputProps={{
             name: name,
             required: true,
-            autoFocus: false
+            placeholder: placeholder,
+            disabled: disabled,
           }}
-          country={country}
+          countryCodeEditable
           preferredCountries={["sa", "ae", "us", "gb", "eg"]}
           excludeCountries={["il"]}
         />
       </div>
+      {(error || (showInlineError && isInvalid)) && (
+        <p className="mt-1.5 text-xs text-red-500 font-medium">
+          {error || t("Validations.invalid_phone_format")}
+        </p>
+      )}
     </div>
   );
 };

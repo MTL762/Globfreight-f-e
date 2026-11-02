@@ -1,13 +1,26 @@
-import { noSchema } from "./String.schema";
+import { PhoneNotReq, PhoneReq } from "./String.schema";
 
-// The regex pattern validates Qatar phone numbers:
-// - Mobile numbers starting with 3, 5, 6, or 7
-// - Followed by 7 digits (8 digits total)
-// - Can optionally start with country code +974
+/**
+ * Validates Saudi Arabia phone numbers based on country key (+966)
+ */
+export function SaudiPhoneSchema(t?: TFunction, required: boolean = false) {
+  return required ? PhoneReq(t, "SA") : PhoneNotReq(t, "SA");
+}
 
-export function QatarPhoneSchema(t?: (key: string) => string) {
-  if (t) {
-    return noSchema();
-  }
-  return noSchema();
+/**
+ * Validates Qatar phone numbers based on country key (+974)
+ */
+export function QatarPhoneSchema(t?: (key: string) => string, required: boolean = false) {
+  return required ? PhoneReq(t as any, "QA") : PhoneNotReq(t as any, "QA");
+}
+
+/**
+ * Validates phone numbers for any given country code
+ */
+export function PhoneInputSchema(
+  t?: TFunction,
+  countryCode?: string,
+  required: boolean = false
+) {
+  return required ? PhoneReq(t, countryCode) : PhoneNotReq(t, countryCode);
 }
