@@ -42,7 +42,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
           //onInfo: true,
         }}
         cardHeader={t("Faq")}
-        filters={[{ "name": "name", "type": "text", "width": 3 }]}
+        filters={[{ "name": "search", "type": "text", "width": 3 }]}
       />
     </>
   );
