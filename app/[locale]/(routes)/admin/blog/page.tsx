@@ -10,10 +10,10 @@ import { PROJECT_NAME } from "@/utils/config";
 // export const generateStaticParams = GenerateStaticParams;
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
-  const headerName= t("Blog");
+  const headerName = t("Blog");
   return {
-     title:  headerName +PROJECT_NAME,
-  description: "Manage " + headerName + " items in the HR dashboard"
+    title: headerName + PROJECT_NAME,
+    description: "Manage " + headerName + " items in the HR dashboard"
   };
 }
 async function page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
@@ -30,7 +30,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
 
   return (
     <>
-    <CustomHeader />
+      <CustomHeader />
       <TableBasic
         data={filteredData}
         columns={BlogColumns}
@@ -43,7 +43,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
           onInfo: true,
         }}
         cardHeader={t("Blog")}
-        filters={[{"name":"title","type":"text","width":3}]}
+        filters={[{ "name": "search", "type": "text", "width": 3 }]}
       />
     </>
   );
