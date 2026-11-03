@@ -28,7 +28,7 @@ interface PublicBlogDetailProps {
   post: BlogPost;
   relatedPosts: BlogPost[];
   locale: string;
-  slugsByLocale?: Record<string, string>;
+  slugsByLocale?: Partial<Record<string, string>>;
   alternatesLanguages?: Record<string, string>;
 }
 

@@ -1,165 +1,325 @@
+import { cache } from "react";
+import { fetchHelper } from "@/api/fetch";
+import { redirect } from "next/navigation";
 import { SITE_URL, SYSTEM_LOCALES, SystemLocale } from "./seo";
 
-/**
- * Resolves translated blog post slugs across all supported system locales.
- * Handles multilingual slug objects and cross-locale API queries with caching.
- */
-export async function resolveAllPostSlugs(
-  slug: string,
-  post?: any
-): Promise<Record<SystemLocale, string>> {
-  const result: Partial<Record<SystemLocale, string>> = {};
-  const apiBase = (process.env.API_BASE_URL || process.env.baseUrl || "https://api.globfreight.com").replace(/\/$/, "");
+const API_BASE = (
+  process.env.API_BASE_URL ||
+  process.env.baseUrl ||
+  "https://api.globfreight.com"
+).replace(/\/$/, "");
 
-  // 1. If post.slug is already an object with translated values
-  if (post && typeof post.slug === "object" && post.slug !== null) {
-    let hasAll = true;
-    for (const loc of SYSTEM_LOCALES) {
-      const s = post.slug[loc] || post.slug.en || post.slug.ar;
-      if (s) {
-        result[loc] = s;
-      } else {
-        hasAll = false;
-      }
-    }
-    if (hasAll) return result as Record<SystemLocale, string>;
+export function safeDecodeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug);
+  } catch {
+    return slug;
   }
+}
 
-  const cleanSlug = encodeURIComponent(decodeURIComponent(slug));
+export function encodeSlug(slug: string): string {
+  return encodeURIComponent(safeDecodeSlug(slug.trim()));
+}
 
-  // 2. Query API in parallel for each locale with caching
-  await Promise.all(
-    SYSTEM_LOCALES.map(async (loc) => {
-      if (result[loc]) return;
-      try {
-        const res = await fetch(`${apiBase}/blog-posts/slug/${cleanSlug}`, {
-          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc },
-          next: { revalidate: 3600 }
-        });
-        if (res.ok) {
-          const json = await res.json();
-          if (json?.data?.slug) {
-            result[loc] = json.data.slug;
-            return;
-          }
-        }
-      } catch {}
-
-      // Fallback
-      result[loc] = typeof post?.slug === "string" ? post.slug : slug;
-    })
+export function isValidSlugValue(val: unknown): val is string {
+  if (typeof val !== "string") return false;
+  const trimmed = val.trim();
+  return (
+    trimmed.length > 0 &&
+    trimmed.toLowerCase() !== "object-object" &&
+    trimmed.toLowerCase() !== "[object object]" &&
+    trimmed !== "undefined" &&
+    trimmed !== "null"
   );
+}
 
-  return result as Record<SystemLocale, string>;
+export function getStrictLocalizedValue(val: unknown, locale: string): string {
+  if (!val) return "";
+  if (typeof val === "string") return isValidSlugValue(val) ? val.trim() : "";
+  if (typeof val === "object" && val !== null) {
+    const localized = (val as Record<string, unknown>)[locale];
+    return isValidSlugValue(localized) ? localized.trim() : "";
+  }
+  return "";
 }
 
 /**
- * Resolves translated category slugs across all supported system locales.
+ * Resolves translated slugs across all supported locales for a given resource.
  */
-export async function resolveAllCategorySlugs(
-  slug: string,
-  category?: any
-): Promise<Record<SystemLocale, string>> {
+async function fetchTranslatedSlugs({
+  slug,
+  entity,
+  titleKey,
+  endpointPath,
+  currentLocale
+}: {
+  slug: string;
+  entity: any;
+  titleKey: "title" | "name";
+  endpointPath: "blog-posts/slug" | "categories/slug";
+  currentLocale: string;
+}): Promise<Partial<Record<SystemLocale, string>>> {
   const result: Partial<Record<SystemLocale, string>> = {};
-  const apiBase = (process.env.API_BASE_URL || process.env.baseUrl || "https://api.globfreight.com").replace(/\/$/, "");
+  const publishedLocales: string[] | null =
+    Array.isArray(entity?.published_locales) && entity.published_locales.length > 0
+      ? entity.published_locales
+      : null;
 
-  // 1. If category.slug is already an object
-  if (category && typeof category.slug === "object" && category.slug !== null) {
-    let hasAll = true;
+  // If entity.slug is already a localized object
+  if (entity && typeof entity.slug === "object" && entity.slug !== null) {
     for (const loc of SYSTEM_LOCALES) {
-      const s = category.slug[loc] || category.slug.en || category.slug.ar;
-      if (s) {
-        result[loc] = s;
-      } else {
-        hasAll = false;
-      }
+      if (publishedLocales && !publishedLocales.includes(loc)) continue;
+      const s = getStrictLocalizedValue(entity.slug, loc);
+      const label = getStrictLocalizedValue(entity[titleKey], loc);
+      if (s && label) result[loc] = s;
     }
-    if (hasAll) return result as Record<SystemLocale, string>;
+    return result;
   }
 
-  const cleanSlug = encodeURIComponent(decodeURIComponent(slug));
+  // Set current locale from the already-fetched entity
+  const currentSlug = getStrictLocalizedValue(entity?.slug, currentLocale);
+  const currentLabel = getStrictLocalizedValue(entity?.[titleKey], currentLocale);
+  if (currentSlug && currentLabel && SYSTEM_LOCALES.includes(currentLocale as SystemLocale)) {
+    result[currentLocale as SystemLocale] = currentSlug;
+  }
+
+  const cleanSlug = encodeSlug(slug);
 
   await Promise.all(
     SYSTEM_LOCALES.map(async (loc) => {
       if (result[loc]) return;
+      if (publishedLocales && !publishedLocales.includes(loc)) return;
+
       try {
-        const res = await fetch(`${apiBase}/categories/slug/${cleanSlug}`, {
+        const res = await fetch(`${API_BASE}/${endpointPath}/${cleanSlug}?locale=${loc}`, {
           headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc },
-          next: { revalidate: 3600 }
+          cache: "no-store"
         });
-        if (res.ok) {
-          const json = await res.json();
-          if (json?.data?.slug) {
-            result[loc] = json.data.slug;
+        const json = await res.json().catch(() => null);
+
+        if (res.status === 301 || json?.status === 301 || json?.data?.is_redirect) {
+          const redirected = json?.data?.new_slug || json?.data?.current_slug;
+          if (isValidSlugValue(redirected)) result[loc] = redirected.trim();
+          return;
+        }
+
+        if (res.ok && json?.data) {
+          const data = json.data;
+          if (
+            Array.isArray(data.published_locales) &&
+            data.published_locales.length > 0 &&
+            !data.published_locales.includes(loc)
+          ) {
             return;
           }
+          const s = getStrictLocalizedValue(data.slug, loc);
+          const label = getStrictLocalizedValue(data[titleKey], loc);
+          if (s && label) result[loc] = s;
         }
       } catch {}
-
-      // Fallback
-      result[loc] = typeof category?.slug === "string" ? category.slug : slug;
     })
   );
 
-  return result as Record<SystemLocale, string>;
+  return result;
 }
 
-/**
- * Builds alternating hreflang link objects for a blog post
- */
-export function getBlogPostAlternates(
-  slugsByLocale: Record<string, string>,
+function buildAlternates(
+  slugsByLocale: Partial<Record<string, string>>,
   currentLocale: string,
+  basePath: "blog" | "blog/category",
   publishedLocales?: string[]
 ) {
   const languages: Record<string, string> = {};
   const allowedLocales =
     Array.isArray(publishedLocales) && publishedLocales.length > 0
-      ? SYSTEM_LOCALES.filter(loc => publishedLocales.includes(loc))
+      ? SYSTEM_LOCALES.filter((loc) => publishedLocales.includes(loc))
       : SYSTEM_LOCALES;
 
   for (const loc of allowedLocales) {
-    const s = slugsByLocale[loc] || slugsByLocale.en || Object.values(slugsByLocale)[0];
-    if (s) {
-      languages[loc] = `${SITE_URL}/${loc}/blog/${encodeURIComponent(decodeURIComponent(s))}`;
+    const s = slugsByLocale[loc];
+    if (isValidSlugValue(s)) {
+      languages[loc] = `${SITE_URL}/${loc}/${basePath}/${encodeSlug(s)}`;
     }
   }
-  const defaultSlug =
-    (allowedLocales.includes("en" as any) ? slugsByLocale.en : undefined) ||
-    slugsByLocale[allowedLocales[0]] ||
-    Object.values(slugsByLocale)[0];
-  if (defaultSlug) {
-    const defaultLoc = allowedLocales.includes("en" as any) ? "en" : allowedLocales[0] || "en";
-    languages["x-default"] = `${SITE_URL}/${defaultLoc}/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
+
+  const defaultLoc =
+    (allowedLocales.includes("en" as any) && isValidSlugValue(slugsByLocale.en)
+      ? "en"
+      : undefined) || allowedLocales.find((loc) => isValidSlugValue(slugsByLocale[loc]));
+
+  if (defaultLoc && isValidSlugValue(slugsByLocale[defaultLoc])) {
+    languages["x-default"] = `${SITE_URL}/${defaultLoc}/${basePath}/${encodeSlug(
+      slugsByLocale[defaultLoc]!
+    )}`;
   }
 
-  const currentSlug = slugsByLocale[currentLocale] || defaultSlug;
+  const currentSlug =
+    slugsByLocale[currentLocale] || (defaultLoc ? slugsByLocale[defaultLoc] : "") || "";
 
   return {
-    canonical: `${SITE_URL}/${currentLocale}/blog/${encodeURIComponent(decodeURIComponent(currentSlug))}`,
+    canonical: currentSlug
+      ? `${SITE_URL}/${currentLocale}/${basePath}/${encodeSlug(currentSlug)}`
+      : `${SITE_URL}/${currentLocale}/blog`,
     languages
   };
 }
 
 /**
- * Builds alternating hreflang link objects for a category
+ * Memoized per-request resolver for Blog Post dynamic route (shared between generateMetadata & Page).
  */
-export function getCategoryAlternates(
-  slugsByLocale: Record<string, string>,
-  currentLocale: string
-) {
-  const languages: Record<string, string> = {};
-  for (const loc of SYSTEM_LOCALES) {
-    const s = slugsByLocale[loc] || slugsByLocale.en || Object.values(slugsByLocale)[0];
-    languages[loc] = `${SITE_URL}/${loc}/blog/category/${encodeURIComponent(decodeURIComponent(s))}`;
+const fetchAndResolvePost = cache(async (slug: string, locale: string) => {
+  const res = await fetchHelper({
+    endPoint: ["blogPostsSlug", encodeSlug(slug)],
+    method: "GET",
+    locale: locale as any
+  }).catch(() => ({ success: false, status: 500 }));
+
+  const post = res?.success && res?.data && "id" in res.data ? res.data : null;
+  const slugsByLocale = post
+    ? await fetchTranslatedSlugs({
+        slug,
+        entity: post,
+        titleKey: "title",
+        endpointPath: "blog-posts/slug",
+        currentLocale: locale
+      })
+    : {};
+  const alternates = buildAlternates(slugsByLocale, locale, "blog", post?.published_locales);
+
+  return { res, post, slugsByLocale, alternates };
+});
+
+/**
+ * Memoized per-request resolver for Category dynamic route (shared between generateMetadata & Page).
+ */
+const fetchAndResolveCategory = cache(async (slug: string, locale: string) => {
+  const res = await fetchHelper({
+    endPoint: ["categoriesSlug", encodeSlug(slug)],
+    method: "GET",
+    locale: locale as any
+  }).catch(() => null);
+
+  let category = res?.data && (res.data.id || res.data.name) ? res.data : null;
+
+  if (!category && res?.status !== 301 && !res?.isRedirect) {
+    const listRes = await fetchHelper({
+      endPoint: ["categories"],
+      method: "GET",
+      locale: locale as any
+    }).catch(() => null);
+    const decoded = safeDecodeSlug(slug).toLowerCase();
+    category =
+      (Array.isArray(listRes?.data) ? listRes.data : []).find((cat: any) => {
+        const cSlug = getStrictLocalizedValue(cat.slug, locale);
+        return (cSlug && cSlug.toLowerCase() === decoded) || String(cat.id) === decoded;
+      }) || null;
   }
-  const defaultSlug = slugsByLocale.en || Object.values(slugsByLocale)[0];
-  languages["x-default"] = `${SITE_URL}/en/blog/category/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
 
-  const currentSlug = slugsByLocale[currentLocale] || defaultSlug;
+  const slugsByLocale = category
+    ? await fetchTranslatedSlugs({
+        slug,
+        entity: category,
+        titleKey: "name",
+        endpointPath: "categories/slug",
+        currentLocale: locale
+      })
+    : {};
+  const alternates = buildAlternates(slugsByLocale, locale, "blog/category");
 
-  return {
-    canonical: `${SITE_URL}/${currentLocale}/blog/category/${encodeURIComponent(decodeURIComponent(currentSlug))}`,
-    languages
-  };
+  return { res, category, slugsByLocale, alternates };
+});
+
+function guardDynamicEntity({
+  slug,
+  locale,
+  basePath,
+  titleKey,
+  res,
+  entity,
+  slugsByLocale,
+  enforceRedirects
+}: {
+  slug: string;
+  locale: string;
+  basePath: "blog" | "blog/category";
+  titleKey: "title" | "name";
+  res: any;
+  entity: any;
+  slugsByLocale: Partial<Record<SystemLocale, string>>;
+  enforceRedirects: boolean;
+}) {
+  if (res?.status === 301 || res?.isRedirect) {
+    const newSlug = res?.data?.new_slug || res?.newSlug;
+    if (isValidSlugValue(newSlug)) {
+      redirect(`/${locale}/${basePath}/${encodeSlug(newSlug)}`);
+    }
+    if (enforceRedirects) redirect(`/${locale}`);
+  }
+
+  if (!enforceRedirects) {
+    return entity ? slugsByLocale[locale as SystemLocale] || "" : "";
+  }
+
+  const publishedLocales: string[] | undefined = Array.isArray(entity?.published_locales)
+    ? entity.published_locales
+    : undefined;
+  const isPublished =
+    !publishedLocales || publishedLocales.length === 0 || publishedLocales.includes(locale);
+
+  const strictLabel = getStrictLocalizedValue(entity?.[titleKey], locale);
+  const strictSlug = getStrictLocalizedValue(entity?.slug, locale);
+  const canonicalSlug = strictSlug || slugsByLocale[locale as SystemLocale];
+
+  if (!entity || !isPublished || !strictLabel || !canonicalSlug) {
+    redirect(`/${locale}`);
+  }
+
+  if (safeDecodeSlug(slug) !== safeDecodeSlug(canonicalSlug)) {
+    redirect(`/${locale}/${basePath}/${encodeSlug(canonicalSlug)}`);
+  }
+
+  return canonicalSlug;
+}
+
+export async function resolveBlogPostPage(
+  slug: string,
+  locale: string,
+  enforceRedirects = true
+) {
+  const { res, post, slugsByLocale, alternates } = await fetchAndResolvePost(slug, locale);
+  const currentCanonicalSlug = guardDynamicEntity({
+    slug,
+    locale,
+    basePath: "blog",
+    titleKey: "title",
+    res,
+    entity: post,
+    slugsByLocale,
+    enforceRedirects
+  });
+
+  return { post, currentCanonicalSlug, slugsByLocale, alternates };
+}
+
+export async function resolveCategoryPage(
+  slug: string,
+  locale: string,
+  enforceRedirects = true
+) {
+  const { res, category, slugsByLocale, alternates } = await fetchAndResolveCategory(
+    slug,
+    locale
+  );
+  const currentCanonicalSlug = guardDynamicEntity({
+    slug,
+    locale,
+    basePath: "blog/category",
+    titleKey: "name",
+    res,
+    entity: category,
+    slugsByLocale,
+    enforceRedirects
+  });
+
+  return { category, currentCanonicalSlug, slugsByLocale, alternates };
 }
