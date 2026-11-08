@@ -28,6 +28,11 @@ export default function BlogFormPage({ data }: { data?: BlogType }) {
           title: t("SEO Settings"),
           multiLang: true,
           width: 12
+        },
+        {
+          id: "schema",
+          title: t("Schema Markup"),
+          width: 12
         }
       ]}
       inputs={inputs}

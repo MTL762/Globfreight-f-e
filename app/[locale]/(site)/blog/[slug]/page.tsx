@@ -52,7 +52,7 @@ export default async function BlogDetailPage(props: {
     .slice(0, 3);
 
   return (
-    <PublicShell>
+    <PublicShell alternateLinks={alternates.languages}>
       <DynamicSlugPageSeo
         links={alternates.languages}
         schemas={buildBlogPostSchemas(post, locale, alternates)}

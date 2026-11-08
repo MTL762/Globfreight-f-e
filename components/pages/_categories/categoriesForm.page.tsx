@@ -28,6 +28,11 @@ export default function CategoriesFormPage({ data }: { data?: CategoriesType }) 
           title: t("SEO Settings"),
           multiLang: true,
           width: 12
+        },
+        {
+          id: "schema",
+          title: t("Schema Markup"),
+          width: 12
         }
       ]}
       inputs={inputs}

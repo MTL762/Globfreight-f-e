@@ -8,7 +8,11 @@ import { HeaderLanguageMenu } from "./header-language-menu";
 import { HeaderMobileMenu } from "./header-mobile-menu";
 import ThemeSwitcher from "@/components/theme-switcher";
 
-export async function SiteHeader() {
+export async function SiteHeader({
+  alternateLinks
+}: {
+  alternateLinks?: Record<string, string> | null;
+} = {}) {
   const t = await getTranslations("Nav");
   const locale = await getLocale();
 
@@ -96,7 +100,7 @@ export async function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <HeaderLanguageMenu />
+          <HeaderLanguageMenu alternateLinks={alternateLinks} />
 
           <ThemeSwitcher />
 

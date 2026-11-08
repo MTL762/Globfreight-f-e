@@ -34,11 +34,19 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
 
           let directVal: any;
           if (rawDirect !== null && typeof rawDirect === "object" && !Array.isArray(rawDirect)) {
-            directVal = rawDirect[code] ?? rawDirect.en ?? rawDirect.ar ?? Object.values(rawDirect)[0];
+            if (item.name === "seo_canonical_url") {
+              directVal = rawDirect[code] ?? "";
+            } else {
+              directVal = rawDirect[code] ?? rawDirect.en ?? rawDirect.ar ?? Object.values(rawDirect)[0];
+            }
           } else if (Array.isArray(rawDirect)) {
             directVal = code === "en" ? rawDirect : [];
           } else if (typeof rawDirect === "string") {
-            directVal = rawDirect;
+            if (item.name === "seo_canonical_url") {
+              directVal = code === "en" || code === "ar" ? rawDirect : "";
+            } else {
+              directVal = rawDirect;
+            }
           }
 
           const seoKey = item.name.startsWith("seo_") ? item.name.replace("seo_", "") : null;
@@ -46,9 +54,17 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
           if (seoKey && dataObj.seo) {
             const rawSeo = dataObj.seo[seoKey];
             if (rawSeo !== null && typeof rawSeo === "object" && !Array.isArray(rawSeo)) {
-              seoVal = rawSeo[code] ?? rawSeo.en ?? rawSeo.ar ?? Object.values(rawSeo)[0];
+              if (item.name === "seo_canonical_url" || seoKey === "canonical_url") {
+                seoVal = rawSeo[code] ?? "";
+              } else {
+                seoVal = rawSeo[code] ?? rawSeo.en ?? rawSeo.ar ?? Object.values(rawSeo)[0];
+              }
             } else if (typeof rawSeo === "string") {
-              seoVal = rawSeo;
+              if (item.name === "seo_canonical_url" || seoKey === "canonical_url") {
+                seoVal = code === "en" || code === "ar" ? rawSeo : "";
+              } else {
+                seoVal = rawSeo;
+              }
             }
           }
 

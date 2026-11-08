@@ -77,14 +77,14 @@ export interface BlogPost {
   seo_meta_title?: string | MultilingualString;
   seo_meta_description?: string | MultilingualString;
   seo_focus_keyphrase?: string | MultilingualString;
-  seo_canonical_url?: string;
+  seo_canonical_url?: string | MultilingualString;
   seo_schema_markup_type?: string;
   seo?: {
     id?: number;
     meta_title?: string | MultilingualString | null;
     meta_description?: string | MultilingualString | null;
     focus_keyphrase?: string | MultilingualString | null;
-    canonical_url?: string | null;
+    canonical_url?: string | MultilingualString | null;
     schema_markup_type?: string | null;
     schema_markup?: string | object | null;
     og_title?: string | MultilingualString | null;

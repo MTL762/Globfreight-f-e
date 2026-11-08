@@ -28,7 +28,7 @@ export interface SubCategorySeo {
   meta_title?: LocalizedString;
   meta_description?: LocalizedString;
   focus_keyphrase?: LocalizedString;
-  canonical_url?: string | null;
+  canonical_url?: string | LocalizedString | null;
   schema_markup_type?: string | null;
   schema_markup?: string | object | null;
   og_title?: LocalizedString;

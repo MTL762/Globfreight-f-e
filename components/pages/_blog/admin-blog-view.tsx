@@ -113,7 +113,9 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
     excerpt ||
     "Globfreight supply chain and logistics intelligence article.";
   const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, previewLocale);
-  const canonicalUrl = post.seo?.canonical_url || post.seo_canonical_url || (currentSlug ? `https://globfreight.com${publicPath}` : "");
+  const canonicalUrl =
+    getBlogText(post.seo?.canonical_url || post.seo_canonical_url, previewLocale) ||
+    (currentSlug ? `https://globfreight.com${publicPath}` : "");
   const ogTitle = getBlogText(post.seo?.og_title, previewLocale) || metaTitle;
   const ogDescription = getBlogText(post.seo?.og_description, previewLocale) || metaDescription;
   const ogImage = post.seo?.og_image || postImage;

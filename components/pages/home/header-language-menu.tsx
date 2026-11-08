@@ -2,6 +2,10 @@
 
 import LanguageSwitcher from "@/components/language-switcher";
 
-export function HeaderLanguageMenu() {
-  return <LanguageSwitcher />;
+export function HeaderLanguageMenu({
+  alternateLinks
+}: {
+  alternateLinks?: Record<string, string> | null;
+} = {}) {
+  return <LanguageSwitcher initialAlternateLinks={alternateLinks} />;
 }

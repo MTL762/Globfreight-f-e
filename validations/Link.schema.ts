@@ -52,3 +52,15 @@ export function OptionalLinkSchema(t?: TFunction) {
     .optional()
     .nullable();
 }
+
+export function LocalizedOrOptionalLinkSchema(t?: TFunction) {
+  return z
+    .union([
+      OptionalLinkSchema(t),
+      z.record(z.string(), z.string().optional().nullable()),
+      z.null(),
+      z.undefined()
+    ])
+    .optional()
+    .nullable();
+}

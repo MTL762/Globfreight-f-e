@@ -28,17 +28,32 @@ export function extractFormNameInputs({
       if (dirtyFields && !dirtyFields[item]) return;
       if (data[item] == undefined) return;
 
-      // If the key directly matches a multiLang input (e.g. item === "image"), skip it because localized values are sent via language keys
       const isDirectMulti = inputs.find(input => input.name === item)?.multiLang;
-      if (isDirectMulti) return;
+      let baseName = item;
+      let isMulti = false;
+
+      if (isDirectMulti) {
+        if (
+          typeof data[item] === "object" &&
+          data[item] !== null &&
+          !Array.isArray(data[item]) &&
+          !(data[item] instanceof File) &&
+          !(data[item] instanceof Blob)
+        ) {
+          baseName = item;
+          isMulti = true;
+        } else {
+          return;
+        }
+      } else {
+        baseName = item.slice(0, -2);
+        isMulti = Boolean(inputs.find(input => input.name === baseName)?.multiLang);
+      }
 
       if (item.includes("phone") || item.includes("Phone")) {
         if (data[item]) formdata.append(item, `${data[item]}`);
         return;
       }
-
-      const baseName = item.slice(0, -2);
-      const isMulti = inputs.find(input => input.name === baseName)?.multiLang;
 
       if (isMulti) {
         if (processedMultiLang.has(baseName)) return;
@@ -47,7 +62,10 @@ export function extractFormNameInputs({
         FORM_LANGUAGES.forEach(({ code, key }) => {
           const langKey = `${baseName}${key}`;
           const isDirty = dirtyFields ? Boolean(dirtyFields[langKey]) : false;
-          const val = data[langKey];
+          const rawDirectObj = typeof data[baseName] === "object" && data[baseName] !== null && !Array.isArray(data[baseName]) ? data[baseName] : undefined;
+          const seoKey = baseName.startsWith("seo_") ? baseName.replace(/^seo_/, "") : null;
+          const rawSeoObj = seoKey && typeof data.seo?.[seoKey] === "object" && data.seo[seoKey] !== null && !Array.isArray(data.seo[seoKey]) ? data.seo[seoKey] : undefined;
+          const val = data[langKey] !== undefined ? data[langKey] : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
           const hasValue = val !== undefined && val !== null && val !== "";
 
           if (hasValue || (isDirty && val === "")) {
@@ -214,15 +232,29 @@ export function extractFormNameInputs({
       if (data[item] === undefined || data[item] === null) return;
 
       const isDirectMulti = inputs.find(input => input.name === item)?.multiLang;
-      if (isDirectMulti) return;
+      let baseName = item;
+      let isMulti = false;
+
+      if (isDirectMulti) {
+        if (
+          typeof data[item] === "object" &&
+          data[item] !== null &&
+          !Array.isArray(data[item])
+        ) {
+          baseName = item;
+          isMulti = true;
+        } else {
+          return;
+        }
+      } else {
+        baseName = item.slice(0, -2);
+        isMulti = Boolean(inputs.find(input => input.name === baseName)?.multiLang);
+      }
 
       if (item.includes("phone") || item.includes("Phone")) {
         formdata[item] = `${data[item]}`;
         return;
       }
-
-      const baseName = item.slice(0, -2);
-      const isMulti = inputs.find(input => input.name === baseName)?.multiLang;
 
       if (isMulti) {
         if (processedMultiLang.has(baseName)) return;
@@ -232,7 +264,10 @@ export function extractFormNameInputs({
         FORM_LANGUAGES.forEach(({ code, key }) => {
           const langKey = `${baseName}${key}`;
           const isDirty = dirtyFields ? Boolean(dirtyFields[langKey]) : false;
-          const val = data[langKey];
+          const rawDirectObj = typeof data[baseName] === "object" && data[baseName] !== null && !Array.isArray(data[baseName]) ? data[baseName] : undefined;
+          const seoKey = baseName.startsWith("seo_") ? baseName.replace(/^seo_/, "") : null;
+          const rawSeoObj = seoKey && typeof data.seo?.[seoKey] === "object" && data.seo[seoKey] !== null && !Array.isArray(data.seo[seoKey]) ? data.seo[seoKey] : undefined;
+          const val = data[langKey] !== undefined ? data[langKey] : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
           const hasValue = val !== undefined && val !== null && val !== "";
           if (hasValue || (isDirty && val === "")) {
             if (baseName === "tags") {

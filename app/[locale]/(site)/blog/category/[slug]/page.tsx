@@ -59,7 +59,7 @@ export default async function BlogCategoryPage(props: {
   ]);
 
   return (
-    <PublicShell>
+    <PublicShell alternateLinks={alternates.languages}>
       <DynamicSlugPageSeo links={alternates.languages} schemas={[breadcrumbsJsonLd]} />
       <PublicBlogList
         posts={posts}

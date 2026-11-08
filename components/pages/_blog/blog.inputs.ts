@@ -158,7 +158,7 @@ export const BlogInputs = (): FormInput[] => {
     {
       name: "seo_canonical_url",
       type: "text",
-      multiLang: false,
+      multiLang: true,
       label: "Canonical URL",
       placeholder: "https://globfreight.com/blog/...",
       toolTip: "Canonical URL to prevent duplicate content (max 500 characters)",
@@ -188,23 +188,6 @@ export const BlogInputs = (): FormInput[] => {
       label: "Keywords",
       placeholder: "air freight, cargo, shipping, logistics",
       toolTip: "Comma-separated list of keywords for search engines",
-      cardId: "seo",
-      width: 6
-    },
-    {
-      name: "seo_schema_markup_type",
-      type: "select",
-      multiLang: false,
-      label: "Schema Markup Type",
-      toolTip: "Structured data schema type name (JSON-LD)",
-      defaultValue: "Article",
-      options: [
-        { label: "Article", value: "Article" },
-        { label: "BlogPosting", value: "BlogPosting" },
-        { label: "Service", value: "Service" },
-        { label: "FAQPage", value: "FAQPage" },
-        { label: "WebPage", value: "WebPage" }
-      ],
       cardId: "seo",
       width: 6
     },
@@ -298,7 +281,24 @@ export const BlogInputs = (): FormInput[] => {
       cardId: "seo",
       width: 6
     },
-    // Custom JSON-LD & FAQ Schema
+    // Schema Markup & FAQ Structured Data
+    {
+      name: "seo_schema_markup_type",
+      type: "select",
+      multiLang: false,
+      label: "Schema Markup Type",
+      toolTip: "Structured data schema type name (JSON-LD)",
+      defaultValue: "Article",
+      options: [
+        { label: "Article", value: "Article" },
+        { label: "BlogPosting", value: "BlogPosting" },
+        { label: "Service", value: "Service" },
+        { label: "FAQPage", value: "FAQPage" },
+        { label: "WebPage", value: "WebPage" }
+      ],
+      cardId: "schema",
+      width: 12
+    },
     {
       name: "seo_schema_markup",
       type: "textarea",
@@ -306,7 +306,7 @@ export const BlogInputs = (): FormInput[] => {
       label: "Custom Schema Markup (JSON-LD)",
       placeholder: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\"\n}",
       toolTip: "Custom JSON-LD structured data script",
-      cardId: "seo",
+      cardId: "schema",
       width: 12
     },
     {
@@ -315,7 +315,7 @@ export const BlogInputs = (): FormInput[] => {
       multiLang: false,
       label: "Frequently Asked Questions (FAQ Selection)",
       toolTip: "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
-      cardId: "seo",
+      cardId: "schema",
       width: 12
     }
   ];

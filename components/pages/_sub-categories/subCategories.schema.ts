@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { StringNotReq, noSchema } from "@/validations/String.schema";
-import { OptionalLinkSchema } from "@/validations/Link.schema";
+import { OptionalLinkSchema, LocalizedOrOptionalLinkSchema } from "@/validations/Link.schema";
 import { PriceSchema } from "@/validations/Number.schema";
 
 export const SubCategoriesSchema = (t: TFunction) => {
@@ -50,7 +50,7 @@ export const SubCategoriesSchema = (t: TFunction) => {
     seo_focus_keyphraseNl: StringNotReq(),
     seo_focus_keyphraseFr: StringNotReq(),
     seo_focus_keyphraseDe: StringNotReq(),
-    seo_canonical_url: OptionalLinkSchema(t),
+    seo_canonical_url: LocalizedOrOptionalLinkSchema(t),
     seo_canonical_urlAr: OptionalLinkSchema(t),
     seo_canonical_urlEn: OptionalLinkSchema(t),
     seo_canonical_urlNl: OptionalLinkSchema(t),

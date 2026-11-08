@@ -23,9 +23,11 @@ const AlternateLinksContext = createContext<AlternateLinksContextValue>({
 });
 
 export function toRelativePathname(urlOrPath: string): string {
-  if (!urlOrPath.startsWith("http")) return urlOrPath;
+  if (!urlOrPath) return "/";
+  if (!urlOrPath.startsWith("http")) return urlOrPath.startsWith("/") ? urlOrPath : `/${urlOrPath}`;
   try {
-    return new URL(urlOrPath).pathname;
+    const parsed = new URL(urlOrPath);
+    return `${parsed.pathname}${parsed.search}`;
   } catch {
     return urlOrPath;
   }
@@ -68,13 +70,15 @@ export function useAlternateLinks() {
  */
 export function SetAlternateLinks({ links }: { links: Record<string, string> | null }) {
   const { setAlternateLinks } = useAlternateLinks();
+  const serialized = links ? JSON.stringify(links) : null;
 
   useEffect(() => {
     setAlternateLinks(links);
     return () => {
       setAlternateLinks(null);
     };
-  }, [links, setAlternateLinks]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serialized, setAlternateLinks]);
 
   return null;
 }
