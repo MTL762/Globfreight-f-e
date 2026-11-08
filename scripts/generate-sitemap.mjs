@@ -112,6 +112,43 @@ async function fetchBlogPostsAcrossLocales() {
   return postMap;
 }
 
+async function fetchServicesAcrossLocales() {
+  const serviceMap = new Map();
+
+  await Promise.all(
+    LOCALES.map(async (loc) => {
+      try {
+        const url = `${API_BASE_URL}/services`;
+        const res = await fetch(url, {
+          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc }
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const items = Array.isArray(json?.data) ? json.data : [];
+          for (const srv of items) {
+            if (!srv?.id) continue;
+            const existing = serviceMap.get(srv.id) || {
+              slugs: {},
+              lastmod: srv.updated_at || new Date().toISOString()
+            };
+            const srvSlug = typeof srv.slug === "object" && srv.slug !== null
+              ? srv.slug[loc] || srv.slug.en || srv.slug.ar || Object.values(srv.slug)[0]
+              : srv.slug || String(srv.id);
+
+            if (srvSlug) existing.slugs[loc] = srvSlug;
+            if (srv.updated_at) existing.lastmod = srv.updated_at;
+            serviceMap.set(srv.id, existing);
+          }
+        }
+      } catch (err) {
+        console.warn(chalk.yellow(`⚠️ Could not fetch services for locale ${loc}: ${err.message}`));
+      }
+    })
+  );
+
+  return serviceMap;
+}
+
 function buildXmlItem({ loc, alternates, lastmod, changefreq, priority }) {
   const lines = [
     "  <url>",
@@ -230,7 +267,41 @@ async function generateSitemap() {
     }
   }
 
-  // 4. Assemble complete XML
+  // 4. Dynamic Services across all locales
+  const serviceMap = await fetchServicesAcrossLocales();
+  console.log(chalk.green(`✓ Processed ${serviceMap.size} service entries across all locales`));
+
+  for (const [, { slugs, lastmod }] of serviceMap.entries()) {
+    const defaultSlug = slugs.en || Object.values(slugs)[0];
+    if (!defaultSlug) continue;
+
+    const alternates = LOCALES.map((locale) => {
+      const locSlug = slugs[locale] || defaultSlug;
+      return {
+        locale,
+        url: `${SITE_URL}/${locale}/services/${encodeURIComponent(decodeURIComponent(locSlug))}`
+      };
+    });
+    alternates.push({
+      locale: "x-default",
+      url: `${SITE_URL}/${DEFAULT_LOCALE}/services/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
+    });
+
+    const serviceDate = formatDate(lastmod || buildDate);
+
+    for (const locale of LOCALES) {
+      const locSlug = slugs[locale] || defaultSlug;
+      items.push({
+        loc: `${SITE_URL}/${locale}/services/${encodeURIComponent(decodeURIComponent(locSlug))}`,
+        alternates,
+        lastmod: serviceDate,
+        changefreq: "weekly",
+        priority: "0.85"
+      });
+    }
+  }
+
+  // 5. Assemble complete XML
   const xmlContent = [
     `<?xml version="1.0" encoding="UTF-8"?>`,
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`,

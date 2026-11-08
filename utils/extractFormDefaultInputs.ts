@@ -12,7 +12,7 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
         const langDefaults: Record<string, any> = {};
         const rawDirect = dataObj[item.name] ?? (item.name === "image" ? dataObj["images"] : undefined);
         FORM_LANGUAGES.forEach(({ code, key }) => {
-          if (item.name === "tags") {
+          if (item.name === "tags" || item.name === "features") {
             let tagsVal: string[] = [];
             if (rawDirect !== null && typeof rawDirect === "object" && !Array.isArray(rawDirect)) {
               const langTags = rawDirect[code];

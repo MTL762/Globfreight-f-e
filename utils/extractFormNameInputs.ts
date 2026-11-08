@@ -74,13 +74,22 @@ export function extractFormNameInputs({
             } else if (baseName === "tags") {
               const tagString = Array.isArray(val)
                 ? val
-                    .map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? ""))
-                    .filter(Boolean)
-                    .join(", ")
+                  .map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? ""))
+                  .filter(Boolean)
+                  .join(", ")
                 : `${val ?? ""}`;
               if (tagString || (isDirty && val === "")) {
                 formdata.append(`tags[${code}]`, tagString);
               }
+            } else if (baseName === "features") {
+              const featureList = Array.isArray(val)
+                ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
+                : typeof val === "string"
+                  ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
+                  : [];
+              featureList.forEach(item => {
+                formdata.append(`features[${code}][]`, item);
+              });
             } else if (Array.isArray(val)) {
               val.forEach(subVal => {
                 if (subVal instanceof File || subVal instanceof Blob) {
@@ -270,12 +279,12 @@ export function extractFormNameInputs({
           const val = data[langKey] !== undefined ? data[langKey] : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
           const hasValue = val !== undefined && val !== null && val !== "";
           if (hasValue || (isDirty && val === "")) {
-            if (baseName === "tags") {
+            if (baseName === "tags" || baseName === "features") {
               const tagList = Array.isArray(val)
                 ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
                 : typeof val === "string"
-                ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
-                : [];
+                  ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
+                  : [];
               langObj[code] = tagList;
             } else {
               langObj[code] = Array.isArray(val) ? (val as any) : `${val ?? ""}`;

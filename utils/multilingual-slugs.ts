@@ -56,7 +56,7 @@ async function fetchTranslatedSlugs({
   slug: string;
   entity: any;
   titleKey: "title" | "name";
-  endpointPath: "blog-posts/slug" | "categories/slug";
+  endpointPath: "blog-posts/slug" | "categories/slug" | "services/slug";
   currentLocale: string;
 }): Promise<Partial<Record<SystemLocale, string>>> {
   const result: Partial<Record<SystemLocale, string>> = {};
@@ -116,7 +116,7 @@ async function fetchTranslatedSlugs({
           const label = getStrictLocalizedValue(data[titleKey], loc);
           if (s && label) result[loc] = s;
         }
-      } catch {}
+      } catch { }
     })
   );
 
@@ -126,7 +126,7 @@ async function fetchTranslatedSlugs({
 function buildAlternates(
   slugsByLocale: Partial<Record<string, string>>,
   currentLocale: string,
-  basePath: "blog" | "blog/category",
+  basePath: "blog" | "blog/category" | "services",
   publishedLocales?: string[]
 ) {
   const languages: Record<string, string> = {};
@@ -159,7 +159,7 @@ function buildAlternates(
   return {
     canonical: currentSlug
       ? `${SITE_URL}/${currentLocale}/${basePath}/${encodeSlug(currentSlug)}`
-      : `${SITE_URL}/${currentLocale}/blog`,
+      : `${SITE_URL}/${currentLocale}/${basePath === "services" ? "services" : "blog"}`,
     languages
   };
 }
@@ -177,12 +177,12 @@ const fetchAndResolvePost = cache(async (slug: string, locale: string) => {
   const post = res?.success && res?.data && "id" in res.data ? res.data : null;
   const slugsByLocale = post
     ? await fetchTranslatedSlugs({
-        slug,
-        entity: post,
-        titleKey: "title",
-        endpointPath: "blog-posts/slug",
-        currentLocale: locale
-      })
+      slug,
+      entity: post,
+      titleKey: "title",
+      endpointPath: "blog-posts/slug",
+      currentLocale: locale
+    })
     : {};
   const alternates = buildAlternates(slugsByLocale, locale, "blog", post?.published_locales);
 
@@ -217,12 +217,12 @@ const fetchAndResolveCategory = cache(async (slug: string, locale: string) => {
 
   const slugsByLocale = category
     ? await fetchTranslatedSlugs({
-        slug,
-        entity: category,
-        titleKey: "name",
-        endpointPath: "categories/slug",
-        currentLocale: locale
-      })
+      slug,
+      entity: category,
+      titleKey: "name",
+      endpointPath: "categories/slug",
+      currentLocale: locale
+    })
     : {};
   const alternates = buildAlternates(slugsByLocale, locale, "blog/category");
 
@@ -241,15 +241,15 @@ function guardDynamicEntity({
 }: {
   slug: string;
   locale: string;
-  basePath: "blog" | "blog/category";
+  basePath: "blog" | "blog/category" | "services";
   titleKey: "title" | "name";
   res: any;
   entity: any;
   slugsByLocale: Partial<Record<SystemLocale, string>>;
   enforceRedirects: boolean;
 }) {
-  if (res?.status === 301 || res?.isRedirect) {
-    const newSlug = res?.data?.new_slug || res?.newSlug;
+  if (res?.status === 301 || res?.isRedirect || res?.is_redirect || res?.data?.is_redirect) {
+    const newSlug = res?.data?.new_slug || res?.new_slug || res?.newSlug;
     if (isValidSlugValue(newSlug)) {
       redirect(`/${locale}/${basePath}/${encodeSlug(newSlug)}`);
     }
@@ -279,6 +279,69 @@ function guardDynamicEntity({
   }
 
   return canonicalSlug;
+}
+
+/**
+ * Memoized per-request resolver for Service dynamic route.
+ */
+const fetchAndResolveService = cache(async (slug: string, locale: string) => {
+  const res = await fetchHelper({
+    endPoint: ["servicesSlug", encodeSlug(slug)],
+    method: "GET",
+    locale: locale as any
+  }).catch(() => null);
+
+  let service = res?.data && (res.data.id || res.data.name) ? res.data : null;
+
+  if (!service && res?.status !== 301 && !res?.isRedirect && !res?.is_redirect && !res?.data?.is_redirect) {
+    const listRes = await fetchHelper({
+      endPoint: ["services"],
+      method: "GET",
+      locale: locale as any
+    }).catch(() => null);
+    const decoded = safeDecodeSlug(slug).toLowerCase();
+    service =
+      (Array.isArray(listRes?.data) ? listRes.data : []).find((srv: any) => {
+        const sSlug = getStrictLocalizedValue(srv.slug, locale);
+        return (sSlug && sSlug.toLowerCase() === decoded) || String(srv.id) === decoded;
+      }) || null;
+  }
+
+  const slugsByLocale = service
+    ? await fetchTranslatedSlugs({
+      slug,
+      entity: service,
+      titleKey: "name",
+      endpointPath: "services/slug",
+      currentLocale: locale
+    })
+    : {};
+  const alternates = buildAlternates(slugsByLocale, locale, "services", service?.published_locales);
+
+  return { res, service, slugsByLocale, alternates };
+});
+
+export async function resolveServicePage(
+  slug: string,
+  locale: string,
+  enforceRedirects = true
+) {
+  const { res, service, slugsByLocale, alternates } = await fetchAndResolveService(
+    slug,
+    locale
+  );
+  const currentCanonicalSlug = guardDynamicEntity({
+    slug,
+    locale,
+    basePath: "services",
+    titleKey: "name",
+    res,
+    entity: service,
+    slugsByLocale,
+    enforceRedirects
+  });
+
+  return { service, currentCanonicalSlug, slugsByLocale, alternates };
 }
 
 export async function resolveBlogPostPage(

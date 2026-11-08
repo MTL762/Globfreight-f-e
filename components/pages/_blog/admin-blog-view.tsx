@@ -112,8 +112,7 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
     getBlogText(post.seo?.meta_description || post.seo_meta_description, previewLocale) ||
     excerpt ||
     "Globfreight supply chain and logistics intelligence article.";
-  const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, previewLocale);
-  const canonicalUrl =
+  const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, previewLocale); const canonicalUrl =
     getBlogText(post.seo?.canonical_url || post.seo_canonical_url, previewLocale) ||
     (currentSlug ? `https://globfreight.com${publicPath}` : "");
   const ogTitle = getBlogText(post.seo?.og_title, previewLocale) || metaTitle;
@@ -303,8 +302,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
               type="button"
               onClick={() => setActiveTab("preview")}
               className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "preview"
-                  ? "bg-background text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
                 }`}
             >
               <Eye className="h-3.5 w-3.5 text-primary" />
@@ -315,8 +314,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
               type="button"
               onClick={() => setActiveTab("seo")}
               className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "seo"
-                  ? "bg-background text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
                 }`}
             >
               <Search className="h-3.5 w-3.5 text-blue-500" />
@@ -327,8 +326,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
               type="button"
               onClick={() => setActiveTab("metadata")}
               className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeTab === "metadata"
-                  ? "bg-background text-foreground shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground"
                 }`}
             >
               <BarChart3 className="h-3.5 w-3.5 text-emerald-500" />
@@ -352,8 +351,8 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
                   type="button"
                   onClick={() => setPreviewLocale(lang.code)}
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${isSelected
-                      ? "bg-primary text-primary-foreground shadow-xs ring-2 ring-primary/30"
-                      : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/50"
+                    ? "bg-primary text-primary-foreground shadow-xs ring-2 ring-primary/30"
+                    : "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/50"
                     }`}
                   title={`${lang.label} - ${coverage.hasContent ? "Has Content" : "No Content"}`}
                 >
@@ -421,10 +420,10 @@ export default function AdminBlogView({ blogData }: AdminBlogViewProps) {
           <div className="flex justify-center w-full transition-all duration-300">
             <div
               className={`transition-all duration-300 w-full ${deviceMode === "desktop"
-                  ? "max-w-5xl"
-                  : deviceMode === "tablet"
-                    ? "max-w-2xl border-4 border-muted rounded-3xl shadow-xl overflow-hidden"
-                    : "max-w-[400px] border-8 border-zinc-800 dark:border-zinc-700 rounded-[44px] shadow-2xl overflow-hidden bg-background"
+                ? "max-w-5xl"
+                : deviceMode === "tablet"
+                  ? "max-w-2xl border-4 border-muted rounded-3xl shadow-xl overflow-hidden"
+                  : "max-w-[400px] border-8 border-zinc-800 dark:border-zinc-700 rounded-[44px] shadow-2xl overflow-hidden bg-background"
                 }`}
             >
               {/* Smartphone Bezel Header when in mobile mode */}

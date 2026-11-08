@@ -185,5 +185,75 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Failed to include blog posts in sitemap:", err);
   }
 
+  // 4. Dynamic Services with localized slugs and hreflang alternates
+  try {
+    const serviceResponses = await Promise.all(
+      SYSTEM_LOCALES.map(async (loc) => {
+        try {
+          const res = await fetch(`${apiBase}/services`, {
+            headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc },
+            next: { revalidate: 3600 }
+          });
+          if (res.ok) {
+            const json = await res.json();
+            return { loc, items: Array.isArray(json?.data) ? json.data : [] };
+          }
+        } catch {}
+        return { loc, items: [] };
+      })
+    );
+
+    const serviceMap = new Map<number, { slugs: Record<string, string>; lastModified: Date }>();
+
+    for (const { loc, items } of serviceResponses) {
+      for (const srv of items) {
+        if (!srv?.id) continue;
+        const existing = serviceMap.get(srv.id) || {
+          slugs: {},
+          lastModified: srv.updated_at ? new Date(srv.updated_at) : new Date()
+        };
+        const srvSlug =
+          typeof srv.slug === "object" && srv.slug !== null
+            ? srv.slug[loc] || srv.slug.en || srv.slug.ar || Object.values(srv.slug)[0]
+            : srv.slug || String(srv.id);
+
+        if (srvSlug) {
+          existing.slugs[loc] = srvSlug;
+        }
+        if (srv.updated_at) {
+          existing.lastModified = new Date(srv.updated_at);
+        }
+        serviceMap.set(srv.id, existing);
+      }
+    }
+
+    for (const [, { slugs, lastModified }] of serviceMap.entries()) {
+      const languages: Record<string, string> = {};
+      const defaultSlug = slugs.en || Object.values(slugs)[0];
+      if (!defaultSlug) continue;
+
+      for (const loc of SYSTEM_LOCALES) {
+        const s = slugs[loc] || defaultSlug;
+        languages[loc] = `${SITE_URL}/${loc}/services/${encodeURIComponent(decodeURIComponent(s))}`;
+      }
+      languages["x-default"] = `${SITE_URL}/en/services/${encodeURIComponent(decodeURIComponent(defaultSlug))}`;
+
+      for (const locale of SYSTEM_LOCALES) {
+        const s = slugs[locale] || defaultSlug;
+        entries.push({
+          url: `${SITE_URL}/${locale}/services/${encodeURIComponent(decodeURIComponent(s))}`,
+          lastModified,
+          changeFrequency: "weekly",
+          priority: 0.85,
+          alternates: {
+            languages
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Failed to include services in sitemap:", err);
+  }
+
   return entries;
 }

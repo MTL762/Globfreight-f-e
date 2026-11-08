@@ -16,6 +16,11 @@ export const links = ({ permissions }: { permissions?: Set<Permission> }): NavIt
       icon: "blog"
     },
     {
+      title: "Services",
+      url: "/admin/services",
+      icon: "services"
+    },
+    {
       title: "Categories",
       url: "/categories",
       icon: "categories"
