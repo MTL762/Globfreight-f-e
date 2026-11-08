@@ -87,11 +87,11 @@ export function buildServiceMetadata(
   const backendKeywords = Array.isArray(service.seo?.keywords)
     ? service.seo.keywords
     : typeof service.seo?.keywords === "string"
-      ? service.seo.keywords
+    ? service.seo.keywords
         .split(",")
         .map((k) => k.trim())
         .filter(Boolean)
-      : [];
+    : [];
 
   const keywords = [
     ...(focusKeyphrase ? [focusKeyphrase] : []),
@@ -140,11 +140,11 @@ export function buildServiceMetadata(
     robots: isNoIndex
       ? { index: false, follow: false }
       : {
-        index: true,
-        follow: true,
-        "max-image-preview": "large",
-        "max-snippet": -1
-      }
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1
+        }
   };
 }
 
@@ -201,7 +201,7 @@ export function buildServiceSchemas(
     ) {
       try {
         schemas.push(JSON.parse(service.seo.schema_markup));
-      } catch { }
+      } catch {}
     }
   }
 

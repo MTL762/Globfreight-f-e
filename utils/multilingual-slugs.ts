@@ -116,7 +116,7 @@ async function fetchTranslatedSlugs({
           const label = getStrictLocalizedValue(data[titleKey], loc);
           if (s && label) result[loc] = s;
         }
-      } catch { }
+      } catch {}
     })
   );
 
@@ -177,12 +177,12 @@ const fetchAndResolvePost = cache(async (slug: string, locale: string) => {
   const post = res?.success && res?.data && "id" in res.data ? res.data : null;
   const slugsByLocale = post
     ? await fetchTranslatedSlugs({
-      slug,
-      entity: post,
-      titleKey: "title",
-      endpointPath: "blog-posts/slug",
-      currentLocale: locale
-    })
+        slug,
+        entity: post,
+        titleKey: "title",
+        endpointPath: "blog-posts/slug",
+        currentLocale: locale
+      })
     : {};
   const alternates = buildAlternates(slugsByLocale, locale, "blog", post?.published_locales);
 
@@ -217,12 +217,12 @@ const fetchAndResolveCategory = cache(async (slug: string, locale: string) => {
 
   const slugsByLocale = category
     ? await fetchTranslatedSlugs({
-      slug,
-      entity: category,
-      titleKey: "name",
-      endpointPath: "categories/slug",
-      currentLocale: locale
-    })
+        slug,
+        entity: category,
+        titleKey: "name",
+        endpointPath: "categories/slug",
+        currentLocale: locale
+      })
     : {};
   const alternates = buildAlternates(slugsByLocale, locale, "blog/category");
 
@@ -309,12 +309,12 @@ const fetchAndResolveService = cache(async (slug: string, locale: string) => {
 
   const slugsByLocale = service
     ? await fetchTranslatedSlugs({
-      slug,
-      entity: service,
-      titleKey: "name",
-      endpointPath: "services/slug",
-      currentLocale: locale
-    })
+        slug,
+        entity: service,
+        titleKey: "name",
+        endpointPath: "services/slug",
+        currentLocale: locale
+      })
     : {};
   const alternates = buildAlternates(slugsByLocale, locale, "services", service?.published_locales);
 

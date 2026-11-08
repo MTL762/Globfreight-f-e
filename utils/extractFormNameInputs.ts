@@ -74,9 +74,9 @@ export function extractFormNameInputs({
             } else if (baseName === "tags") {
               const tagString = Array.isArray(val)
                 ? val
-                  .map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? ""))
-                  .filter(Boolean)
-                  .join(", ")
+                    .map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? ""))
+                    .filter(Boolean)
+                    .join(", ")
                 : `${val ?? ""}`;
               if (tagString || (isDirty && val === "")) {
                 formdata.append(`tags[${code}]`, tagString);
@@ -85,8 +85,8 @@ export function extractFormNameInputs({
               const featureList = Array.isArray(val)
                 ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
                 : typeof val === "string"
-                  ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
-                  : [];
+                ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
+                : [];
               featureList.forEach(item => {
                 formdata.append(`features[${code}][]`, item);
               });
@@ -283,8 +283,8 @@ export function extractFormNameInputs({
               const tagList = Array.isArray(val)
                 ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
                 : typeof val === "string"
-                  ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
-                  : [];
+                ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
+                : [];
               langObj[code] = tagList;
             } else {
               langObj[code] = Array.isArray(val) ? (val as any) : `${val ?? ""}`;
