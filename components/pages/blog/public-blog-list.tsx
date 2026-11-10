@@ -12,12 +12,24 @@ import { BlogAdvisoryCta } from "./blog-advisory-cta";
 interface PublicBlogListProps {
   posts: BlogPost[];
   locale: string;
-  categories: Array<{ id: number; name: string | Record<string, string>; slug?: string | Record<string, string> }>;
+  categories: Array<{
+    id: number;
+    name: string | Record<string, string>;
+    slug?: string | Record<string, string>;
+  }>;
   initialCategory?: string;
   categoryTitle?: string;
+  slugsByLocale?: Partial<Record<string, string>>;
+  alternatesLanguages?: Record<string, string>;
 }
 
-export function PublicBlogList({ posts, locale, categories, initialCategory, categoryTitle }: PublicBlogListProps) {
+export function PublicBlogList({
+  posts,
+  locale,
+  categories,
+  initialCategory,
+  categoryTitle
+}: PublicBlogListProps) {
   const currentLocale = useLocale() || locale;
   const t = useTranslations("BlogPage");
 
@@ -28,8 +40,15 @@ export function PublicBlogList({ posts, locale, categories, initialCategory, cat
   const categoryOptions = useMemo(() => {
     const list = [{ id: "all", label: t("hero.allArticles"), href: "/blog" }];
     categories.forEach(cat => {
-      const name = getBlogText(cat.name, currentLocale, typeof cat.slug === "string" ? cat.slug : "");
-      const catSlug = typeof cat.slug === "object" ? getBlogText(cat.slug, currentLocale) : (cat.slug || String(cat.id));
+      const name = getBlogText(
+        cat.name,
+        currentLocale,
+        typeof cat.slug === "string" ? cat.slug : ""
+      );
+      const catSlug =
+        typeof cat.slug === "object"
+          ? getBlogText(cat.slug, currentLocale)
+          : cat.slug || String(cat.id);
       if (name) {
         list.push({
           id: catSlug,
@@ -61,12 +80,16 @@ export function PublicBlogList({ posts, locale, categories, initialCategory, cat
 
       const title = rawTitle.toLowerCase();
       const excerpt = getBlogText(post.excerpt, currentLocale, "").toLowerCase();
-      const catSlug = post.category?.slug || String(post.category?.id || "");
+      const catSlug = post.category
+        ? typeof post.category.slug === "object"
+          ? getBlogText(post.category.slug, currentLocale, "")
+          : String(post.category.slug || post.category.id || "")
+        : "";
       const postTags = Array.isArray(post.tags)
         ? post.tags
         : typeof post.tags === "object" && post.tags !== null
-        ? ((post.tags as any)[currentLocale] || (post.tags as any).en || [])
-        : [];
+          ? (post.tags as any)[currentLocale] || (post.tags as any).en || []
+          : [];
       const tags = postTags.join(" ").toLowerCase();
 
       const matchesSearch =
@@ -183,8 +206,8 @@ export function PublicBlogList({ posts, locale, categories, initialCategory, cat
               {searchQuery
                 ? `${t("list.searchResults")} (${filteredPosts.length})`
                 : selectedCategory !== "all"
-                ? `${categoryTitle || categoryOptions.find(c => c.id === selectedCategory)?.label || ""} (${filteredPosts.length})`
-                : t("list.allPublications")}
+                  ? `${categoryTitle || categoryOptions.find(c => c.id === selectedCategory)?.label || ""} (${filteredPosts.length})`
+                  : t("list.allPublications")}
             </h2>
             <span className="text-xs text-muted-foreground">
               {filteredPosts.length} {t("list.articlesCount")}
@@ -195,9 +218,7 @@ export function PublicBlogList({ posts, locale, categories, initialCategory, cat
             <div className="rounded-3xl border border-dashed border-border/80 bg-muted/20 py-16 px-6 text-center space-y-4">
               <FileText className="h-12 w-12 text-muted-foreground/40 mx-auto" />
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-foreground">
-                  {t("list.emptyTitle")}
-                </h3>
+                <h3 className="text-base font-bold text-foreground">{t("list.emptyTitle")}</h3>
                 <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
                   {t("list.emptyDesc")}
                 </p>

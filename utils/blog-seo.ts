@@ -37,16 +37,13 @@ function getPostCoreSeo(post: BlogPost, locale: string, alternates: AlternatesMa
 
   const postImage = getBlogText(post.image, locale);
   const ogImage = post.seo?.og_image || postImage;
-  const focusKeyphrase = getBlogText(
-    post.seo?.focus_keyphrase || post.seo_focus_keyphrase,
-    locale
-  );
+  const focusKeyphrase = getBlogText(post.seo?.focus_keyphrase || post.seo_focus_keyphrase, locale);
 
   const tags: string[] = Array.isArray(post.tags)
     ? post.tags
     : typeof post.tags === "object" && post.tags !== null
-    ? (post.tags as any)[locale] || (post.tags as any).en || []
-    : [];
+      ? (post.tags as any)[locale] || (post.tags as any).en || []
+      : [];
 
   const categoryName = post.category
     ? typeof post.category.name === "string"
@@ -93,26 +90,23 @@ export function buildBlogPostMetadata(
   const ogTitle = getBlogText(post.seo?.og_title, locale) || title;
   const ogDescription = getBlogText(post.seo?.og_description, locale) || description;
   const ogImageAlt =
-    getBlogText(post.seo?.og_image_alt, locale) ||
-    getBlogText(post.image_alt, locale) ||
-    title;
+    getBlogText(post.seo?.og_image_alt, locale) || getBlogText(post.image_alt, locale) || title;
 
-  const twitterCard = (
-    post.seo?.twitter_card === "summary" ? "summary" : "summary_large_image"
-  ) as "summary" | "summary_large_image";
+  const twitterCard = (post.seo?.twitter_card === "summary" ? "summary" : "summary_large_image") as
+    | "summary"
+    | "summary_large_image";
   const twitterTitle = getBlogText(post.seo?.twitter_title, locale) || ogTitle;
-  const twitterDescription =
-    getBlogText(post.seo?.twitter_description, locale) || ogDescription;
+  const twitterDescription = getBlogText(post.seo?.twitter_description, locale) || ogDescription;
   const twitterImage = post.seo?.twitter_image || ogImage;
 
   const backendKeywords = Array.isArray(post.seo?.keywords)
     ? post.seo.keywords
     : typeof post.seo?.keywords === "string"
-    ? post.seo.keywords
-        .split(",")
-        .map((k) => k.trim())
-        .filter(Boolean)
-    : [];
+      ? post.seo.keywords
+          .split(",")
+          .map(k => k.trim())
+          .filter(Boolean)
+      : [];
 
   const keywords = [
     ...(focusKeyphrase ? [focusKeyphrase] : []),
@@ -155,19 +149,13 @@ export function buildBlogPostMetadata(
       siteName: "Globfreight",
       tags,
       ...(categoryName ? { section: categoryName } : {}),
-      images: ogImage
-        ? [{ url: ogImage, alt: ogImageAlt }]
-        : getOpenGraphImages(title)
+      images: ogImage ? [{ url: ogImage, alt: ogImageAlt }] : getOpenGraphImages(title)
     },
     twitter: {
       card: twitterCard,
       title: twitterTitle,
       description: twitterDescription,
-      images: twitterImage
-        ? [twitterImage]
-        : ogImage
-        ? [ogImage]
-        : [`${SITE_URL}/og-image.jpg`]
+      images: twitterImage ? [twitterImage] : ogImage ? [ogImage] : [`${SITE_URL}/og-image.jpg`]
     },
     robots: {
       index: metaRobotsRaw.includes("noindex") ? false : isLive,
@@ -176,11 +164,7 @@ export function buildBlogPostMetadata(
   };
 }
 
-export function buildBlogPostSchemas(
-  post: BlogPost,
-  locale: string,
-  alternates: AlternatesMap
-) {
+export function buildBlogPostSchemas(post: BlogPost, locale: string, alternates: AlternatesMap) {
   const {
     title,
     description,
@@ -199,8 +183,7 @@ export function buildBlogPostSchemas(
       ? getBlogText(rawSchema, locale)
       : rawSchema) || "BlogPosting";
 
-  const publishedDateIso =
-    post.published_at || post.created_at || new Date().toISOString();
+  const publishedDateIso = post.published_at || post.created_at || new Date().toISOString();
   const modifiedDateIso =
     post.updated_at || post.published_at || post.created_at || new Date().toISOString();
 
@@ -230,9 +213,7 @@ export function buildBlogPostSchemas(
   ]);
 
   const faqJsonLd =
-    Array.isArray(post.seo?.faqs) && post.seo.faqs.length > 0
-      ? getFaqJsonLd(post.seo.faqs)
-      : null;
+    Array.isArray(post.seo?.faqs) && post.seo.faqs.length > 0 ? getFaqJsonLd(post.seo.faqs) : null;
 
   return [articleJsonLd, breadcrumbsJsonLd, faqJsonLd, post.seo?.schema_markup];
 }
@@ -244,29 +225,130 @@ export function buildCategoryMetadata(
 ): Metadata {
   const categoryName = getBlogText(category.name, locale, "Logistics Category");
   const categoryDesc = getBlogText(category.description, locale, "");
-  const title = `${categoryName} – Logistics Intelligence & Insights | Globfreight`;
+  const metaTitleRaw = getBlogText(category.seo?.meta_title, locale);
+  const title = metaTitleRaw || `${categoryName} – Logistics Intelligence & Insights | Globfreight`;
+
+  const metaDescRaw = getBlogText(category.seo?.meta_description, locale);
   const description =
+    metaDescRaw ||
     categoryDesc ||
     `Explore industry insights, regulatory developments, and expert analysis in ${categoryName} from Globfreight.`;
+
+  const rawCanonical = category.seo?.canonical_url;
+  const customCanonical =
+    typeof rawCanonical === "object" && rawCanonical !== null
+      ? getBlogText(rawCanonical, locale)
+      : rawCanonical;
+  const canonicalUrl =
+    customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
+      ? customCanonical.trim()
+      : alternates.canonical;
+
+  const image = category.image || "/og-image.jpg";
+  const ogImage = category.seo?.og_image || image;
+  const ogTitle = getBlogText(category.seo?.og_title, locale) || title;
+  const ogDescription = getBlogText(category.seo?.og_description, locale) || description;
+  const ogImageAlt =
+    getBlogText(category.seo?.og_image_alt, locale) ||
+    getBlogText(category.image_alt, locale) ||
+    categoryName;
+
+  const twitterCard = (
+    category.seo?.twitter_card === "summary" ? "summary" : "summary_large_image"
+  ) as "summary" | "summary_large_image";
+  const twitterTitle = getBlogText(category.seo?.twitter_title, locale) || ogTitle;
+  const twitterDescription =
+    getBlogText(category.seo?.twitter_description, locale) || ogDescription;
+  const twitterImage = category.seo?.twitter_image || ogImage;
+
+  const backendKeywords = Array.isArray(category.seo?.keywords)
+    ? category.seo.keywords
+    : typeof category.seo?.keywords === "string"
+      ? category.seo.keywords
+          .split(",")
+          .map((k: string) => k.trim())
+          .filter(Boolean)
+      : [];
+
+  const focusKeyphrase = getBlogText(category.seo?.focus_keyphrase, locale);
+  const allKeywords = [...(focusKeyphrase ? [focusKeyphrase] : []), ...backendKeywords];
 
   return {
     title,
     description,
-    alternates,
+    keywords: allKeywords.length > 0 ? allKeywords : undefined,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: alternates.languages
+    },
     openGraph: {
-      title,
-      description,
-      url: alternates.canonical,
+      title: ogTitle,
+      description: ogDescription,
+      url: canonicalUrl,
       type: "website",
       siteName: "Globfreight",
-      images: getOpenGraphImages(title)
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: ogImageAlt
+        }
+      ]
     },
     twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [`${SITE_URL}/og-image.jpg`]
+      card: twitterCard,
+      title: twitterTitle,
+      description: twitterDescription,
+      images: [twitterImage]
     }
   };
 }
 
+export function buildCategorySchemas(
+  category: any,
+  locale: string,
+  alternates: AlternatesMap
+): (Record<string, unknown> | null | undefined)[] {
+  const categoryName = getBlogText(category.name, locale, "Category");
+
+  const homeLabel = locale === "ar" ? "الرئيسية" : "Home";
+  const blogLabel = locale === "ar" ? "المدونة" : "Blog";
+
+  const rawCanonical = category.seo?.canonical_url;
+  const customCanonical =
+    typeof rawCanonical === "object" && rawCanonical !== null
+      ? getBlogText(rawCanonical, locale)
+      : rawCanonical;
+  const canonicalUrl =
+    customCanonical && typeof customCanonical === "string" && customCanonical.trim() !== ""
+      ? customCanonical.trim()
+      : alternates.canonical;
+
+  const breadcrumbsJsonLd = getBreadcrumbJsonLd([
+    { name: homeLabel, url: `${SITE_URL}/${locale}` },
+    { name: blogLabel, url: `${SITE_URL}/${locale}/blog` },
+    { name: categoryName, url: canonicalUrl }
+  ]);
+
+  const faqJsonLd =
+    Array.isArray(category.seo?.faqs) && category.seo.faqs.length > 0
+      ? getFaqJsonLd(category.seo.faqs)
+      : null;
+
+  let customSchemaMarkup: any = null;
+  if (category.seo?.schema_markup) {
+    if (typeof category.seo.schema_markup === "object") {
+      customSchemaMarkup = category.seo.schema_markup;
+    } else if (
+      typeof category.seo.schema_markup === "string" &&
+      category.seo.schema_markup.trim().startsWith("{")
+    ) {
+      try {
+        customSchemaMarkup = JSON.parse(category.seo.schema_markup);
+      } catch {}
+    }
+  }
+
+  return [breadcrumbsJsonLd, faqJsonLd, customSchemaMarkup].filter(Boolean);
+}

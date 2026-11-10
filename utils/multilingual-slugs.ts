@@ -86,7 +86,7 @@ async function fetchTranslatedSlugs({
   const cleanSlug = encodeSlug(slug);
 
   await Promise.all(
-    SYSTEM_LOCALES.map(async (loc) => {
+    SYSTEM_LOCALES.map(async loc => {
       if (result[loc]) return;
       if (publishedLocales && !publishedLocales.includes(loc)) return;
 
@@ -132,7 +132,7 @@ function buildAlternates(
   const languages: Record<string, string> = {};
   const allowedLocales =
     Array.isArray(publishedLocales) && publishedLocales.length > 0
-      ? SYSTEM_LOCALES.filter((loc) => publishedLocales.includes(loc))
+      ? SYSTEM_LOCALES.filter(loc => publishedLocales.includes(loc))
       : SYSTEM_LOCALES;
 
   for (const loc of allowedLocales) {
@@ -145,7 +145,7 @@ function buildAlternates(
   const defaultLoc =
     (allowedLocales.includes("en" as any) && isValidSlugValue(slugsByLocale.en)
       ? "en"
-      : undefined) || allowedLocales.find((loc) => isValidSlugValue(slugsByLocale[loc]));
+      : undefined) || allowedLocales.find(loc => isValidSlugValue(slugsByLocale[loc]));
 
   if (defaultLoc && isValidSlugValue(slugsByLocale[defaultLoc])) {
     languages["x-default"] = `${SITE_URL}/${defaultLoc}/${basePath}/${encodeSlug(
@@ -211,7 +211,15 @@ const fetchAndResolveCategory = cache(async (slug: string, locale: string) => {
     category =
       (Array.isArray(listRes?.data) ? listRes.data : []).find((cat: any) => {
         const cSlug = getStrictLocalizedValue(cat.slug, locale);
-        return (cSlug && cSlug.toLowerCase() === decoded) || String(cat.id) === decoded;
+        const anySlug =
+          typeof cat.slug === "object" && cat.slug !== null
+            ? Object.values(cat.slug).map(v => String(v).toLowerCase())
+            : [String(cat.slug || "").toLowerCase()];
+        return (
+          (cSlug && cSlug.toLowerCase() === decoded) ||
+          anySlug.includes(decoded) ||
+          String(cat.id) === decoded
+        );
       }) || null;
   }
 
@@ -293,7 +301,13 @@ const fetchAndResolveService = cache(async (slug: string, locale: string) => {
 
   let service = res?.data && (res.data.id || res.data.name) ? res.data : null;
 
-  if (!service && res?.status !== 301 && !res?.isRedirect && !res?.is_redirect && !res?.data?.is_redirect) {
+  if (
+    !service &&
+    res?.status !== 301 &&
+    !res?.isRedirect &&
+    !res?.is_redirect &&
+    !res?.data?.is_redirect
+  ) {
     const listRes = await fetchHelper({
       endPoint: ["services"],
       method: "GET",
@@ -321,15 +335,8 @@ const fetchAndResolveService = cache(async (slug: string, locale: string) => {
   return { res, service, slugsByLocale, alternates };
 });
 
-export async function resolveServicePage(
-  slug: string,
-  locale: string,
-  enforceRedirects = true
-) {
-  const { res, service, slugsByLocale, alternates } = await fetchAndResolveService(
-    slug,
-    locale
-  );
+export async function resolveServicePage(slug: string, locale: string, enforceRedirects = true) {
+  const { res, service, slugsByLocale, alternates } = await fetchAndResolveService(slug, locale);
   const currentCanonicalSlug = guardDynamicEntity({
     slug,
     locale,
@@ -344,11 +351,7 @@ export async function resolveServicePage(
   return { service, currentCanonicalSlug, slugsByLocale, alternates };
 }
 
-export async function resolveBlogPostPage(
-  slug: string,
-  locale: string,
-  enforceRedirects = true
-) {
+export async function resolveBlogPostPage(slug: string, locale: string, enforceRedirects = true) {
   const { res, post, slugsByLocale, alternates } = await fetchAndResolvePost(slug, locale);
   const currentCanonicalSlug = guardDynamicEntity({
     slug,
@@ -364,15 +367,8 @@ export async function resolveBlogPostPage(
   return { post, currentCanonicalSlug, slugsByLocale, alternates };
 }
 
-export async function resolveCategoryPage(
-  slug: string,
-  locale: string,
-  enforceRedirects = true
-) {
-  const { res, category, slugsByLocale, alternates } = await fetchAndResolveCategory(
-    slug,
-    locale
-  );
+export async function resolveCategoryPage(slug: string, locale: string, enforceRedirects = true) {
+  const { res, category, slugsByLocale, alternates } = await fetchAndResolveCategory(slug, locale);
   const currentCanonicalSlug = guardDynamicEntity({
     slug,
     locale,

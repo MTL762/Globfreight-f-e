@@ -3,11 +3,10 @@ import { PublicShell } from "@/components/pages/home/public-shell";
 import { PublicBlogList } from "@/components/pages/blog/public-blog-list";
 import { DynamicSlugPageSeo } from "@/components/alternate-links-context";
 import { BlogPost, getBlogText } from "@/types/blog";
-import { getBreadcrumbJsonLd, SITE_URL } from "@/utils/seo";
 import { resolveCategoryPage } from "@/utils/multilingual-slugs";
-import { buildCategoryMetadata } from "@/utils/blog-seo";
+import { buildCategoryMetadata, buildCategorySchemas } from "@/utils/blog-seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import type { Metadata } from "next";
+import { Metadata } from "next";
 
 export async function generateMetadata({
   params
@@ -32,7 +31,7 @@ export default async function BlogCategoryPage(props: {
   const { locale, slug } = await props.params;
   setRequestLocale(locale);
 
-  const [{ category, currentCanonicalSlug, alternates }, blogsRes, categoriesRes] =
+  const [{ category, currentCanonicalSlug, slugsByLocale, alternates }, blogsRes, categoriesRes] =
     await Promise.all([
       resolveCategoryPage(slug, locale, true),
       fetchHelper({
@@ -52,21 +51,20 @@ export default async function BlogCategoryPage(props: {
   const categories = Array.isArray(categoriesRes?.data) ? categoriesRes.data : [];
   const categoryName = getBlogText(category.name, locale, "Category");
 
-  const breadcrumbsJsonLd = getBreadcrumbJsonLd([
-    { name: "Home", url: `${SITE_URL}/${locale}` },
-    { name: "Blog", url: `${SITE_URL}/${locale}/blog` },
-    { name: categoryName, url: alternates.canonical }
-  ]);
-
   return (
     <PublicShell alternateLinks={alternates.languages}>
-      <DynamicSlugPageSeo links={alternates.languages} schemas={[breadcrumbsJsonLd]} />
+      <DynamicSlugPageSeo
+        links={alternates.languages}
+        schemas={buildCategorySchemas(category, locale, alternates)}
+      />
       <PublicBlogList
         posts={posts}
         locale={locale}
         categories={categories}
         initialCategory={currentCanonicalSlug}
         categoryTitle={categoryName}
+        slugsByLocale={slugsByLocale}
+        alternatesLanguages={alternates.languages}
       />
     </PublicShell>
   );
