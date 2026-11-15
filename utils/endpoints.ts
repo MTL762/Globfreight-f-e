@@ -14,7 +14,7 @@ export const endpoints = {
   adminUsers: "/admin/users",
   adminCategories: "/admin/categories",
   adminSubCategories: "/admin/sub-categories",
-  adminServices: "/admin/services",
+  adminServices: "/api/admin/services",
   adminBlogPosts: "/admin/blog-posts",
   adminFaqItems: "/admin/faq-items",
   adminFaqItemsSelectMenu: "/admin/faq-items/select_menu",
