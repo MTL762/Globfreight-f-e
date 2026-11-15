@@ -41,7 +41,7 @@ async function page({ searchParams }: { searchParams: SearchParams }): Promise<J
           onDelete: ["adminSubCategories"]
         }}
         cardHeader={t("SubCategories")}
-        filters={[{ name: "name", type: "text", width: 3 }]}
+        filters={[{ name: "search", type: "text", width: 3 }]}
       />
     </>
   );

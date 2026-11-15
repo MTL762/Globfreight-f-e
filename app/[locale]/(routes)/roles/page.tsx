@@ -41,7 +41,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
           onDelete: ["roles"],
         }}
         cardHeader={t("Roles")}
-        filters={[{ name: "name", type: "text", width: 4 }]}
+        filters={[{ name: "search", type: "text", width: 4 }]}
       />
     </div>
   );
