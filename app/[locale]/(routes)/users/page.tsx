@@ -46,8 +46,7 @@ export default async function Page({
         }}
         cardHeader={t("Users")}
         filters={[
-          { name: "name", type: "text", width: 4 },
-          { name: "email", type: "text", width: 4 }
+          { name: "search", type: "text", width: 4 },
         ]}
       />
     </div>
