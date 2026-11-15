@@ -40,8 +40,22 @@ export function SentEmailsTableWrapper({ data, total }: SentEmailsTableWrapperPr
         cardHeader={t("SentEmails")}
         createNewLink="/sent-emails/create"
         filters={[
-          { name: "recipient_email", type: "text", width: 3 },
-          { name: "subject", type: "text", width: 3 }
+          {
+            name: 'search',
+            type: 'text'
+          },
+          {
+            options: [
+              {
+                value: 'failed',
+                label: t('failed')
+              },
+              {
+                value: 'sent',
+                label: t('sent')
+              }
+            ], name: "status", type: "select", width: 3
+          },
         ]}
       />
 
