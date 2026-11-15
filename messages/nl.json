@@ -3206,5 +3206,26 @@
   "Urgent": "Urgent",
   "WebPage": "Webpagina",
   "Select the access levels and authorized system actions for this role": "Selecteer de toegangsniveaus en geautoriseerde systeemacties voor deze rol",
-  "Session expired. Please sign in again.": "Sessie verlopen. Meld u opnieuw aan."
+  "Session expired. Please sign in again.": "Sessie verlopen. Meld u opnieuw aan.",
+  "sentEmails": {
+    "compose": {
+      "title": "E-mail opstellen en verzenden",
+      "subtitle": "Verstuur e-mailmelding rechtstreeks naar klant of gebruiker",
+      "backToList": "Terug naar lijst",
+      "recipientEmailLabel": "E-mailadres ontvanger *",
+      "recipientEmailPlaceholder": "klant@voorbeeld.nl",
+      "recipientNameLabel": "Naam ontvanger (Optioneel)",
+      "recipientNamePlaceholder": "Ahmed Hassan",
+      "subjectLabel": "Onderwerp e-mail *",
+      "subjectPlaceholder": "Zending-update - Cognossement beschikbaar",
+      "bodyLabel": "Berichtinhoud (HTML ondersteund) *",
+      "bodyPlaceholder": "<p>Beste klant, uw verzenddocumenten zijn nu klaar om te downloaden.</p>",
+      "cancel": "Annuleren",
+      "sending": "Verzenden...",
+      "sendNow": "Nu verzenden",
+      "successMessage": "E-mail succesvol verzonden",
+      "errorMessage": "Verzenden van e-mail mislukt",
+      "unexpectedError": "Er is een fout opgetreden bij het verzenden van de e-mail"
+    }
+  }
 }

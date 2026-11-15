@@ -3207,5 +3207,26 @@
   "Urgent": "عاجل",
   "WebPage": "صفحة ويب",
   "Select the access levels and authorized system actions for this role": "حدد مستويات الوصول وإجراءات النظام المصرح بها لهذا الدور",
-  "Session expired. Please sign in again.": "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى."
+  "Session expired. Please sign in again.": "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.",
+  "sentEmails": {
+    "compose": {
+      "title": "إنشاء وإرسال بريد إلكتروني",
+      "subtitle": "إرسال إشعار أو رسالة مباشرة إلى العميل أو المستخدم",
+      "backToList": "الرجوع للقائمة",
+      "recipientEmailLabel": "البريد الإلكتروني للمستلم *",
+      "recipientEmailPlaceholder": "customer@example.com",
+      "recipientNameLabel": "اسم المستلم (اختياري)",
+      "recipientNamePlaceholder": "أحمد حسن",
+      "subjectLabel": "عنوان الموضوع *",
+      "subjectPlaceholder": "تحديث الشحنة - بوليصة الشحن متاحة",
+      "bodyLabel": "محتوى الرسالة (HTML مدعوم) *",
+      "bodyPlaceholder": "<p>عزيزي العميل، مستندات الشحن الخاصة بك جاهزة الآن للتحميل.</p>",
+      "cancel": "إلغاء",
+      "sending": "جاري الإرسال...",
+      "sendNow": "إرسال الآن",
+      "successMessage": "تم إرسال البريد الإلكتروني بنجاح",
+      "errorMessage": "فشل إرسال البريد الإلكتروني",
+      "unexpectedError": "حدث خطأ أثناء إرسال البريد"
+    }
+  }
 }

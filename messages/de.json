@@ -3206,5 +3206,26 @@
   "Urgent": "Dringend",
   "WebPage": "Webseite",
   "Select the access levels and authorized system actions for this role": "Wählen Sie die Zugriffsebenen und autorisierten Systemaktionen für diese Rolle aus",
-  "Session expired. Please sign in again.": "Sitzung abgelaufen. Bitte melden Sie sich erneut an."
+  "Session expired. Please sign in again.": "Sitzung abgelaufen. Bitte melden Sie sich erneut an.",
+  "sentEmails": {
+    "compose": {
+      "title": "E-Mail verfassen und senden",
+      "subtitle": "E-Mail-Benachrichtigung direkt an Kunden oder Benutzer senden",
+      "backToList": "Zurück zur Liste",
+      "recipientEmailLabel": "Empfänger-E-Mail *",
+      "recipientEmailPlaceholder": "kunde@beispiel.de",
+      "recipientNameLabel": "Empfängername (Optional)",
+      "recipientNamePlaceholder": "Ahmed Hassan",
+      "subjectLabel": "E-Mail-Betreff *",
+      "subjectPlaceholder": "Sendungs-Update - Frachtbrief verfügbar",
+      "bodyLabel": "Nachrichteninhalt (HTML unterstützt) *",
+      "bodyPlaceholder": "<p>Sehr geehrter Kunde, Ihre Versanddokumente stehen jetzt zum Download bereit.</p>",
+      "cancel": "Abbrechen",
+      "sending": "Wird gesendet...",
+      "sendNow": "Jetzt senden",
+      "successMessage": "E-Mail erfolgreich gesendet",
+      "errorMessage": "E-Mail konnte nicht gesendet werden",
+      "unexpectedError": "Beim Senden der E-Mail ist ein Fehler aufgetreten"
+    }
+  }
 }

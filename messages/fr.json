@@ -3206,5 +3206,26 @@
   "Urgent": "Urgent",
   "WebPage": "Page web",
   "Select the access levels and authorized system actions for this role": "Sélectionnez les niveaux d'accès et les actions système autorisées pour ce rôle",
-  "Session expired. Please sign in again.": "Session expirée. Veuillez vous reconnecter."
+  "Session expired. Please sign in again.": "Session expirée. Veuillez vous reconnecter.",
+  "sentEmails": {
+    "compose": {
+      "title": "Rédiger et envoyer un e-mail",
+      "subtitle": "Envoyer une notification par e-mail directement au client ou à l'utilisateur",
+      "backToList": "Retour à la liste",
+      "recipientEmailLabel": "E-mail du destinataire *",
+      "recipientEmailPlaceholder": "client@exemple.fr",
+      "recipientNameLabel": "Nom du destinataire (Optionnel)",
+      "recipientNamePlaceholder": "Ahmed Hassan",
+      "subjectLabel": "Objet de l'e-mail *",
+      "subjectPlaceholder": "Mise à jour de l'expédition - Connaissement disponible",
+      "bodyLabel": "Corps du message (HTML pris en charge) *",
+      "bodyPlaceholder": "<p>Cher client, vos documents d'expédition sont maintenant prêts à être téléchargés.</p>",
+      "cancel": "Annuler",
+      "sending": "Envoi en cours...",
+      "sendNow": "Envoyer maintenant",
+      "successMessage": "E-mail envoyé avec succès",
+      "errorMessage": "Échec de l'envoi de l'e-mail",
+      "unexpectedError": "Une erreur s'est produite lors de l'envoi de l'e-mail"
+    }
+  }
 }

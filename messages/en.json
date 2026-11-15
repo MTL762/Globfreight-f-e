@@ -3207,5 +3207,26 @@
   "Urgent": "Urgent",
   "WebPage": "WebPage",
   "Select the access levels and authorized system actions for this role": "Select the access levels and authorized system actions for this role",
-  "Session expired. Please sign in again.": "Session expired. Please sign in again."
+  "Session expired. Please sign in again.": "Session expired. Please sign in again.",
+  "sentEmails": {
+    "compose": {
+      "title": "Compose & Send Email",
+      "subtitle": "Dispatch email notification directly to client or user",
+      "backToList": "Back to List",
+      "recipientEmailLabel": "Recipient Email *",
+      "recipientEmailPlaceholder": "customer@example.com",
+      "recipientNameLabel": "Recipient Name (Optional)",
+      "recipientNamePlaceholder": "Ahmed Hassan",
+      "subjectLabel": "Email Subject *",
+      "subjectPlaceholder": "Shipment Update - Bill of Lading Available",
+      "bodyLabel": "Message Body (HTML supported) *",
+      "bodyPlaceholder": "<p>Dear Customer, your shipping documents are now ready for download.</p>",
+      "cancel": "Cancel",
+      "sending": "Sending...",
+      "sendNow": "Send Now",
+      "successMessage": "Email sent successfully",
+      "errorMessage": "Failed to send email",
+      "unexpectedError": "An error occurred while sending email"
+    }
+  }
 }
