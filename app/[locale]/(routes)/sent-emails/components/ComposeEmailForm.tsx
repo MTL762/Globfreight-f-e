@@ -1,167 +1,162 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft, Send } from "lucide-react";
+import type { UseFormRegisterReturn } from "react-hook-form";
+
 import { Button } from "@/components/ui/button";
-import { Send, ArrowLeft, ArrowRight } from "lucide-react";
-import { fetchHelper } from "@/api/fetch";
-import { toast } from "sonner";
-import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ErrorMessage from "@/components/ui/ErrorMessage";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Link } from "@/i18n/navigation";
+
+import { useComposeEmailForm } from "./useComposeEmailForm.logic";
+
+const LABEL_CLASS = "text-xs font-bold text-muted-foreground uppercase tracking-wider";
+const INPUT_CLASS = "rounded-2xl border-border/60";
+
+function ComposeEmailHeader({ tCompose }: { tCompose: TFunction }) {
+  return (
+    <CardHeader className="p-0 pb-6 border-b border-border/40">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <Send className="h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-bold">{tCompose("title")}</CardTitle>
+            <p className="text-xs text-muted-foreground mt-0.5">{tCompose("subtitle")}</p>
+          </div>
+        </div>
+        <Button variant="outline" size="sm" asChild className="rounded-xl">
+          <Link href="/sent-emails">
+            <ArrowLeft className="h-4 w-4 me-1.5 rtl:rotate-180" />
+            <span>{tCompose("backToList")}</span>
+          </Link>
+        </Button>
+      </div>
+    </CardHeader>
+  );
+}
+
+type ComposeInputFieldProps = {
+  id: string;
+  label: string;
+  type?: "text" | "email";
+  placeholder: string;
+  error?: string;
+  registration: UseFormRegisterReturn;
+};
+
+function ComposeInputField({
+  id,
+  label,
+  type = "text",
+  placeholder,
+  error,
+  registration
+}: ComposeInputFieldProps) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id} className={LABEL_CLASS}>
+        {label}
+      </Label>
+      <Input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        aria-invalid={Boolean(error)}
+        className={INPUT_CLASS}
+        {...registration}
+      />
+      <ErrorMessage error={error} />
+    </div>
+  );
+}
+
+function ComposeFormActions({
+  isSubmitting,
+  onCancel,
+  tCompose
+}: {
+  isSubmitting: boolean;
+  onCancel: () => void;
+  tCompose: TFunction;
+}) {
+  return (
+    <div className="flex justify-end gap-3 pt-4 border-t border-border/40">
+      <Button type="button" variant="outline" onClick={onCancel} className="rounded-xl">
+        {tCompose("cancel")}
+      </Button>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="rounded-xl gap-2 font-medium bg-rose-600 hover:bg-rose-700 text-white"
+      >
+        <Send className="h-4 w-4" />
+        <span>{isSubmitting ? tCompose("sending") : tCompose("sendNow")}</span>
+      </Button>
+    </div>
+  );
+}
 
 export function ComposeEmailForm() {
-  const locale = useLocale();
-  const router = useRouter();
-  const isRtl = locale === "ar";
-  const ArrowIcon = isRtl ? ArrowRight : ArrowLeft;
-
-  const [formData, setFormData] = useState({
-    recipient_email: "",
-    recipient_name: "",
-    subject: "",
-    body: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!formData.recipient_email || !formData.subject || !formData.body) {
-      toast.error(isRtl ? "يرجى ملء جميع الحقول المطلوبة" : "Please fill in all required fields");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      const res = await fetchHelper({
-        endPoint: ["adminSentEmails"],
-        method: "POST",
-        body: formData
-      });
-
-      if (res?.success !== false) {
-        toast.success(isRtl ? "تم إرسال البريد الإلكتروني بنجاح" : "Email sent successfully");
-        router.push(`/${locale}/sent-emails`);
-        router.refresh();
-      } else {
-        toast.error(res?.result?.message || res?.message || (isRtl ? "فشل إرسال البريد الإلكتروني" : "Failed to send email"));
-      }
-    } catch {
-      toast.error(isRtl ? "حدث خطأ أثناء إرسال البريد" : "An error occurred while sending email");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const { form, onSubmit, router, tCompose } = useComposeEmailForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = form;
 
   return (
     <Card className="rounded-3xl border border-border/50 bg-card p-6 shadow-sm max-w-4xl mx-auto">
-      <CardHeader className="p-0 pb-6 border-b border-border/40">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400">
-              <Send className="h-5 w-5" />
-            </div>
-            <div>
-              <CardTitle className="text-xl font-bold">
-                {isRtl ? "إنشاء وإرسال بريد إلكتروني" : "Compose & Send Email"}
-              </CardTitle>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {isRtl
-                  ? "إرسال إشعار أو رسالة مباشرة إلى العميل أو المستخدم"
-                  : "Dispatch email notification directly to client or user"}
-              </p>
-            </div>
-          </div>
-
-          <Button variant="outline" size="sm" asChild className="rounded-xl">
-            <Link href={`/${locale}/sent-emails`}>
-              <ArrowIcon className="h-4 w-4 mr-1.5" />
-              <span>{isRtl ? "الرجوع للقائمة" : "Back to List"}</span>
-            </Link>
-          </Button>
-        </div>
-      </CardHeader>
-
+      <ComposeEmailHeader tCompose={tCompose} />
       <CardContent className="p-0 pt-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                {isRtl ? "البريد الإلكتروني للمستلم *" : "Recipient Email *"}
-              </label>
-              <Input
-                type="email"
-                required
-                value={formData.recipient_email}
-                onChange={(e) => setFormData({ ...formData, recipient_email: e.target.value })}
-                placeholder="customer@example.com"
-                className="rounded-2xl border-border/60"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                {isRtl ? "اسم المستلم (اختياري)" : "Recipient Name (Optional)"}
-              </label>
-              <Input
-                type="text"
-                value={formData.recipient_name}
-                onChange={(e) => setFormData({ ...formData, recipient_name: e.target.value })}
-                placeholder="Ahmed Hassan"
-                className="rounded-2xl border-border/60"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-              {isRtl ? "عنوان الموضوع *" : "Email Subject *"}
-            </label>
-            <Input
-              type="text"
-              required
-              value={formData.subject}
-              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-              placeholder="Shipment Update - Bill of Lading Available"
-              className="rounded-2xl border-border/60"
+            <ComposeInputField
+              id="recipient_email"
+              type="email"
+              label={tCompose("recipientEmailLabel")}
+              placeholder={tCompose("recipientEmailPlaceholder")}
+              error={errors.recipient_email?.message}
+              registration={register("recipient_email")}
+            />
+            <ComposeInputField
+              id="recipient_name"
+              label={tCompose("recipientNameLabel")}
+              placeholder={tCompose("recipientNamePlaceholder")}
+              error={errors.recipient_name?.message}
+              registration={register("recipient_name")}
             />
           </div>
-
+          <ComposeInputField
+            id="subject"
+            label={tCompose("subjectLabel")}
+            placeholder={tCompose("subjectPlaceholder")}
+            error={errors.subject?.message}
+            registration={register("subject")}
+          />
           <div className="space-y-2">
-            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-              {isRtl ? "محتوى الرسالة (HTML مدعوم) *" : "Message Body (HTML supported) *"}
-            </label>
+            <Label htmlFor="body" className={LABEL_CLASS}>
+              {tCompose("bodyLabel")}
+            </Label>
             <Textarea
+              id="body"
               rows={8}
-              required
-              value={formData.body}
-              onChange={(e) => setFormData({ ...formData, body: e.target.value })}
-              placeholder="<p>Dear Customer, your shipping documents are now ready for download.</p>"
-              className="rounded-2xl border-border/60 font-mono text-sm"
+              placeholder={tCompose("bodyPlaceholder")}
+              aria-invalid={Boolean(errors.body)}
+              className={`${INPUT_CLASS} font-mono text-sm`}
+              {...register("body")}
             />
+            <ErrorMessage error={errors.body?.message} />
           </div>
-
-          <div className="flex justify-end gap-3 pt-4 border-t border-border/40">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push(`/${locale}/sent-emails`)}
-              className="rounded-xl"
-            >
-              {isRtl ? "إلغاء" : "Cancel"}
-            </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="rounded-xl gap-2 font-medium bg-rose-600 hover:bg-rose-700 text-white"
-            >
-              <Send className="h-4 w-4" />
-              <span>{isSubmitting ? (isRtl ? "جاري الإرسال..." : "Sending...") : (isRtl ? "إرسال الآن" : "Send Now")}</span>
-            </Button>
-          </div>
+          <ComposeFormActions
+            isSubmitting={isSubmitting}
+            onCancel={() => router.push("/sent-emails")}
+            tCompose={tCompose}
+          />
         </form>
       </CardContent>
     </Card>
