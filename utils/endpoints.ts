@@ -38,7 +38,7 @@ export const endpoints = {
   categoriesSlug: "/categories/slug",
   subCategories: "/sub-categories",
   subCategoriesSlug: "/sub-categories/slug",
-  services: "/services",
+  services: "/api/services",
   servicesSlug: "/services/slug",
   blogPosts: "/blog-posts",
   blogPostsSlug: "/blog-posts/slug",

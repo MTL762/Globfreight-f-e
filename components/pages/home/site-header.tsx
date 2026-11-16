@@ -1,29 +1,31 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { fetchHelper } from "@/api/fetch";
 import { getBlogText } from "@/types/blog";
+import { getServiceText } from "@/types/service";
 import { BrandMark } from "@/components/brand-mark";
 import { Link } from "@/i18n/navigation";
 import { HeaderLanguageMenu } from "./header-language-menu";
-import { HeaderMobileMenu } from "./header-mobile-menu";
+import { HeaderMobileMenu, type MobileNavItem } from "./header-mobile-menu";
+import { HeaderNavSubmenu, type HeaderNavItem } from "./header-nav-submenu";
 import ThemeSwitcher from "@/components/theme-switcher";
 
-export async function SiteHeader({
-  alternateLinks
-}: {
-  alternateLinks?: Record<string, string> | null;
-} = {}) {
-  const t = await getTranslations("Nav");
-  const locale = await getLocale();
-
-  const categoriesRes = await fetchHelper({
-    endPoint: ["categories"],
-    method: "GET",
-    locale: locale as any
-  }).catch(() => ({ data: [] }));
-  const categories: { label: string; href: string }[] = (
-    Array.isArray(categoriesRes?.data) ? categoriesRes.data : []
-  )
+async function fetchHeaderData(locale: string) {
+  const [categoriesRes, servicesRes] = await Promise.all([
+    fetchHelper({
+      endPoint: ["categories"],
+      method: "GET",
+      locale: locale as any
+    }).catch(() => ({ data: [] })),
+    fetchHelper({
+      endPoint: ["services"],
+      method: "GET",
+      params: { per_page: 20 },
+      locale: locale as any
+    }).catch(() => ({ data: [] }))
+  ]);
+  console.log(servicesRes, 'servicesRes')
+  const categories: HeaderNavItem[] = (Array.isArray(categoriesRes?.data) ? categoriesRes.data : [])
     .map((cat: any) => {
       const slug =
         typeof cat.slug === "object" ? getBlogText(cat.slug, locale) : cat.slug || String(cat.id);
@@ -32,17 +34,45 @@ export async function SiteHeader({
         href: `/blog/category/${encodeURIComponent(slug)}`
       };
     })
-    .filter((c: { label: string }) => c.label);
+    .filter(c => c.label);
 
-  const nav = [
-    ["home", "/"],
-    ["blog", "/blog"],
-    ["ship", "/ship-with-us"]
-  ] as const;
+  const services: HeaderNavItem[] = (Array.isArray(servicesRes?.data) ? servicesRes.data : [])
+    .map((svc: any) => {
+      const slug = getServiceText(svc.slug, locale) || String(svc.id);
+      return {
+        label: getServiceText(svc.name, locale),
+        href: `/services/${encodeURIComponent(slug)}`
+      };
+    })
+    .filter(s => s.label);
 
-  const mobileNavItems = [
-    ...nav.map(([key, href]) => ({ key, label: t(key), href })),
-    ...categories.map((c) => ({ key: `cat-${c.href}`, label: c.label, href: c.href }))
+  return { categories, services };
+}
+
+export async function SiteHeader({
+  alternateLinks
+}: {
+  alternateLinks?: Record<string, string> | null;
+} = {}) {
+  const t = await getTranslations("Nav");
+  const locale = await getLocale();
+  const { categories, services } = await fetchHeaderData(locale);
+
+  const mobileNavItems: MobileNavItem[] = [
+    { key: "home", label: t("home"), href: "/" },
+    {
+      key: "services",
+      label: t("services"),
+      href: "/services",
+      children: services
+    },
+    {
+      key: "blog",
+      label: t("blog"),
+      href: "/blog",
+      children: categories
+    },
+    { key: "ship", label: t("ship"), href: "/ship-with-us" }
   ];
 
   return (
@@ -57,53 +87,49 @@ export async function SiteHeader({
         </Link>
 
         <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="Primary navigation">
-          {nav.map(([key, href]) => (
+          <Link
+            href="/"
+            className="text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors rounded-md py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {t("home")}
+          </Link>
+
+          {services.length > 0 ? (
+            <HeaderNavSubmenu
+              label={t("services")}
+              mainHref="/services"
+              allLabel={t("allServices")}
+              items={services}
+            />
+          ) : (
             <Link
-              key={key}
-              href={href}
+              href="/services"
               className="text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors rounded-md py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              {t(key)}
+              {t("services")}
             </Link>
-          ))}
-
-          {categories.length > 0 && (
-            <div className="relative group">
-              <button
-                type="button"
-                aria-haspopup="true"
-                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors rounded-md py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {t("categories")}
-                <ChevronDown
-                  size={14}
-                  aria-hidden="true"
-                  className="transition-transform group-hover:rotate-180 group-focus-within:rotate-180"
-                />
-              </button>
-              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all absolute start-0 top-full pt-2 z-50">
-                <ul className="min-w-56 max-h-80 overflow-y-auto rounded-xl border border-border bg-background p-1.5 shadow-lg">
-                  {categories.map((cat) => (
-                    <li key={cat.href}>
-                      <Link
-                        href={cat.href}
-                        className="block rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                      >
-                        {cat.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
           )}
+
+          <Link
+            href="/blog"
+            className="text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors rounded-md py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {t("blog")}
+          </Link>
+
+          {categories.length > 0 && <HeaderNavSubmenu label={t("categories")} items={categories} />}
+
+          <Link
+            href="/ship-with-us"
+            className="text-xs sm:text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors rounded-md py-1 px-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {t("ship")}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <HeaderLanguageMenu alternateLinks={alternateLinks} />
-
           <ThemeSwitcher />
-
           <Link
             className="hidden sm:inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs sm:text-sm font-bold shadow-xs hover:opacity-90 active:scale-[0.98] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             href="/#contact"
@@ -111,7 +137,6 @@ export async function SiteHeader({
             <span>{t("contact")}</span>
             <ArrowUpRight size={14} aria-hidden="true" />
           </Link>
-
           <HeaderMobileMenu navItems={mobileNavItems} contactLabel={t("contact")} />
         </div>
       </div>
