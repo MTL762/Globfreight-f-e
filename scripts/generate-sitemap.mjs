@@ -1,333 +1,84 @@
-import fs from "fs";
-import path from "path";
-import "dotenv/config";
-import chalk from "chalk";
+import fs from "node:fs";
+import path from "node:path";
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://globfreight.com").replace(/\/$/, "");
-const API_BASE_URL = (process.env.API_BASE_URL || process.env.baseUrl || "https://api.globfreight.com").replace(/\/$/, "");
-const LOCALES = ["en", "nl", "fr", "de", "ar"];
+/**
+ * Sitemap generator script.
+ * Generates static public/sitemap.xml at build time or on-demand.
+ *
+ * Usage:
+ *   node scripts/generate-sitemap.mjs
+ *   node scripts/generate-sitemap.mjs https://cliktec.com
+ *   NEXT_PUBLIC_SITE_URL=https://cliktec.com node scripts/generate-sitemap.mjs
+ */
+
+const LOCALES = ["en", "ar", "es", "de", "tr", "nl", "fr"];
 const DEFAULT_LOCALE = "en";
 
-const STATIC_PAGES = [
-  { path: "", changeFrequency: "weekly", priority: "1.0" },
-  { path: "/services", changeFrequency: "monthly", priority: "0.9" },
-  { path: "/ship-with-us", changeFrequency: "monthly", priority: "0.9" },
-  { path: "/quote", changeFrequency: "monthly", priority: "0.9" },
-  { path: "/about", changeFrequency: "monthly", priority: "0.8" },
-  { path: "/contact", changeFrequency: "monthly", priority: "0.8" },
-  { path: "/blog", changeFrequency: "weekly", priority: "0.8" }
+const ROUTES = [
+	{ path: "/site", priority: "1.0", changefreq: "weekly" },
+	{ path: "/site/plans", priority: "0.9", changefreq: "monthly" },
+	{ path: "/site/faq", priority: "0.8", changefreq: "monthly" },
 ];
 
-function escapeXml(unsafe) {
-  return String(unsafe).replace(/[<>&'"]/g, (c) => {
-    switch (c) {
-      case "<": return "&lt;";
-      case ">": return "&gt;";
-      case "&": return "&amp;";
-      case "'": return "&apos;";
-      case '"': return "&quot;";
-      default: return c;
-    }
-  });
+function getOrigin() {
+	const cliArg = process.argv[2];
+	const envUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
+	const candidate = cliArg || envUrl || "https://cliktec.com";
+	return candidate.replace(/\/+$/, "");
 }
 
-function formatDate(date) {
-  const d = date ? new Date(date) : new Date();
-  return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+function localizedUrl(origin, locale, routePath) {
+	const normalized = routePath.startsWith("/") ? routePath : `/${routePath}`;
+	return `${origin}/${locale}${normalized === "/" ? "" : normalized}`;
 }
 
-async function fetchCategoriesAcrossLocales() {
-  const categoryMap = new Map();
+function generateSitemapXml() {
+	const origin = getOrigin();
+	const lastmod = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-  await Promise.all(
-    LOCALES.map(async (loc) => {
-      try {
-        const url = `${API_BASE_URL}/categories`;
-        const res = await fetch(url, {
-          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc }
-        });
-        if (res.ok) {
-          const json = await res.json();
-          const items = Array.isArray(json?.data) ? json.data : [];
-          for (const cat of items) {
-            if (!cat?.id) continue;
-            const existing = categoryMap.get(cat.id) || {
-              slugs: {},
-              lastmod: cat.updated_at || new Date().toISOString()
-            };
-            const catSlug = typeof cat.slug === "object" && cat.slug !== null
-              ? cat.slug[loc] || cat.slug.en || cat.slug.ar || Object.values(cat.slug)[0]
-              : cat.slug || String(cat.id);
+	let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+	xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+	xml += `        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
 
-            if (catSlug) existing.slugs[loc] = catSlug;
-            if (cat.updated_at) existing.lastmod = cat.updated_at;
-            categoryMap.set(cat.id, existing);
-          }
-        }
-      } catch (err) {
-        console.warn(chalk.yellow(`⚠️ Could not fetch categories for locale ${loc}: ${err.message}`));
-      }
-    })
-  );
+	let totalUrls = 0;
 
-  return categoryMap;
+	for (const route of ROUTES) {
+		for (const locale of LOCALES) {
+			const pageUrl = localizedUrl(origin, locale, route.path);
+			const defaultUrl = localizedUrl(origin, DEFAULT_LOCALE, route.path);
+
+			xml += "  <url>\n";
+			xml += `    <loc>${pageUrl}</loc>\n`;
+			xml += `    <lastmod>${lastmod}</lastmod>\n`;
+			xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
+			xml += `    <priority>${route.priority}</priority>\n`;
+
+			for (const altLocale of LOCALES) {
+				const altUrl = localizedUrl(origin, altLocale, route.path);
+				xml += `    <xhtml:link rel="alternate" hreflang="${altLocale}" href="${altUrl}" />\n`;
+			}
+			xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${defaultUrl}" />\n`;
+
+			xml += "  </url>\n";
+			totalUrls++;
+		}
+	}
+
+	xml += "</urlset>\n";
+
+	const publicDir = path.join(process.cwd(), "public");
+	if (!fs.existsSync(publicDir)) {
+		fs.mkdirSync(publicDir, { recursive: true });
+	}
+
+	const outputPath = path.join(publicDir, "sitemap.xml");
+	fs.writeFileSync(outputPath, xml, "utf-8");
+
+	console.log(`[sitemap] Successfully generated ${outputPath}`);
+	console.log(`[sitemap] Origin: ${origin}`);
+	console.log(
+		`[sitemap] Total URLs: ${totalUrls} (${ROUTES.length} routes x ${LOCALES.length} locales)`,
+	);
 }
 
-async function fetchBlogPostsAcrossLocales() {
-  const postMap = new Map();
-
-  await Promise.all(
-    LOCALES.map(async (loc) => {
-      try {
-        const url = `${API_BASE_URL}/blog-posts?per_page=100`;
-        const res = await fetch(url, {
-          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc }
-        });
-        if (res.ok) {
-          const json = await res.json();
-          const items = Array.isArray(json?.data) ? json.data : [];
-          for (const post of items) {
-            if (!post?.id) continue;
-            const existing = postMap.get(post.id) || {
-              slugs: {},
-              lastmod: post.updated_at || post.published_at || post.created_at || new Date().toISOString()
-            };
-            const postSlug = typeof post.slug === "object" && post.slug !== null
-              ? post.slug[loc] || post.slug.en || post.slug.ar || Object.values(post.slug)[0]
-              : post.slug || String(post.id);
-
-            if (postSlug) existing.slugs[loc] = postSlug;
-            if (post.updated_at || post.published_at) {
-              existing.lastmod = post.updated_at || post.published_at;
-            }
-            postMap.set(post.id, existing);
-          }
-        }
-      } catch (err) {
-        console.warn(chalk.yellow(`⚠️ Could not fetch blog posts for locale ${loc}: ${err.message}`));
-      }
-    })
-  );
-
-  return postMap;
-}
-
-async function fetchServicesAcrossLocales() {
-  const serviceMap = new Map();
-
-  await Promise.all(
-    LOCALES.map(async (loc) => {
-      try {
-        const url = `${API_BASE_URL}/services`;
-        const res = await fetch(url, {
-          headers: { Accept: "application/json", "Accept-Language": loc, Locale: loc }
-        });
-        if (res.ok) {
-          const json = await res.json();
-          const items = Array.isArray(json?.data) ? json.data : [];
-          for (const srv of items) {
-            if (!srv?.id) continue;
-            const existing = serviceMap.get(srv.id) || {
-              slugs: {},
-              lastmod: srv.updated_at || new Date().toISOString()
-            };
-            const srvSlug = typeof srv.slug === "object" && srv.slug !== null
-              ? srv.slug[loc] || srv.slug.en || srv.slug.ar || Object.values(srv.slug)[0]
-              : srv.slug || String(srv.id);
-
-            if (srvSlug) existing.slugs[loc] = srvSlug;
-            if (srv.updated_at) existing.lastmod = srv.updated_at;
-            serviceMap.set(srv.id, existing);
-          }
-        }
-      } catch (err) {
-        console.warn(chalk.yellow(`⚠️ Could not fetch services for locale ${loc}: ${err.message}`));
-      }
-    })
-  );
-
-  return serviceMap;
-}
-
-function buildXmlItem({ loc, alternates, lastmod, changefreq, priority }) {
-  const lines = [
-    "  <url>",
-    `    <loc>${escapeXml(loc)}</loc>`
-  ];
-
-  for (const alt of alternates) {
-    lines.push(`    <xhtml:link rel="alternate" hreflang="${alt.locale}" href="${escapeXml(alt.url)}" />`);
-  }
-
-  lines.push(`    <lastmod>${lastmod}</lastmod>`);
-  lines.push(`    <changefreq>${changefreq}</changefreq>`);
-  lines.push(`    <priority>${priority}</priority>`);
-  lines.push("  </url>");
-
-  return lines.join("\n");
-}
-
-async function generateSitemap() {
-  const startTime = Date.now();
-  console.log(chalk.cyan(`\n🌐 Generating sitemap for ${SITE_URL}...`));
-
-  const items = [];
-  const buildDate = new Date().toISOString();
-
-  // 1. Static pages across all locales
-  for (const page of STATIC_PAGES) {
-    const alternates = LOCALES.map((locale) => ({
-      locale,
-      url: `${SITE_URL}/${locale}${page.path}`
-    }));
-    alternates.push({
-      locale: "x-default",
-      url: `${SITE_URL}/${DEFAULT_LOCALE}${page.path}`
-    });
-
-    for (const locale of LOCALES) {
-      const isDefault = locale === DEFAULT_LOCALE;
-      const priority = isDefault ? page.priority : Math.max(0.2, (parseFloat(page.priority) - 0.05)).toFixed(2);
-
-      items.push({
-        loc: `${SITE_URL}/${locale}${page.path}`,
-        alternates,
-        lastmod: buildDate,
-        changefreq: page.changeFrequency,
-        priority: String(priority)
-      });
-    }
-  }
-
-  // 2. Dynamic Categories across all locales
-  const categoryMap = await fetchCategoriesAcrossLocales();
-  console.log(chalk.green(`✓ Processed ${categoryMap.size} category entries across all locales`));
-
-  for (const [, { slugs, lastmod }] of categoryMap.entries()) {
-    const defaultSlug = slugs.en || Object.values(slugs)[0];
-    if (!defaultSlug) continue;
-
-    const alternates = LOCALES.map((locale) => {
-      const locSlug = slugs[locale] || defaultSlug;
-      return {
-        locale,
-        url: `${SITE_URL}/${locale}/blog/category/${encodeURIComponent(decodeURIComponent(locSlug))}`
-      };
-    });
-    alternates.push({
-      locale: "x-default",
-      url: `${SITE_URL}/${DEFAULT_LOCALE}/blog/category/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
-    });
-
-    const categoryDate = formatDate(lastmod || buildDate);
-
-    for (const locale of LOCALES) {
-      const locSlug = slugs[locale] || defaultSlug;
-      items.push({
-        loc: `${SITE_URL}/${locale}/blog/category/${encodeURIComponent(decodeURIComponent(locSlug))}`,
-        alternates,
-        lastmod: categoryDate,
-        changefreq: "weekly",
-        priority: "0.8"
-      });
-    }
-  }
-
-  // 3. Dynamic Blog Posts across all locales
-  const postMap = await fetchBlogPostsAcrossLocales();
-  console.log(chalk.green(`✓ Processed ${postMap.size} blog post entries across all locales`));
-
-  for (const [, { slugs, lastmod }] of postMap.entries()) {
-    const defaultSlug = slugs.en || Object.values(slugs)[0];
-    if (!defaultSlug) continue;
-
-    const alternates = LOCALES.map((locale) => {
-      const locSlug = slugs[locale] || defaultSlug;
-      return {
-        locale,
-        url: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`
-      };
-    });
-    alternates.push({
-      locale: "x-default",
-      url: `${SITE_URL}/${DEFAULT_LOCALE}/blog/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
-    });
-
-    const postDate = formatDate(lastmod || buildDate);
-
-    for (const locale of LOCALES) {
-      const locSlug = slugs[locale] || defaultSlug;
-      items.push({
-        loc: `${SITE_URL}/${locale}/blog/${encodeURIComponent(decodeURIComponent(locSlug))}`,
-        alternates,
-        lastmod: postDate,
-        changefreq: "weekly",
-        priority: "0.7"
-      });
-    }
-  }
-
-  // 4. Dynamic Services across all locales
-  const serviceMap = await fetchServicesAcrossLocales();
-  console.log(chalk.green(`✓ Processed ${serviceMap.size} service entries across all locales`));
-
-  for (const [, { slugs, lastmod }] of serviceMap.entries()) {
-    const defaultSlug = slugs.en || Object.values(slugs)[0];
-    if (!defaultSlug) continue;
-
-    const alternates = LOCALES.map((locale) => {
-      const locSlug = slugs[locale] || defaultSlug;
-      return {
-        locale,
-        url: `${SITE_URL}/${locale}/services/${encodeURIComponent(decodeURIComponent(locSlug))}`
-      };
-    });
-    alternates.push({
-      locale: "x-default",
-      url: `${SITE_URL}/${DEFAULT_LOCALE}/services/${encodeURIComponent(decodeURIComponent(defaultSlug))}`
-    });
-
-    const serviceDate = formatDate(lastmod || buildDate);
-
-    for (const locale of LOCALES) {
-      const locSlug = slugs[locale] || defaultSlug;
-      items.push({
-        loc: `${SITE_URL}/${locale}/services/${encodeURIComponent(decodeURIComponent(locSlug))}`,
-        alternates,
-        lastmod: serviceDate,
-        changefreq: "weekly",
-        priority: "0.85"
-      });
-    }
-  }
-
-  // 5. Assemble complete XML
-  const xmlContent = [
-    `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`,
-    `        xmlns:xhtml="http://www.w3.org/1999/xhtml">`,
-    items.map(buildXmlItem).join("\n"),
-    `</urlset>`,
-    ""
-  ].join("\n");
-
-  // 5. Output path
-  const publicDir = path.join(process.cwd(), "public");
-  if (!fs.existsSync(publicDir)) {
-    fs.mkdirSync(publicDir, { recursive: true });
-  }
-
-  const outputPath = path.join(publicDir, "sitemap.xml");
-  fs.writeFileSync(outputPath, xmlContent, "utf8");
-
-  const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
-  console.log(chalk.green(`\n✅ Sitemap generated successfully!`));
-  console.log(chalk.gray(`   Total URLs: ${items.length}`));
-  console.log(chalk.gray(`   Output File: ${outputPath}`));
-  console.log(chalk.gray(`   Duration: ${elapsed}s\n`));
-}
-
-generateSitemap().catch((err) => {
-  console.error(chalk.red("❌ Failed to generate sitemap:"), err);
-  process.exit(1);
-});
+generateSitemapXml();
