@@ -1,6 +1,5 @@
-
-import { fetchHelper } from '@/api/fetch';
-import { getTranslations } from 'next-intl/server';
+import { fetchHelper } from "@/api/fetch";
+import { getTranslations } from "next-intl/server";
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 import type { Metadata } from "next";
 import { CustomersTableWrapper } from "./components/CustomersTableWrapper";
@@ -15,12 +14,23 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
+export default async function Page({
+  searchParams
+}: {
+  searchParams: SearchParams;
+}): Promise<JSX.Element> {
   const t = await getTranslations();
+  const rawParams = await searchParams;
+  const searchVal = rawParams?.search || rawParams?.name;
+  const params = {
+    ...rawParams,
+    ...(searchVal ? { search: searchVal, name: searchVal } : {})
+  };
+
   const data = await fetchHelper({
     endPoint: ["adminCustomers"],
     method: "GET",
-    params: await searchParams,
+    params
   });
 
   const filteredData = Array.isArray(data?.data) ? data.data : [];

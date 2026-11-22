@@ -17,10 +17,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
   const t = await getTranslations();
+  const rawParams = await searchParams;
+  const searchVal = rawParams?.search || rawParams?.name;
+  const params = {
+    ...rawParams,
+    ...(searchVal ? { search: searchVal, name: searchVal } : {})
+  };
+
   const data = await fetchHelper({
     endPoint: ["adminSubCategories"],
     method: "GET",
-    params: await searchParams
+    params
   });
 
   if (!data) return <div>Error loading data...</div>;

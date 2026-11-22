@@ -16,7 +16,8 @@
     "lint:format": "prettier --check './{app,src,components,lib,context,pages}/**/*.{ts,tsx,js,jsx}'",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "prebuild": "npm run sitemap",
-    "create-crud": "node createCRUD.js"
+    "create-crud": "node createCRUD.js",
+    "jira:pull": "node scripts/pull-jira-tasks.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -19,10 +19,17 @@ export default async function SentEmailsPage({
 }: {
   searchParams: SearchParams;
 }): Promise<JSX.Element> {
+  const rawParams = await searchParams;
+  const searchVal = rawParams?.search || rawParams?.recipient_email || rawParams?.subject;
+  const params = {
+    ...rawParams,
+    ...(searchVal ? { search: searchVal, recipient_email: searchVal, subject: searchVal } : {})
+  };
+
   const data = await fetchHelper({
     endPoint: ["adminSentEmails"],
     method: "GET",
-    params: await searchParams
+    params
   });
 
   const emailList = data?.data || [];
@@ -30,10 +37,7 @@ export default async function SentEmailsPage({
   return (
     <div className="space-y-6">
       <CustomHeader />
-      <SentEmailsTableWrapper
-        data={emailList}
-        total={data?.total}
-      />
+      <SentEmailsTableWrapper data={emailList} total={data?.total} />
     </div>
   );
 }

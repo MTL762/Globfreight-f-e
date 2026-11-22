@@ -18,11 +18,7 @@ interface CustomersTableWrapperProps {
   cardHeader?: string;
 }
 
-export function CustomersTableWrapper({
-  data,
-  total,
-  cardHeader
-}: CustomersTableWrapperProps) {
+export function CustomersTableWrapper({ data, total, cardHeader }: CustomersTableWrapperProps) {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
@@ -85,9 +81,7 @@ export function CustomersTableWrapper({
               <FaWhatsapp className="h-4 w-4" />
               <Mail className="h-3.5 w-3.5" />
             </div>
-            <span>
-              {isRtl ? "إرسال رسالة جماعية" : "Send WhatsApp & Email"}
-            </span>
+            <span>{isRtl ? "إرسال رسالة جماعية" : "Send WhatsApp & Email"}</span>
           </Button>
         </div>
 
@@ -102,7 +96,7 @@ export function CustomersTableWrapper({
             onDelete: ["adminCustomers"]
           }}
           cardHeader={cardHeader || t("Customers")}
-          filters={[{ name: "name", type: "text", width: 3 }]}
+          filters={[{ name: "search", type: "text", width: 3 }]}
         />
       </div>
 
