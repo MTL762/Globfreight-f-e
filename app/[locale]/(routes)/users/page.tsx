@@ -21,10 +21,17 @@ export default async function Page({
   searchParams: SearchParams;
 }): Promise<JSX.Element> {
   const t = await getTranslations();
+  const rawParams = await searchParams;
+  const searchVal = rawParams?.search || rawParams?.name;
+  const params = {
+    ...rawParams,
+    ...(searchVal ? { search: searchVal, name: searchVal } : {})
+  };
+
   const data = await fetchHelper({
     endPoint: ["adminUsers"],
     method: "GET",
-    params: await searchParams
+    params
   });
 
   if (!data) return <div>Error loading users...</div>;
@@ -47,6 +54,15 @@ export default async function Page({
         cardHeader={t("Users")}
         filters={[
           { name: "search", type: "text", width: 4 },
+          {
+            name: "status",
+            type: "select",
+            width: 3,
+            options: [
+              { value: "active", label: t("active") },
+              { value: "inactive", label: t("inactive") }
+            ]
+          }
         ]}
       />
     </div>

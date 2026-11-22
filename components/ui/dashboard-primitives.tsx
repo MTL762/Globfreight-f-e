@@ -151,9 +151,15 @@ export function SearchField({
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
         aria-label={placeholder || "Search"}
-        className="h-9 w-64 rounded-full border border-border/60 bg-background/80 px-4 pr-10 text-sm shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary"
+        className="h-9 w-64 rounded-full border border-border/60 bg-background/80 px-4 pe-10 text-sm shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary"
       />
-      <Search className="pointer-events-none absolute end-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <button
+        type="submit"
+        aria-label={placeholder || "Search"}
+        className="absolute end-1.5 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-muted-foreground transition hover:text-foreground hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <Search className="h-4 w-4" />
+      </button>
     </div>
   );
 }

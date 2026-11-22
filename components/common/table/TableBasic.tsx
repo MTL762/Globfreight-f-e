@@ -13,13 +13,15 @@ import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-tabl
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useMemo, useState } from "react";
 import type { FormInput } from "../Form/CustomFormTypes.types";
 import { TableActionsType, TablePaginationType } from "./table.types";
 import TableActions from "./tableActions/TableActions";
 import BasicTableHeader from "./tableHelperComponents/BasicTableHeader";
 import TableNoData from "./tableHelperComponents/TableNoData";
 import { TablePagination } from "./tableHelperComponents/TablePagination";
+import { filterTableData } from "./tableHelperComponents/filterTableData";
 
 interface TableBasicProps<T> {
   data: T[];
@@ -56,20 +58,34 @@ export default function TableBasic<T extends Record<string, unknown>>({
     setExpandedRowId(prev => (prev === rowId ? null : rowId));
   };
 
-  // ... (rest of the setup code remains the same until TableBody) ...
-  // Set totalData if not already provided.
-  if (pagination && pagination.total === undefined) {
-    pagination.total = data?.length || 0;
-  }
+  const searchParams = useSearchParams();
 
-  const hasData = Boolean(data && data?.length > 0);
+  const filteredData = useMemo(() => {
+    return filterTableData(data || [], searchParams);
+  }, [data, searchParams]);
+
+  const activeParamsCount = Array.from(searchParams.entries()).filter(
+    ([k, v]) => !["page", "per_page", "limit", "pageSize"].includes(k) && v && v.trim() !== ""
+  ).length;
+
+  const currentTotal =
+    activeParamsCount > 0 ? filteredData.length : (pagination?.total ?? filteredData.length);
+
+  const resolvedPagination = pagination
+    ? {
+        ...pagination,
+        total: currentTotal
+      }
+    : undefined;
+
+  const hasData = Boolean(filteredData && filteredData.length > 0);
 
   // Resolve columns - if it's a function, call it
   const resolvedColumns = typeof columns === "function" ? columns() : columns;
 
   // Create table instance with tanstack-table
   const table = useReactTable({
-    data: data || [],
+    data: filteredData || [],
     columns: resolvedColumns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -86,7 +102,7 @@ export default function TableBasic<T extends Record<string, unknown>>({
             headers={resolvedColumns?.map(col => ({
               name: (col as any).accessorKey || (col as any).id || "column"
             }))}
-            data={data}
+            data={filteredData}
             cardHeader={cardHeader}
             filters={filters}
             hideCreateNew={hideCreateNew}
@@ -256,9 +272,9 @@ export default function TableBasic<T extends Record<string, unknown>>({
           </Table>
         </motion.div>
       )}
-      {pagination && hasData && !isInnerTable && (
+      {resolvedPagination && hasData && !isInnerTable && (
         <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-slate-950 p-6">
-          <TablePagination pagination={pagination} />
+          <TablePagination pagination={resolvedPagination} />
         </div>
       )}
     </>

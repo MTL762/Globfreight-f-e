@@ -29,7 +29,11 @@ export default function useServicesLogic({ data }: { data?: any }) {
     const featuresMap: Record<string, string[]> = {};
     FORM_LANGUAGES.forEach(({ code, key }) => {
       let langFeatures: any[] = [];
-      if (sourceData?.features && typeof sourceData.features === "object" && !Array.isArray(sourceData.features)) {
+      if (
+        sourceData?.features &&
+        typeof sourceData.features === "object" &&
+        !Array.isArray(sourceData.features)
+      ) {
         langFeatures = sourceData.features[code] || [];
       } else if (Array.isArray(sourceData?.features)) {
         if (code === "en" || code === locale) {
@@ -37,7 +41,7 @@ export default function useServicesLogic({ data }: { data?: any }) {
         }
       }
       featuresMap[`features${key}`] = Array.isArray(langFeatures)
-        ? langFeatures.map((item: any) => (typeof item === "string" ? item : item?.value ?? ""))
+        ? langFeatures.map((item: any) => (typeof item === "string" ? item : (item?.value ?? "")))
         : [];
     });
     return featuresMap;
@@ -46,7 +50,11 @@ export default function useServicesLogic({ data }: { data?: any }) {
   const initialFeatures = getInitialFeatures(normalizedData);
   const formDefaults = extractFormDefaultInputs(inputs, normalizedData) as Record<string, any>;
 
-  const buildDefaultValues = (sourceData: any, defaults: Record<string, any>, features: Record<string, string[]>) => ({
+  const buildDefaultValues = (
+    sourceData: any,
+    defaults: Record<string, any>,
+    features: Record<string, string[]>
+  ) => ({
     ...defaults,
     parent_id: defaults.parent_id || sourceData?.parent_id || sourceData?.parent?.id || "",
     is_active: sourceData?.is_active !== undefined ? Boolean(sourceData.is_active) : true,
@@ -55,18 +63,20 @@ export default function useServicesLogic({ data }: { data?: any }) {
     published_locales: Array.isArray(sourceData?.published_locales)
       ? sourceData.published_locales
       : Array.isArray(defaults?.published_locales)
-      ? defaults.published_locales
-      : [],
-    seo_schema_markup_type: defaults.seo_schema_markup_type || sourceData?.seo?.schema_markup_type || "Service",
+        ? defaults.published_locales
+        : [],
+    seo_schema_markup_type:
+      defaults.seo_schema_markup_type || sourceData?.seo?.schema_markup_type || "Service",
     seo_meta_robots: defaults.seo_meta_robots || sourceData?.seo?.meta_robots || "index, follow",
-    seo_twitter_card: defaults.seo_twitter_card || sourceData?.seo?.twitter_card || "summary_large_image",
+    seo_twitter_card:
+      defaults.seo_twitter_card || sourceData?.seo?.twitter_card || "summary_large_image",
     seo_faq_ids: Array.isArray(defaults.seo_faq_ids)
       ? defaults.seo_faq_ids
       : Array.isArray(sourceData?.seo?.faq_ids)
-      ? sourceData.seo.faq_ids
-      : Array.isArray(sourceData?.seo?.faqs)
-      ? sourceData.seo.faqs
-      : [],
+        ? sourceData.seo.faq_ids
+        : Array.isArray(sourceData?.seo?.faqs)
+          ? sourceData.seo.faqs
+          : [],
     ...features
   });
 
@@ -89,7 +99,10 @@ export default function useServicesLogic({ data }: { data?: any }) {
         ...data,
         parent_id: data.parent_id ?? data.parent?.id ?? ""
       };
-      const refreshedDefaults = extractFormDefaultInputs(inputs, refreshedData) as Record<string, any>;
+      const refreshedDefaults = extractFormDefaultInputs(inputs, refreshedData) as Record<
+        string,
+        any
+      >;
       const refreshedFeatures = getInitialFeatures(refreshedData);
       reset(buildDefaultValues(refreshedData, refreshedDefaults, refreshedFeatures) as any);
     }
@@ -127,7 +140,9 @@ export default function useServicesLogic({ data }: { data?: any }) {
             const selfReferencingUrl = `https://globfreight.com/${codes[key]}/services/${autoSlug}`;
             setValue(canonicalFieldName, selfReferencingUrl as any, { shouldValidate: false });
             if (codes[key] === "en" || key === "En") {
-              setValue("seo_canonical_url" as any, selfReferencingUrl as any, { shouldValidate: false });
+              setValue("seo_canonical_url" as any, selfReferencingUrl as any, {
+                shouldValidate: false
+              });
             }
           }
         }
@@ -136,8 +151,17 @@ export default function useServicesLogic({ data }: { data?: any }) {
   }, [watchedNames, dirtyFields, setValue]);
 
   const onSubmit = async (formData: ServicesType) => {
+    const anyImage =
+      formData.imageEn ||
+      formData.imageAr ||
+      formData.imageNl ||
+      formData.imageFr ||
+      formData.imageDe ||
+      (formData as any).image;
+
     const payload = {
       ...formData,
+      imageEn: formData.imageEn || anyImage,
       parent_id:
         formData.parent_id && Number(formData.parent_id) > 0 ? Number(formData.parent_id) : null,
       is_active: formData.is_active ? 1 : 0,
@@ -169,4 +193,3 @@ export default function useServicesLogic({ data }: { data?: any }) {
     t
   };
 }
-

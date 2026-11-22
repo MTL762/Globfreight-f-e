@@ -57,7 +57,8 @@ export const ServicesInputs = (): FormInput[] => {
       type: "multiSelect",
       label: "Live Published Languages",
       placeholder: "Select live languages (e.g. en, ar)...",
-      toolTip: "Controls which language versions are live for visitors. If empty, automatically publishes all translated languages.",
+      toolTip:
+        "Controls which language versions are live for visitors. If empty, automatically publishes all translated languages.",
       options: [
         { label: "English (en)", value: "en" },
         { label: "العربية (ar)", value: "ar" },
@@ -87,7 +88,8 @@ export const ServicesInputs = (): FormInput[] => {
       multiLang: true,
       label: "URL Slug",
       placeholder: "e.g. ocean-freight-forwarding",
-      toolTip: "Auto-generated from service name per language (lowercase, hyphens, unique), editable",
+      toolTip:
+        "Auto-generated from service name per language (lowercase, hyphens, unique), editable",
       cardId: "lang",
       width: 6
     },
@@ -127,7 +129,7 @@ export const ServicesInputs = (): FormInput[] => {
     {
       name: "image",
       type: "img",
-      multiLang: false,
+      multiLang: true,
       label: "Service Cover / Banner Image",
       ratio: "1200:630",
       toolTip: "High-resolution banner (JPEG, PNG, WebP max 10MB)",
@@ -184,7 +186,8 @@ export const ServicesInputs = (): FormInput[] => {
       multiLang: true,
       label: "Canonical URL",
       placeholder: "https://globfreight.com/en/services/...",
-      toolTip: "Self-referencing or custom canonical URL per language to prevent duplicate content penalties",
+      toolTip:
+        "Self-referencing or custom canonical URL per language to prevent duplicate content penalties",
       cardId: "seo",
       width: 6
     },
@@ -323,7 +326,8 @@ export const ServicesInputs = (): FormInput[] => {
       type: "faq-select",
       multiLang: false,
       label: "Frequently Asked Questions (FAQ Selection)",
-      toolTip: "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
+      toolTip:
+        "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
       cardId: "schema",
       width: 12
     }

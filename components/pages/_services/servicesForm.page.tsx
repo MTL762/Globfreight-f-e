@@ -26,6 +26,7 @@ export default function ServicesFormPage({ data }: { data?: ServicesType }) {
         {
           id: "media",
           title: t("Media & Visuals"),
+          multiLang: true,
           width: 12
         },
         {
@@ -44,4 +45,3 @@ export default function ServicesFormPage({ data }: { data?: ServicesType }) {
     />
   );
 }
-

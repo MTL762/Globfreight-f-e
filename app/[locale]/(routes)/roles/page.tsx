@@ -1,10 +1,9 @@
-
-import { fetchHelper } from '@/api/fetch';
-import TableBasic from '@/components/common/table/TableBasic';
-import { getTranslations } from 'next-intl/server';
+import { fetchHelper } from "@/api/fetch";
+import TableBasic from "@/components/common/table/TableBasic";
+import { getTranslations } from "next-intl/server";
 import CustomHeader from "@/components/layouts/header/CustomHeader";
 import type { Metadata } from "next";
-import RolesColumns from './RolesColumns';
+import RolesColumns from "./RolesColumns";
 // import GenerateStaticParams from '@/api/metadata';
 import { PROJECT_NAME } from "@/utils/config";
 // export const generateStaticParams = GenerateStaticParams;
@@ -17,12 +16,23 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }): Promise<JSX.Element> {
+export default async function Page({
+  searchParams
+}: {
+  searchParams: SearchParams;
+}): Promise<JSX.Element> {
   const t = await getTranslations();
+  const rawParams = await searchParams;
+  const searchVal = rawParams?.search || rawParams?.name;
+  const params = {
+    ...rawParams,
+    ...(searchVal ? { search: searchVal, name: searchVal } : {})
+  };
+
   const data = await fetchHelper({
     endPoint: ["roles"],
     method: "GET",
-    params: await searchParams,
+    params
   });
 
   const filteredData = Array.isArray(data?.data) ? data.data : [];
@@ -34,11 +44,11 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
         data={filteredData}
         columns={RolesColumns}
         pagination={{
-          total: data?.total || (Array.isArray(filteredData) ? filteredData.length : 0),
+          total: data?.total || (Array.isArray(filteredData) ? filteredData.length : 0)
         }}
         tableActions={{
           onEdit: true,
-          onDelete: ["roles"],
+          onDelete: ["roles"]
         }}
         cardHeader={t("Roles")}
         filters={[{ name: "search", type: "text", width: 4 }]}

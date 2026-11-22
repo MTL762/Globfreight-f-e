@@ -13,7 +13,7 @@ import { renderInputComponent } from "../../Form/inputs-render";
 function TableFilters({
   filters,
   isFiltersOpen,
-  setIsFiltersOpen,
+  setIsFiltersOpen
 }: {
   setIsFiltersOpen?: (value: boolean) => void;
   isFiltersOpen?: boolean;
@@ -28,13 +28,17 @@ function TableFilters({
   const t = useTranslations();
 
   const onFilterSubmit = () => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("page");
+    for (const filter of filters) {
+      params.delete(filter.name);
+    }
+
     for (const [key, value] of Object.entries(filterValues)) {
       if (value === null || value === undefined || value === "") continue;
       if (Array.isArray(value) && value.length === 0) continue;
 
-      const normalizedValue =
-        value instanceof Date ? value.toISOString() : (value as unknown);
+      const normalizedValue = value instanceof Date ? value.toISOString() : (value as unknown);
 
       if (Array.isArray(normalizedValue)) {
         for (const item of normalizedValue) params.append(key, String(item));
@@ -45,14 +49,21 @@ function TableFilters({
     }
 
     startTransition(() => {
-      router.push(`?${params.toString()}`);
+      const q = params.toString();
+      router.push(q ? `?${q}` : pathName);
     });
   };
 
   const filterReset = () => {
     setFilterValues({});
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("page");
+    for (const filter of filters) {
+      params.delete(filter.name);
+    }
     startTransition(() => {
-      router.replace(pathName);
+      const q = params.toString();
+      router.replace(q ? `?${q}` : pathName);
     });
     setIsFiltersOpen?.(false);
   };
@@ -70,8 +81,8 @@ function TableFilters({
         if (values.length > 0) {
           if (filter.type === "date") {
             newFilterValues[filter.name] = values
-              .map((v) => new Date(v))
-              .filter((d) => !Number.isNaN(d.getTime()));
+              .map(v => new Date(v))
+              .filter(d => !Number.isNaN(d.getTime()));
           } else {
             newFilterValues[filter.name] = values;
           }
@@ -145,18 +156,18 @@ function TableFilters({
                               }
                             } else if (Array.isArray(value)) {
                               value = value
-                                .map((v) => (typeof v === "string" ? new Date(v) : v))
-                                .filter((v) => v instanceof Date && !Number.isNaN(v.getTime()));
+                                .map(v => (typeof v === "string" ? new Date(v) : v))
+                                .filter(v => v instanceof Date && !Number.isNaN(v.getTime()));
                             }
                           }
 
-                          setFilterValues((prev) => ({
+                          setFilterValues(prev => ({
                             ...prev,
-                            [filter.name]: value,
+                            [filter.name]: value
                           }));
-                        },
+                        }
                       },
-                      errors: {},
+                      errors: {}
                     })}
                   </FormInputContainer>
                 )}
@@ -165,7 +176,7 @@ function TableFilters({
           })}
         </FormCardContainer>
 
-        <div className="flex justify-end w-full gap-4 sm:w-auto sm:ml-auto">
+        <div className="flex justify-end w-full gap-4 sm:w-auto sm:ms-auto">
           <Button
             type="button"
             onClick={onFilterSubmit}
@@ -174,7 +185,7 @@ function TableFilters({
           >
             {isPending ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
                 {t("Loading")}...
               </>
             ) : (

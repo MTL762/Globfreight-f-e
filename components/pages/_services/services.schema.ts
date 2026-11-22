@@ -46,6 +46,12 @@ export const ServicesSchema = (t: TFunction) => {
 
       // Media
       image: noSchema().optional(),
+      imageAr: noSchema().optional(),
+      imageEn: noSchema().optional(),
+      imageNl: noSchema().optional(),
+      imageFr: noSchema().optional(),
+      imageDe: noSchema().optional(),
+
       image_altAr: StringNotReq(),
       image_altEn: StringNotReq(),
       image_altNl: StringNotReq(),
@@ -103,7 +109,10 @@ export const ServicesSchema = (t: TFunction) => {
       seo_og_image_altDe: StringNotReq(),
 
       // Twitter Card
-      seo_twitter_card: z.enum(["summary_large_image", "summary"]).optional().default("summary_large_image"),
+      seo_twitter_card: z
+        .enum(["summary_large_image", "summary"])
+        .optional()
+        .default("summary_large_image"),
       seo_twitter_image: noSchema().optional(),
       seo_twitter_titleAr: StringNotReq(),
       seo_twitter_titleEn: StringNotReq(),
@@ -120,10 +129,22 @@ export const ServicesSchema = (t: TFunction) => {
       // Schema & FAQs
       seo_schema_markup_type: z.string().optional().default("Service"),
       seo_schema_markup: StringNotReq(),
-      seo_faq_ids: z.array(z.union([z.number(), z.string(), z.object({ id: z.union([z.number(), z.string()]).optional(), question: z.string().optional() })])).optional().default([])
+      seo_faq_ids: z
+        .array(
+          z.union([
+            z.number(),
+            z.string(),
+            z.object({
+              id: z.union([z.number(), z.string()]).optional(),
+              question: z.string().optional()
+            })
+          ])
+        )
+        .optional()
+        .default([])
     })
     .refine(
-      (data) => Boolean(data.nameEn || data.nameAr || data.nameNl || data.nameFr || data.nameDe),
+      data => Boolean(data.nameEn || data.nameAr || data.nameNl || data.nameFr || data.nameDe),
       {
         message: t("Validations.required"),
         path: ["nameEn"]
@@ -132,4 +153,3 @@ export const ServicesSchema = (t: TFunction) => {
 };
 
 export type ServicesType = z.infer<ReturnType<typeof ServicesSchema>>;
-

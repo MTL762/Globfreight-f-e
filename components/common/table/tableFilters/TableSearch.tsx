@@ -82,7 +82,7 @@ function TableSearch({ searchFilter }: { searchFilter: FormInput }): JSX.Element
           }
         })}
         {isPending && (
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
           </div>
         )}
@@ -101,12 +101,12 @@ function TableSearch({ searchFilter }: { searchFilter: FormInput }): JSX.Element
       <SearchField
         name={searchFilter.name}
         placeholder={searchFilter.placeholder}
-        value={typeof filterValue === 'string' ? filterValue : ''}
+        value={typeof filterValue === "string" ? filterValue : ""}
         onChange={setFilterValue}
-        className={isPending ? "pr-10" : ""}
+        className={isPending ? "pe-10" : ""}
       />
       {isPending && (
-        <div className="absolute inset-y-0 right-10 flex items-center pr-3 pointer-events-none">
+        <div className="absolute inset-y-0 end-10 flex items-center pe-3 pointer-events-none">
           <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
         </div>
       )}
@@ -115,4 +115,3 @@ function TableSearch({ searchFilter }: { searchFilter: FormInput }): JSX.Element
 }
 
 export default TableSearch;
-
