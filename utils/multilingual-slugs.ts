@@ -56,7 +56,7 @@ async function fetchTranslatedSlugs({
   slug: string;
   entity: any;
   titleKey: "title" | "name";
-  endpointPath: "blog-posts/slug" | "categories/slug" | "services/slug";
+  endpointPath: "blog-posts/slug" | "categories/slug" | "api/services/slug";
   currentLocale: string;
 }): Promise<Partial<Record<SystemLocale, string>>> {
   const result: Partial<Record<SystemLocale, string>> = {};
@@ -317,7 +317,14 @@ const fetchAndResolveService = cache(async (slug: string, locale: string) => {
     service =
       (Array.isArray(listRes?.data) ? listRes.data : []).find((srv: any) => {
         const sSlug = getStrictLocalizedValue(srv.slug, locale);
-        return (sSlug && sSlug.toLowerCase() === decoded) || String(srv.id) === decoded;
+        if ((sSlug && sSlug.toLowerCase() === decoded) || String(srv.id) === decoded) return true;
+        if (typeof srv.slug === "object" && srv.slug !== null) {
+          return Object.values(srv.slug).some(
+            v => typeof v === "string" && v.toLowerCase() === decoded
+          );
+        }
+        if (typeof srv.slug === "string" && srv.slug.toLowerCase() === decoded) return true;
+        return false;
       }) || null;
   }
 
@@ -326,7 +333,7 @@ const fetchAndResolveService = cache(async (slug: string, locale: string) => {
         slug,
         entity: service,
         titleKey: "name",
-        endpointPath: "services/slug",
+        endpointPath: "api/services/slug",
         currentLocale: locale
       })
     : {};

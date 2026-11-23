@@ -15,10 +15,10 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
-const API_BASE = (
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://api.globfreight.com"
-).replace(/\/$/, "");
+const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.globfreight.com").replace(
+  /\/$/,
+  ""
+);
 
 interface LanguageSwitcherProps {
   initialAlternateLinks?: Record<string, string> | null;
@@ -32,8 +32,7 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
   const activeAlternateLinks = initialAlternateLinks ?? contextAlternateLinks;
 
   const activeLang =
-    SUPPORTED_LANGUAGE_ITEMS.find((l) => l.code === currentLocale) ||
-    SUPPORTED_LANGUAGE_ITEMS[0];
+    SUPPORTED_LANGUAGE_ITEMS.find(l => l.code === currentLocale) || SUPPORTED_LANGUAGE_ITEMS[0];
 
   const navigateToLocale = (targetPath: string, targetLocale: string) => {
     try {
@@ -48,7 +47,8 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
       return direct ? toRelativePathname(direct) : `/${targetLocale}`;
     }
 
-    const cleanPath = !pathname || pathname === "/" ? "" : pathname.startsWith("/") ? pathname : `/${pathname}`;
+    const cleanPath =
+      !pathname || pathname === "/" ? "" : pathname.startsWith("/") ? pathname : `/${pathname}`;
     return `/${targetLocale}${cleanPath}`;
   };
 
@@ -79,7 +79,10 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
           json?.data?.new_slug;
 
         if (res.ok && typeof resolvedSlug === "string" && resolvedSlug.trim()) {
-          navigateToLocale(`/${targetLocale}/blog/${encodeURIComponent(resolvedSlug.trim())}`, targetLocale);
+          navigateToLocale(
+            `/${targetLocale}/blog/${encodeURIComponent(resolvedSlug.trim())}`,
+            targetLocale
+          );
           return;
         }
       } catch {}
@@ -102,7 +105,43 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
           json?.data?.new_slug;
 
         if (res.ok && typeof resolvedSlug === "string" && resolvedSlug.trim()) {
-          navigateToLocale(`/${targetLocale}/blog/category/${encodeURIComponent(resolvedSlug.trim())}`, targetLocale);
+          navigateToLocale(
+            `/${targetLocale}/blog/category/${encodeURIComponent(resolvedSlug.trim())}`,
+            targetLocale
+          );
+          return;
+        }
+      } catch {}
+      navigateToLocale(`/${targetLocale}`, targetLocale);
+      return;
+    }
+
+    const servicesMatch = pathname?.match(/^\/services\/([^/]+)$/);
+    if (servicesMatch) {
+      const rawSlug = servicesMatch[1];
+      try {
+        const cleanSlug = encodeURIComponent(decodeURIComponent(rawSlug));
+        const res = await fetch(
+          `${API_BASE}/api/services/slug/${cleanSlug}?locale=${targetLocale}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Accept-Language": targetLocale,
+              Locale: targetLocale
+            }
+          }
+        );
+        const json = await res.json().catch(() => null);
+        const resolvedSlug =
+          json?.data?.slug ||
+          (typeof json?.data?.slug === "object" ? json.data.slug[targetLocale] : null) ||
+          json?.data?.new_slug;
+
+        if (res.ok && typeof resolvedSlug === "string" && resolvedSlug.trim()) {
+          navigateToLocale(
+            `/${targetLocale}/services/${encodeURIComponent(resolvedSlug.trim())}`,
+            targetLocale
+          );
           return;
         }
       } catch {}
@@ -111,7 +150,8 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
     }
 
     // 3. Normal static route navigation
-    const cleanPath = !pathname || pathname === "/" ? "" : pathname.startsWith("/") ? pathname : `/${pathname}`;
+    const cleanPath =
+      !pathname || pathname === "/" ? "" : pathname.startsWith("/") ? pathname : `/${pathname}`;
     const search = typeof window !== "undefined" ? window.location.search : "";
     navigateToLocale(`/${targetLocale}${cleanPath}${search}`, targetLocale);
   };
@@ -130,7 +170,7 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44 p-1.5 z-50">
-        {SUPPORTED_LANGUAGE_ITEMS.map((item) => {
+        {SUPPORTED_LANGUAGE_ITEMS.map(item => {
           const isActive = item.code === currentLocale;
           const targetHref = getTargetHref(item.code);
 
@@ -145,22 +185,18 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
                 </span>
                 <span>{item.label}</span>
               </div>
-              {isActive && (
-                <Check size={14} className="text-primary shrink-0" aria-hidden="true" />
-              )}
+              {isActive && <Check size={14} className="text-primary shrink-0" aria-hidden="true" />}
             </div>
           );
 
           const className = `flex items-center justify-between px-2.5 py-2 rounded-md text-xs font-medium cursor-pointer transition-colors focus-visible:ring-1 focus-visible:ring-primary ${
-            isActive
-              ? "bg-primary/10 text-primary font-bold"
-              : "text-foreground hover:bg-muted"
+            isActive ? "bg-primary/10 text-primary font-bold" : "text-foreground hover:bg-muted"
           }`;
 
           return (
             <DropdownMenuItem
               key={item.code}
-              onSelect={(e) => {
+              onSelect={e => {
                 e.preventDefault();
                 handleSelect(item.code);
               }}
@@ -168,14 +204,12 @@ const LanguageSwitcher = ({ initialAlternateLinks }: LanguageSwitcherProps) => {
             >
               <a
                 href={targetHref}
-                onClick={(e) => {
+                onClick={e => {
                   e.preventDefault();
                   handleSelect(item.code);
                 }}
                 aria-current={isActive ? "true" : undefined}
-                aria-label={`${item.label} (${item.short})${
-                  isActive ? " - selected" : ""
-                }`}
+                aria-label={`${item.label} (${item.short})${isActive ? " - selected" : ""}`}
                 className={className}
               >
                 {content}

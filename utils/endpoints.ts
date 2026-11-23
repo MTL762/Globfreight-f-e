@@ -39,7 +39,7 @@ export const endpoints = {
   subCategories: "/sub-categories",
   subCategoriesSlug: "/sub-categories/slug",
   services: "/api/services",
-  servicesSlug: "/services/slug",
+  servicesSlug: "/api/services/slug",
   blogPosts: "/blog-posts",
   blogPostsSlug: "/blog-posts/slug",
   faqItems: "/faq-items",
@@ -74,8 +74,7 @@ export const tags = {
   adminPriceRequests: "adminPriceRequests",
   customers: "customers",
   sentEmails: "sentEmails",
-  visitors: "visitors",
+  visitors: "visitors"
 };
 
 export type Tags = keyof typeof tags;
-
