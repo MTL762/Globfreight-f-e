@@ -16,7 +16,11 @@ export interface categoriesSeo {
   focus_keyphrase?: LocalizedString;
   canonical_url?: string | LocalizedString | null;
   schema_markup_type?: string | null;
-  schema_markup?: string | object | null;
+  schema_markup?:
+    | string
+    | Record<string, unknown>
+    | Record<string, Record<string, unknown> | string | null>
+    | null;
   og_title?: LocalizedString;
   og_description?: LocalizedString;
   og_image?: string | null;
@@ -50,4 +54,3 @@ export interface categories {
   created_at: string;
   updated_at: string;
 }
-

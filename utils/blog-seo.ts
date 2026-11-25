@@ -215,7 +215,19 @@ export function buildBlogPostSchemas(post: BlogPost, locale: string, alternates:
   const faqJsonLd =
     Array.isArray(post.seo?.faqs) && post.seo.faqs.length > 0 ? getFaqJsonLd(post.seo.faqs) : null;
 
-  return [articleJsonLd, breadcrumbsJsonLd, faqJsonLd, post.seo?.schema_markup];
+  let customSchema: unknown = post.seo?.schema_markup;
+  if (typeof customSchema === "object" && customSchema !== null && !("@context" in customSchema)) {
+    const localized = customSchema as Record<string, unknown>;
+    customSchema = localized[locale] || localized.en || Object.values(localized)[0];
+  }
+  let parsedCustomSchema = customSchema as Record<string, any> | string | null | undefined;
+  if (typeof customSchema === "string" && customSchema.trim().startsWith("{")) {
+    try {
+      parsedCustomSchema = JSON.parse(customSchema);
+    } catch {}
+  }
+
+  return [articleJsonLd, breadcrumbsJsonLd, faqJsonLd, parsedCustomSchema];
 }
 
 export function buildCategoryMetadata(
@@ -338,14 +350,18 @@ export function buildCategorySchemas(
 
   let customSchemaMarkup: any = null;
   if (category.seo?.schema_markup) {
-    if (typeof category.seo.schema_markup === "object") {
-      customSchemaMarkup = category.seo.schema_markup;
-    } else if (
-      typeof category.seo.schema_markup === "string" &&
-      category.seo.schema_markup.trim().startsWith("{")
-    ) {
+    let rawMarkup = category.seo.schema_markup;
+    if (typeof rawMarkup === "object" && rawMarkup !== null && !("@context" in rawMarkup)) {
+      rawMarkup =
+        (rawMarkup as Record<string, unknown>)[locale] ||
+        (rawMarkup as Record<string, unknown>).en ||
+        Object.values(rawMarkup)[0];
+    }
+    if (typeof rawMarkup === "object" && rawMarkup !== null) {
+      customSchemaMarkup = rawMarkup;
+    } else if (typeof rawMarkup === "string" && rawMarkup.trim().startsWith("{")) {
       try {
-        customSchemaMarkup = JSON.parse(category.seo.schema_markup);
+        customSchemaMarkup = JSON.parse(rawMarkup);
       } catch {}
     }
   }

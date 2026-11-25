@@ -105,7 +105,10 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
       seo_og_image_altDe: StringNotReq(),
 
       // Twitter / X
-      seo_twitter_card: z.enum(["summary_large_image", "summary"]).optional().default("summary_large_image"),
+      seo_twitter_card: z
+        .enum(["summary_large_image", "summary"])
+        .optional()
+        .default("summary_large_image"),
       seo_twitter_image: noSchema().optional(),
       seo_twitter_titleAr: StringNotReq(),
       seo_twitter_titleEn: StringNotReq(),
@@ -137,18 +140,38 @@ export const BlogSchema = (t: TFunction, locale: Locale) => {
       seo_schema_markup_typeDe: StringNotReq(),
 
       seo_schema_markup: StringNotReq(),
-      seo_faq_ids: z.array(z.union([z.number(), z.string(), z.object({ id: z.union([z.number(), z.string()]).optional(), question: z.string().optional() })])).optional().default([]),
-      seo_faqs: z.any().optional().default([]),
+      seo_schema_markupAr: StringNotReq(),
+      seo_schema_markupEn: StringNotReq(),
+      seo_schema_markupNl: StringNotReq(),
+      seo_schema_markupFr: StringNotReq(),
+      seo_schema_markupDe: StringNotReq(),
+      seo_faq_ids: z
+        .array(
+          z.union([
+            z.number(),
+            z.string(),
+            z.object({
+              id: z.union([z.number(), z.string()]).optional(),
+              question: z.string().optional()
+            })
+          ])
+        )
+        .optional()
+        .default([]),
+      seo_faqs: z.any().optional().default([])
     })
     .refine(
-      (data) => Boolean(data.titleEn || data.titleAr || data.titleNl || data.titleFr || data.titleDe),
+      data => Boolean(data.titleEn || data.titleAr || data.titleNl || data.titleFr || data.titleDe),
       {
         message: t("Validations.required"),
         path: [locale === "ar" ? "titleAr" : "titleEn"]
       }
     )
     .refine(
-      (data) => Boolean(data.contentEn || data.contentAr || data.contentNl || data.contentFr || data.contentDe),
+      data =>
+        Boolean(
+          data.contentEn || data.contentAr || data.contentNl || data.contentFr || data.contentDe
+        ),
       {
         message: t("Validations.required"),
         path: [locale === "ar" ? "contentAr" : "contentEn"]

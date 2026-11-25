@@ -13,7 +13,7 @@ export const BlogInputs = (): FormInput[] => {
       toolTip: t("BlogTooltips.category_id"),
       required: true,
       cardId: "general",
-      width: 6,
+      width: 6
     },
     {
       name: "sub_category_id",
@@ -22,7 +22,7 @@ export const BlogInputs = (): FormInput[] => {
       label: "Sub Category",
       toolTip: t("BlogTooltips.sub_category_id"),
       cardId: "general",
-      width: 6,
+      width: 6
     },
     {
       name: "is_featured",
@@ -32,7 +32,7 @@ export const BlogInputs = (): FormInput[] => {
       options: booleanOptions(t),
       cardId: "general",
       defaultValue: "false",
-      width: 6,
+      width: 6
     },
     {
       name: "status",
@@ -47,14 +47,15 @@ export const BlogInputs = (): FormInput[] => {
       ],
       required: true,
       cardId: "general",
-      width: 6,
+      width: 6
     },
     {
       name: "published_locales",
       type: "multiSelect",
       label: "Live Published Languages",
       placeholder: "Select live languages (e.g. en, ar)...",
-      toolTip: "Controls which language versions are live for visitors. If omitted or empty on publish, auto-publishes all translated languages.",
+      toolTip:
+        "Controls which language versions are live for visitors. If omitted or empty on publish, auto-publishes all translated languages.",
       options: [
         { label: "English (en)", value: "en" },
         { label: "العربية (ar)", value: "ar" },
@@ -63,7 +64,7 @@ export const BlogInputs = (): FormInput[] => {
         { label: "Deutsch (de)", value: "de" }
       ],
       cardId: "general",
-      width: 6,
+      width: 6
     },
     {
       name: "image",
@@ -302,9 +303,9 @@ export const BlogInputs = (): FormInput[] => {
     {
       name: "seo_schema_markup",
       type: "textarea",
-      multiLang: false,
+      multiLang: true,
       label: "Custom Schema Markup (JSON-LD)",
-      placeholder: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Article\"\n}",
+      placeholder: '{\n  "@context": "https://schema.org",\n  "@type": "Article"\n}',
       toolTip: "Custom JSON-LD structured data script",
       cardId: "schema",
       width: 12
@@ -314,7 +315,8 @@ export const BlogInputs = (): FormInput[] => {
       type: "faq-select",
       multiLang: false,
       label: "Frequently Asked Questions (FAQ Selection)",
-      toolTip: "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
+      toolTip:
+        "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
       cardId: "schema",
       width: 12
     }

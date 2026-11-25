@@ -129,6 +129,11 @@ export const ServicesSchema = (t: TFunction) => {
       // Schema & FAQs
       seo_schema_markup_type: z.string().optional().default("Service"),
       seo_schema_markup: StringNotReq(),
+      seo_schema_markupAr: StringNotReq(),
+      seo_schema_markupEn: StringNotReq(),
+      seo_schema_markupNl: StringNotReq(),
+      seo_schema_markupFr: StringNotReq(),
+      seo_schema_markupDe: StringNotReq(),
       seo_faq_ids: z
         .array(
           z.union([

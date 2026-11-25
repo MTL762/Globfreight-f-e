@@ -1,22 +1,13 @@
 import type { Metadata } from "next";
 import { Service, getServiceText, getServiceFeatures } from "@/types/service";
-import {
-  getBreadcrumbJsonLd,
-  getFaqJsonLd,
-  getServiceJsonLd,
-  SITE_URL
-} from "./seo";
+import { getBreadcrumbJsonLd, getFaqJsonLd, getServiceJsonLd, SITE_URL } from "./seo";
 
 interface AlternatesMap {
   canonical: string;
   languages: Record<string, string>;
 }
 
-export function getServiceCoreSeo(
-  service: Service,
-  locale: string,
-  alternates: AlternatesMap
-) {
+export function getServiceCoreSeo(service: Service, locale: string, alternates: AlternatesMap) {
   const serviceName = getServiceText(service.name, locale);
   const metaTitleRaw = getServiceText(service.seo?.meta_title, locale);
   const title = metaTitleRaw || (serviceName ? `${serviceName} | GlobFreight` : "GlobFreight");
@@ -59,15 +50,8 @@ export function buildServiceMetadata(
   locale: string,
   alternates: AlternatesMap
 ): Metadata {
-  const {
-    title,
-    serviceName,
-    description,
-    canonicalUrl,
-    ogImage,
-    focusKeyphrase,
-    features
-  } = getServiceCoreSeo(service, locale, alternates);
+  const { title, serviceName, description, canonicalUrl, ogImage, focusKeyphrase, features } =
+    getServiceCoreSeo(service, locale, alternates);
 
   const ogTitle = getServiceText(service.seo?.og_title, locale) || title;
   const ogDescription = getServiceText(service.seo?.og_description, locale) || description;
@@ -87,11 +71,11 @@ export function buildServiceMetadata(
   const backendKeywords = Array.isArray(service.seo?.keywords)
     ? service.seo.keywords
     : typeof service.seo?.keywords === "string"
-    ? service.seo.keywords
-        .split(",")
-        .map((k) => k.trim())
-        .filter(Boolean)
-    : [];
+      ? service.seo.keywords
+          .split(",")
+          .map(k => k.trim())
+          .filter(Boolean)
+      : [];
 
   const keywords = [
     ...(focusKeyphrase ? [focusKeyphrase] : []),
@@ -120,7 +104,9 @@ export function buildServiceMetadata(
       locale,
       images: [
         {
-          url: ogImage.startsWith("http") ? ogImage : `${SITE_URL}${ogImage.startsWith("/") ? "" : "/"}${ogImage}`,
+          url: ogImage.startsWith("http")
+            ? ogImage
+            : `${SITE_URL}${ogImage.startsWith("/") ? "" : "/"}${ogImage}`,
           width: 1200,
           height: 630,
           alt: ogImageAlt
@@ -193,14 +179,20 @@ export function buildServiceSchemas(
   }
 
   if (service.seo?.schema_markup) {
-    if (typeof service.seo.schema_markup === "object") {
-      schemas.push(service.seo.schema_markup as Record<string, unknown>);
-    } else if (
-      typeof service.seo.schema_markup === "string" &&
-      service.seo.schema_markup.trim().startsWith("{")
+    let customSchema: unknown = service.seo.schema_markup;
+    if (
+      typeof customSchema === "object" &&
+      customSchema !== null &&
+      !("@context" in customSchema)
     ) {
+      const localized = customSchema as Record<string, unknown>;
+      customSchema = localized[locale] || localized.en || Object.values(localized)[0];
+    }
+    if (typeof customSchema === "object" && customSchema !== null) {
+      schemas.push(customSchema as Record<string, unknown>);
+    } else if (typeof customSchema === "string" && customSchema.trim().startsWith("{")) {
       try {
-        schemas.push(JSON.parse(service.seo.schema_markup));
+        schemas.push(JSON.parse(customSchema));
       } catch {}
     }
   }

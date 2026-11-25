@@ -16,7 +16,14 @@ export const CategoriesInputs = () => {
       cardId: "lang",
       width: 6
     },
-    { name: "description", type: "textarea", multiLang: true, cardId: "lang", required: true, width: 12 },
+    {
+      name: "description",
+      type: "textarea",
+      multiLang: true,
+      cardId: "lang",
+      required: true,
+      width: 12
+    },
     {
       name: "image",
       type: "img",
@@ -38,12 +45,51 @@ export const CategoriesInputs = () => {
       width: 6
     },
     { name: "order", type: "number", cardId: "general", min: 0, width: 6 },
-    { name: "is_active", options: booleanOptions(t), type: "radioGroup", label: "Active", cardId: "general", width: 6 },
+    {
+      name: "is_active",
+      options: booleanOptions(t),
+      type: "radioGroup",
+      label: "Active",
+      cardId: "general",
+      width: 6
+    },
     // SEO Fields
-    { name: "seo_meta_title", type: "text", multiLang: true, charLimit: 60, label: "Meta Title", cardId: "seo", width: 6 },
-    { name: "seo_meta_description", type: "textarea", multiLang: true, charLimit: 155, label: "Meta Description", cardId: "seo", width: 6 },
-    { name: "seo_focus_keyphrase", type: "text", multiLang: true, label: "Focus Keyphrase", placeholder: "e.g. freight tech", cardId: "seo", width: 6 },
-    { name: "seo_canonical_url", type: "text", multiLang: true, label: "Canonical URL", placeholder: "https://globfreight.com/categories/...", cardId: "seo", width: 6 },
+    {
+      name: "seo_meta_title",
+      type: "text",
+      multiLang: true,
+      charLimit: 60,
+      label: "Meta Title",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_meta_description",
+      type: "textarea",
+      multiLang: true,
+      charLimit: 155,
+      label: "Meta Description",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_focus_keyphrase",
+      type: "text",
+      multiLang: true,
+      label: "Focus Keyphrase",
+      placeholder: "e.g. freight tech",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_canonical_url",
+      type: "text",
+      multiLang: true,
+      label: "Canonical URL",
+      placeholder: "https://globfreight.com/categories/...",
+      cardId: "seo",
+      width: 6
+    },
     {
       name: "seo_meta_robots",
       type: "select",
@@ -59,12 +105,50 @@ export const CategoriesInputs = () => {
       cardId: "seo",
       width: 6
     },
-    { name: "seo_keywords", type: "text", multiLang: false, label: "Keywords", placeholder: "logistics, shipping, supply chain", cardId: "seo", width: 6 },
+    {
+      name: "seo_keywords",
+      type: "text",
+      multiLang: false,
+      label: "Keywords",
+      placeholder: "logistics, shipping, supply chain",
+      cardId: "seo",
+      width: 6
+    },
     // Open Graph
-    { name: "seo_og_title", type: "text", multiLang: true, label: "Open Graph Title", cardId: "seo", width: 6 },
-    { name: "seo_og_description", type: "textarea", multiLang: true, label: "Open Graph Description", cardId: "seo", width: 6 },
-    { name: "seo_og_image", type: "img", multiLang: false, ratio: "1200:630", label: "Open Graph Image (1200×630)", toolTip: "Image file upload (jpeg, png, webp, jpg, max 10MB) for social sharing banner", cardId: "seo", width: 6 },
-    { name: "seo_og_image_alt", type: "text", multiLang: true, label: "Open Graph Image Alt Text", cardId: "seo", width: 6 },
+    {
+      name: "seo_og_title",
+      type: "text",
+      multiLang: true,
+      label: "Open Graph Title",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_og_description",
+      type: "textarea",
+      multiLang: true,
+      label: "Open Graph Description",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_og_image",
+      type: "img",
+      multiLang: false,
+      ratio: "1200:630",
+      label: "Open Graph Image (1200×630)",
+      toolTip: "Image file upload (jpeg, png, webp, jpg, max 10MB) for social sharing banner",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_og_image_alt",
+      type: "text",
+      multiLang: true,
+      label: "Open Graph Image Alt Text",
+      cardId: "seo",
+      width: 6
+    },
     // Twitter
     {
       name: "seo_twitter_card",
@@ -79,9 +163,32 @@ export const CategoriesInputs = () => {
       cardId: "seo",
       width: 6
     },
-    { name: "seo_twitter_image", type: "img", multiLang: false, ratio: "1200:630", label: "Twitter Image (1200×630)", toolTip: "Image file upload (jpeg, png, webp, jpg, max 10MB) for Twitter card", cardId: "seo", width: 6 },
-    { name: "seo_twitter_title", type: "text", multiLang: true, label: "Twitter / X Title", cardId: "seo", width: 6 },
-    { name: "seo_twitter_description", type: "textarea", multiLang: true, label: "Twitter / X Description", cardId: "seo", width: 6 },
+    {
+      name: "seo_twitter_image",
+      type: "img",
+      multiLang: false,
+      ratio: "1200:630",
+      label: "Twitter Image (1200×630)",
+      toolTip: "Image file upload (jpeg, png, webp, jpg, max 10MB) for Twitter card",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_twitter_title",
+      type: "text",
+      multiLang: true,
+      label: "Twitter / X Title",
+      cardId: "seo",
+      width: 6
+    },
+    {
+      name: "seo_twitter_description",
+      type: "textarea",
+      multiLang: true,
+      label: "Twitter / X Description",
+      cardId: "seo",
+      width: 6
+    },
     // Schema Markup & FAQ Structured Data
     {
       name: "seo_schema_markup_type",
@@ -94,7 +201,7 @@ export const CategoriesInputs = () => {
         { label: "Article", value: "Article" },
         { label: "Service", value: "Service" },
         { label: "FAQPage", value: "FAQPage" },
-        { label: "WebPage", value: "WebPage" },
+        { label: "WebPage", value: "WebPage" }
       ],
       cardId: "schema",
       width: 12
@@ -102,9 +209,9 @@ export const CategoriesInputs = () => {
     {
       name: "seo_schema_markup",
       type: "textarea",
-      multiLang: false,
+      multiLang: true,
       label: "Custom Schema Markup (JSON-LD)",
-      placeholder: "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Category\"\n}",
+      placeholder: '{\n  "@context": "https://schema.org",\n  "@type": "Category"\n}',
       toolTip: "Custom JSON-LD structured data script",
       cardId: "schema",
       width: 12
@@ -114,10 +221,11 @@ export const CategoriesInputs = () => {
       type: "faq-select",
       multiLang: false,
       label: "Frequently Asked Questions (FAQ Selection)",
-      toolTip: "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
+      toolTip:
+        "Select existing FAQs from the FAQ module by ID (faq_ids). Questions & answers are automatically translated per language.",
       cardId: "schema",
       width: 12
-    },
+    }
   ];
   return inputs;
 };

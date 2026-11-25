@@ -38,6 +38,7 @@ export default function ServicesFormPage({ data }: { data?: ServicesType }) {
         {
           id: "schema",
           title: t("Schema Markup"),
+          multiLang: true,
           width: 12
         }
       ]}

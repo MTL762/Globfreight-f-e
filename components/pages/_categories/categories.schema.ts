@@ -81,7 +81,10 @@ export const CategoriesSchema = (t: TFunction) => {
     seo_og_image_altFr: StringNotReq(),
     seo_og_image_altDe: StringNotReq(),
     // Twitter
-    seo_twitter_card: z.enum(["summary_large_image", "summary"]).optional().default("summary_large_image"),
+    seo_twitter_card: z
+      .enum(["summary_large_image", "summary"])
+      .optional()
+      .default("summary_large_image"),
     seo_twitter_image: noSchema().optional(),
     seo_twitter_titleAr: StringNotReq(),
     seo_twitter_titleEn: StringNotReq(),
@@ -95,8 +98,25 @@ export const CategoriesSchema = (t: TFunction) => {
     seo_twitter_descriptionDe: StringNotReq(),
     // Schema & FAQs
     seo_schema_markup: StringNotReq(),
-    seo_faq_ids: z.array(z.union([z.number(), z.string(), z.object({ id: z.union([z.number(), z.string()]).optional(), question: z.string().optional() })])).optional().default([]),
-    seo_faqs: z.any().optional().default([]),
+    seo_schema_markupAr: StringNotReq(),
+    seo_schema_markupEn: StringNotReq(),
+    seo_schema_markupNl: StringNotReq(),
+    seo_schema_markupFr: StringNotReq(),
+    seo_schema_markupDe: StringNotReq(),
+    seo_faq_ids: z
+      .array(
+        z.union([
+          z.number(),
+          z.string(),
+          z.object({
+            id: z.union([z.number(), z.string()]).optional(),
+            question: z.string().optional()
+          })
+        ])
+      )
+      .optional()
+      .default([]),
+    seo_faqs: z.any().optional().default([])
   });
 };
 

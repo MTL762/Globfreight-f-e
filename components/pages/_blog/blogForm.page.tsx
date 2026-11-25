@@ -32,6 +32,7 @@ export default function BlogFormPage({ data }: { data?: BlogType }) {
         {
           id: "schema",
           title: t("Schema Markup"),
+          multiLang: true,
           width: 12
         }
       ]}

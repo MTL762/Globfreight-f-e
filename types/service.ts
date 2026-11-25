@@ -7,7 +7,11 @@ export interface ServiceSeo {
   focus_keyphrase?: string | MultilingualString | null;
   canonical_url?: string | MultilingualString | null;
   schema_markup_type?: string | null;
-  schema_markup?: string | object | null;
+  schema_markup?:
+    | string
+    | Record<string, unknown>
+    | Record<string, Record<string, unknown> | string | null>
+    | null;
   og_title?: string | MultilingualString | null;
   og_description?: string | MultilingualString | null;
   og_image?: string | null;
@@ -59,10 +63,7 @@ export function getServiceText(
   return (typeof result === "string" ? result.trim() : result) || fallback;
 }
 
-export function getServiceFeatures(
-  features: Service["features"],
-  locale: string = "en"
-): string[] {
+export function getServiceFeatures(features: Service["features"], locale: string = "en"): string[] {
   if (!features) return [];
   if (Array.isArray(features)) {
     return features
@@ -81,9 +82,11 @@ export function getServiceFeatures(
         .filter(Boolean);
     }
     if (typeof raw === "string") {
-      return raw.split(",").map((s: string) => s.trim()).filter(Boolean);
+      return raw
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
     }
   }
   return [];
 }
-

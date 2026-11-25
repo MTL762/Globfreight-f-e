@@ -314,7 +314,7 @@ export const ServicesInputs = (): FormInput[] => {
     {
       name: "seo_schema_markup",
       type: "textarea",
-      multiLang: false,
+      multiLang: true,
       label: "Custom Schema Markup (JSON-LD)",
       placeholder: '{\n  "@context": "https://schema.org",\n  "@type": "Service"\n}',
       toolTip: "Custom JSON-LD structured data script",

@@ -62,10 +62,24 @@ export function extractFormNameInputs({
         FORM_LANGUAGES.forEach(({ code, key }) => {
           const langKey = `${baseName}${key}`;
           const isDirty = dirtyFields ? Boolean(dirtyFields[langKey]) : false;
-          const rawDirectObj = typeof data[baseName] === "object" && data[baseName] !== null && !Array.isArray(data[baseName]) ? data[baseName] : undefined;
+          const rawDirectObj =
+            typeof data[baseName] === "object" &&
+            data[baseName] !== null &&
+            !Array.isArray(data[baseName])
+              ? data[baseName]
+              : undefined;
           const seoKey = baseName.startsWith("seo_") ? baseName.replace(/^seo_/, "") : null;
-          const rawSeoObj = seoKey && typeof data.seo?.[seoKey] === "object" && data.seo[seoKey] !== null && !Array.isArray(data.seo[seoKey]) ? data.seo[seoKey] : undefined;
-          const val = data[langKey] !== undefined ? data[langKey] : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
+          const rawSeoObj =
+            seoKey &&
+            typeof data.seo?.[seoKey] === "object" &&
+            data.seo[seoKey] !== null &&
+            !Array.isArray(data.seo[seoKey])
+              ? data.seo[seoKey]
+              : undefined;
+          const val =
+            data[langKey] !== undefined
+              ? data[langKey]
+              : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
           const hasValue = val !== undefined && val !== null && val !== "";
 
           if (hasValue || (isDirty && val === "")) {
@@ -74,7 +88,9 @@ export function extractFormNameInputs({
             } else if (baseName === "tags") {
               const tagString = Array.isArray(val)
                 ? val
-                    .map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? ""))
+                    .map((subVal: any) =>
+                      typeof subVal === "string" ? subVal : (subVal?.value ?? "")
+                    )
                     .filter(Boolean)
                     .join(", ")
                 : `${val ?? ""}`;
@@ -83,10 +99,17 @@ export function extractFormNameInputs({
               }
             } else if (baseName === "features") {
               const featureList = Array.isArray(val)
-                ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
+                ? val
+                    .map((subVal: any) =>
+                      typeof subVal === "string" ? subVal : (subVal?.value ?? "")
+                    )
+                    .filter(Boolean)
                 : typeof val === "string"
-                ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
-                : [];
+                  ? val
+                      .split(",")
+                      .map((s: string) => s.trim())
+                      .filter(Boolean)
+                  : [];
               featureList.forEach(item => {
                 formdata.append(`features[${code}][]`, item);
               });
@@ -118,9 +141,14 @@ export function extractFormNameInputs({
               return;
             } else if (baseName.startsWith("seo_")) {
               const seoKey = baseName.replace(/^seo_/, "");
-              formdata.append(`seo[${seoKey}][${code}]`, `${val ?? ""}`);
+              const serializedVal =
+                seoKey === "schema_markup" && typeof val === "object" && val !== null
+                  ? JSON.stringify(val)
+                  : `${val ?? ""}`;
+              formdata.append(`seo[${seoKey}][${code}]`, serializedVal);
             } else {
-              const safeVal = (baseName === "content" && typeof val === "string") ? sanitizeHtml(val) : val;
+              const safeVal =
+                baseName === "content" && typeof val === "string" ? sanitizeHtml(val) : val;
               formdata.append(`${baseName}[${code}]`, `${safeVal ?? ""}`);
             }
           }
@@ -150,7 +178,9 @@ export function extractFormNameInputs({
           }
           if (
             (seoKey === "faq_ids" || seoKey === "faqs") &&
-            (Array.isArray(data[item]) || typeof data[item] === "number" || typeof data[item] === "string")
+            (Array.isArray(data[item]) ||
+              typeof data[item] === "number" ||
+              typeof data[item] === "string")
           ) {
             const arr = Array.isArray(data[item]) ? data[item] : [data[item]];
             arr.forEach((faqItem: any, idx: number) => {
@@ -210,7 +240,11 @@ export function extractFormNameInputs({
       const isImageField =
         !item.includes("alt") &&
         !item.includes("Alt") &&
-        (item.includes("image") || item.includes("Image") || item === "file" || item === "avatar" || item === "logo");
+        (item.includes("image") ||
+          item.includes("Image") ||
+          item === "file" ||
+          item === "avatar" ||
+          item === "logo");
 
       if (
         isImageField &&
@@ -245,11 +279,7 @@ export function extractFormNameInputs({
       let isMulti = false;
 
       if (isDirectMulti) {
-        if (
-          typeof data[item] === "object" &&
-          data[item] !== null &&
-          !Array.isArray(data[item])
-        ) {
+        if (typeof data[item] === "object" && data[item] !== null && !Array.isArray(data[item])) {
           baseName = item;
           isMulti = true;
         } else {
@@ -273,19 +303,52 @@ export function extractFormNameInputs({
         FORM_LANGUAGES.forEach(({ code, key }) => {
           const langKey = `${baseName}${key}`;
           const isDirty = dirtyFields ? Boolean(dirtyFields[langKey]) : false;
-          const rawDirectObj = typeof data[baseName] === "object" && data[baseName] !== null && !Array.isArray(data[baseName]) ? data[baseName] : undefined;
+          const rawDirectObj =
+            typeof data[baseName] === "object" &&
+            data[baseName] !== null &&
+            !Array.isArray(data[baseName])
+              ? data[baseName]
+              : undefined;
           const seoKey = baseName.startsWith("seo_") ? baseName.replace(/^seo_/, "") : null;
-          const rawSeoObj = seoKey && typeof data.seo?.[seoKey] === "object" && data.seo[seoKey] !== null && !Array.isArray(data.seo[seoKey]) ? data.seo[seoKey] : undefined;
-          const val = data[langKey] !== undefined ? data[langKey] : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
+          const rawSeoObj =
+            seoKey &&
+            typeof data.seo?.[seoKey] === "object" &&
+            data.seo[seoKey] !== null &&
+            !Array.isArray(data.seo[seoKey])
+              ? data.seo[seoKey]
+              : undefined;
+          const val =
+            data[langKey] !== undefined
+              ? data[langKey]
+              : (rawDirectObj?.[code] ?? rawSeoObj?.[code]);
           const hasValue = val !== undefined && val !== null && val !== "";
           if (hasValue || (isDirty && val === "")) {
             if (baseName === "tags" || baseName === "features") {
               const tagList = Array.isArray(val)
-                ? val.map((subVal: any) => (typeof subVal === "string" ? subVal : subVal?.value ?? "")).filter(Boolean)
+                ? val
+                    .map((subVal: any) =>
+                      typeof subVal === "string" ? subVal : (subVal?.value ?? "")
+                    )
+                    .filter(Boolean)
                 : typeof val === "string"
-                ? val.split(",").map((s: string) => s.trim()).filter(Boolean)
-                : [];
+                  ? val
+                      .split(",")
+                      .map((s: string) => s.trim())
+                      .filter(Boolean)
+                  : [];
               langObj[code] = tagList;
+            } else if (baseName === "seo_schema_markup") {
+              if (val === "") {
+                langObj[code] = null;
+              } else if (typeof val === "string" && val.trim().startsWith("{")) {
+                try {
+                  langObj[code] = JSON.parse(val);
+                } catch {
+                  langObj[code] = val;
+                }
+              } else {
+                langObj[code] = val;
+              }
             } else {
               langObj[code] = Array.isArray(val) ? (val as any) : `${val ?? ""}`;
             }
@@ -310,7 +373,9 @@ export function extractFormNameInputs({
           if (!formdata.seo) formdata.seo = {};
           if (
             (seoKey === "faq_ids" || seoKey === "faqs") &&
-            (Array.isArray(data[item]) || typeof data[item] === "number" || typeof data[item] === "string")
+            (Array.isArray(data[item]) ||
+              typeof data[item] === "number" ||
+              typeof data[item] === "string")
           ) {
             const arr = Array.isArray(data[item]) ? data[item] : [data[item]];
             const hasNumericIds = arr.some(
@@ -325,11 +390,13 @@ export function extractFormNameInputs({
                 .filter((x: any) => !isNaN(x) && x > 0);
             } else {
               formdata.seo[seoKey] = arr.filter(
-                (faq: { question?: string; answer?: string }) => faq?.question?.trim() || faq?.answer?.trim()
+                (faq: { question?: string; answer?: string }) =>
+                  faq?.question?.trim() || faq?.answer?.trim()
               );
             }
           } else if (seoKey === "focus_keyphrase") {
-            formdata.seo[seoKey] = typeof data[item] === "object" ? data[item] : { en: `${data[item]}` };
+            formdata.seo[seoKey] =
+              typeof data[item] === "object" ? data[item] : { en: `${data[item]}` };
           } else if (seoKey === "schema_markup") {
             if (typeof data[item] === "string" && data[item].trim().startsWith("{")) {
               try {

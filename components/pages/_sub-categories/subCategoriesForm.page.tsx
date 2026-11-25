@@ -4,7 +4,11 @@ import CustomForm from "@/components/common/Form/CustomForm";
 import type { SubCategoriesType } from "./subCategories.schema";
 import useSubCategoriesLogic from "./useSubCategoriesForm.logic";
 
-export default function SubCategoriesFormPage({ data }: { data?: SubCategoriesType }) {
+export default function SubCategoriesFormPage({
+  data
+}: {
+  data?: SubCategoriesType;
+}) {
   const { inputs, t, control, formSubmit } = useSubCategoriesLogic({ data });
 
   return (
@@ -32,6 +36,7 @@ export default function SubCategoriesFormPage({ data }: { data?: SubCategoriesTy
         {
           id: "schema",
           title: t("Schema Markup"),
+          multiLang: true,
           width: 12
         }
       ]}

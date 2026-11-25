@@ -86,7 +86,11 @@ export interface BlogPost {
     focus_keyphrase?: string | MultilingualString | null;
     canonical_url?: string | MultilingualString | null;
     schema_markup_type?: string | null;
-    schema_markup?: string | object | null;
+    schema_markup?:
+      | string
+      | Record<string, unknown>
+      | Record<string, Record<string, unknown> | string | null>
+      | null;
     og_title?: string | MultilingualString | null;
     og_description?: string | MultilingualString | null;
     og_image?: string | null;
@@ -148,7 +152,8 @@ export function getBlogText(
 ): string {
   if (!val) return fallback;
   if (typeof val === "string") return val.trim() || fallback;
-  const result = val[locale] || val.en || val.ar || Object.values(val).find(v => Boolean(v?.trim?.() ?? v));
+  const result =
+    val[locale] || val.en || val.ar || Object.values(val).find(v => Boolean(v?.trim?.() ?? v));
   return (typeof result === "string" ? result.trim() : result) || fallback;
 }
 

@@ -10,7 +10,8 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
       }
       if (item.multiLang) {
         const langDefaults: Record<string, any> = {};
-        const rawDirect = dataObj[item.name] ?? (item.name === "image" ? dataObj["images"] : undefined);
+        const rawDirect =
+          dataObj[item.name] ?? (item.name === "image" ? dataObj["images"] : undefined);
         FORM_LANGUAGES.forEach(({ code, key }) => {
           if (item.name === "tags" || item.name === "features") {
             let tagsVal: string[] = [];
@@ -19,14 +20,20 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
               if (Array.isArray(langTags)) {
                 tagsVal = langTags;
               } else if (typeof langTags === "string") {
-                tagsVal = langTags.split(",").map((s: string) => s.trim()).filter(Boolean);
+                tagsVal = langTags
+                  .split(",")
+                  .map((s: string) => s.trim())
+                  .filter(Boolean);
               }
             } else if (Array.isArray(rawDirect)) {
               if (code === "en" || code === "ar") {
                 tagsVal = rawDirect;
               }
             } else if (typeof rawDirect === "string") {
-              tagsVal = rawDirect.split(",").map((s: string) => s.trim()).filter(Boolean);
+              tagsVal = rawDirect
+                .split(",")
+                .map((s: string) => s.trim())
+                .filter(Boolean);
             }
             langDefaults[`${item.name}${key}`] = tagsVal;
             return;
@@ -36,8 +43,18 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
           if (rawDirect !== null && typeof rawDirect === "object" && !Array.isArray(rawDirect)) {
             if (item.name === "seo_canonical_url") {
               directVal = rawDirect[code] ?? "";
+            } else if (item.name === "seo_schema_markup" || item.name === "schema_markup") {
+              const target =
+                rawDirect[code] ??
+                ("@context" in rawDirect || "@type" in rawDirect ? rawDirect : undefined);
+              directVal = target
+                ? typeof target === "object"
+                  ? JSON.stringify(target, null, 2)
+                  : target
+                : "";
             } else {
-              directVal = rawDirect[code] ?? rawDirect.en ?? rawDirect.ar ?? Object.values(rawDirect)[0];
+              directVal =
+                rawDirect[code] ?? rawDirect.en ?? rawDirect.ar ?? Object.values(rawDirect)[0];
             }
           } else if (Array.isArray(rawDirect)) {
             directVal = code === "en" ? rawDirect : [];
@@ -56,6 +73,14 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
             if (rawSeo !== null && typeof rawSeo === "object" && !Array.isArray(rawSeo)) {
               if (item.name === "seo_canonical_url" || seoKey === "canonical_url") {
                 seoVal = rawSeo[code] ?? "";
+              } else if (item.name === "seo_schema_markup" || seoKey === "schema_markup") {
+                const target =
+                  rawSeo[code] ?? ("@context" in rawSeo || "@type" in rawSeo ? rawSeo : undefined);
+                seoVal = target
+                  ? typeof target === "object"
+                    ? JSON.stringify(target, null, 2)
+                    : target
+                  : "";
               } else {
                 seoVal = rawSeo[code] ?? rawSeo.en ?? rawSeo.ar ?? Object.values(rawSeo)[0];
               }
@@ -68,7 +93,11 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
             }
           }
 
-          langDefaults[`${item.name}${key}`] = directVal ?? seoVal ?? "";
+          const finalVal = directVal ?? seoVal ?? "";
+          langDefaults[`${item.name}${key}`] =
+            typeof finalVal === "object" && finalVal !== null
+              ? JSON.stringify(finalVal, null, 2)
+              : finalVal;
         });
         return langDefaults;
       }
@@ -127,7 +156,7 @@ export function extractFormDefaultInputs(inputs: FormInput[], data?: unknown): o
         }
         const val =
           typeof seoVal === "object" && seoVal !== null && !Array.isArray(seoVal)
-            ? seoVal.en ?? Object.values(seoVal)[0] ?? ""
+            ? (seoVal.en ?? Object.values(seoVal)[0] ?? "")
             : seoVal;
         return {
           [item.name]: val ?? ""
